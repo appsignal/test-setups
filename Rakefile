@@ -35,8 +35,12 @@ namespace :app do
   desc "Attach to app and get a console"
   task :console do
     app = get_app
-    puts "Starting console in #{app}"
-    run_command "cd #{app} && docker-compose exec app /commands/console.sh"
+    if File.exists?("#{app}/commands/console.sh")
+      puts "Starting console in #{app}"
+      run_command "cd #{app} && docker-compose exec app /commands/console.sh"
+    else
+      puts "Starting a console in #{app} is not supported"
+    end
   end
 
   desc "Very that test setup works"
