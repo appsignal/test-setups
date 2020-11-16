@@ -1,6 +1,6 @@
 # Test setups
 
-Test setups using Docker, requirements to run this:
+Experiment to run test setups using Docker, requirements to run this:
 
 * A recent Docker version that includes Compose.
 * Any 2.0+ version of Ruby

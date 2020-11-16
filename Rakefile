@@ -45,7 +45,12 @@ namespace :app do
   end
 end
 
-namespace :setup do
+namespace :integrations do
   desc "Clone integrations"
-  task 
+  task :clone do
+    ["ruby"].each do |integration|
+      puts "Cloning #{integration}"
+      run_command "git clone git@github.com:appsignal/appsignal-#{integration}.git #{integration}/integration"
+    end
+  end
 end

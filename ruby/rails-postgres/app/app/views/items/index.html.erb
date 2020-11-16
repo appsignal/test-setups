@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Items</h1>
+<h1>Items <%= ActiveRecord::Base.connection_pool.stat %></h1>
 
 <table>
   <thead>

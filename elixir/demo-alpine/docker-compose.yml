@@ -8,11 +8,10 @@ services:
     env_file:
       - postgres.env
   app:
-    image: ruby/rails-postgres:latest
+    image: elixir/demo-alpine:latest
     ports:
-      - "3000:3000"
+      - "3000:4000"
     env_file:
       - postgres.env
     volumes:
       - ./app:/app
-      - ../integration:/integration

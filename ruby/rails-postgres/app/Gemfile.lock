@@ -1,3 +1,9 @@
+PATH
+  remote: /integration
+  specs:
+    appsignal (2.11.0)
+      rack
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -155,6 +161,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  appsignal!
   jbuilder (~> 2.7)
   listen
   puma (~> 4.1)
