@@ -48,9 +48,14 @@ end
 namespace :integrations do
   desc "Clone integrations"
   task :clone do
-    ["ruby"].each do |integration|
-      puts "Cloning #{integration}"
-      run_command "git clone git@github.com:appsignal/appsignal-#{integration}.git #{integration}/integration"
+    ["ruby", "elixir"].each do |integration|
+      path = "#{integration}/integration"
+      if File.exists?(path)
+        puts "#{path} already present"
+      else
+        puts "Cloning #{integration}"
+        run_command "git clone git@github.com:appsignal/appsignal-#{integration}.git #{path}"
+      end
     end
   end
 end

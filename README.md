@@ -5,10 +5,17 @@ Experiment to run test setups using Docker, requirements to run this:
 * A recent Docker version that includes Compose.
 * Any 2.0+ version of Ruby
 
+Next, checkout the integrations locally:
+
+```
+rake integrations:clone
+```
+
 To start a test setup:
 
 ```
-rake app=path-to-app app:up
+rake app=elixir/demo-alpine app:up
+rake app=ruby/rails-postgres app:up
 ```
 
 This will boot a test environment with AppSignal enabled listening on
