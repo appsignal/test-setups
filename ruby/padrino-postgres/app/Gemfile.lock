@@ -1,5 +1,5 @@
 PATH
-  remote: /integration
+  remote: ../integration
   specs:
     appsignal (2.11.0)
       rack

@@ -31,4 +31,4 @@ gem 'padrino', '0.15.0'
 #   gem 'padrino-' + g, '0.15.0'
 # end
 
-gem 'appsignal', :path => '/integration'
+gem 'appsignal', :path => "../../integration"
