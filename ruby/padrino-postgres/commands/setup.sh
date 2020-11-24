@@ -7,4 +7,4 @@ echo "Install dependencies"
 cd /app && bundle install --path=vendor/bundle
 
 echo "Run app"
-cd /app && bundle exec padrino start
+cd /app && bundle exec padrino start -h 0.0.0.0
