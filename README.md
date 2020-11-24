@@ -16,6 +16,7 @@ To start a test setup:
 ```
 rake app=elixir/demo-alpine app:up
 rake app=ruby/rails-postgres app:up
+rake app=ruby/padrino-postgres app:up
 ```
 
 This will boot a test environment with AppSignal enabled listening on
