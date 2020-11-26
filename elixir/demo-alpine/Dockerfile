@@ -20,4 +20,4 @@ RUN mkdir /commands
 COPY ./commands/*.sh /commands/
 RUN chmod +x /commands/*.sh
 
-CMD /commands/setup.sh
+CMD /commands/boot.sh

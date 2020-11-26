@@ -11,6 +11,12 @@ Next, checkout the integrations locally:
 rake integrations:clone
 ```
 
+Copy the example key env file and add a key:
+
+```
+cp appsignal_key.env.example appsignal_key.env
+```
+
 To start a test setup:
 
 ```
@@ -28,7 +34,13 @@ rake app=path-to-app app:bash
 rake app=path-to-app app:console
 ```
 
-## Expected scripts in container
+## Generate a new test setup
 
-If the containers supports starting a console it should add a script to
-do this in `/commands/console.sh`.
+To generate a new test setup run:
+
+```
+rake app=lang/app app:new
+```
+
+Then customize the generated files and place your code in `app` within
+the generated skeleton app.

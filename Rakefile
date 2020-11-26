@@ -1,3 +1,4 @@
+require 'erb'
 require 'fileutils'
 
 def get_app
@@ -12,34 +13,66 @@ def run_command(command)
   system command
 end
 
+def render_erb(file)
+  ERB.new(File.read(file)).result
+end
+
 namespace :app do
+  desc "Create a test setup skeleton"
+  task :new do
+    @app = ENV['app']
+    raise "#{@app} already exists" if File.exists?(@app)
+
+    # Create directories
+    FileUtils.mkdir_p "#{@app}"
+    FileUtils.mkdir_p "#{@app}/commands"
+    FileUtils.mkdir_p "#{@app}/working_directory"
+    FileUtils.touch "#{@app}/working_directory/.gitkeep"
+
+    # Copy command scripts
+    %w(boot console).each do |command|
+      FileUtils.cp "support/template/commands/#{command}.sh", "#{@app}/commands/#{command}.sh"
+    end
+
+    # Copy Dockerfile
+    FileUtils.cp "support/template/Dockerfile", "#{@app}/Dockerfile"
+
+    # Render docker compose file
+    File.write "#{@app}/docker-compose.yml", render_erb("support/template/docker-compose.yml.erb")
+
+    # Render env file
+    File.write "#{@app}/appsignal.env", render_erb("support/template/appsignal.env.erb")
+
+    puts "Generated test setup skeleton in #{@app}, add your code in app directory now"
+  end
+
   desc "Start a test app"
   task :up do
-    app = get_app
-    puts "Starting #{app}"
+    @app = get_app
+    puts "Starting #{@app}"
 
     puts "Building..."
-    run_command "cd #{app} && docker build -t #{app}  ."
+    run_command "cd #{@app} && docker build -t #{@app}  ."
 
     puts "Starting compose..."
-    run_command "cd #{app} && docker-compose up"
+    run_command "cd #{@app} && docker-compose up"
   end
 
   desc "Attach to app and get bash"
   task :bash do
-    app = get_app
-    puts "Starting bash in #{app}"
-    run_command "cd #{app} && docker-compose exec app /bin/bash"
+    @app = get_app
+    puts "Starting bash in #{@app}"
+    run_command "cd #{@app} && docker-compose exec app /bin/bash"
   end
 
   desc "Attach to app and get a console"
   task :console do
-    app = get_app
-    if File.exists?("#{app}/commands/console.sh")
-      puts "Starting console in #{app}"
-      run_command "cd #{app} && docker-compose exec app /commands/console.sh"
+    @app = get_app
+    if File.exists?("#{@app}/commands/console.sh")
+      puts "Starting console in #{@app}"
+      run_command "cd #{@app} && docker-compose exec app /commands/console.sh"
     else
-      puts "Starting a console in #{app} is not supported"
+      puts "Starting a console in #{@app} is not supported"
     end
   end
 

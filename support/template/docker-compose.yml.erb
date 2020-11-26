@@ -1,18 +1,11 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres
-    ports:
-      - "5432:5432"
-    env_file:
-      - postgres.env
   app:
-    image: ruby/rails-postgres:latest
+    image: <%= @app %>:latest
     ports:
       - "3000:3000"
     env_file:
-      - postgres.env
       - appsignal.env
       - ../../appsignal_key.env
     volumes:

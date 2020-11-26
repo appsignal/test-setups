@@ -9,4 +9,4 @@ RUN chmod +x /commands/*.sh
 
 EXPOSE 3000
 
-CMD /commands/setup.sh
+CMD /commands/boot.sh
