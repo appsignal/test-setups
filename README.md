@@ -25,7 +25,8 @@ rake app=ruby/rails-postgres app:up
 ```
 
 This will boot a test environment with AppSignal enabled listening on
-[localhost](http://localhost:3000).
+[localhost](http://localhost:3000). The agent log and lock files are
+accessible in the `working_directory`.
 
 To run commands:
 
