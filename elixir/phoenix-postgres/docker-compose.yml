@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  app:
+    image: elixir/phoenix-postgres:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ./working_directory:/working_directory
+      - ../integration:/integration
