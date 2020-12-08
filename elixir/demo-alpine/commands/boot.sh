@@ -13,5 +13,14 @@ cd /app && mix ecto.setup
 echo "Running npm install"
 cd /app/assets && npm install
 
-echo "Running app"
-cd /app && mix phx.server
+echo "Digest assets"
+cd /app && mix phx.digest
+
+echo "Build a release"
+mkdir /tmp/release
+export MIX_ENV=prod
+export SECRET_KEY_BASE=base
+cd /app && mix release --path=/tmp/release
+
+echo "Run the release"
+/tmp/release/bin/demo start

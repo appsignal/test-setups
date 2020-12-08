@@ -88,6 +88,13 @@ namespace :app do
     raise "Not implemented yet"
   end
 
+  desc "Remove docker images"
+  task :down do
+      @app = get_app
+      puts "Bringing compose down..."
+      run_command "cd #{@app} && docker-compose down --rmi=local"
+  end
+
   namespace :tail do
     desc "Tail appsignal.log"
     task :appsignal do

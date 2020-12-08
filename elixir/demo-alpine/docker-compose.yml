@@ -9,6 +9,8 @@ services:
       - postgres.env
   app:
     image: elixir/demo-alpine:latest
+    depends_on:
+      - postgres
     ports:
       - "3000:4000"
     env_file:
