@@ -20,6 +20,11 @@ def render_erb(file)
 end
 
 namespace :app do
+  desc "Open the browser pointing to the app"
+  task :open do
+    run_command "open http://localhost:3000"
+  end
+
   desc "Create a test setup skeleton"
   task :new do
     @app = ENV['app']

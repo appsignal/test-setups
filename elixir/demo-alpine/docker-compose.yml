@@ -13,6 +13,9 @@ services:
       - "3000:4000"
     env_file:
       - postgres.env
+      - appsignal.env
+      - ../../appsignal_key.env
     volumes:
       - ./app:/app
+      - ./working_directory:/working_directory
       - ../integration:/integration

@@ -41,6 +41,12 @@ Tail the appsignal log:
 rake app=path-to-app app:tail:appsignal
 ```
 
+Open the browser pointing to the app:
+
+```
+rake app:open
+```
+
 ## Generate a new test setup
 
 To generate a new test setup run:
@@ -50,4 +56,5 @@ rake app=lang/app app:new
 ```
 
 Then customize the generated files and place your code in `app` within
-the generated skeleton app.
+the generated skeleton app. Make sure to map the port to localhost to
+`3000`.
