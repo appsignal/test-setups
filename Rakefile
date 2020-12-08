@@ -1,6 +1,8 @@
 require 'erb'
 require 'fileutils'
 
+INTEGRATIONS = %w(ruby elixir)
+
 def get_app
   ENV['app'].tap do |app|
     raise "Specify which app you want to run using app=path" if app.nil?
@@ -80,18 +82,39 @@ namespace :app do
   task :verify do
     raise "Not implemented yet"
   end
+
+  namespace :tail do
+    desc "Tail appsignal.log"
+    task :appsignal do
+      @app = get_app
+      run_command "tail -f #{@app}/working_directory/appsignal.log"
+    end
+  end
 end
 
 namespace :integrations do
   desc "Clone integrations"
   task :clone do
-    ["ruby", "elixir"].each do |integration|
+    INTEGRATIONS.each do |integration|
       path = "#{integration}/integration"
       if File.exists?(path)
         puts "#{path} already present"
       else
         puts "Cloning #{integration}"
         run_command "git clone git@github.com:appsignal/appsignal-#{integration}.git #{path}"
+      end
+    end
+  end
+
+  desc "Reset integrations"
+  task :reset do
+    INTEGRATIONS.each do |integration|
+      path = "#{integration}/integration"
+      if File.exists?(path)
+        puts "Resetting #{integration}"
+        run_command "cd #{path} && git fetch && git reset --hard origin/main"
+      else
+        puts "#{path} not present"
       end
     end
   end

@@ -35,6 +35,12 @@ rake app=path-to-app app:bash
 rake app=path-to-app app:console
 ```
 
+Tail the appsignal log:
+
+```
+rake app=path-to-app app:tail:appsignal
+```
+
 ## Generate a new test setup
 
 To generate a new test setup run:
