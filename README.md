@@ -1,6 +1,6 @@
 # Test setups
 
-Experiment to run test setups using Docker, requirements to run this:
+Run test setups using Docker, requirements to run this:
 
 * A recent Docker version that includes Compose.
 * Any 2.0+ version of Ruby
@@ -11,7 +11,7 @@ Next, checkout the integrations locally:
 rake integrations:clone
 ```
 
-Copy the example key env file and add a key:
+Copy the example key env file and add a valid push api key:
 
 ```
 cp appsignal_key.env.example appsignal_key.env
@@ -20,8 +20,7 @@ cp appsignal_key.env.example appsignal_key.env
 To start a test setup:
 
 ```
-rake app=elixir/demo-alpine app:up
-rake app=ruby/rails-postgres app:up
+rake app=lang/app app:up
 ```
 
 This will boot a test environment with AppSignal enabled listening on
@@ -31,14 +30,14 @@ accessible in the `working_directory`.
 To run commands:
 
 ```
-rake app=path-to-app app:bash
-rake app=path-to-app app:console
+rake app=lang/app app:bash
+rake app=lang/app app:console
 ```
 
 Tail the appsignal log:
 
 ```
-rake app=path-to-app app:tail:appsignal
+rake app=lang/app app:tail:appsignal
 ```
 
 Open the browser pointing to the app:
