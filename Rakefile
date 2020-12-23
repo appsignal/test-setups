@@ -60,6 +60,9 @@ namespace :app do
     # Copy Dockerfile
     FileUtils.cp "support/template/Dockerfile", "#{@app}/Dockerfile"
 
+    # Copy readme
+    FileUtils.cp "support/template/README.md", "#{@app}/README.md"
+
     # Render docker compose file
     File.write "#{@app}/docker-compose.yml", render_erb("support/template/docker-compose.yml.erb")
 
