@@ -46,6 +46,12 @@ Open the browser pointing to the app:
 rake app:open
 ```
 
+Reset the integrations to their current `main`:
+
+```
+rake integrations:reset
+```
+
 ## Generate a new test setup
 
 To generate a new test setup run:
