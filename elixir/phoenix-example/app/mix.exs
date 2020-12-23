@@ -1,9 +1,9 @@
-defmodule Demo.MixProject do
+defmodule AppsignalPhoenixExample.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :demo,
+      app: :appsignal_phoenix_example,
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Demo.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Demo.Application, []},
+      mod: {AppsignalPhoenixExample.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -37,8 +37,6 @@ defmodule Demo.MixProject do
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.14.6"},
-      {:floki, ">= 0.27.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.3 or ~> 0.2.9"},
@@ -47,7 +45,9 @@ defmodule Demo.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:appsignal, path: "/integration/appsignal-elixir"}
+      {:appsignal, path: "/integration/appsignal-elixir", override: true},
+      {:appsignal_plug, path: "/integration/appsignal-elixir-plug", override: true},
+      {:appsignal_phoenix, path: "/integration/appsignal-elixir-phoenix", override: true}
     ]
   end
 

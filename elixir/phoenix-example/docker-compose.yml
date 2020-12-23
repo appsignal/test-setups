@@ -8,13 +8,13 @@ services:
     env_file:
       - postgres.env
   app:
-    image: elixir/alpine-release:latest
+    image: elixir/phoenix-example:latest
     depends_on:
       - postgres
     ports:
       - "3000:4000"
     environment:
-      - APPSIGNAL_APP_NAME=elixir-alpine-release
+      - APPSIGNAL_APP_NAME=elixir-phoenix-example
     env_file:
       - postgres.env
       - ../../appsignal.env

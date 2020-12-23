@@ -1,12 +1,28 @@
 require 'erb'
 require 'fileutils'
 
-INTEGRATIONS = %w(ruby elixir)
-
 def get_app
   ENV['app'].tap do |app|
     raise "Specify which app you want to run using app=path" if app.nil?
     raise "#{app} not found" unless File.exists?(app)
+  end
+end
+
+def clone_from_git(path, repo)
+  if File.exists?(path)
+    puts "#{path} already present"
+  else
+    puts "Cloning #{repo} into #{path}"
+    run_command "git clone git@github.com:appsignal/#{repo}.git #{path}"
+  end
+end
+
+def reset_repo(path)
+  if File.exists?(path)
+    puts "Resetting #{integration}"
+    run_command "cd #{path} && git fetch && git reset --hard origin/main"
+  else
+    puts "#{path} not present"
   end
 end
 
@@ -46,9 +62,6 @@ namespace :app do
 
     # Render docker compose file
     File.write "#{@app}/docker-compose.yml", render_erb("support/template/docker-compose.yml.erb")
-
-    # Render env file
-    File.write "#{@app}/appsignal.env", render_erb("support/template/appsignal.env.erb")
 
     puts "Generated test setup skeleton in #{@app}, add your code in app directory now"
   end
@@ -102,27 +115,26 @@ end
 namespace :integrations do
   desc "Clone integrations"
   task :clone do
-    INTEGRATIONS.each do |integration|
-      path = "#{integration}/integration"
-      if File.exists?(path)
-        puts "#{path} already present"
-      else
-        puts "Cloning #{integration}"
-        run_command "git clone git@github.com:appsignal/appsignal-#{integration}.git #{path}"
-      end
-    end
+    # Clone Ruby
+    clone_from_git("ruby/integration", "appsignal-ruby")
+    # Clone Elixir, it currently consists of multiple repos
+    FileUtils.mkdir_p("elixir/integration")
+    clone_from_git("elixir/integration/appsignal-elixir", "appsignal-elixir")
+    clone_from_git("elixir/integration/appsignal-elixir-phoenix", "appsignal-elixir-phoenix")
+    clone_from_git("elixir/integration/appsignal-elixir-plug", "appsignal-elixir-plug")
   end
 
   desc "Reset integrations"
   task :reset do
-    INTEGRATIONS.each do |integration|
-      path = "#{integration}/integration"
-      if File.exists?(path)
-        puts "Resetting #{integration}"
-        run_command "cd #{path} && git fetch && git reset --hard origin/main"
-      else
-        puts "#{path} not present"
-      end
-    end
+    reset_repo("ruby/integration")
+    reset_repo("elixir/integration/appsignal-elixir-phoenix")
+    reset_repo("elixir/integration/appsignal-phoenix")
+    reset_repo("elixir/integration/appsignal-plug")
+  end
+
+  desc "Remove integrations"
+  task :clean do
+    run_command("rm -rf ruby/integration")
+    run_command("rm -rf elixir/integration")
   end
 end

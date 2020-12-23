@@ -5,8 +5,10 @@ services:
     image: <%= @app %>:latest
     ports:
       - "3000:3000"
+    environment:
+      - APPSIGNAL_APP_NAME=<%= @app.gsub('/', '-') %>
     env_file:
-      - appsignal.env
+      - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
       - ./app:/app

@@ -56,4 +56,5 @@ rake app=lang/app app:new
 
 Then customize the generated files and place your code in `app` within
 the generated skeleton app. Make sure to map the port to localhost to
-`3000`.
+`3000`. If you want to run tasks such as generators do that from within
+the Docker setup by using the `app:bash` task.

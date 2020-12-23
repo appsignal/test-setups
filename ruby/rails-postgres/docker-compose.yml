@@ -13,9 +13,11 @@ services:
       - postgres
     ports:
       - "3000:3000"
+    environment:
+      - APPSIGNAL_APP_NAME=ruby-rails-postgres
     env_file:
       - postgres.env
-      - appsignal.env
+      - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
       - ./app:/app
