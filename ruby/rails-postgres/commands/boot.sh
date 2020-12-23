@@ -1,6 +1,3 @@
-echo "Install appsignal agent"
-cd /integration/ext && ruby extconf.rb && make
-
 echo "Install dependencies"
 cd /app && bundle install --path=vendor/bundle
 cd /app && npm install --prefix=vendor/npm

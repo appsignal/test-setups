@@ -83,11 +83,6 @@ namespace :app do
     end
   end
 
-  desc "Very that test setup works"
-  task :verify do
-    raise "Not implemented yet"
-  end
-
   desc "Remove docker images"
   task :down do
       @app = get_app
