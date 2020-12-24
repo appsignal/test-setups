@@ -49,8 +49,6 @@ namespace :app do
     # Create directories
     FileUtils.mkdir_p "#{@app}"
     FileUtils.mkdir_p "#{@app}/commands"
-    FileUtils.mkdir_p "#{@app}/working_directory"
-    FileUtils.touch "#{@app}/working_directory/.gitkeep"
 
     # Copy command scripts
     %w(boot console).each do |command|
@@ -110,7 +108,7 @@ namespace :app do
     desc "Tail appsignal.log"
     task :appsignal do
       @app = get_app
-      run_command "tail -f #{@app}/working_directory/appsignal.log"
+      run_command "cd #{@app} && docker-compose exec app tail -f /tmp/appsignal.log"
     end
   end
 end

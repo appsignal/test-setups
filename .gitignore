@@ -1,6 +1,5 @@
 **/tmp/**
 **/vendor/**
 */integration
-**/working_directory/*
 .DS_Store
 appsignal_key.env

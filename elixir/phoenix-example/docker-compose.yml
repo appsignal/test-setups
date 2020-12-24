@@ -21,5 +21,4 @@ services:
       - ../../appsignal_key.env
     volumes:
       - ./app:/app
-      - ./working_directory:/working_directory
       - ../integration:/integration
