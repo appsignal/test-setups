@@ -13,10 +13,11 @@ Next, checkout the integrations locally:
 rake integrations:clone
 ```
 
-Copy the example key env file and add a valid push api key:
+Generate an environment file using a valid push api key,
+this file is ignored by git:
 
 ```
-cp appsignal_key.env.example appsignal_key.env
+rake global:set_push_api_key key=<key>
 ```
 
 To start a test setup:

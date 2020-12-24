@@ -72,7 +72,7 @@ namespace :app do
   desc "Start a test app"
   task :up do
     unless File.exist?("appsignal_key.env")
-      raise "Please copy appsignal_key.env.example to appsignal_key.env and add a push api key"
+      raise "No push api key set yet, run rake global:set_push_api_key key=<key>"
     end
 
     @app = get_app
@@ -159,5 +159,12 @@ namespace :global do
     end.flatten
 
     File.write "README.md", render_erb("support/templates/README.md.erb")
+  end
+
+  desc "Set the push api key to use"
+  task :set_push_api_key do
+    @key = ENV['key'] or raise "No key provided"
+    puts "Setting push api key in appsignal_key.env"
+    File.write "appsignal_key.env", render_erb("support/templates/appsignal_key.env.erb")
   end
 end
