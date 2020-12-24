@@ -71,6 +71,10 @@ namespace :app do
 
   desc "Start a test app"
   task :up do
+    unless File.exist?("appsignal_key.env")
+      raise "Please copy appsignal_key.env.example to appsignal_key.env and add a push api key"
+    end
+
     @app = get_app
     puts "Starting #{@app}"
 
