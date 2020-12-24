@@ -13,16 +13,17 @@ Next, checkout the integrations locally:
 rake integrations:clone
 ```
 
-Copy the example key env file and add a valid push api key:
+Generate an environment file using a valid push api key you
+can get on [AppSignal](https://appsignal.com):
 
 ```
-cp appsignal_key.env.example appsignal_key.env
+rake global:set_push_api_key key=<key>
 ```
 
 To start a test setup:
 
 ```
-<% @apps.each do |app | %>rake <%= app %> app:up
+<% @apps.each do |app | %>rake app=<%= app %> app:up
 <% end %>```
 
 This will boot a test environment with AppSignal enabled listening on
@@ -32,19 +33,19 @@ accessible in the `working_directory`.
 To run bash:
 
 ```
-<% @apps.each do |app | %>rake <%= app %> app:bash
+<% @apps.each do |app | %>rake app=<%= app %> app:bash
 <% end %>```
 
 To run the console:
 
 ```
-<% @apps.each do |app | %>rake <%= app %> app:console
+<% @apps.each do |app | %>rake app=<%= app %> app:console
 <% end %>```
 
 Tail the appsignal log:
 
 ```
-<% @apps.each do |app | %>rake <%= app %> app:tail:appsignal
+<% @apps.each do |app | %>rake app=<%= app %> app:tail:appsignal
 <% end %>```
 
 Open the browser pointing to the app:

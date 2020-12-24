@@ -13,8 +13,8 @@ Next, checkout the integrations locally:
 rake integrations:clone
 ```
 
-Generate an environment file using a valid push api key,
-this file is ignored by git:
+Generate an environment file using a valid push api key you
+can get on [AppSignal](https://appsignal.com):
 
 ```
 rake global:set_push_api_key key=<key>
@@ -23,9 +23,9 @@ rake global:set_push_api_key key=<key>
 To start a test setup:
 
 ```
-rake elixir/alpine-release app:up
-rake elixir/phoenix-example app:up
-rake ruby/rails-postgres app:up
+rake app=elixir/alpine-release app:up
+rake app=elixir/phoenix-example app:up
+rake app=ruby/rails-postgres app:up
 ```
 
 This will boot a test environment with AppSignal enabled listening on
@@ -35,25 +35,25 @@ accessible in the `working_directory`.
 To run bash:
 
 ```
-rake elixir/alpine-release app:bash
-rake elixir/phoenix-example app:bash
-rake ruby/rails-postgres app:bash
+rake app=elixir/alpine-release app:bash
+rake app=elixir/phoenix-example app:bash
+rake app=ruby/rails-postgres app:bash
 ```
 
 To run the console:
 
 ```
-rake elixir/alpine-release app:console
-rake elixir/phoenix-example app:console
-rake ruby/rails-postgres app:console
+rake app=elixir/alpine-release app:console
+rake app=elixir/phoenix-example app:console
+rake app=ruby/rails-postgres app:console
 ```
 
 Tail the appsignal log:
 
 ```
-rake elixir/alpine-release app:tail:appsignal
-rake elixir/phoenix-example app:tail:appsignal
-rake ruby/rails-postgres app:tail:appsignal
+rake app=elixir/alpine-release app:tail:appsignal
+rake app=elixir/phoenix-example app:tail:appsignal
+rake app=ruby/rails-postgres app:tail:appsignal
 ```
 
 Open the browser pointing to the app:
