@@ -1,5 +1,7 @@
 # Test setups
 
+<!-- Generated from support/templates/README.md.erb -->
+
 Run test setups using Docker, requirements to run this:
 
 * A recent Docker version that includes Compose.
