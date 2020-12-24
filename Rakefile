@@ -1,6 +1,8 @@
 require 'erb'
 require 'fileutils'
 
+LANGUAGES = %w(elixir ruby)
+
 def get_app
   ENV['app'].tap do |app|
     raise "Specify which app you want to run using app=path" if app.nil?
@@ -52,17 +54,17 @@ namespace :app do
 
     # Copy command scripts
     %w(boot console).each do |command|
-      FileUtils.cp "support/template/commands/#{command}.sh", "#{@app}/commands/#{command}.sh"
+      FileUtils.cp "support/templates/skeleton/commands/#{command}.sh", "#{@app}/commands/#{command}.sh"
     end
 
     # Copy Dockerfile
-    FileUtils.cp "support/template/Dockerfile", "#{@app}/Dockerfile"
+    FileUtils.cp "support/templates/skeleton/Dockerfile", "#{@app}/Dockerfile"
 
     # Copy readme
-    FileUtils.cp "support/template/README.md", "#{@app}/README.md"
+    FileUtils.cp "support/templates/skeleton/README.md", "#{@app}/README.md"
 
     # Render docker compose file
-    File.write "#{@app}/docker-compose.yml", render_erb("support/template/docker-compose.yml.erb")
+    File.write "#{@app}/docker-compose.yml", render_erb("support/templates/skeleton/docker-compose.yml.erb")
 
     puts "Generated test setup skeleton in #{@app}, add your code in app directory now"
   end
@@ -137,5 +139,21 @@ namespace :integrations do
   task :clean do
     run_command("rm -rf ruby/integration")
     run_command("rm -rf elixir/integration")
+  end
+end
+
+namespace :global do
+  desc "Update global files"
+  task :update => [:update_readme]
+
+  desc "Update the readme using the template"
+  task :update_readme do
+    @apps = LANGUAGES.map do |language|
+      Dir["#{language}/*"].reject do |dir|
+        dir.end_with?("integration")
+      end
+    end.flatten
+
+    File.write "README.md", render_erb("support/templates/README.md.erb")
   end
 end

@@ -20,10 +20,8 @@ cp appsignal_key.env.example appsignal_key.env
 To start a test setup:
 
 ```
-rake elixir/alpine-release app:up
-rake elixir/phoenix-example app:up
-rake ruby/rails-postgres app:up
-```
+<% @apps.each do |app | %>rake <%= app %> app:up
+<% end %>```
 
 This will boot a test environment with AppSignal enabled listening on
 [localhost](http://localhost:3000). The agent log and lock files are
@@ -32,26 +30,20 @@ accessible in the `working_directory`.
 To run bash:
 
 ```
-rake elixir/alpine-release app:bash
-rake elixir/phoenix-example app:bash
-rake ruby/rails-postgres app:bash
-```
+<% @apps.each do |app | %>rake <%= app %> app:bash
+<% end %>```
 
 To run the console:
 
 ```
-rake elixir/alpine-release app:console
-rake elixir/phoenix-example app:console
-rake ruby/rails-postgres app:console
-```
+<% @apps.each do |app | %>rake <%= app %> app:console
+<% end %>```
 
 Tail the appsignal log:
 
 ```
-rake elixir/alpine-release app:tail:appsignal
-rake elixir/phoenix-example app:tail:appsignal
-rake ruby/rails-postgres app:tail:appsignal
-```
+<% @apps.each do |app | %>rake <%= app %> app:tail:appsignal
+<% end %>```
 
 Open the browser pointing to the app:
 
