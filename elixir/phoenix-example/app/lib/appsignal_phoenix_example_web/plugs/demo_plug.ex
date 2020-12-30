@@ -11,7 +11,6 @@ defmodule DemoPlug do
 
     Appsignal.instrument(fn span ->
       span
-      |> Appsignal.Span.set_namespace("graphql") # at the moment i am not sure what this does
       |> Appsignal.Span.set_attribute("appsignal:category", "locale") # creates a sub event in event timeline
       |> Appsignal.Span.set_name("Locales.Instrument") # Events heading
 
