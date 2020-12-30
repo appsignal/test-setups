@@ -51,5 +51,9 @@ defmodule AppsignalPhoenixExampleWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+
+  # TODO: this custom plug has instrumentation that I can't get to work
+  plug ChipWeb.CustomPlug
   plug AppsignalPhoenixExampleWeb.Router
+
 end
