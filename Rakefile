@@ -66,7 +66,9 @@ namespace :app do
     # Render docker compose file
     File.write "#{@app}/docker-compose.yml", render_erb("support/templates/skeleton/docker-compose.yml.erb")
 
-    puts "Generated test setup skeleton in #{@app}, add your code in app directory now"
+    puts "Generated test setup skeleton in #{@app}. Next:"
+    puts "- Add your code in the app directory"
+    puts "- Fill out the TODO markers in the generated files"
   end
 
   desc "Start a test app"

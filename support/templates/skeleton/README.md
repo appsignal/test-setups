@@ -1,3 +1,3 @@
 # TODO
 
-Please describe what this test setup does.
+Please describe what this test setup replicates.
