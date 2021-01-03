@@ -1,3 +1,5 @@
+#!/bin/sh
+
 echo "Install dependencies"
 cd /app && bundle install --path=vendor/bundle
 cd /app && npm install --prefix=vendor/npm
@@ -8,5 +10,5 @@ cd /integration && rake extension:install
 echo "Clean tmp"
 rm -rf /app/tmp
 
-echo "Run app"
+echo "Running rails server"
 cd /app && bin/rails server -b 0.0.0.0
