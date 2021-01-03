@@ -103,6 +103,13 @@ namespace :app do
     end
   end
 
+  desc "Restart the app container, needed when making changes in the integration"
+  task :restart do
+    @app = get_app
+    puts "Restarting #{@app}"
+    run_command "cd #{@app} && docker-compose restart app"
+  end
+
   desc "Remove docker images"
   task :down do
       @app = get_app
