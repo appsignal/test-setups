@@ -57,11 +57,11 @@ namespace :app do
       FileUtils.cp "support/templates/skeleton/commands/#{command}.sh", "#{@app}/commands/#{command}.sh"
     end
 
-    # Copy Dockerfile
-    FileUtils.cp "support/templates/skeleton/Dockerfile", "#{@app}/Dockerfile"
-
     # Copy readme
     FileUtils.cp "support/templates/skeleton/README.md", "#{@app}/README.md"
+
+    # Render Dockerfile
+    File.write "#{@app}/Dockerfile", render_erb("support/templates/skeleton/Dockerfile.erb")
 
     # Render docker compose file
     File.write "#{@app}/docker-compose.yml", render_erb("support/templates/skeleton/docker-compose.yml.erb")
