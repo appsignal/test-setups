@@ -6,15 +6,10 @@ defmodule ChipWeb.CustomPlug do
     opts
   end
 
-  def call(%Conn{ path_info: [ "custom" ] } = conn, _opts) do
-    # TODO: this instrumentation doesn't seem to make it to AppSignal
+  def call(conn, _opts) do
     Appsignal.instrument "ChipWeb.CustomPlug", fn ->
       Process.sleep(1000)
-      |> Appsignal.Span.set_namespace("web")
-      |> Appsignal.Span.set_name("custom")
       conn
-      |> Conn.send_resp(200, "special case handling of /custom endpoint")
-      |> Conn.halt
     end
   end
 
