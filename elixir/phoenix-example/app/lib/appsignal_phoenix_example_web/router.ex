@@ -18,8 +18,11 @@ defmodule AppsignalPhoenixExampleWeb.Router do
 
     get "/", PageController, :index
     resources "/users", UserController
+
   end
 
+  forward "/api", Absinthe.Plug, schema: AppsignalPhoenixExampleWeb.Schema
+  forward "/graphiql", Absinthe.Plug.GraphiQL, schema: AppsignalPhoenixExampleWeb.Schema
 
   # Other scopes may use custom stacks.
   # scope "/api", AppsignalPhoenixExampleWeb do
