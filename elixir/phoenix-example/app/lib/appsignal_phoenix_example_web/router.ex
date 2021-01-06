@@ -18,6 +18,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
 
     get "/", PageController, :index
     resources "/users", UserController
+    get "/custom", PageController, :custom
 
   end
 

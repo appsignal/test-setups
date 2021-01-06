@@ -21,7 +21,7 @@ end
 
 def reset_repo(path)
   if File.exists?(path)
-    puts "Resetting #{integration}"
+    puts "Resetting"
     run_command "cd #{path} && git fetch && git reset --hard origin/main"
   else
     puts "#{path} not present"
