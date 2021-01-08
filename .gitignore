@@ -3,3 +3,5 @@
 */integration
 .DS_Store
 appsignal_key.env
+node_modules
+package-lock.json

@@ -1,7 +1,7 @@
 require 'erb'
 require 'fileutils'
 
-LANGUAGES = %w(elixir ruby)
+LANGUAGES = %w(elixir ruby nodejs)
 
 def get_app
   ENV['app'].tap do |app|
@@ -19,10 +19,10 @@ def clone_from_git(path, repo)
   end
 end
 
-def reset_repo(path)
+def reset_repo(path, branch: "main")
   if File.exists?(path)
-    puts "Resetting #{integration}"
-    run_command "cd #{path} && git fetch && git reset --hard origin/main"
+    puts "Resetting #{path}"
+    run_command "cd #{path} && git fetch && git reset --hard origin/#{branch}"
   else
     puts "#{path} not present"
   end
@@ -81,7 +81,7 @@ namespace :app do
     puts "Starting #{@app}"
 
     puts "Building..."
-    run_command "cd #{@app} && docker build -t #{@app}  ."
+    run_command "cd #{@app} && docker build -t #{@app} ."
 
     puts "Starting compose..."
     run_command "cd #{@app} && docker-compose up"
@@ -112,11 +112,12 @@ namespace :app do
     run_command "cd #{@app} && docker-compose restart app"
   end
 
-  desc "Remove docker images"
+  desc "Bring compose down and remove cached app docker image"
   task :down do
-      @app = get_app
-      puts "Bringing compose down..."
-      run_command "cd #{@app} && docker-compose down --rmi=local"
+    @app = get_app
+    puts "Bringing compose down..."
+    run_command "cd #{@app} && docker-compose down --rmi=local"
+    run_command "docker image rm -f #{@app}:latest"
   end
 
   namespace :tail do
@@ -138,20 +139,28 @@ namespace :integrations do
     clone_from_git("elixir/integration/appsignal-elixir", "appsignal-elixir")
     clone_from_git("elixir/integration/appsignal-elixir-phoenix", "appsignal-elixir-phoenix")
     clone_from_git("elixir/integration/appsignal-elixir-plug", "appsignal-elixir-plug")
+    # Clone Node.js
+    clone_from_git("nodejs/integration", "appsignal-nodejs")
+    reset_repo("nodejs/integration", branch: "make")
   end
 
   desc "Reset integrations"
   task :reset do
+    # Ruby
     reset_repo("ruby/integration")
+    # Elixir
     reset_repo("elixir/integration/appsignal-elixir-phoenix")
     reset_repo("elixir/integration/appsignal-phoenix")
     reset_repo("elixir/integration/appsignal-plug")
+    # Node.js
+    reset_repo("nodejs/integration", branch: "make")
   end
 
   desc "Remove integrations"
   task :clean do
     run_command("rm -rf ruby/integration")
     run_command("rm -rf elixir/integration")
+    run_command("rm -rf nodejs/integration")
   end
 end
 
