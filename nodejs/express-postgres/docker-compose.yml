@@ -16,6 +16,7 @@ services:
     environment:
       - APPSIGNAL_APP_NAME=nodejs-express-postgres
     env_file:
+      - postgres.env
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:

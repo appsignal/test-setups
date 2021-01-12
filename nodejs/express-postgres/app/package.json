@@ -11,8 +11,10 @@
   "dependencies": {
     "@appsignal/express": "*",
     "@appsignal/nodejs": "*",
-    "express": "^4.17.1",
-    "pg": "*"
+    "express": "*",
+    "pg": "*",
+    "pug": "*",
+    "sequelize-cli": "*"
   },
   "devDependencies": {
     "nodemon": "*"
