@@ -9,7 +9,6 @@ const { expressMiddleware } = require("@appsignal/express");
 const { expressErrorHandler } = require("@appsignal/express");
 
 app.use(expressMiddleware(appsignal));
-app.use(expressErrorHandler(appsignal));
 app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -53,6 +52,8 @@ app.get('/error', (req, res) => {
   console.log("Request on /error")
   throw new Error("This is an error")
 })
+
+app.use(expressErrorHandler(appsignal));
 
 app.listen(3000, () => {
   console.log('Example app listening')
