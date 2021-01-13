@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
+  after_action :custom_instrumentation, only: [:index]
 
   # GET /items
   # GET /items.json
@@ -70,5 +71,17 @@ class ItemsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def item_params
       params.require(:item).permit(:name, :description)
+    end
+
+    def custom_instrumentation
+      Appsignal.instrument('ruby.fiber') do
+        f = Fiber.new { puts 1; Fiber.yield; puts 2 }
+        Appsignal.instrument('ruby.fiber-resume1') do
+          f.resume
+        end
+        Appsignal.instrument('ruby.fiber-resume2') do
+          f.resume
+        end
+      end
     end
 end
