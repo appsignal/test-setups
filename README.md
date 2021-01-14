@@ -48,12 +48,20 @@ rake app=elixir/phoenix-example app:bash
 rake app=ruby/rails-postgres app:bash
 ```
 
-To run the console:
+To run the console (if implemented in the test app):
 
 ```
 rake app=elixir/alpine-release app:console
 rake app=elixir/phoenix-example app:console
 rake app=ruby/rails-postgres app:console
+```
+
+To send in a diagnose (if implemented in the test app);
+
+```
+rake app=elixir/alpine-release app:diagnose
+rake app=elixir/phoenix-example app:diagnose
+rake app=ruby/rails-postgres app:diagnose
 ```
 
 Tail the appsignal log:
