@@ -53,7 +53,7 @@ namespace :app do
     FileUtils.mkdir_p "#{@app}/commands"
 
     # Copy command scripts
-    %w(boot console).each do |command|
+    %w(boot console diagnose).each do |command|
       FileUtils.cp "support/templates/skeleton/commands/#{command}.sh", "#{@app}/commands/#{command}.sh"
     end
 
@@ -102,6 +102,17 @@ namespace :app do
       run_command "cd #{@app} && docker-compose exec app /commands/console.sh"
     else
       puts "Starting a console in #{@app} is not supported"
+    end
+  end
+
+  desc "Attach to app and run diagnose"
+  task :diagnose do
+    @app = get_app
+    if File.exists?("#{@app}/commands/diagnose.sh")
+      puts "Runing diagnose in #{@app}"
+      run_command "cd #{@app} && docker-compose exec app /commands/diagnose.sh"
+    else
+      puts "Running diagnose in #{@app} is not supported"
     end
   end
 

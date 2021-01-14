@@ -42,10 +42,16 @@ To run bash:
 <% @apps.each do |app | %>rake app=<%= app %> app:bash
 <% end %>```
 
-To run the console:
+To run the console (if implemented in the test app):
 
 ```
 <% @apps.each do |app | %>rake app=<%= app %> app:console
+<% end %>```
+
+To send in a diagnose (if implemented in the test app);
+
+```
+<% @apps.each do |app | %>rake app=<%= app %> app:diagnose
 <% end %>```
 
 Tail the appsignal log:
