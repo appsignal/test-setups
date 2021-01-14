@@ -26,6 +26,7 @@ To start a test setup:
 rake app=elixir/alpine-release app:up
 rake app=elixir/phoenix-example app:up
 rake app=ruby/rails-postgres app:up
+rake app=nodejs/express-postgres app:up
 ```
 
 This will boot a test environment with AppSignal enabled listening on
@@ -38,6 +39,7 @@ To restart the app container after making changes to an integration:
 rake app=elixir/alpine-release app:restart
 rake app=elixir/phoenix-example app:restart
 rake app=ruby/rails-postgres app:restart
+rake app=nodejs/express-postgres app:restart
 ```
 
 To run bash:
@@ -46,6 +48,7 @@ To run bash:
 rake app=elixir/alpine-release app:bash
 rake app=elixir/phoenix-example app:bash
 rake app=ruby/rails-postgres app:bash
+rake app=nodejs/express-postgres app:bash
 ```
 
 To run the console (if implemented in the test app):
@@ -54,6 +57,7 @@ To run the console (if implemented in the test app):
 rake app=elixir/alpine-release app:console
 rake app=elixir/phoenix-example app:console
 rake app=ruby/rails-postgres app:console
+rake app=nodejs/express-postgres app:console
 ```
 
 To send in a diagnose (if implemented in the test app);
@@ -70,6 +74,7 @@ Tail the appsignal log:
 rake app=elixir/alpine-release app:tail:appsignal
 rake app=elixir/phoenix-example app:tail:appsignal
 rake app=ruby/rails-postgres app:tail:appsignal
+rake app=nodejs/express-postgres app:tail:appsignal
 ```
 
 Open the browser pointing to the app:
