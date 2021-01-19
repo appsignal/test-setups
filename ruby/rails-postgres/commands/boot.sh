@@ -1,14 +1,21 @@
 #!/bin/sh
 
-echo "Install dependencies"
-cd /app && bundle install --path=vendor/bundle
-cd /app && npm install --prefix=vendor/npm
+set -eu
 
 echo "Install appsignal"
 cd /integration && rake extension:install
 
+cd /app
+
+echo "Install dependencies"
+bundle install --path=vendor/bundle
+npm install --prefix=vendor/npm
+
 echo "Clean tmp"
-rm -rf /app/tmp
+rm -rf tmp
+
+echo "Running migrations"
+bin/rails db:migrate
 
 echo "Running rails server"
-cd /app && bin/rails server -b 0.0.0.0
+bin/rails server -b 0.0.0.0

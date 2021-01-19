@@ -1,7 +1,7 @@
 PATH
   remote: /integration
   specs:
-    appsignal (2.11.1)
+    appsignal (2.11.2)
       rack
 
 GEM
@@ -91,6 +91,7 @@ GEM
     nio4r (2.5.4)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
+    pg (1.2.3)
     puma (4.3.6)
       nio4r (~> 2.0)
     rack (2.2.3)
@@ -143,7 +144,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -164,10 +164,10 @@ DEPENDENCIES
   appsignal!
   jbuilder (~> 2.7)
   listen
+  pg
   puma (~> 4.1)
   rails (~> 6.0.3, >= 6.0.3.4)
   sass-rails (>= 6)
-  sqlite3 (~> 1.4)
   turbolinks (~> 5)
 
 RUBY VERSION
