@@ -32,7 +32,41 @@ end
 
 def run_command(command)
   puts "Running '#{command}'"
-  system command
+  # Spawn child process with parent process STDIN, STDOUT and STDERR
+  pid = spawn({}, command, :in => $stdin, :out => $stdout, :err => $stderr)
+  # Register child process so we can wait for it to exit gracefully later
+  child_processes << [pid, command]
+  # Wait for child process to end
+  _pid, status = Process.wait2(pid)
+  # Exit with the error status code if an error occurred in the child process
+  exit status.exitstatus unless status.success?
+end
+
+def child_processes
+  @child_processes ||= []
+end
+
+# "Trap" an interrupt from the user and wait for the child processes to end
+# first before exiting this process. Docker-compose if interrupted gracefully
+# stops all its containers first before truely exiting, wait for this graceful
+# exit.
+Signal.trap "INT" do
+  return if child_processes.empty?
+
+  child_processes.each do |(pid, command)|
+    begin
+      Process.kill(0, pid) # Check if process still exists
+
+      puts "Waiting for child process to end: #{pid}: #{command}"
+      _pid, status = Process.wait2(pid)
+      # Exit with the error status code if an error occurred in the child process
+      exit status.exitstatus unless status.success?
+    rescue Errno::ESRCH
+      # Do nothing, child process is no longer running
+    end
+  end
+  # There were no errors, so gracefully exit process here
+  exit 0
 end
 
 def render_erb(file)
