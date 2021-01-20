@@ -18,4 +18,4 @@ echo "Running migrations"
 bin/rails db:migrate
 
 echo "Running rails server"
-bin/rails server -b 0.0.0.0
+bin/rails server --binding=0.0.0.0

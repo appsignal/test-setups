@@ -4,7 +4,7 @@ services:
   app:
     image: <%= @app %>:latest
     ports:
-      - "3000:3000"
+      - "4001:3000"
     environment:
       - APPSIGNAL_APP_NAME=<%= @app.gsub('/', '-') %>
     env_file:
