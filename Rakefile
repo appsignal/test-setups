@@ -86,6 +86,7 @@ namespace :app do
 
     # Create directories
     FileUtils.mkdir_p "#{@app}"
+    FileUtils.mkdir_p "#{@app}/app"
     FileUtils.mkdir_p "#{@app}/commands"
 
     # Copy command scripts
