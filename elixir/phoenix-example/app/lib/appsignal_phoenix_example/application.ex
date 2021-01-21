@@ -2,6 +2,7 @@ defmodule AppsignalPhoenixExample.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
+  import Telemetry.Metrics
 
   use Application
 
@@ -14,9 +15,10 @@ defmodule AppsignalPhoenixExample.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: AppsignalPhoenixExample.PubSub},
       # Start the Endpoint (http/https)
-      AppsignalPhoenixExampleWeb.Endpoint
+      AppsignalPhoenixExampleWeb.Endpoint,
       # Start a worker by calling: AppsignalPhoenixExample.Worker.start_link(arg)
       # {AppsignalPhoenixExample.Worker, arg}
+      {TelemetryMetricsAppsignal, [metrics: metrics()]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -24,6 +26,12 @@ defmodule AppsignalPhoenixExample.Application do
     opts = [strategy: :one_for_one, name: AppsignalPhoenixExample.Supervisor]
     Supervisor.start_link(children, opts)
   end
+
+  def metrics, do:
+  [
+    summary("phoenix.endpoint.stop.duration"),
+    last_value("vm.memory.total")
+  ]
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
