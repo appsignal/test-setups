@@ -1,7 +1,7 @@
 require 'erb'
 require 'fileutils'
 
-LANGUAGES = %w(elixir ruby nodejs)
+LANGUAGES = %w(elixir ruby nodejs javascript)
 
 def get_app
   ENV['app'].tap do |app|
@@ -190,6 +190,9 @@ namespace :integrations do
     # Clone Node.js
     clone_from_git("nodejs/integration", "appsignal-nodejs")
     reset_repo("nodejs/integration", branch: "make")
+    # Clone JavaScript
+    clone_from_git("javascript/integration", "appsignal-javascript")
+    reset_repo("javascript/integration")
   end
 
   desc "Reset integrations"
@@ -202,6 +205,8 @@ namespace :integrations do
     reset_repo("elixir/integration/appsignal-plug")
     # Node.js
     reset_repo("nodejs/integration", branch: "make")
+    # JavaScript
+    reset_repo("javascript/integration")
   end
 
   desc "Remove integrations"
@@ -209,6 +214,7 @@ namespace :integrations do
     run_command("rm -rf ruby/integration")
     run_command("rm -rf elixir/integration")
     run_command("rm -rf nodejs/integration")
+    run_command("rm -rf javascript/integration")
   end
 end
 

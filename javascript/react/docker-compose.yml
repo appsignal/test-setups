@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: javascript/react
+    ports:
+      - "4001:3000"
+    environment:
+      - APPSIGNAL_APP_NAME=javascript-react
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
