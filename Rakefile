@@ -76,7 +76,7 @@ end
 namespace :app do
   desc "Open the browser pointing to the app"
   task :open do
-    run_command "open http://localhost:3000"
+    run_command "open http://localhost:4001"
   end
 
   desc "Create a test setup skeleton"

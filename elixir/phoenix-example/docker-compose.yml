@@ -3,8 +3,6 @@ version: '3.8'
 services:
   postgres:
     image: postgres
-    ports:
-      - "5432:5432"
     env_file:
       - postgres.env
   app:
@@ -12,7 +10,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - "3000:4000"
+      - "4001:4000"
     environment:
       - APPSIGNAL_APP_NAME=elixir-phoenix-example
     env_file:
