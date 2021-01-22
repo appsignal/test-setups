@@ -4,7 +4,8 @@ services:
   motoserver:
     image: motoserver/moto
   app:
-    image: ruby/shoryuken:latest
+    build: .
+    image: ruby/shoryuken
     depends_on:
       - motoserver
     environment:

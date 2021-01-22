@@ -6,7 +6,8 @@ services:
     env_file:
       - postgres.env
   app:
-    image: ruby/rails-postgres:latest
+    build: .
+    image: ruby/rails-postgres
     depends_on:
       - postgres
     ports:

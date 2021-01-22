@@ -6,7 +6,8 @@ services:
     env_file:
       - postgres.env
   app:
-    image: nodejs/express-postgres:latest
+    build: .
+    image: nodejs/express-postgres
     depends_on:
       - postgres
     ports:
