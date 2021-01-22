@@ -117,8 +117,8 @@ namespace :app do
     @app = get_app
     puts "Starting #{@app}"
 
-    puts "Building..."
-    run_command "cd #{@app} && docker build -t #{@app} ."
+    puts "Building environment..."
+    run_command "cd #{@app} && docker-compose build"
 
     puts "Starting compose..."
     run_command "cd #{@app} && docker-compose up"

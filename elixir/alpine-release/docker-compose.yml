@@ -6,7 +6,8 @@ services:
     env_file:
       - postgres.env
   app:
-    image: elixir/alpine-release:latest
+    build: .
+    image: elixir/alpine-release
     depends_on:
       - postgres
     ports:

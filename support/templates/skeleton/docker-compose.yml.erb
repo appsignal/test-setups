@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   app:
-    image: <%= @app %>:latest
+    build: .
+    image: <%= @app %>
     ports:
       - "4001:3000"
     environment:
