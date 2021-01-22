@@ -6,7 +6,8 @@ services:
     env_file:
       - postgres.env
   app:
-    image: elixir/phoenix-example:latest
+    build: .
+    image: elixir/phoenix-example
     depends_on:
       - postgres
     ports:
