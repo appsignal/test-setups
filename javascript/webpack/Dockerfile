@@ -8,5 +8,7 @@ RUN mkdir /commands
 COPY ./commands/*.sh /commands/
 RUN chmod +x /commands/*.sh
 
+RUN npm install -g http-server
+
 # Run the app
 CMD /commands/boot.sh

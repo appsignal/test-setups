@@ -25,8 +25,8 @@ function component() {
 
   // Lodash, now imported by this script
   element.innerHTML = _.join([
-    "Hello webpack",
-    "test app!<br>",
+    "Hello from the",
+    " webpack test app!<br>",
     "We are running release:",
     APPSIGNAL_REVISION
   ], " ");
