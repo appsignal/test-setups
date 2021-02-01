@@ -121,7 +121,7 @@ namespace :app do
     run_command "cd #{@app} && docker-compose build"
 
     puts "Starting compose..."
-    run_command "cd #{@app} && docker-compose up"
+    run_command "cd #{@app} && docker-compose up --abort-on-container-exit"
   end
 
   desc "Attach to app and get bash"
