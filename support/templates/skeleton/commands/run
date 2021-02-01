@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -eu
+
+echo "TODO: Implement installing dependencies"
+
+# Call processmon like this:
+# cd /app
+# /commands/processmon processmon.toml
+
+tail -f /dev/null # Keep container alive so you can bash into it

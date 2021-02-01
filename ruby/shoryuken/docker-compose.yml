@@ -15,19 +15,5 @@ services:
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
-      - "nfsmount_app:/app"
-      - "nfsmount_integration:/integration"
-
-volumes:
-  nfsmount_app:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
-      device: ":${PWD}/app"
-  nfsmount_integration:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
-      device: ":${PWD}/../integration"
+      - ./app:/app
+      - ../integration:/integration

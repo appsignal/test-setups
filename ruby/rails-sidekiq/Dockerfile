@@ -1,7 +1,7 @@
 FROM ruby:3.0
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2021-01-23
+ENV REFRESHED_AT=2021-02-10
 
 RUN apt-get update && \
   curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
@@ -14,8 +14,8 @@ ENV BUNDLE_PATH=/app/vendor/bundle
 
 # Copy commands into the container
 RUN mkdir /commands
-COPY ./commands/*.sh /commands/
-RUN chmod +x /commands/*.sh
+COPY ./commands/* /commands/
+RUN chmod +x /commands/*
 
-# Run the app
-CMD /commands/boot.sh
+# Prepare and run
+CMD /commands/run

@@ -1,0 +1,24 @@
+[[paths_to_watch]]
+path = "/app"
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.app]
+command = "bundle"
+args = [
+  "exec",
+  "ruby",
+  "app.rb"
+]
+working_dir = "/app"
+
+[processes.shoryuken]
+command = "bundle"
+args = [
+  "exec",
+  "shoryuken",
+  "--require=./workers.rb",
+  "--config=shoryuken.yml"
+]
+working_dir = "/app"

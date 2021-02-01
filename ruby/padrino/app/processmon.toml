@@ -1,0 +1,16 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = ["log"]
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.rails]
+command = "bundle"
+args = [
+  "exec",
+  "rackup",
+  "--host=0.0.0.0",
+  "--port=4001"
+]
+working_dir = "/app"
