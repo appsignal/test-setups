@@ -117,8 +117,15 @@ namespace :app do
     @app = get_app
     puts "Starting #{@app}"
 
+    puts "Copying processmon"
+    FileUtils.rm_f "#{@app}/commands/processmon"
+    FileUtils.cp "support/processmon/processmon", "#{@app}/commands/"
+
     puts "Building environment..."
     run_command "cd #{@app} && docker-compose build"
+
+    puts "Cleaning processmon"
+    FileUtils.rm_f "#{@app}/commands/processmon"
 
     puts "Starting compose..."
     run_command "cd #{@app} && docker-compose up --abort-on-container-exit"
@@ -313,5 +320,10 @@ namespace :global do
     @key = ENV['key'] or raise "No key provided"
     puts "Setting push api key in appsignal_key.env"
     File.write "appsignal_key.env", render_erb("support/templates/appsignal_key.env.erb")
+  end
+
+  desc "Install bundled processmon"
+  task :install_processmon do
+    run_command("cd support/processmon && ./build.sh")
   end
 end
