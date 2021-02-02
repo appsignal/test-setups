@@ -1,0 +1,20 @@
+<h1>Queue Sidekiq workers now</h1>
+
+<p>Click on any of the links below to queue a job for that Sidekiq worker.</p>
+
+<ul>
+  <% @worker_types.each do |worker_type| %>
+    <li><%= link_to worker_type, queue_workers_path(:worker => worker_type) %></li>
+  <% end %>
+</ul>
+
+<h1>Queue Sidekiq workers in the future</h1>
+
+<p>Click on any of the links below to queue a job for that Sidekiq worker.</p>
+<p>The job will be queued 5 minutes into the future.</p>
+
+<ul>
+  <% @worker_types.each do |worker_type| %>
+    <li><%= link_to worker_type, queue_workers_path(:worker => worker_type, :time => :future) %></li>
+  <% end %>
+</ul>
