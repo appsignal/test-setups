@@ -1,7 +1,7 @@
 defmodule AppsignalPhoenixExampleWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :appsignal_phoenix_example
   use Appsignal.Phoenix
-  plug AppsignalAbsinthePlug
+  # plug AppsignalAbsinthePlug
   plug Gateway.Plug.Absinthe
 
   # The session will be stored in the cookie and signed,
