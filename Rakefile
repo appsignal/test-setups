@@ -302,7 +302,7 @@ namespace :global do
     @apps = LANGUAGES.map do |language|
       Dir["#{language}/*"].reject do |dir|
         dir.end_with?("integration")
-      end
+      end.sort
     end.flatten
 
     File.write "README.md", render_erb("support/templates/README.md.erb")
