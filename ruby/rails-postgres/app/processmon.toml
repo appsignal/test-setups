@@ -1,0 +1,13 @@
+paths_to_watch = [
+  "/integration"
+]
+
+[processes]
+
+[processes.rails]
+command = "bin/rails"
+args = [
+  "server",
+  "--binding=0.0.0.0"
+]
+working_dir = "/app"

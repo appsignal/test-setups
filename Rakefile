@@ -141,9 +141,9 @@ namespace :app do
   desc "Attach to app and get a console"
   task :console do
     @app = get_app
-    if File.exists?("#{@app}/commands/console.sh")
+    if File.exists?("#{@app}/commands/console")
       puts "Starting console in #{@app}"
-      run_command "cd #{@app} && docker-compose exec app /commands/console.sh"
+      run_command "cd #{@app} && docker-compose exec app /commands/console"
     else
       puts "Starting a console in #{@app} is not supported"
     end
@@ -152,9 +152,9 @@ namespace :app do
   desc "Attach to app and run diagnose"
   task :diagnose do
     @app = get_app
-    if File.exists?("#{@app}/commands/diagnose.sh")
+    if File.exists?("#{@app}/commands/diagnose")
       puts "Runing diagnose in #{@app}"
-      run_command "cd #{@app} && docker-compose exec app /commands/diagnose.sh"
+      run_command "cd #{@app} && docker-compose exec app /commands/diagnose"
     else
       puts "Running diagnose in #{@app} is not supported"
     end

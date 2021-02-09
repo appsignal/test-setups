@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -eu
+
+cd /app && bundle exec appsignal diagnose --send-report
