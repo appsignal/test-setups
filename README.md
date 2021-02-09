@@ -32,6 +32,7 @@ rake app=ruby/single-task app:up
 rake app=nodejs/express-postgres app:up
 rake app=nodejs/next-js app:up
 rake app=javascript/react app:up
+rake app=javascript/typescript-angular app:up
 rake app=javascript/webpack app:up
 ```
 
@@ -51,6 +52,7 @@ rake app=ruby/single-task app:restart
 rake app=nodejs/express-postgres app:restart
 rake app=nodejs/next-js app:restart
 rake app=javascript/react app:restart
+rake app=javascript/typescript-angular app:restart
 rake app=javascript/webpack app:restart
 ```
 
@@ -66,6 +68,7 @@ rake app=ruby/single-task app:bash
 rake app=nodejs/express-postgres app:bash
 rake app=nodejs/next-js app:bash
 rake app=javascript/react app:bash
+rake app=javascript/typescript-angular app:bash
 rake app=javascript/webpack app:bash
 ```
 
@@ -81,6 +84,7 @@ rake app=ruby/single-task app:console
 rake app=nodejs/express-postgres app:console
 rake app=nodejs/next-js app:console
 rake app=javascript/react app:console
+rake app=javascript/typescript-angular app:console
 rake app=javascript/webpack app:console
 ```
 
@@ -96,6 +100,7 @@ rake app=ruby/single-task app:diagnose
 rake app=nodejs/express-postgres app:diagnose
 rake app=nodejs/next-js app:diagnose
 rake app=javascript/react app:diagnose
+rake app=javascript/typescript-angular app:diagnose
 rake app=javascript/webpack app:diagnose
 ```
 
@@ -111,6 +116,7 @@ rake app=ruby/single-task app:tail:appsignal
 rake app=nodejs/express-postgres app:tail:appsignal
 rake app=nodejs/next-js app:tail:appsignal
 rake app=javascript/react app:tail:appsignal
+rake app=javascript/typescript-angular app:tail:appsignal
 rake app=javascript/webpack app:tail:appsignal
 ```
 
