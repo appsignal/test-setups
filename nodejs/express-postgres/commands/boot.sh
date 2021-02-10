@@ -1,5 +1,5 @@
 #!/bin/sh
-
+sleep 5
 echo "Create posts table if needed"
 psql "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB" \
   -c "CREATE TABLE IF NOT EXISTS posts (id SERIAL, title varchar(80), text text);"
