@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
@@ -10,7 +10,3 @@ echo "Install dependencies"
 cd /app
 bundle config set --local path 'vendor/bundle'
 bundle install
-
-echo "Run single task. Will exit afterwards."
-# Run with warnings enabled, verbose mode
-bundle exec ruby -W2 app.rb
