@@ -1,12 +1,19 @@
 #!/bin/sh
+
+set -eu
+
 sleep 5
+
 echo "Create posts table if needed"
 psql "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB" \
   -c "CREATE TABLE IF NOT EXISTS posts (id SERIAL, title varchar(80), text text);"
 
 echo "Install, link and build integration"
-cd /integration && make install
-cd /integration && make build
+(
+  cd /integration
+  script/setup
+  script/build
+)
 
 echo "Npm link in app"
 cd /app && npm link @appsignal/nodejs
