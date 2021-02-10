@@ -1,6 +1,6 @@
 FROM rust:1.49.0-alpine3.11
 
-ENV VERSION=0.4.0
+ENV VERSION=0.4.1
 
 RUN apk update
 RUN apk add musl-dev

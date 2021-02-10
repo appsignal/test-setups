@@ -1,0 +1,12 @@
+[[paths_to_watch]]
+path = "/app"
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.demo]
+command = "/tmp/release/bin/demo"
+args = ["start"]
+
+[triggers.prepare]
+command = "/commands/prepare"
