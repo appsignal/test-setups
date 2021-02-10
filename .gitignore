@@ -8,3 +8,5 @@ package-lock.json
 yarn.lock
 .next
 **/commands/processmon
+Gemfile.lock
+mix.lock

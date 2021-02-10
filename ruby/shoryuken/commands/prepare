@@ -17,14 +17,10 @@ echo "Install dependencies"
   bundle install
 )
 
-echo "Start Shoryuken worker"
+echo "Create sqs queues"
 (
   cd /app
   # Create queues in mock server
   bundle exec shoryuken sqs create default
   bundle exec shoryuken sqs create batched
-  # Queue some jobs
-  bundle exec ruby app.rb
-  # Start worker process
-  bundle exec shoryuken --require=$(pwd)/workers.rb --config=shoryuken.yml
 )
