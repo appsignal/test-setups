@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
@@ -16,8 +16,5 @@ yarn install
 echo "Clean tmp"
 rm -rf tmp
 
-echo "Running migrations"
+echo "Run migrations"
 bin/rails db:migrate
-
-echo "Start app"
-bundle exec foreman start
