@@ -1,0 +1,6 @@
+:schedule:
+  performance_worker:
+    every: 1m   # Runs once per minute
+    class: PerformanceWorker
+:limits:
+  default: 1

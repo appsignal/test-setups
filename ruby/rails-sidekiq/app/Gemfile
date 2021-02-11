@@ -19,6 +19,9 @@ gem 'sidekiq'
 gem 'appsignal', :path => "/integration"
 gem "foreman"
 
+gem "sidekiq-limit_fetch"
+gem "sidekiq-scheduler"
+
 group :development, :test do
   gem 'pry'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

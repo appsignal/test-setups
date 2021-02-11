@@ -1,4 +1,5 @@
 require 'sidekiq/web'
+require 'sidekiq-scheduler'
 
 Sidekiq::Extensions.enable_delay!
 
