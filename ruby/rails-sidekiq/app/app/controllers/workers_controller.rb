@@ -75,13 +75,13 @@ class WorkersController < ApplicationController
     case test.to_sym
     when :with_args
       if future
-        worker.with(*args).set(:wait => DELAY_DURATION).test.deliver_later
+        worker.with(*args).test.deliver_later(:wait => DELAY_DURATION)
       else
         worker.with(*args).test.deliver_later
       end
     else
       if future
-        worker.set(:wait => DELAY_DURATION).test(*args).deliver_later
+        worker.test(*args).deliver_later(:wait => DELAY_DURATION)
       else
         worker.test(*args).deliver_later
       end
