@@ -183,10 +183,15 @@ namespace :app do
     end
 
     exports_path = "/etc/exports"
-    exports = File.read(exports_path)
-    required_exports = %(/Users -alldirs -mapall=#{Process.uid}:#{Process.gid} localhost)
-    exports_missing = false
-    exports_missing = true unless exports.include?(required_exports)
+
+    if File.exist?(exports_path)
+      exports = File.read(exports_path)
+      required_exports = %(/Users -alldirs -mapall=#{Process.uid}:#{Process.gid} localhost)
+      exports_missing = false
+      exports_missing = true unless exports.include?(required_exports)
+    else
+      exports_missing = true
+    end
 
     nfs_config_path = "/etc/nfs.conf"
     nfs_config = File.read(nfs_config_path)
