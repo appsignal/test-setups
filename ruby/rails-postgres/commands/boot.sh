@@ -16,6 +16,7 @@ rm -rf tmp
 
 echo "Running migrations"
 bin/rails db:migrate
+RAILS_ENV=test bin/rails db:create db:migrate
 
 echo "Running rails server"
 bin/rails server --binding=0.0.0.0

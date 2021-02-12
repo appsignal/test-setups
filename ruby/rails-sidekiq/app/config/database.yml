@@ -9,3 +9,11 @@ default: &default
 development:
   <<: *default
   database: app_db
+
+test:
+  <<: *default
+  database: app_db_test
+
+production:
+  <<: *default
+  database: app_db_production

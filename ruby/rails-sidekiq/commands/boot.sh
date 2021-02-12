@@ -19,6 +19,7 @@ mkdir -p tmp/pids tmp/sockets
 
 echo "Running migrations"
 bin/rails db:migrate
+RAILS_ENV=test bin/rails db:create db:migrate
 
 echo "Start app"
 bundle exec foreman start
