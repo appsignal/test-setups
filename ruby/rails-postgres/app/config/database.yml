@@ -12,8 +12,8 @@ development:
 
 test:
   <<: *default
-  database: app_db
+  database: app_db_test
 
 production:
   <<: *default
-  database: sample_postgres_production
+  database: app_db_production
