@@ -34,13 +34,15 @@ end
 
 class MyRootResource < Webmachine::Resource
   def to_html
+    time = Time.now.utc
+    params = "?time=#{time.hour}:#{time.min}:#{time.sec}"
     <<~HTML
       <html>
         <body>
           <h1>Hello webmachine app!</h1>
           <ul>
-            <li><a href="/slow">Slow request</a></li>
-            <li><a href="/error">Error request</a></li>
+            <li><a href="/slow#{params}">Slow request</a></li>
+            <li><a href="/error#{params}">Error request</a></li>
           </ul>
         </body>
       </html>
