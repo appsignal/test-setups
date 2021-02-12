@@ -2,11 +2,15 @@
 
 set -eu
 
-sleep 5
-
 echo "Create posts table if needed"
-psql "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB" \
-  -c "CREATE TABLE IF NOT EXISTS posts (id SERIAL, title varchar(80), text text);"
+host="postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB"
+until psql $host --command='\l'; do
+  >&2 echo "Postgres is unavailable - sleeping"
+  sleep 1
+done
+
+psql $host \
+  --command "CREATE TABLE IF NOT EXISTS posts (id SERIAL, title varchar(80), text text);"
 
 echo "Install, link and build integration"
 (
