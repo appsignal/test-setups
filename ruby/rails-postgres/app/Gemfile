@@ -18,3 +18,8 @@ gem 'jbuilder', '~> 2.7'
 gem 'listen'
 
 gem 'appsignal', :path => '/integration'
+
+group :development, :test do
+  gem "rspec-rails"
+  gem "pry"
+end
