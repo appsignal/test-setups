@@ -41,6 +41,7 @@ class ItemsController < ApplicationController
   # PATCH/PUT /items/1
   # PATCH/PUT /items/1.json
   def update
+    ItemUpdater.update_all([@item], :attributes => item_params)
     respond_to do |format|
       if @item.update(item_params)
         format.html { redirect_to @item, notice: 'Item was successfully updated.' }
@@ -63,25 +64,26 @@ class ItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = Item.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def item_params
-      params.require(:item).permit(:name, :description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_item
+    @item = Item.find(params[:id])
+  end
 
-    def custom_instrumentation
-      Appsignal.instrument('ruby.fiber') do
-        f = Fiber.new { puts 1; Fiber.yield; puts 2 }
-        Appsignal.instrument('ruby.fiber-resume1') do
-          f.resume
-        end
-        Appsignal.instrument('ruby.fiber-resume2') do
-          f.resume
-        end
+  # Only allow a list of trusted parameters through.
+  def item_params
+    params.require(:item).permit(:name, :description)
+  end
+
+  def custom_instrumentation
+    Appsignal.instrument('ruby.fiber') do
+      f = Fiber.new { puts 1; Fiber.yield; puts 2 }
+      Appsignal.instrument('ruby.fiber-resume1') do
+        f.resume
+      end
+      Appsignal.instrument('ruby.fiber-resume2') do
+        f.resume
       end
     end
+  end
 end

@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: ruby/webmachine
+    ports:
+      - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=ruby-webmachine
+      - PORT=4001
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - "nfsmount_app:/app"
+      - "nfsmount_integration:/integration"
+
+volumes:
+  nfsmount_app:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
+      device: ":${PWD}/app"
+  nfsmount_integration:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
+      device: ":${PWD}/../integration"

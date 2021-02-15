@@ -1,0 +1,30 @@
+Hello world!
+
+<%
+  time = Time.now.utc
+  param = "?time=#{time.hour}:#{time.min}:#{time.sec}"
+%>
+
+<ul>
+  <li><%= link_to "Slow", "/slow#{param}" %></li>
+  <li><%= link_to "Error", "/error#{param}" %></li>
+  <li>
+    Posts
+    <ul>
+      <li><%= link_to "Index", "/posts/#{param}" %></li>
+      <li><%= link_to "Slow", "/posts/slow#{param}" %></li>
+      <li><%= link_to "Error", "/posts/error#{param}" %></li>
+      <li><%= link_to "Action 1 :id", "/posts/action1/123#{param}" %></li>
+      <li><%= link_to "Action 2", "/posts/action2#{param}" %></li>
+      <li><%= link_to "Action 3 :id", "/posts/action3/123#{param}" %></li>
+      <li>
+        Comments
+        <ul>
+          <li><%= link_to "Index", "/posts/123/comments/#{param}" %></li>
+          <li><%= link_to "Slow", "/posts/123/comments/slow#{param}" %></li>
+          <li><%= link_to "Error", "/posts/123/comments/error#{param}" %></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>

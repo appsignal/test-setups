@@ -25,10 +25,12 @@ To start a test setup:
 ```
 rake app=elixir/alpine-release app:up
 rake app=elixir/phoenix-example app:up
+rake app=ruby/padrino app:up
 rake app=ruby/rails-postgres app:up
 rake app=ruby/rails-sidekiq app:up
 rake app=ruby/shoryuken app:up
 rake app=ruby/single-task app:up
+rake app=ruby/webmachine app:up
 rake app=nodejs/express-postgres app:up
 rake app=nodejs/next-js app:up
 rake app=javascript/react app:up
@@ -45,10 +47,12 @@ To restart the app container after making changes to an integration:
 ```
 rake app=elixir/alpine-release app:restart
 rake app=elixir/phoenix-example app:restart
+rake app=ruby/padrino app:restart
 rake app=ruby/rails-postgres app:restart
 rake app=ruby/rails-sidekiq app:restart
 rake app=ruby/shoryuken app:restart
 rake app=ruby/single-task app:restart
+rake app=ruby/webmachine app:restart
 rake app=nodejs/express-postgres app:restart
 rake app=nodejs/next-js app:restart
 rake app=javascript/react app:restart
@@ -61,10 +65,12 @@ To run bash:
 ```
 rake app=elixir/alpine-release app:bash
 rake app=elixir/phoenix-example app:bash
+rake app=ruby/padrino app:bash
 rake app=ruby/rails-postgres app:bash
 rake app=ruby/rails-sidekiq app:bash
 rake app=ruby/shoryuken app:bash
 rake app=ruby/single-task app:bash
+rake app=ruby/webmachine app:bash
 rake app=nodejs/express-postgres app:bash
 rake app=nodejs/next-js app:bash
 rake app=javascript/react app:bash
@@ -77,10 +83,12 @@ To run the console (if implemented in the test app):
 ```
 rake app=elixir/alpine-release app:console
 rake app=elixir/phoenix-example app:console
+rake app=ruby/padrino app:console
 rake app=ruby/rails-postgres app:console
 rake app=ruby/rails-sidekiq app:console
 rake app=ruby/shoryuken app:console
 rake app=ruby/single-task app:console
+rake app=ruby/webmachine app:console
 rake app=nodejs/express-postgres app:console
 rake app=nodejs/next-js app:console
 rake app=javascript/react app:console
@@ -93,10 +101,12 @@ To send in a diagnose (if implemented in the test app);
 ```
 rake app=elixir/alpine-release app:diagnose
 rake app=elixir/phoenix-example app:diagnose
+rake app=ruby/padrino app:diagnose
 rake app=ruby/rails-postgres app:diagnose
 rake app=ruby/rails-sidekiq app:diagnose
 rake app=ruby/shoryuken app:diagnose
 rake app=ruby/single-task app:diagnose
+rake app=ruby/webmachine app:diagnose
 rake app=nodejs/express-postgres app:diagnose
 rake app=nodejs/next-js app:diagnose
 rake app=javascript/react app:diagnose
@@ -109,10 +119,12 @@ Tail the appsignal log:
 ```
 rake app=elixir/alpine-release app:tail:appsignal
 rake app=elixir/phoenix-example app:tail:appsignal
+rake app=ruby/padrino app:tail:appsignal
 rake app=ruby/rails-postgres app:tail:appsignal
 rake app=ruby/rails-sidekiq app:tail:appsignal
 rake app=ruby/shoryuken app:tail:appsignal
 rake app=ruby/single-task app:tail:appsignal
+rake app=ruby/webmachine app:tail:appsignal
 rake app=nodejs/express-postgres app:tail:appsignal
 rake app=nodejs/next-js app:tail:appsignal
 rake app=javascript/react app:tail:appsignal
