@@ -50,7 +50,16 @@ app.post('/create', (req, res) => {
 
 app.get('/bull', (req, res) => {
   console.log("Request on /bull")
+  
+  const tracer = appsignal.tracer();
+  const span = tracer.createSpan()
+  const childSpan = span.child();
+  childSpan.setName('set-name');
+  childSpan.setCategory("bull-queue")
+
   testFunction();
+
+  span.close()
   res.send("Welcome")
 })
 
@@ -71,7 +80,7 @@ function testFunction() {
   // const Redis = require('ioredis')
   // const client = new Redis("/tmp/redis.sock"); // 192.168.1.1:6379
 
-  const client = {redis: {port: 6379, host: process.env.REDIS_URL}}
+  const client = {redis: {port: 6379, host: 'redis'}}
 
   const sendRatingMailQueue = new Queue('sendRatingMail', client)
 
