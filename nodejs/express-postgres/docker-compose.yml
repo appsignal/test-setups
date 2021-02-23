@@ -17,8 +17,10 @@ services:
       - "4001:3000"
     environment:
       - APPSIGNAL_APP_NAME=nodejs-express-postgres
+      - PORT=4001
     env_file:
       - postgres.env
+      - redis.env
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:

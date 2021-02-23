@@ -71,7 +71,7 @@ function testFunction() {
   // const Redis = require('ioredis')
   // const client = new Redis("/tmp/redis.sock"); // 192.168.1.1:6379
 
-  const client = {redis: {port: 6379, host: 'localhost'}}
+  const client = {redis: {port: 6379, host: process.env.REDIS_URL}}
 
   const sendRatingMailQueue = new Queue('sendRatingMail', client)
 
