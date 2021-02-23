@@ -48,6 +48,12 @@ app.post('/create', (req, res) => {
   })
 })
 
+app.get('/bull', (req, res) => {
+  console.log("Request on /bull")
+  testFunction();
+  res.send("Welcome")
+})
+
 app.get('/error', (req, res) => {
   console.log("Request on /error")
   throw new Error("This is an error")
@@ -58,3 +64,30 @@ app.use(expressErrorHandler(appsignal));
 app.listen(3000, () => {
   console.log('Example app listening')
 })
+
+
+function testFunction() {
+  var Queue = require('bull');
+  // const Redis = require('ioredis')
+  // const client = new Redis("/tmp/redis.sock"); // 192.168.1.1:6379
+
+  const client = {redis: {port: 6379, host: 'localhost'}}
+
+  const sendRatingMailQueue = new Queue('sendRatingMail', client)
+
+  const data = {
+    email: 'foo@bar.com'
+  }
+
+  const options = {
+    delay: 86400000,
+    attempts: 3
+  }
+
+  sendRatingMailQueue.add(data, options)
+
+  sendRatingMailQueue.process(async job => {
+    await sendRatingMailTo(job.data.email)
+  })
+
+}

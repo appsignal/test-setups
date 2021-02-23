@@ -5,11 +5,14 @@ services:
     image: postgres
     env_file:
       - postgres.env
+  redis:
+    image: "redis:6.0"
   app:
     build: .
     image: nodejs/express-postgres
     depends_on:
       - postgres
+      - redis
     ports:
       - "4001:3000"
     environment:

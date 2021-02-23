@@ -11,7 +11,9 @@
   "dependencies": {
     "@appsignal/express": "*",
     "@appsignal/nodejs": "*",
+    "bull": "*",
     "express": "*",
+    "ioredis": "*",
     "pg": "*",
     "pug": "*",
     "sequelize-cli": "*"
