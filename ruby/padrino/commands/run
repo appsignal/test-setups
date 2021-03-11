@@ -2,8 +2,10 @@
 
 set -eu
 
-cd /app
+cd /integration
+rake extension:install
 
+cd /app
 bundle install
 
 # Start processmon
