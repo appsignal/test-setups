@@ -6,11 +6,14 @@ echo "Running mix local hex and rebar"
 mix local.hex --force
 mix local.rebar --force
 
+cd /app
 echo "Running mix deps.get"
-cd /app && mix deps.get
+mix deps.get
 
 echo "Running npm install"
-cd /app/assets && npm install
+(cd /app/assets && npm install)
 
 echo "Migrate if needed"
-cd /app && mix ecto.migrate
+mix ecto.migrate
+
+/commands/processmon processmon.toml
