@@ -11,3 +11,4 @@ tags
 **/commands/processmon
 Gemfile.lock
 mix.lock
+support/processmon/processmon

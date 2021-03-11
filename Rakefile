@@ -2,6 +2,7 @@ require 'erb'
 require 'fileutils'
 
 LANGUAGES = %w(elixir ruby nodejs javascript)
+PROCESSMON_PATH = "support/processmon/processmon"
 
 def get_app
   ENV['app'].tap do |app|
@@ -112,6 +113,10 @@ namespace :app do
   task :up => :prepare_nfs do
     unless File.exist?("appsignal_key.env")
       raise "No push api key set yet, run rake global:set_push_api_key key=<key>"
+    end
+    unless File.exist?(PROCESSMON_PATH)
+      puts "Processmon not present. Building processmon..."
+      Rake::Task["global:install_processmon"].invoke
     end
 
     @app = get_app
