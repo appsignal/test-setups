@@ -2,6 +2,7 @@ require 'erb'
 require 'fileutils'
 
 LANGUAGES = %w(elixir ruby nodejs javascript)
+PROCESSMON_PATH = "support/processmon/processmon"
 
 def get_app
   ENV['app'].tap do |app|
@@ -113,12 +114,23 @@ namespace :app do
     unless File.exist?("appsignal_key.env")
       raise "No push api key set yet, run rake global:set_push_api_key key=<key>"
     end
+    unless File.exist?(PROCESSMON_PATH)
+      puts "Processmon not present. Building processmon..."
+      Rake::Task["global:install_processmon"].invoke
+    end
 
     @app = get_app
     puts "Starting #{@app}"
 
+    puts "Copying processmon"
+    FileUtils.rm_f "#{@app}/commands/processmon"
+    FileUtils.cp "support/processmon/processmon", "#{@app}/commands/"
+
     puts "Building environment..."
     run_command "cd #{@app} && docker-compose build"
+
+    puts "Cleaning processmon"
+    FileUtils.rm_f "#{@app}/commands/processmon"
 
     puts "Starting compose..."
     run_command "cd #{@app} && docker-compose up --abort-on-container-exit"
@@ -134,9 +146,9 @@ namespace :app do
   desc "Attach to app and get a console"
   task :console do
     @app = get_app
-    if File.exists?("#{@app}/commands/console.sh")
+    if File.exists?("#{@app}/commands/console")
       puts "Starting console in #{@app}"
-      run_command "cd #{@app} && docker-compose exec app /commands/console.sh"
+      run_command "cd #{@app} && docker-compose exec app /commands/console"
     else
       puts "Starting a console in #{@app} is not supported"
     end
@@ -145,9 +157,9 @@ namespace :app do
   desc "Attach to app and run diagnose"
   task :diagnose do
     @app = get_app
-    if File.exists?("#{@app}/commands/diagnose.sh")
+    if File.exists?("#{@app}/commands/diagnose")
       puts "Runing diagnose in #{@app}"
-      run_command "cd #{@app} && docker-compose exec app /commands/diagnose.sh"
+      run_command "cd #{@app} && docker-compose exec app /commands/diagnose"
     else
       puts "Running diagnose in #{@app} is not supported"
     end
@@ -318,5 +330,10 @@ namespace :global do
     @key = ENV['key'] or raise "No key provided"
     puts "Setting push api key in appsignal_key.env"
     File.write "appsignal_key.env", render_erb("support/templates/appsignal_key.env.erb")
+  end
+
+  desc "Install bundled processmon"
+  task :install_processmon do
+    run_command("cd support/processmon && ./build.sh")
   end
 end

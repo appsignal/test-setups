@@ -1,12 +1,12 @@
 FROM ruby:3.0
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2021-01-18
+ENV REFRESHED_AT=2021-02-10
 
 # Copy commands into the container
 RUN mkdir /commands
-COPY ./commands/*.sh /commands/
-RUN chmod +x /commands/*.sh
+COPY ./commands/* /commands/
+RUN chmod +x /commands/*
 
-# Run the app
-CMD /commands/boot.sh
+# Run prepare and start processmon
+CMD /commands/prepare && cd /app && /commands/processmon processmon.toml

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "Install, link and build integration"
+cd /integration && script/setup
+cd /integration && script/build
+
+echo "Npm link in app"
+cd /app && npm link @appsignal/nodejs
+cd /app && npm link @appsignal/nextjs
+
+echo "Install dependencies"
+cd /app && npm install
