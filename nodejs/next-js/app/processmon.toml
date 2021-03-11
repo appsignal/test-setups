@@ -1,0 +1,14 @@
+[[paths_to_watch]]
+path = "/app"
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.node]
+command = "node"
+args = ["server.js"]
+working_dir = "/app"
+
+[triggers.build_integration]
+command = "./script/build"
+working_dir = "/integration"

@@ -15,8 +15,5 @@
     "pg": "*",
     "pug": "*",
     "sequelize-cli": "*"
-  },
-  "devDependencies": {
-    "nodemon": "*"
   }
 }
