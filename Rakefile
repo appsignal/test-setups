@@ -91,8 +91,8 @@ namespace :app do
     FileUtils.mkdir_p "#{@app}/commands"
 
     # Copy command scripts
-    %w(boot console diagnose).each do |command|
-      FileUtils.cp "support/templates/skeleton/commands/#{command}.sh", "#{@app}/commands/#{command}.sh"
+    %w(console diagnose run).each do |command|
+      FileUtils.cp "support/templates/skeleton/commands/#{command}", "#{@app}/commands/#{command}"
     end
 
     # Copy readme
