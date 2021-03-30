@@ -1,5 +1,8 @@
 [[paths_to_watch]]
 path = "/app"
+ignore = [
+  ".next"
+]
 
 [[paths_to_watch]]
 path = "/integration"
