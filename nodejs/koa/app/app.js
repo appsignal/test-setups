@@ -6,6 +6,16 @@ const app = new Koa();
 
 console.log("Starting KOA app");
 
+// Track errors in AppSignal
+
+app.on("error", (error) => {
+  appsignal
+    .tracer()
+    .currentSpan()
+    .addError(error)
+    .close()
+});
+
 // logger
 
 app.use(async (ctx, next) => {
@@ -27,6 +37,9 @@ app.use(async (ctx, next) => {
 
 app.use(async ctx => {
   ctx.body = 'Hello World';
+
+  // Uncomment this to throw an error
+  //ctx.throw(500,'Error Message');
 });
 
 app.listen(3000);
