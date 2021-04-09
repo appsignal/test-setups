@@ -5,7 +5,9 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
+    Appsignal.add_breadcrumb('Items', 'index', 'Fetching all items')
     @items = Item.all
+    Appsignal.add_breadcrumb('Items', 'index', 'Done fetching all items')
   end
 
   # GET /items/1
