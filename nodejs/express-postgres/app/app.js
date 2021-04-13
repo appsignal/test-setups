@@ -1,14 +1,10 @@
-const { appsignal } = require("./appsignal");
+const  {app, appsignal}  = require("./express")
 
 // Initialize express
-const express = require('express')
-const app = express()
 const bodyParser = require('body-parser')
 
-const { expressMiddleware } = require("@appsignal/express");
 const { expressErrorHandler } = require("@appsignal/express");
 
-app.use(expressMiddleware(appsignal));
 app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -21,6 +17,8 @@ const pool = new Pool({
   password: process.env.POSTGRES_PASSWORD,
   port: 5432,
 })
+const adminRoutes = require("./routes/admin.routes");
+app.use('/admin', adminRoutes);
 
 app.get('/', (req, res) => {
   console.log("Request on /")
