@@ -8,8 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "@appsignal/nextjs": "*",
-    "@appsignal/nodejs": "*",
+    "@appsignal/nextjs": "1.0.10-beta.0",
+    "@appsignal/nodejs": "1.2.2-beta.0",
     "next": "~> 10.0",
     "react": "~> 17.0",
     "react-dom": "~> 17.0"
