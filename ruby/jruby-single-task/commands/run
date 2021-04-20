@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+echo "Run single task. Will exit afterwards."
+# Run with warnings enabled, verbose mode
+bundle exec ruby -W2 app.rb
