@@ -25,6 +25,7 @@ To start a test setup:
 ```
 rake app=elixir/alpine-release app:up
 rake app=elixir/phoenix-example app:up
+rake app=ruby/jruby-single-task app:up
 rake app=ruby/padrino app:up
 rake app=ruby/rails-postgres app:up
 rake app=ruby/rails-sidekiq app:up
@@ -48,6 +49,7 @@ To restart the app container after making changes to an integration:
 ```
 rake app=elixir/alpine-release app:restart
 rake app=elixir/phoenix-example app:restart
+rake app=ruby/jruby-single-task app:restart
 rake app=ruby/padrino app:restart
 rake app=ruby/rails-postgres app:restart
 rake app=ruby/rails-sidekiq app:restart
@@ -67,6 +69,7 @@ To run bash:
 ```
 rake app=elixir/alpine-release app:bash
 rake app=elixir/phoenix-example app:bash
+rake app=ruby/jruby-single-task app:bash
 rake app=ruby/padrino app:bash
 rake app=ruby/rails-postgres app:bash
 rake app=ruby/rails-sidekiq app:bash
@@ -86,6 +89,7 @@ To run the console (if implemented in the test app):
 ```
 rake app=elixir/alpine-release app:console
 rake app=elixir/phoenix-example app:console
+rake app=ruby/jruby-single-task app:console
 rake app=ruby/padrino app:console
 rake app=ruby/rails-postgres app:console
 rake app=ruby/rails-sidekiq app:console
@@ -105,6 +109,7 @@ To send in a diagnose (if implemented in the test app);
 ```
 rake app=elixir/alpine-release app:diagnose
 rake app=elixir/phoenix-example app:diagnose
+rake app=ruby/jruby-single-task app:diagnose
 rake app=ruby/padrino app:diagnose
 rake app=ruby/rails-postgres app:diagnose
 rake app=ruby/rails-sidekiq app:diagnose
@@ -124,6 +129,7 @@ Tail the appsignal log:
 ```
 rake app=elixir/alpine-release app:tail:appsignal
 rake app=elixir/phoenix-example app:tail:appsignal
+rake app=ruby/jruby-single-task app:tail:appsignal
 rake app=ruby/padrino app:tail:appsignal
 rake app=ruby/rails-postgres app:tail:appsignal
 rake app=ruby/rails-sidekiq app:tail:appsignal
