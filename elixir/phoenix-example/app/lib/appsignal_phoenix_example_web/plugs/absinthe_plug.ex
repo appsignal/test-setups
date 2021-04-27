@@ -7,6 +7,8 @@ defmodule Gateway.Plug.Absinthe do
 
   @path "/api"
   def call(%Plug.Conn{request_path: @path, method: "POST"} = conn, _) do
+    IO.puts "***** TESTING SETTING ANOTHER NAMESPACE ****"
+    Appsignal.Span.set_namespace(Appsignal.Tracer.root_span(), 'api')
     conn
     |> Appsignal.Plug.put_name("Gateway.AbsintheController#query")
   end
