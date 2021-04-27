@@ -9,4 +9,4 @@ COPY ./commands/* /commands/
 RUN chmod +x /commands/*
 
 # Run prepare and start processmon
-CMD /commands/prepare && cd /app && /commands/processmon processmon.toml
+CMD /commands/run
