@@ -9,6 +9,8 @@ defmodule DemoPlug do
   def call(%Plug.Conn{params: %{"locale" => loc}} = conn, _default) when loc in @locales do
     Logger.info("inside the cal and locate is: #{loc}")
 
+    Appsignal.Span.set_namespace(Appsignal.Tracer.root_span(), 'locale')
+
     Appsignal.instrument(fn span ->
       span
       |> Appsignal.Span.set_attribute("appsignal:category", "locale") # creates a sub event in event timeline
