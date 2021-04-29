@@ -7,9 +7,9 @@ defmodule DemoPlug do
   def init(default), do: default
 
   def call(%Plug.Conn{params: %{"locale" => loc}} = conn, _default) when loc in @locales do
-    Logger.info("inside the cal and locate is: #{loc}")
+    Logger.info("Running call in DemoPlug for locale #{loc}")
 
-    Appsignal.Span.set_namespace(Appsignal.Tracer.root_span(), 'locale')
+    Appsignal.Span.set_namespace(Appsignal.Tracer.root_span(), "locale")
 
     Appsignal.instrument(fn span ->
       span
