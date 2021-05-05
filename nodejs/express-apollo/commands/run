@@ -1,0 +1,17 @@
+#!/bin/bash
+set -eu
+
+echo "Install, link and build integration"
+(
+  cd /integration
+  script/setup
+  script/build
+)
+
+echo "Npm link in app"
+cd /app && npm link @appsignal/nodejs
+cd /app && npm link @appsignal/express
+cd /app && npm link @appsignal/apollo-server
+
+echo "Install dependencies"
+cd /app && npm install && npm start
