@@ -38,6 +38,7 @@ rake app=nodejs/next-js app:up
 rake app=javascript/react app:up
 rake app=javascript/typescript-angular app:up
 rake app=javascript/webpack app:up
+rake app=nodejs/express-apollo app:up
 ```
 
 This will boot a test environment with AppSignal enabled listening on
@@ -62,6 +63,7 @@ rake app=nodejs/next-js app:restart
 rake app=javascript/react app:restart
 rake app=javascript/typescript-angular app:restart
 rake app=javascript/webpack app:restart
+rake app=nodejs/express-apollo app:restart
 ```
 
 To run bash:
@@ -82,6 +84,7 @@ rake app=nodejs/next-js app:bash
 rake app=javascript/react app:bash
 rake app=javascript/typescript-angular app:bash
 rake app=javascript/webpack app:bash
+rake app=nodejs/express-apollo app:bash
 ```
 
 To run the console (if implemented in the test app):
@@ -102,6 +105,7 @@ rake app=nodejs/next-js app:console
 rake app=javascript/react app:console
 rake app=javascript/typescript-angular app:console
 rake app=javascript/webpack app:console
+rake app=nodejs/express-apollo app:console
 ```
 
 To send in a diagnose (if implemented in the test app);
@@ -122,6 +126,7 @@ rake app=nodejs/next-js app:diagnose
 rake app=javascript/react app:diagnose
 rake app=javascript/typescript-angular app:diagnose
 rake app=javascript/webpack app:diagnose
+rake app=nodejs/express-apollo app:diagnose
 ```
 
 Tail the appsignal log:
@@ -142,6 +147,7 @@ rake app=nodejs/next-js app:tail:appsignal
 rake app=javascript/react app:tail:appsignal
 rake app=javascript/typescript-angular app:tail:appsignal
 rake app=javascript/webpack app:tail:appsignal
+rake app=nodejs/express-apollo app:tail:appsignal
 ```
 
 Open the browser pointing to the app:
