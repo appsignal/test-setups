@@ -1,9 +1,7 @@
-# TODO Specify FROM
+FROM node:15.5-buster
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2021-05-05
-
-# TODO Add any required dependencies here
 
 # Copy commands into the container
 RUN mkdir /commands

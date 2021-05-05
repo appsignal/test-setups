@@ -1,11 +1,16 @@
 #!/bin/bash
-
 set -eu
 
-echo "TODO: Implement installing dependencies"
+echo "Install, link and build integration"
+(
+  cd /integration
+  script/setup
+  script/build
+)
 
-# Call processmon like this:
-# cd /app
-# /commands/processmon processmon.toml
+echo "Npm link in app"
+cd /app && npm link @appsignal/nodejs
+cd /app && npm link @appsignal/express
 
-tail -f /dev/null # Keep container alive so you can bash into it
+echo "Install dependencies"
+cd /app && npm install
