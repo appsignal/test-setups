@@ -105,7 +105,6 @@ rake app=nodejs/next-js app:console
 rake app=javascript/react app:console
 rake app=javascript/typescript-angular app:console
 rake app=javascript/webpack app:console
-rake app=nodejs/express-apollo app:console
 ```
 
 To send in a diagnose (if implemented in the test app);
