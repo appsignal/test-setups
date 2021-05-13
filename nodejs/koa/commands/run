@@ -2,17 +2,5 @@
 
 set -eu
 
-echo "Install, link and build integration"
-cd /integration && script/setup
-cd /integration && script/build
-
-echo "Npm link in app"
-cd /app && npm link @appsignal/nodejs
-cd /app && npm link @appsignal/koa
-
-echo "Install dependencies"
-cd /app && npm install
-
-# Call processmon like this:
 cd /app
 /commands/processmon processmon.toml

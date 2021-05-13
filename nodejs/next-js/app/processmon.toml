@@ -8,10 +8,11 @@ ignore = [
 path = "/integration"
 
 [processes.node]
-command = "node"
-args = ["server.js"]
+command = "npm"
+args = ["run", "server"]
 working_dir = "/app"
 
 [triggers.build_integration]
-command = "./script/build"
+command = "mono"
+args = ["build"]
 working_dir = "/integration"
