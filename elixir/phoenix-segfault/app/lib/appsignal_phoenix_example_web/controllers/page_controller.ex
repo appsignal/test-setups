@@ -3,26 +3,8 @@ defmodule AppsignalPhoenixExampleWeb.PageController do
 
   alias AppsignalPhoenixExample.Accounts
   alias AppsignalPhoenixExample.Accounts.User
-  require Logger
-  plug DemoPlug, "en"
 
   def index(conn, _params) do
-    users = Accounts.list_users()
-    slow()
-    render(conn, "index.html", users: users)
-  end
-
-  defp slow do
-    Appsignal.instrument("slow", fn ->
-      :timer.sleep(1000)
-    end)
-
-    Appsignal.instrument("slow_2", fn ->
-      :timer.sleep(1000)
-    end)
-
-    Appsignal.instrument("slow_3", fn ->
-      :timer.sleep(1000)
-    end)
+    render(conn, "index.html", users: Accounts.list_users())
   end
 end
