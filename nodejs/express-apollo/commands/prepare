@@ -6,6 +6,7 @@ echo "Install, link and build integration"
 (
   cd /integration
   script/setup
+  source ~/.bashrc
   mono bootstrap
   mono build
 )
@@ -16,4 +17,4 @@ echo "Install dependencies"
 npm install
 
 echo "Npm link in app"
-npm link @appsignal/nodejs @appsignal/nextjs
+npm link @appsignal/nodejs @appsignal/express @appsignal/apollo-server

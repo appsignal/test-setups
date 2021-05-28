@@ -2,8 +2,6 @@
 
 set -eu
 
-set -eu
-
 echo "Create posts table if needed"
 host="postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB"
 until psql $host --command='\l'; do
@@ -18,12 +16,14 @@ echo "Install, link and build integration"
 (
   cd /integration
   script/setup
-  script/build
+  mono bootstrap
+  mono build
 )
 
-echo "Npm link in app"
-cd /app && npm link @appsignal/nodejs
-cd /app && npm link @appsignal/express
+cd /app
 
 echo "Install dependencies"
-cd /app && npm install
+npm install
+
+echo "Npm link in app"
+npm link @appsignal/nodejs @appsignal/express

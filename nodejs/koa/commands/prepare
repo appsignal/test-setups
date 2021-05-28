@@ -16,4 +16,4 @@ echo "Install dependencies"
 npm install
 
 echo "Npm link in app"
-npm link @appsignal/nodejs @appsignal/nextjs
+npm link @appsignal/nodejs @appsignal/koa

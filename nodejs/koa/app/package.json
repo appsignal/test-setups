@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "server": "node app.js"
+  },
   "dependencies": {
     "@appsignal/koa": "*",
     "@appsignal/nodejs": "*",
