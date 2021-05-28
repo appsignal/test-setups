@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - postgres.env
+  app:
+    build: .
+    image: elixir/phoenix-example
+    depends_on:
+      - postgres
+    ports:
+      - "4001:4000"
+    environment:
+      - APPSIGNAL_APP_NAME=elixir-phoenix-example
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
