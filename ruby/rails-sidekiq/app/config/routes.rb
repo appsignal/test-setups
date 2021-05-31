@@ -5,6 +5,14 @@ Rails.application.routes.draw do
     end
   end
   mount Sidekiq::Web => "/sidekiq"
+
+  resources :redis do
+    collection do
+      get :restful
+      get :eval
+    end
+  end
+
   resources :requests do
     collection do
       get :perform_excon_get
