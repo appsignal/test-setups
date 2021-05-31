@@ -5,5 +5,22 @@ Rails.application.routes.draw do
     end
   end
   mount Sidekiq::Web => "/sidekiq"
-  root :to => "workers#index"
+  resources :requests do
+    collection do
+      get :perform_excon_get
+      get :excon_get
+      get :perform_excon_post
+      post :excon_post
+      get :perform_excon_put
+      put :excon_put
+      get :perform_excon_delete
+      delete :excon_delete
+      get :perform_excon_head
+      get :perform_excon_options
+      match "/excon_options" => "requests#excon_options", :via => :options
+      get :perform_excon_trace
+      match "/excon_trace" => "requests#excon_trace", :via => :trace
+    end
+  end
+  root :to => "examples#index"
 end
