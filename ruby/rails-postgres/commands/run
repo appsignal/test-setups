@@ -3,12 +3,13 @@
 set -eu
 
 echo "Install appsignal"
-cd /integration && rake extension:install
+cd /integration
+rake extension:install
 
 cd /app
-
 echo "Install dependencies"
-bundle install --path=vendor/bundle
+bundle config set --local path 'vendor/bundle'
+bundle install
 npm install --prefix=vendor/npm
 
 echo "Clean tmp"
@@ -18,5 +19,4 @@ echo "Running migrations"
 bin/rails db:migrate
 RAILS_ENV=test bin/rails db:create db:migrate
 
-echo "Start processmon"
 /commands/processmon processmon.toml

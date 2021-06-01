@@ -1,0 +1,13 @@
+[[paths_to_watch]]
+path = "/app"
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.app]
+command = "bundle"
+args = [
+  "exec",
+  "rackup"
+]
+working_dir = "/app"

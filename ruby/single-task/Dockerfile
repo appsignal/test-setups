@@ -9,4 +9,4 @@ COPY ./commands/* /commands/
 RUN chmod +x /commands/*
 
 # Run prepare and run task
-CMD /commands/prepare && /commands/run
+CMD /commands/run
