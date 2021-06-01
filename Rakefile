@@ -110,7 +110,7 @@ namespace :app do
   end
 
   desc "Start a test app"
-  task :up => :prepare_nfs do
+  task :up do
     unless File.exist?("appsignal_key.env")
       raise "No push api key set yet, run rake global:set_push_api_key key=<key>"
     end
@@ -186,86 +186,6 @@ namespace :app do
       @app = get_app
       run_command "cd #{@app} && docker-compose exec app tail -f /tmp/appsignal.log"
     end
-  end
-
-  task :prepare_nfs do
-    require "rbconfig"
-    unless RbConfig::CONFIG["host_os"].downcase.start_with? "darwin"
-      puts "Warning: Skipping NFS check. Host system is not macOS. Use at own risk."
-    end
-
-    exports_path = "/etc/exports"
-
-    if File.exist?(exports_path)
-      exports = File.read(exports_path)
-      required_exports = %(/Users -alldirs -mapall=#{Process.uid}:#{Process.gid} localhost)
-      exports_missing = false
-      exports_missing = true unless exports.include?(required_exports)
-    else
-      exports_missing = true
-    end
-
-    nfs_config_path = "/etc/nfs.conf"
-    nfs_config = File.read(nfs_config_path)
-    required_nfs_config = "nfs.server.mount.require_resv_port = 0"
-    nfs_config_missing = false
-    nfs_config_missing = true unless nfs_config.include?(required_nfs_config)
-
-    if exports_missing || nfs_config_missing
-      puts "Warning: Some system config is missing for NFS volumes support."
-      puts "We will need to shut down all Docker setups (docker-compose down) and restart Docker."
-      puts "Please make sure you have stopped any running containers before continuing."
-      puts "Press `y` to continue. Press any other key to exit."
-      print "Continue? "
-      input = $stdin.gets.chomp
-      if input == "y"
-        puts "Configuring NFS volumes on the system."
-        puts "Stopping all apps."
-        Dir["{#{LANGUAGES.join(",")}}/*"].each do |dir|
-          next if dir.end_with?("integration")
-
-          puts "Running: `docker-compose down` for `#{dir}`"
-          `cd #{dir} && docker-compose down`
-        end
-
-        puts "Stopping Docker."
-        `osascript -e 'quit app "Docker"'`
-      else
-        puts "Exiting without configuring NFS volumes."
-        exit 1
-      end
-    else
-      next # Config correct, skipping
-    end
-
-    if exports_missing
-      puts
-      puts "Warning: Exports not set up"
-      puts "Setting exports for NFS volumes."
-      puts "This may prompt for your password and prompt a macOS security confirmation."
-      puts
-      `echo #{required_exports} | sudo tee -a #{exports_path}`
-    end
-
-    if nfs_config_missing
-      puts
-      puts "Warning: NFS not set up"
-      puts "Configuring NFS volumes."
-      puts "This may prompt for your password and prompt a macOS security confirmation."
-      puts
-      `echo #{required_nfs_config} | sudo tee -a #{nfs_config_path}`
-    end
-
-    puts
-    puts "Restarting NFS. This may prompt for your password."
-    `sudo nfsd restart`
-
-    puts
-    puts "Starting Docker."
-    `open -a Docker`
-
-    puts
-    puts "Configuration done. Now continuing."
   end
 end
 
