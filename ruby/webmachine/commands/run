@@ -1,12 +1,13 @@
 #!/bin/bash
-
 set -eu
 
 echo "Install appsignal"
 cd /integration
 rake extension:install
 
-echo "Install dependencies"
 cd /app
+echo "Install dependencies"
 bundle config set --local path 'vendor/bundle'
 bundle install
+
+/commands/processmon processmon.toml

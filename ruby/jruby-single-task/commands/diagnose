@@ -3,4 +3,4 @@
 set -eu
 
 cd /app
-bundle exec appsignal diagnose --send-report
+bundle exec appsignal diagnose --environment development --send-report

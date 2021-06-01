@@ -11,4 +11,4 @@ COPY ./commands/* /commands/
 RUN chmod +x /commands/*
 
 # Run the app
-CMD /commands/boot.sh
+CMD /commands/run
