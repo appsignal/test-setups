@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+bundle exec pumactl phased-restart --control-url tcp://127.0.0.1:9293 --control-token token
