@@ -8,8 +8,6 @@ services:
       - "4001:4001"
     environment:
       - APPSIGNAL_APP_NAME=ruby-sinatra-puma
-      - PUMA_TOKEN=token
-      - PUMA_URL=tcp://127.0.0.1:9293
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env
