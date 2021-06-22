@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: ruby/sinatra
+    ports:
+      - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=ruby-sinatra
+      - PORT=4001
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
