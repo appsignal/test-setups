@@ -17,6 +17,15 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
   def index(conn, _params) do
     users = Accounts.list_users()
     function1()
+
+    Appsignal.Span.set_sample_data(
+      Appsignal.Tracer.root_span(),
+      "custom_data",
+      %{
+        users: users
+      }
+    )
+
     render(conn, "index.html", users: users)
   end
 
