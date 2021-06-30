@@ -5,23 +5,18 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
   alias AppsignalPhoenixExample.Accounts.User
   use Appsignal.Instrumentation.Decorators
 
+  plug :set_appsignal_namespace
+
+  defp set_appsignal_namespace(conn, _params) do
+    # Configures all actions in this controller to report
+    # in the "user" namespace
+    Appsignal.Span.set_namespace(Appsignal.Tracer.root_span, "user")
+    conn
+  end
+
   def index(conn, _params) do
     users = Accounts.list_users()
-    slow() 
-    try do
-      raise "Exception with set_error!"
-    catch
-      kind, reason ->
-        stack = __STACKTRACE__
-
-        # the following attempt works however what should work
-        Appsignal.Span.add_error(Appsignal.Tracer.root_span, kind, reason, stack)
-        Appsignal.Span.set_sample_data(Appsignal.Tracer.root_span, "tags", %{locale: "en"})
-
-        # however the following does not work (this is how we show in the docs)
-        # Appsignal.add_error(kind, reason, stack)
-    end
-
+    function1()
     render(conn, "index.html", users: users)
   end
 
@@ -79,8 +74,28 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
   end
 
   # Decorate this function to add custom instrumentation
-  @decorate transaction_event()
+  # @decorate transaction_event()
   defp slow do
     :timer.sleep(1000)
+    Appsignal.instrument("slow", "title", fn x -> x end)
+  end
+
+  # Decorate this function to add custom instrumentation
+  @decorate transaction_event("functions")
+  defp function1 do
+    function2()
+    function3()
+  end
+
+  # Decorate this function to add custom instrumentation
+  @decorate transaction_event()
+  defp function2 do
+    :timer.sleep(2000)
+  end
+
+  # Decorate this function to add custom instrumentation
+  @decorate transaction_event()
+  defp function3 do
+    :timer.sleep(3000)
   end
 end
