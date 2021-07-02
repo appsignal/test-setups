@@ -5,6 +5,8 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug :fetch_live_flash
+    plug :put_root_layout, {AppsignalPhoenixExampleWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -18,8 +20,8 @@ defmodule AppsignalPhoenixExampleWeb.Router do
 
     get "/", PageController, :index
     resources "/users", UserController
+    live "/", PageLive, :index
   end
-
 
   # Other scopes may use custom stacks.
   # scope "/api", AppsignalPhoenixExampleWeb do
