@@ -201,7 +201,7 @@ namespace :integrations do
     clone_from_git("elixir/integration/appsignal-elixir-plug", "appsignal-elixir-plug")
     # Clone Node.js
     clone_from_git("nodejs/integration", "appsignal-nodejs")
-    reset_repo("nodejs/integration", branch: "make")
+    reset_repo("nodejs/integration")
     # Clone JavaScript
     clone_from_git("javascript/integration", "appsignal-javascript")
     reset_repo("javascript/integration")
@@ -216,7 +216,7 @@ namespace :integrations do
     reset_repo("elixir/integration/appsignal-phoenix")
     reset_repo("elixir/integration/appsignal-plug")
     # Node.js
-    reset_repo("nodejs/integration", branch: "make")
+    reset_repo("nodejs/integration")
     # JavaScript
     reset_repo("javascript/integration")
   end
