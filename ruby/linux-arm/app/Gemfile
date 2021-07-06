@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+gem "appsignal", :path => "/integration"
+gem "sinatra"
+gem "webrick"
+gem "pry"
