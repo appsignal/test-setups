@@ -8,6 +8,10 @@ const { expressErrorHandler } = require("@appsignal/express");
 app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({extended: true}));
 
+// Services
+const UserService = require("./services/user");
+const BlogService = require("./services/blog");
+
 // Initialize postgres
 const Pool = require('pg').Pool
 const pool = new Pool({
@@ -48,7 +52,10 @@ app.post('/create', (req, res) => {
 
 app.get('/error', (req, res) => {
   console.log("Request on /error")
-  throw new Error("This is an error")
+  let userService = new UserService();
+  //userService.login()
+  let blogService = new BlogService();
+  blogService.load()
 })
 
 app.use(expressErrorHandler(appsignal));
