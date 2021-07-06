@@ -2,5 +2,5 @@
 
 set -eu
 
-echo "TODO: Implement running diagnose"
-exit 1
+cd /app
+bundle exec appsignal diagnose --environment=production
