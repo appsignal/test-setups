@@ -7,7 +7,7 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
 
   def index(conn, _params) do
     users = Accounts.list_users()
-    slow() 
+    slow()
     try do
       raise "Exception with set_error!"
     catch
@@ -44,6 +44,7 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
     end
   end
 
+  @decorate transaction(:user)
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)
