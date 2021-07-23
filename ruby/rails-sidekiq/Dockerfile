@@ -1,4 +1,4 @@
-FROM ruby:3.0
+FROM ruby:3.0.2
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2021-02-10
