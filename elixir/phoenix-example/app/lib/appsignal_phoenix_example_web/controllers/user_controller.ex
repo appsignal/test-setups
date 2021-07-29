@@ -6,22 +6,7 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
   use Appsignal.Instrumentation.Decorators
 
   def index(conn, _params) do
-    users = Accounts.list_users()
-    slow()
-    try do
-      raise "Exception with set_error!"
-    catch
-      kind, reason ->
-        stack = __STACKTRACE__
-
-        # the following attempt works however what should work
-        Appsignal.Span.add_error(Appsignal.Tracer.root_span, kind, reason, stack)
-        Appsignal.Span.set_sample_data(Appsignal.Tracer.root_span, "tags", %{locale: "en"})
-
-        # however the following does not work (this is how we show in the docs)
-        # Appsignal.add_error(kind, reason, stack)
-    end
-
+    raise ArgumentError, message: "the argument value is invalid"
     render(conn, "index.html", users: users)
   end
 
@@ -33,6 +18,7 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
 
   def create(conn, %{"user" => user_params}) do
     slow()
+
     case Accounts.create_user(user_params) do
       {:ok, user} ->
         conn
