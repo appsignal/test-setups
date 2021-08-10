@@ -5,7 +5,7 @@ ignore = ["log"]
 [[paths_to_watch]]
 path = "/integration"
 
-[processes.rails]
+[processes.app]
 command = "bundle"
 args = [
   "exec",
