@@ -17,7 +17,7 @@ defmodule Mix.Tasks.SingleTask do
 
       do_stuff(event_count)
 
-      IO.puts "Sent a span with a 1000 events."
+      IO.puts "Sent a span with a #{event_count} events."
     end)
   end
 
