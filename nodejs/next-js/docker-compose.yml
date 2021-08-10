@@ -5,7 +5,7 @@ services:
     build: .
     image: nodejs/next-js
     ports:
-      - "4001:3000"
+      - "4001:4001"
     environment:
       - APPSIGNAL_APP_NAME=nodejs-next-js
     env_file:

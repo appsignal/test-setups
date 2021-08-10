@@ -6,7 +6,7 @@ const url = require("url");
 const next = require("next");
 const { createServer } = require("http");
 
-const PORT = parseInt(process.env.PORT, 10) || 3000;
+const PORT = parseInt(process.env.PORT, 10) || 4001;
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
