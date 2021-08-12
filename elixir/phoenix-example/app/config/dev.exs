@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :appsignal_phoenix_example, AppsignalPhoenixExample.Repo,
-  username: System.get_env("POSTGRES_USER"),
-  password: System.get_env("POSTGRES_PASSWORD"),
-  database: System.get_env("POSTGRES_DB"),
-  hostname: "postgres",
+  username: System.get_env("POSTGRES_USER") || "postgres",
+  password: System.get_env("POSTGRES_PASSWORD") || "postgres",
+  database: System.get_env("POSTGRES_DB") || "phoenix_example_dev",
+  hostname: System.get_env("POSTGRES_HOST") || "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
