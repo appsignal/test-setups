@@ -33,13 +33,14 @@ defmodule AppsignalPhoenixExample.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, github: "elixir-lang/elixir", branch: "master", override: true},
-      {:phoenix_ecto, "~> 4.1", override: true},
-      {:ecto_sql, github: "elixir-ecto/ecto_sql", branch: "master", override: true},
+      {:phoenix, github: "phoenixframework/phoenix", override: true},
+      {:phoenix_ecto, "~> 4.1"},
+      {:ecto_sql, "~> 3.5"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
-      #{:phoenix_live_reload, "~> 1.2", only: :dev, override: true},
-      #{:phoenix_live_dashboard, "~> 0.3 or ~> 0.2.9"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_dashboard, "~> 0.4"},
+      {:telemetry, "1.0.0", override: true},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
