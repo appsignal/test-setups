@@ -2,4 +2,5 @@
 
 set -eu
 
-cd /app && iex -S mix
+cd /app
+iex -S mix
