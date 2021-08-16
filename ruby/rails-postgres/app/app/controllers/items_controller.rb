@@ -5,10 +5,11 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    Appsignal.add_breadcrumb('Items', 'index', 'Fetching all items')
     @items = Item.all
-    Appsignal.add_breadcrumb('Items', 'index', 'Done fetching all items')
-    raise 'oops 6'
+    Appsignal.instrument("employee.benefits_trail_builder", "Fetch benefits report", "#{@items.to_sql}") do
+      puts 'A long and slow process'
+      sleep 25
+    end
   end
 
   # GET /items/1
