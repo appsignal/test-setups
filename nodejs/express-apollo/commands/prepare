@@ -5,6 +5,7 @@ set -eu
 echo "Install, link and build integration"
 (
   cd /integration
+  rm -f /integration/packages/nodejs-ext/ext/appsignal-agent
   script/setup
   source ~/.bashrc
   mono bootstrap

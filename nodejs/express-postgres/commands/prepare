@@ -15,6 +15,7 @@ psql $host \
 echo "Install, link and build integration"
 (
   cd /integration
+  rm -f /integration/packages/nodejs-ext/ext/appsignal-agent
   script/setup
   mono bootstrap
   mono build
