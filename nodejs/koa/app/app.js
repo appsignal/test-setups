@@ -11,9 +11,7 @@ console.log("Starting KOA app");
 app.on("error", (error) => {
   appsignal
     .tracer()
-    .currentSpan()
-    .addError(error)
-    .close()
+    .setError(error)
 });
 
 // logger
