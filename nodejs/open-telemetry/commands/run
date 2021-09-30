@@ -1,0 +1,23 @@
+#!/bin/bash
+set -eu
+
+echo "Install, link and build integration"
+(
+  cd /integration
+  script/setup
+  mono bootstrap
+  mono build
+)
+
+cd /app
+
+echo "Install dependencies"
+npm install
+
+echo "Npm link in app"
+npm link @appsignal/nodejs
+
+echo "Run app"
+tail -f /dev/null
+# /commands/processmon processmon.toml
+npm run server
