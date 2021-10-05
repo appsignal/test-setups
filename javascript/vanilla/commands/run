@@ -1,0 +1,19 @@
+#!/bin/bash
+set -eu
+
+(
+  echo "Install, link and build integration"
+  cd /integration
+  script/setup
+  mono bootstrap
+  mono build
+)
+
+cd /app
+
+echo "Install dependencies"
+yarn install
+yarn link @appsignal/types @appsignal/javascript
+
+echo "Starting app"
+yarn server
