@@ -5,6 +5,8 @@ services:
     image: postgres
     env_file:
       - postgres.env
+    ports:
+      - 5432
   app:
     build: .
     image: elixir/phoenix-example
