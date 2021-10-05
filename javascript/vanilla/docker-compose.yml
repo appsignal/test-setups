@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: javascript/vanilla
+    ports:
+      - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=javascript-vanilla
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+      - appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
