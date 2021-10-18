@@ -25,7 +25,8 @@ module.exports = {
       release: APPSIGNAL_REVISION,
       appName: APPSIGNAL_APP_NAME,
       environment: "development",
-      urlRoot: `http://localhost:${port}`
+      urlRoot: `http://localhost:${port}`,
+      timeout: 30000
     })
   ]
 };

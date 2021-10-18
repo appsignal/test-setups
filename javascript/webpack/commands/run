@@ -1,30 +1,21 @@
-#!/bin/sh
-
+#!/bin/bash
 set -eu
 
-echo "Install, link and build integration"
-cd /integration/packages/javascript
-yarn install
-yarn build
-yarn link
+(
+  echo "Install, link and build integration"
+  cd /integration
+  script/setup
+  mono bootstrap
+  mono build
+)
 
-cd /integration/packages/plugin-window-events
-yarn install
-yarn build
-yarn link
-
-cd /integration/packages/webpack
-yarn install
-yarn build
-yarn link
-
-# App
 cd /app
+
 echo "Install dependencies"
-yarn link @appsignal/javascript
-yarn link @appsignal/plugin-window-events
-yarn link @appsignal/webpack
 yarn install
+yarn link @appsignal/types @appsignal/javascript @appsignal/plugin-window-events @appsignal/webpack
+
+npm install -g http-server
 
 echo "Host running"
 echo "To test the app, run the following command:"
