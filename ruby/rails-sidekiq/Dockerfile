@@ -5,7 +5,7 @@ ENV REFRESHED_AT=2021-02-10
 
 RUN apt-get update && \
   curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
-  apt-get install -y nodejs && \
+  apt-get install -y nodejs python2 && \
   npm install -g npm && \
   npm install -g yarn
 
