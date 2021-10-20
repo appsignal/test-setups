@@ -13,8 +13,10 @@ esbuild.build({
     // Include AppSignal app front-end key in build assets
     "APPSIGNAL_FRONTEND_KEY": JSON.stringify(process.env.APPSIGNAL_FRONTEND_KEY)
   }
-}).catch(() => process.exit(1));
-
-// Copy the src/index.html file to the dist directory so it can be served by
-// the HTTP server
-copyFileSync("src/index.html", "dist/index.html");
+}).then(() =>
+  // Copy the src/index.html file to the dist directory so it can be served by
+  // the HTTP server
+  copyFileSync("src/index.html", "dist/index.html")
+).catch(() =>
+  process.exit(1)
+);
