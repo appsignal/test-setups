@@ -1,0 +1,64 @@
+version: v1.0
+name: Appsignal test setups tests
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+blocks:
+  - name: Run tests for each test setup
+    task:
+      prologue:
+        commands:
+          - checkout
+          - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
+          - "rake integrations:clone"
+      jobs:
+        - name: elixir/alpine-release
+          commands:
+            - "rake app=elixir/alpine-release app:test"
+        - name: elixir/phoenix-example
+          commands:
+            - "rake app=elixir/phoenix-example app:test"
+        - name: javascript/react
+          commands:
+            - "rake app=javascript/react app:test"
+        - name: javascript/vanilla
+          commands:
+            - "cp javascript/vanilla/appsignal_key.env{.example,}"
+            - "rake app=javascript/vanilla app:test"
+        - name: javascript/vue-2
+          commands:
+            - "rake app=javascript/vue-2 app:test"
+        - name: javascript/vue-3
+          commands:
+            - "rake app=javascript/vue-3 app:test"
+        - name: nodejs/express-apollo
+          commands:
+            - "rake app=nodejs/express-apollo app:test"
+        - name: nodejs/express-postgres
+          commands:
+            - "rake app=nodejs/express-postgres app:test"
+        - name: nodejs/koa
+          commands:
+            - "rake app=nodejs/koa app:test"
+        - name: nodejs/next-js
+          commands:
+            - "rake app=nodejs/next-js app:test"
+        - name: ruby/padrino
+          commands:
+            - "rake app=ruby/padrino app:test"
+        - name: ruby/rails-postgres
+          commands:
+            - "rake app=ruby/rails-postgres app:test"
+        - name: ruby/rails-sidekiq
+          commands:
+            - "rake app=ruby/rails-sidekiq app:test"
+        - name: ruby/sinatra
+          commands:
+            - "rake app=ruby/sinatra app:test"
+        - name: ruby/sinatra-puma
+          commands:
+            - "rake app=ruby/sinatra-puma app:test"
+        - name: ruby/webmachine
+          commands:
+            - "rake app=ruby/webmachine app:test"
