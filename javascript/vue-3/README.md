@@ -1,4 +1,4 @@
-# Vue 2 cli App test app
+# Vue 3 cli App test app
 
 Basic vue-cli test app.
 
