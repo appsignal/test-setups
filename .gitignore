@@ -3,6 +3,8 @@
 */integration
 .DS_Store
 appsignal_key.env
+.env
+yarn-error.log
 node_modules
 package-lock.json
 yarn.lock
