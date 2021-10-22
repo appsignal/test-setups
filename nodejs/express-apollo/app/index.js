@@ -1,9 +1,10 @@
 const  {app, appsignal}  = require("./express")
 
 const { createApolloPlugin } = require("@appsignal/apollo-server");
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, gql } = require("apollo-server-express");
 
 const { expressErrorHandler } = require("@appsignal/express")
+
 const fs = require('fs');
 // The GraphQL schema
 const typeDefs = gql`
@@ -57,9 +58,15 @@ const server = new ApolloServer({
   plugins: [createApolloPlugin(appsignal)],
 });
 
+app.get("/", (req, res) => {
+  res.send("Hello world! See <a href=\"/graphql\">&sol;graphql</a>")
+})
+
+server.applyMiddleware({ app });
+
 // ADD THIS AFTER ANY OTHER EXPRESS MIDDLEWARE, AND AFTER ANY ROUTES!
 app.use(expressErrorHandler(appsignal))
 
-server.listen(4001).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
+app.listen(4001, () => {
+  console.log(`🚀 Server ready at http://localhost:4001`);
 });
