@@ -26,3 +26,13 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=ruby/rails-sidekiq
+      - APP_URL=http://app:4001

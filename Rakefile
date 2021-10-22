@@ -109,8 +109,7 @@ namespace :app do
     puts "- Fill out the TODO markers in the generated files"
   end
 
-  desc "Start a test app"
-  task :up do
+  def build_app
     unless File.exist?("appsignal_key.env")
       raise "No push api key set yet, run rake global:set_push_api_key key=<key>"
     end
@@ -131,9 +130,25 @@ namespace :app do
 
     puts "Cleaning processmon"
     FileUtils.rm_f "#{@app}/commands/processmon"
+  end
+
+  desc "Start a test app"
+  task :up do
+    build_app
 
     puts "Starting compose..."
     run_command "cd #{@app} && docker-compose up --abort-on-container-exit"
+  end
+
+  desc "Start a test app and run the tests on it"
+  task :test do
+    build_app
+
+    puts "Building the tests container..."
+    run_command "cd #{@app} && docker-compose build tests"
+
+    puts "Starting compose with the tests..."
+    run_command "cd #{@app} && docker-compose --profile tests up --abort-on-container-exit --exit-code-from tests"
   end
 
   desc "Attach to app and get bash"
@@ -176,7 +191,7 @@ namespace :app do
   task :down do
     @app = get_app
     puts "Bringing compose down..."
-    run_command "cd #{@app} && docker-compose down --rmi=local"
+    run_command "cd #{@app} && docker-compose --profile tests down --rmi=local"
     run_command "docker image rm -f #{@app}:latest"
   end
 

@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  get '/', to: redirect('/items')
+  root "welcome#index"
   resources :items
 end
