@@ -2,7 +2,10 @@ const { appsignal } = require("./appsignal");
 appsignal.instrument(require("@appsignal/koa"));
 
 const Koa = require('koa');
+const Router = require('@koa/router');
+
 const app = new Koa();
+const router = new Router();
 
 console.log("Starting KOA app");
 
@@ -31,13 +34,23 @@ app.use(async (ctx, next) => {
   ctx.set('X-Response-Time', `${ms}ms`);
 });
 
-// response
+// routes
 
-app.use(async ctx => {
+router.get('/', ctx => {
   ctx.body = 'Hello World';
+})
 
-  // Uncomment this to throw an error
-  //ctx.throw(500,'Error Message');
-});
+router.get('/slow', async ctx => {
+  await new Promise((resolve) => setTimeout(resolve, 3000))
+  ctx.body = 'Well, that took forever!'
+})
+
+router.get('/error', ctx => {
+  ctx.throw(500, "This is a Koa error!")
+})
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods());
 
 app.listen(3000);

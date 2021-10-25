@@ -6,7 +6,7 @@ PadrinoExample::App.controllers do
 
   # GET /slow
   get "/slow" do
-    sleep 2
+    sleep 3
     render "root/slow"
   end
 

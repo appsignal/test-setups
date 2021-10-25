@@ -18,6 +18,8 @@ defmodule DemoWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    get "/slow", PageController, :slow
+    get "/error", PageController, :error
   end
 
   # Other scopes may use custom stacks.

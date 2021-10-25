@@ -62,6 +62,15 @@ app.get("/", (req, res) => {
   res.send("Hello world! See <a href=\"/graphql\">&sol;graphql</a>")
 })
 
+app.get('/error', (req, res) => {
+  throw "This is an express-apollo error!"
+})
+
+app.get('/slow', async (_req, res) => {
+  await new Promise((resolve) => setTimeout(resolve, 3000))
+  res.send("Well, that took forever!")
+})
+
 server.applyMiddleware({ app });
 
 // ADD THIS AFTER ANY OTHER EXPRESS MIDDLEWARE, AND AFTER ANY ROUTES!
