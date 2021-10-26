@@ -58,6 +58,11 @@ app.get('/error', (req, res) => {
   blogService.load()
 })
 
+app.get('/slow', async (_req, res) => {
+  await new Promise((resolve) => setTimeout(resolve, 3000))
+  res.send("Well, that took forever!")
+})
+
 app.use(expressErrorHandler(appsignal));
 
 app.listen(3000, () => {

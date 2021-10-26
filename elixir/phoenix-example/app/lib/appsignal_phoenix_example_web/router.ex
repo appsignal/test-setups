@@ -17,6 +17,8 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/slow", PageController, :slow
+    get "/error", PageController, :error
     resources "/users", UserController
   end
 
