@@ -30,5 +30,8 @@ Rails.application.routes.draw do
       match "/excon_trace" => "requests#excon_trace", :via => :trace
     end
   end
+
   root :to => "examples#index"
+  get "/slow", to: "examples#slow"
+  get "/error", to: "examples#error"
 end

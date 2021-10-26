@@ -14,7 +14,7 @@ end
 
 class MyPerformanceResource < Webmachine::Resource
   def to_html
-    sleep 1
+    sleep 3
 
     <<~HTML
       <html>
