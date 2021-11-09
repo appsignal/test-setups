@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+echo "Running mix local hex and rebar"
+mix local.hex --force
+mix local.rebar --force
+
+cd /app
+echo "Running mix deps.get"
+mix deps.get
+
+echo "Run a task that creates nested spans sequentially. Will exit afterwards."
+mix sequential_spans

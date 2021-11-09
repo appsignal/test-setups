@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: elixir/sequential-spans
+    ports:
+      - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=elixir-sequential-spans
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
