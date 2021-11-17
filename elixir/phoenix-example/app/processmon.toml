@@ -11,6 +11,6 @@ path = "/integration"
 ignore = ["appsignal-elixir/priv"]
 
 [processes.app]
-command = "mix"
-args = ["phx.server"]
+command = "elixir"
+args = ["--sname", "server", "--cookie", "server", "-S", "mix", "phx.server"]
 working_dir = "/app"

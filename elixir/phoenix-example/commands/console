@@ -2,5 +2,4 @@
 
 set -eu
 
-cd /app
-iex -S mix
+iex --sname console --cookie server --remsh server
