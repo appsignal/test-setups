@@ -6,6 +6,7 @@ set -eu
   cd /integration
   script/setup
   mono bootstrap
+  mono clean
   mono build
 )
 
@@ -13,7 +14,7 @@ cd /app
 
 echo "Install dependencies"
 yarn install
-yarn link @appsignal/types @appsignal/javascript
+yarn link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/react
 
 echo "Starting app"
 yarn start
