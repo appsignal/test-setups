@@ -1,4 +1,4 @@
-const  {app, appsignal}  = require("./express")
+const {app, appsignal} = require("./express")
 
 // Initialize express
 const bodyParser = require('body-parser')
