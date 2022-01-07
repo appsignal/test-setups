@@ -1,8 +1,24 @@
 import logo from './logo.svg';
 import './App.css';
-import Appsignal from "./Appsignal";
+import appsignal from "./Appsignal";
+import { ErrorBoundary } from "@appsignal/react";
 
-Appsignal.demo();
+
+const FallbackComponent = () => (
+  <div>Uh oh! There was an error :(</div>
+);
+
+function AppWrapper() {
+  return (
+    <ErrorBoundary
+      instance={appsignal}
+      tags={{ tag: "value" }}
+      fallback={(error) => <FallbackComponent />}
+    >
+      <App />
+    </ErrorBoundary>
+  );
+}
 
 function App() {
   return (
@@ -28,4 +44,4 @@ function App() {
   );
 }
 
-export default App;
+export default AppWrapper;
