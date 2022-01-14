@@ -53,6 +53,9 @@ blocks:
         - name: ruby/rails-sidekiq
           commands:
             - "rake app=ruby/rails-sidekiq app:test"
+        - name: ruby/rails6-sequel
+          commands:
+            - "rake app=ruby/rails6-sequel app:test"
         - name: ruby/sinatra
           commands:
             - "rake app=ruby/sinatra app:test"

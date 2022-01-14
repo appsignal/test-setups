@@ -1,0 +1,44 @@
+<h1>Users</h1>
+
+<h2>Add new user</h2>
+<%= form_for(:user) do |form| %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+<h1>Existing users</h1>
+<% if @users.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user[:id] %></td>
+          <td><%= user[:name] %></td>
+          <td><%= user[:email] %></td>
+          <td><%= link_to "Delete", user_path(:id => user[:id]), :method => :delete %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No users found. Please create a user first</p>
+<% end %>
