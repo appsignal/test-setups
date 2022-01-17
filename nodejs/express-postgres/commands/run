@@ -18,7 +18,7 @@ echo "Install, link and build integration"
   script/setup
   mono bootstrap
   mono clean
-  mono run --package=@appsignal/nodejs-ext -- npm run install
+  mono run --package=@appsignal/nodejs -- npm run install
   mono build
 )
 
@@ -28,7 +28,7 @@ echo "Install dependencies"
 npm install
 
 echo "Npm link in app"
-npm link @appsignal/nodejs-ext @appsignal/nodejs @appsignal/express
+npm link @appsignal/nodejs @appsignal/express
 
 echo "Starting app"
 /commands/processmon processmon.toml
