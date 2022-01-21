@@ -4,7 +4,7 @@ FROM ruby:3.0.2
 ENV REFRESHED_AT=2021-02-10
 
 RUN apt-get update && \
-  curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
+  curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
   apt-get install -y nodejs python2 && \
   npm install -g npm && \
   npm install -g yarn
