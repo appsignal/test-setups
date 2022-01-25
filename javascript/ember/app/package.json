@@ -66,5 +66,9 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "@appsignal/ember": "^1.0.14",
+    "@appsignal/javascript": "^1.3.21"
   }
 }

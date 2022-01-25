@@ -1,3 +1,10 @@
+# Ember test setup
+
+Write your API key to the Appsignal initialiser at
+`app/app.js`.
+
+The default Ember readme can be found below.
+
 # ember-test-setup
 
 This README outlines the details of collaborating on this Ember application.
