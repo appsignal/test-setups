@@ -1,0 +1,17 @@
+html
+  head
+    title New post
+  body
+    h1 Create a new post
+
+  form(method='post' action='/create')
+    p
+      label(for='title') Title
+      br
+      input(type='text' name='title')
+    p
+      label(for='text') Text
+      br
+      textarea(rows='8' cols='60' name='text')
+    p
+      input(type='submit' name='Create post')
