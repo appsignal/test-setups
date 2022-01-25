@@ -9,4 +9,14 @@ export default class App extends Application {
   Resolver = Resolver;
 }
 
+import Appsignal from '@appsignal/javascript';
+import { installErrorHandler } from "@appsignal/ember";
+import Ember from 'ember';
+
+const appsignal = new Appsignal({
+  key: "<PUSH API KEY HERE>"
+})
+
+installErrorHandler(appsignal, Ember)
+
 loadInitializers(App, config.modulePrefix);
