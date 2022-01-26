@@ -7,7 +7,7 @@ services:
       dockerfile: ../Dockerfile
     image: javascript/ember
     ports:
-      - "4001:4200"
+      - "4001:4001"
     environment:
       - APPSIGNAL_APP_NAME=javascript-ember
     env_file:
@@ -25,4 +25,4 @@ services:
       - app
     environment:
       - APP_NAME=javascript/ember
-      - APP_URL=http://app:4200
+      - APP_URL=http://app:4001
