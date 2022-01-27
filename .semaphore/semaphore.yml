@@ -22,6 +22,9 @@ blocks:
         - name: javascript/react
           commands:
             - "rake app=javascript/react app:test"
+        - name: javascript/ember
+          commands:
+            - "rake app=javascript/ember app:test"
         - name: javascript/vanilla
           commands:
             - "cp javascript/vanilla/appsignal_key.env{.example,}"
