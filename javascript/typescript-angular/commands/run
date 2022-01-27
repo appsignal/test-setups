@@ -6,14 +6,14 @@ set -eu
   cd /integration
   script/setup
   mono bootstrap
-  mono build
+  mono build --package=@appsignal/types,@appsignal/core,@appsignal/javascript,@appsignal/angular,@appsignal/webpack
 )
 
 cd /app
 
 echo "Install dependencies"
 yarn install
-yarn link @appsignal/types @appsignal/javascript @appsignal/angular @appsignal/webpack
+yarn link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/angular @appsignal/webpack
 
 echo "Host running"
 echo "To test the app, run the following command:"
