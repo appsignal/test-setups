@@ -1,6 +1,6 @@
 ARG ALPINE_VERSION=3.9
 
-FROM elixir:1.10-alpine
+FROM elixir:1.13-alpine
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2021-01-04
