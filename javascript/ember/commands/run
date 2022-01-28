@@ -7,7 +7,7 @@ set -eu
   script/setup
   mono bootstrap
   mono clean
-  mono build
+  mono build --package=@appsignal/types,@appsignal/core,@appsignal/javascript,@appsignal/ember
 )
 
 cd /app
