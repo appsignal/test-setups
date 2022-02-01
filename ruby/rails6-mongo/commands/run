@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -eu
+
+echo "Install AppSignal Ruby extension"
+(
+  cd /integration
+  rake extension:install
+)
+
+cd /app
+echo "Install dependencies"
+bundle install
+yarn install
+
+echo "Clean tmp"
+rm -rf tmp
+mkdir -p tmp/pids tmp/sockets
+
+/commands/processmon processmon.toml
