@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+  app:
+    build: .
+    image: ruby/rails6-mongo
+    depends_on:
+      - mongo
+    ports:
+      - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=ruby-rails6-mongo
+      - PORT=4001
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=ruby/rails6-mongo
+      - APP_URL=http://app:4001
