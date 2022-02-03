@@ -1,0 +1,8 @@
+default: &defaults
+  push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
+development:
+  <<: *defaults
+  active: true
+production:
+  <<: *defaults
+  active: true

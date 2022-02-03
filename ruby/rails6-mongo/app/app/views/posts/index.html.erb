@@ -1,0 +1,11 @@
+<h1>POSTS</h1>
+
+<h2>Total posts: <%= @posts.count %></h2>
+
+<ul>
+  <% @posts.each do |post| %>
+    <li><%= link_to post.title, post_path(post) %></li>
+  <% end %>
+</ul>
+
+<%= link_to "New Post", new_post_path %>
