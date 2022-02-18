@@ -5,22 +5,18 @@ services:
     image: postgres
     env_file:
       - postgres.env
-  redis:
-    image: "redis:6.0"
   app:
     build: .
-    image: ruby/rails-sidekiq
+    image: ruby/rails6-postgres
     depends_on:
       - postgres
-      - redis
     ports:
       - "4001:4001"
     environment:
-      - APPSIGNAL_APP_NAME=ruby-rails-sidekiq
+      - APPSIGNAL_APP_NAME=ruby-rails6-postgres
       - PORT=4001
     env_file:
       - postgres.env
-      - redis.env
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
@@ -34,5 +30,5 @@ services:
     depends_on:
       - app
     environment:
-      - APP_NAME=ruby/rails-sidekiq
+      - APP_NAME=ruby/rails6-postgres
       - APP_URL=http://app:4001
