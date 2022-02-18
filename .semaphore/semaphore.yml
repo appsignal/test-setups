@@ -4,6 +4,9 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu2004
+auto_cancel:
+  running:
+    when: branch != 'main'
 blocks:
   - name: Run tests for each test setup
     task:
@@ -53,12 +56,12 @@ blocks:
         - name: ruby/padrino
           commands:
             - "rake app=ruby/padrino app:test"
-        - name: ruby/rails-postgres
+        - name: ruby/rails6-postgres
           commands:
-            - "rake app=ruby/rails-postgres app:test"
-        - name: ruby/rails-sidekiq
+            - "rake app=ruby/rails6-postgres app:test"
+        - name: ruby/rails6-sidekiq
           commands:
-            - "rake app=ruby/rails-sidekiq app:test"
+            - "rake app=ruby/rails6-sidekiq app:test"
         - name: ruby/rails6-mongo
           commands:
             - "rake app=ruby/rails6-mongo app:test"
