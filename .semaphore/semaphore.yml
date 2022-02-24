@@ -55,7 +55,7 @@ blocks:
             - "rake app=nodejs/next-js app:test"
         - name: ruby/jruby-rails6
           commands:
-            - "rake app=ruby/padrino app:test"
+            - "rake app=ruby/jruby-rails6 app:test"
         - name: ruby/padrino
           commands:
             - "rake app=ruby/padrino app:test"
