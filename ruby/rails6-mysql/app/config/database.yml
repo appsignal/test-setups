@@ -1,0 +1,17 @@
+default: &default
+  adapter: mysql2
+  host: mysql
+  username: app
+  password: password
+
+development:
+  <<: *default
+  database: app_db
+
+test:
+  <<: *default
+  database: app_db_test
+
+production:
+  <<: *default
+  database: app_db_production
