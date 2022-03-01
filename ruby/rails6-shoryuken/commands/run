@@ -5,20 +5,21 @@ set -eu
 echo "Install AppSignal Ruby extension"
 (
   cd /integration
-  RUBY_ENGINE=jruby jruby -S rake extension:install
+  rake extension:install
 )
 
 cd /app
 echo "Install dependencies"
 bundle install
-yarn install
 
 echo "Clean tmp"
 rm -rf tmp
 mkdir -p tmp/pids tmp/sockets
 
 echo "Running migrations"
-bin/rails db:create db:migrate
+bin/rails db:migrate
 
+echo "Create sqs queues in mock server"
+bundle exec shoryuken sqs create default
 
 /commands/processmon processmon.toml
