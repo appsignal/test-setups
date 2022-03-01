@@ -1,0 +1,14 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = ["tmp", "log", "public/packs", "node_modules/.cache"]
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.rails]
+command = "bin/rails"
+args = [
+  "server",
+  "--binding=0.0.0.0"
+]
+working_dir = "/app"

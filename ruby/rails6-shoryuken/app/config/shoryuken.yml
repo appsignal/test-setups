@@ -1,0 +1,8 @@
+aws:
+  access_key_id: foo
+  secret_access_key: foo
+  region: eu-west-1
+concurrency: 10
+endpoint: http://motoserver:5000/
+verify_checksums: false
+
