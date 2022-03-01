@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  motoserver:
+    image: motoserver/moto
+  app:
+    build: .
+    platform: "linux/amd64"
+    image: ruby/rails6-shoryuken
+    depends_on:
+      - motoserver
+    ports:
+      - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=rails6-shoryuken
+      - PORT=4001
+    env_file:
+      - shoryuken.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=ruby/rails6-shoryuken
+      - APP_URL=http://app:4001
