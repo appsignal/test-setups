@@ -1,5 +1,6 @@
 defmodule App do
   use Plug.Router
+  use Appsignal.Plug
 
   plug(:match)
   plug(:dispatch)
