@@ -8,6 +8,7 @@ services:
       - "4001:3000"
     environment:
       - APPSIGNAL_APP_NAME=elixir-plug
+      - INTEGRATION_PATH=/integration
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env
