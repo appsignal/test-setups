@@ -8,4 +8,10 @@ defmodule App do
   get "/" do
     send_resp(conn, 200, "Welcome")
   end
+
+  get "/already-sent" do
+    send_resp(conn, 200, "Welcome")
+
+    raise "Already sent!"
+  end
 end
