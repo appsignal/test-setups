@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: nodejs/apollo-mikro
+    ports:
+      - "4001:3000"
+    environment:
+      - APPSIGNAL_APP_NAME=nodejs-apollo-mikro
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=nodejs/apollo-mikro
+      - APP_URL=http://app:3000
