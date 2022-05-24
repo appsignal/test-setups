@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # Configure your database
 #
@@ -8,15 +8,23 @@ use Mix.Config
 config :appsignal_phoenix_example, AppsignalPhoenixExample.Repo,
   username: "postgres",
   password: "postgres",
-  database: "appsignal_phoenix_example_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  database: "appsignal_phoenix_example_test#{System.get_env("MIX_TEST_PARTITION")}",
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: 10
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
-  http: [port: 4002],
+  http: [ip: {127, 0, 0, 1}, port: 4002],
+  secret_key_base: "4Ycv4bk8zmuu6hNVYJpZ+Vn4u3ltRCG1GeolzXcy0SqS448nf48BpdahRUcP+vBM",
   server: false
+
+# In test we don't send emails.
+config :appsignal_phoenix_example, AppsignalPhoenixExample.Mailer, adapter: Swoosh.Adapters.Test
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Initialize plugs at runtime for faster test compilation
+config :phoenix, :plug_init_mode, :runtime
