@@ -1,7 +1,7 @@
-FROM node:15.5-buster
+FROM node:16.15-buster
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2021-03-18-1
+ENV REFRESHED_AT=2022-05-24
 
 # Install dependencies
 RUN apt-get update && apt-get install -y postgresql-client ruby
