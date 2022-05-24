@@ -21,6 +21,8 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     get "/slow", PageController, :slow
     get "/error", PageController, :error
     resources "/users", UserController
+
+    live "/clock", ClockLive
   end
 
   # Other scopes may use custom stacks.
