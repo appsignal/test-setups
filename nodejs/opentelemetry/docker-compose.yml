@@ -19,6 +19,7 @@ services:
     environment:
       - APPSIGNAL_APP_NAME=nodejs-opentelemetry
     env_file:
+      - mysql.env
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:

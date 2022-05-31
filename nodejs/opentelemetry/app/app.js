@@ -15,8 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const redisHost = "redis://redis:6379";
 
-import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
-diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
+opentelemetry.diag.setLogger(new opentelemetry.DiagConsoleLogger(), opentelemetry.DiagLogLevel.DEBUG);
 
 app.get('/', (req, res) => {
   res.send(`
