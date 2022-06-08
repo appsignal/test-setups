@@ -23,6 +23,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     resources "/users", UserController
 
     live "/clock", ClockLive
+    live "/thermostat", ThermostatLive
   end
 
   # Other scopes may use custom stacks.
