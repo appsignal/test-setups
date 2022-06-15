@@ -6,6 +6,8 @@ defmodule AppsignalPhoenixExample.Application do
   use Application
 
   def start(_type, _args) do
+    Appsignal.Phoenix.LiveView.attach()
+
     children = [
       # Start the Ecto repository
       AppsignalPhoenixExample.Repo,
