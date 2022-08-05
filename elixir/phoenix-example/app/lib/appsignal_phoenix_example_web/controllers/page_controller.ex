@@ -19,4 +19,8 @@ defmodule AppsignalPhoenixExampleWeb.PageController do
   def error(_conn, _params) do
     raise "This is a Phoenix error!"
   end
+
+  def partials(conn, _params) do
+    render(conn, "partials.html")
+  end
 end

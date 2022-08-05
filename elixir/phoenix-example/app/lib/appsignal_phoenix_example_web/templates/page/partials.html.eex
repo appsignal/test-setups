@@ -1,0 +1,3 @@
+<%= for n <- (1 .. 10_000) do %>
+  <%= render AppsignalPhoenixExampleWeb.PageView, "_partial.html", assigns %>
+<% end %>
