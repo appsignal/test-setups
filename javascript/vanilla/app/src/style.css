@@ -1,0 +1,13 @@
+button {
+  display: block;
+}
+
+#output code {
+  display: block;
+}
+
+#output {
+  width: auto;
+  height: 6em;
+  overflow: scroll;
+}

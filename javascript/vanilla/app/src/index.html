@@ -6,6 +6,7 @@
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <script src="app.js"></script>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <h1>Example JavaScript vanilla app</h1>
@@ -14,8 +15,33 @@
 
     <p>This creates a very basic environment to test the AppSignal package in.</p>
 
+    <h2>Output</h2>
+
+    <div id="output">
+      <code>Output from test actions will show up below this message...</code>
+    </div>
+
+    <h2>Core functionality</h2> 
+
     <button onclick="testSendError()">Test <code>sendError</code></button>
 
-    <p><em>Open the web developer console to see if the test succeeded.</em></p>
+    <h2><code>plugin-window-events</code></h2>
+
+    <button onclick="testOnError()">Test <code>onError</code> handler</button>
+    <button onclick="testOnUnhandledRejection()">Test <code>onUnhandledRejection</code> handler</button>
+
+    <h2><code>plugin-path-decorator</code></h2>
+
+    <button onclick="testPathDecorator()">Test path decorator</button>
+
+    The button above just submits an error. <a href="something.html">Go to a different page to see that the pathname submitted is different for the same error.</a>
+
+    <h2><code>plugin-breadcrumbs-console</code></h2>
+
+    <button onclick="testConsoleBreadcrumbs()">Test console breadcrumbs</code></button>
+
+    <h2><code>plugin-breadcrumbs-network</code></h2>
+
+    <button onclick="testNetworkBreadcrumbs()">Test network breadcrumbs</code></button>
   </body>
 </html>
