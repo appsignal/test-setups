@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "@appsignal/javascript": "^1.3.17",
+    "@appsignal/plugin-window-events": "^1.0.17",
+    "@appsignal/plugin-path-decorator": "^1.0.15",
+    "@appsignal/plugin-breadcrumbs-console": "^1.1.24",
+    "@appsignal/plugin-breadcrumbs-network": "^1.1.21",
     "esbuild": "^0.13.3",
     "http-server": "^13.0.2"
   },
