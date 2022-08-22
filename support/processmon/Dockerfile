@@ -1,4 +1,4 @@
-FROM rust:1.49.0-alpine3.11
+FROM rust:1.63.0-alpine3.16
 
 ENV VERSION=0.4.1
 
