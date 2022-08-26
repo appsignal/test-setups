@@ -27,6 +27,7 @@ rake app=elixir/alpine-release app:up
 rake app=elixir/phoenix-example app:up
 rake app=elixir/phoenix-segfault app:up
 rake app=elixir/single-task app:up
+rake app=ruby/hanami app:up
 rake app=ruby/jruby-rails6 app:up
 rake app=ruby/jruby-single-task app:up
 rake app=ruby/linux-arm app:up
