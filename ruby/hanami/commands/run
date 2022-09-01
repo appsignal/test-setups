@@ -1,0 +1,20 @@
+#!/bin/bash
+set -eu
+
+echo "Install appsignal"
+(
+  cd /integration
+  rake extension:install
+)
+
+cd /app
+
+# Paths for Puma
+mkdir -p shared/sockets shared/pids shared/log
+
+echo "Install dependencies"
+bundle config set path vendor/bundle
+bundle install
+
+echo "Starting app"
+bundle exec puma --environment production

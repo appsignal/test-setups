@@ -1,0 +1,15 @@
+[[paths_to_watch]]
+path = "/app"
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.app]
+command = "bundle"
+args = [
+  "exec",
+  "puma",
+  "-C config/puma.rb",
+  "--port=4001"
+]
+working_dir = "/app"

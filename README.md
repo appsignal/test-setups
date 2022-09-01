@@ -39,6 +39,7 @@ rake app=ruby/rails6-shoryuken app:up
 rake app=ruby/rails6-sidekiq app:up
 rake app=ruby/sequential-spans app:up
 rake app=ruby/shoryuken app:up
+rake app=ruby/hanami app:up
 rake app=ruby/sinatra app:up
 rake app=ruby/sinatra-puma app:up
 rake app=ruby/single-task app:up
