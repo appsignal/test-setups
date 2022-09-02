@@ -4,11 +4,11 @@ source "https://rubygems.org/"
 gem "appsignal"
 
 # Application framework
-gem "hanami", "~> 2.0.0.alpha"
-gem "hanami-cli", "~> 2.0.0.alpha"
-gem "hanami-controller", "~> 2.0.0.alpha"
-gem "hanami-router", "~> 2.0.0.alpha"
-gem "hanami-utils", "~> 2.0.0.alpha"
+gem "hanami", "2.0.0.alpha8"
+gem "hanami-cli", "2.0.0.alpha8"
+gem "hanami-controller", "2.0.0.alpha8"
+gem "hanami-router", "2.0.0.alpha6"
+gem "hanami-utils", "2.0.0.alpha6"
 gem "puma", "~> 5.6"
 gem "rake", "~> 13.0"
 
