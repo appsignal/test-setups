@@ -16,9 +16,11 @@ defmodule AppsignalPhoenixExample.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: AppsignalPhoenixExample.PubSub},
       # Start the Endpoint (http/https)
-      AppsignalPhoenixExampleWeb.Endpoint
+      AppsignalPhoenixExampleWeb.Endpoint,
       # Start a worker by calling: AppsignalPhoenixExample.Worker.start_link(arg)
       # {AppsignalPhoenixExample.Worker, arg}
+      # Start Finch HTTP client
+      {Finch, name: MyFinch}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
