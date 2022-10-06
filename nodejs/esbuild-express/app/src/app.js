@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 app.get("/error", (req, res) => {
   console.log("Request on /error");
 
-  throw new Error("Error in the redis express app");
+  throw new Error("Error in the esbuild express app");
 });
 
 app.get('/slow', async (_req, res) => {
