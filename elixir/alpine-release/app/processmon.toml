@@ -9,4 +9,5 @@ command = "/tmp/release/bin/demo"
 args = ["start"]
 
 [triggers.prepare]
-command = "/commands/prepare"
+command = "mix"
+args = ["release", "--path=/tmp/release"]
