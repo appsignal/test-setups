@@ -38,6 +38,9 @@ blocks:
         - name: javascript/vue-3
           commands:
             - "rake app=javascript/vue-3 app:test"
+        - name: nodejs/esbuild-express
+          commands:
+            - "rake app=nodejs/esbuild-express app:test"
         - name: nodejs/express-apollo
           commands:
             - "rake app=nodejs/express-apollo app:test"
