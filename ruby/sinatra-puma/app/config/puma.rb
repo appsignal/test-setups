@@ -1,3 +1,4 @@
+plugin 'metrics'
 plugin :appsignal
 
 workers 2
