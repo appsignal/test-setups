@@ -1,7 +1,7 @@
-FROM elixir:1.11.2
+FROM elixir:1.14.1
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2021-01-04
+ENV REFRESHED_AT=2022-10-27
 
 # Install node 12
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
