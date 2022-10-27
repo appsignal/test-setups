@@ -32,12 +32,7 @@ defmodule AppsignalPhoenixExampleWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(AppsignalPhoenixExample.Repo)
-
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(AppsignalPhoenixExample.Repo, {:shared, self()})
-    end
-
+    AppsignalPhoenixExample.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end
