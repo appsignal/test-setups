@@ -80,6 +80,9 @@ blocks:
         - name: ruby/rails6-shoryuken
           commands:
             - "rake app=ruby/rails6-shoryuken app:test"
+        - name: ruby/rails7-sidekiq
+          commands:
+            - "rake app=ruby/rails7-sidekiq app:test"
         - name: ruby/sinatra
           commands:
             - "rake app=ruby/sinatra app:test"
