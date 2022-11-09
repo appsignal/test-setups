@@ -5,3 +5,4 @@ gem "i18n", "~> 0.0" # Lock to pre 1.x version as it's not compatible
 gem "webrick"
 gem "appsignal", :path => "/integration"
 gem "pry"
+gem "rackup"
