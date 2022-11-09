@@ -15,6 +15,7 @@ psql $host \
 echo "Install, link and build integration"
 (
   cd /integration
+  git checkout 2-4-stable
   script/setup
   mono bootstrap
   mono clean
