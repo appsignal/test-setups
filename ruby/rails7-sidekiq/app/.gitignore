@@ -24,6 +24,8 @@
 /tmp/storage/*
 !/tmp/storage/
 !/tmp/storage/.keep
+!/vendor/javascript/
+!/vendor/javascript/.keep
 
 /public/assets
 
