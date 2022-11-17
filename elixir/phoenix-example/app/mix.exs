@@ -23,6 +23,10 @@ defmodule AppsignalPhoenixExample.MixProject do
     ]
   end
 
+  defp integration_path do
+    System.get_env("INTEGRATION_PATH", "../../integration")
+  end
+
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
@@ -50,7 +54,10 @@ defmodule AppsignalPhoenixExample.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
+      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true},
+      {:appsignal_phoenix, path: "#{integration_path()}/appsignal-elixir-phoenix", override: true}
     ]
   end
 
