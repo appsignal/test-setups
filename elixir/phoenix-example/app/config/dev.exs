@@ -2,10 +2,11 @@ import Config
 
 # Configure your database
 config :appsignal_phoenix_example, AppsignalPhoenixExample.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "appsignal_phoenix_example_dev",
+  username: System.get_env("POSTGRES_USER", "postgres"),
+  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
+  database: System.get_env("POSTGRES_DB", "appsignal_phoenix_example_dev"),
+  hostname: System.get_env("POSTGRES_HOST", "localhost"),
+  port: System.get_env("POSTGRES_PORT", "5432"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -19,7 +20,7 @@ config :appsignal_phoenix_example, AppsignalPhoenixExample.Repo,
 config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
