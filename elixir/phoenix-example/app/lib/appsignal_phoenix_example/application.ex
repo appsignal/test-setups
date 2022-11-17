@@ -7,21 +7,19 @@ defmodule AppsignalPhoenixExample.Application do
 
   @impl true
   def start(_type, _args) do
-    Appsignal.Phoenix.LiveView.attach()
-
     children = [
-      # Start the Ecto repository
-      AppsignalPhoenixExample.Repo,
       # Start the Telemetry supervisor
       AppsignalPhoenixExampleWeb.Telemetry,
+      # Start the Ecto repository
+      AppsignalPhoenixExample.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: AppsignalPhoenixExample.PubSub},
+      # Start Finch
+      {Finch, name: AppsignalPhoenixExample.Finch},
       # Start the Endpoint (http/https)
-      AppsignalPhoenixExampleWeb.Endpoint,
+      AppsignalPhoenixExampleWeb.Endpoint
       # Start a worker by calling: AppsignalPhoenixExample.Worker.start_link(arg)
       # {AppsignalPhoenixExample.Worker, arg}
-      # Start Finch HTTP client
-      {Finch, name: MyFinch}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
