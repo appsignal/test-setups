@@ -22,6 +22,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     get "/error", PageController, :error
     get "/finch", PageController, :finch
     resources "/users", UserController
+    live "/thermostat", ThermostatLive
   end
 
 
