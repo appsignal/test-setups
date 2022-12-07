@@ -7,12 +7,32 @@ agent:
 auto_cancel:
   running:
     when: branch != 'main'
+global_job_config:
+  env_vars:
+    - name: CACHE_VERSION
+      value: v1
+  prologue:
+    commands:
+      - checkout
 blocks:
+  - name: Build processmon
+    dependencies: []
+    task:
+      jobs:
+        - name: "Build processmon"
+          commands:
+            - "cache restore $CACHE_VERSION-processmon"
+            - |
+              if [ ! -f support/processmon/processmon ]; then
+                rake global:install_processmon
+                cache store $CACHE_VERSION-processmon support/processmon/processmon
+              fi
   - name: Run tests for each test setup
+    dependencies: ["Build processmon"]
     task:
       prologue:
         commands:
-          - checkout
+          - "cache restore $CACHE_VERSION-processmon"
           - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
           - "rake integrations:clone"
       jobs:
