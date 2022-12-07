@@ -10,8 +10,9 @@ services:
     depends_on:
       - redis
     ports:
-      - "4001:3000"
+      - "4001:4001"
     environment:
+      - PORT=4001
       - APPSIGNAL_APP_NAME=nodejs-express-redis
     env_file:
       - ../../appsignal.env
@@ -28,4 +29,4 @@ services:
       - app
     environment:
       - APP_NAME=nodejs/express-redis
-      - APP_URL=http://app:3000
+      - APP_URL=http://app:4001

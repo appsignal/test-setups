@@ -5,8 +5,9 @@ services:
     build: .
     image: <%= @app %>
     ports:
-      - "4001:3000"
+      - "4001:4001"
     environment:
+      - PORT=4001
       - APPSIGNAL_APP_NAME=<%= @app.gsub('/', '-') %>
     env_file:
       - ../../appsignal.env
@@ -23,4 +24,4 @@ services:
       - app
     environment:
       - APP_NAME=<%= @app %>
-      - APP_URL=http://app:3000
+      - APP_URL=http://app:4001
