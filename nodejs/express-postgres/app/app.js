@@ -65,6 +65,6 @@ app.get('/slow', async (_req, res) => {
 
 app.use(expressErrorHandler(appsignal));
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log('Example app listening')
 })
