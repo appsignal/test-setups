@@ -42,6 +42,9 @@ blocks:
         - name: elixir/phoenix-example
           commands:
             - "rake app=elixir/phoenix-example app:test"
+        - name: elixir/plug-oban
+          commands:
+            - "rake app=elixir/plug-oban app:test"
         - name: javascript/react
           commands:
             - "rake app=javascript/react app:test"

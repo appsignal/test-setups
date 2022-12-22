@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - postgres.env
+    ports:
+      - 5432
+  app:
+    build: .
+    image: elixir/plug-oban
+    depends_on:
+      - postgres
+    ports:
+      - "4001:4000"
+    environment:
+      - APPSIGNAL_APP_NAME=elixir-plug-oban
+      - INTEGRATION_PATH=/integration
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=elixir/plug-oban
+      - APP_URL=http://app:4000
