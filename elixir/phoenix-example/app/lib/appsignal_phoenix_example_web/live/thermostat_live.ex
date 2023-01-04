@@ -20,6 +20,12 @@ defmodule AppsignalPhoenixExampleWeb.ThermostatLive do
   end
 
   def handle_event("inc_temperature", _value, socket) do
-    {:noreply, assign(socket, :temperature, socket.assigns.temperature + 1.0)}
+    temperature = socket.assigns.temperature
+
+    if temperature > 21.0 do
+      raise "Exception!"
+    end
+
+    {:noreply, assign(socket, :temperature, temperature + 1.0)}
   end
 end
