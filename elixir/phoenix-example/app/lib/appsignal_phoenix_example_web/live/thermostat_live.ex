@@ -9,6 +9,7 @@ defmodule AppsignalPhoenixExampleWeb.ThermostatLive do
     <button phx-click="dec_temperature">-</button>
     <button phx-click="inc_temperature">+</button>
     <button phx-click="raise_exception">raise exception</button>
+    <button phx-click="create_user">raise constraint error</button>
     <.live_component module={AppsignalPhoenixExampleWeb.LiveComponent} id="component" />
     """
   end
@@ -27,6 +28,14 @@ defmodule AppsignalPhoenixExampleWeb.ThermostatLive do
 
   def handle_event("raise_exception", _value, socket) do
     raise "Exception!"
+
+    {:noreply, socket}
+  end
+
+  def handle_event("create_user", _value, socket) do
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(:user, %AppsignalPhoenixExample.Accounts.User{name: "user", age: 10})
+    |> AppsignalPhoenixExample.Repo.transaction()
 
     {:noreply, socket}
   end
