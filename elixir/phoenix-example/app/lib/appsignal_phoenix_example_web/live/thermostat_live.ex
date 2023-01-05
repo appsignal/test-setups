@@ -8,6 +8,7 @@ defmodule AppsignalPhoenixExampleWeb.ThermostatLive do
     <br>
     <button phx-click="dec_temperature">-</button>
     <button phx-click="inc_temperature">+</button>
+    <button phx-click="raise_exception">raise exception</button>
     """
   end
 
@@ -20,12 +21,12 @@ defmodule AppsignalPhoenixExampleWeb.ThermostatLive do
   end
 
   def handle_event("inc_temperature", _value, socket) do
-    temperature = socket.assigns.temperature
+    {:noreply, assign(socket, :temperature, socket.assigns.temperature + 1.0)}
+  end
 
-    if temperature > 21.0 do
-      raise "Exception!"
-    end
+  def handle_event("raise_exception", _value, socket) do
+    raise "Exception!"
 
-    {:noreply, assign(socket, :temperature, temperature + 1.0)}
+    {:noreply, socket}
   end
 end
