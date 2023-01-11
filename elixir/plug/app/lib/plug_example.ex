@@ -1,5 +1,6 @@
 defmodule PlugExample do
   import Plug.Conn
+  use Appsignal.Plug
 
   def init(options) do
     options
