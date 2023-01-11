@@ -22,7 +22,9 @@ defmodule PlugExample.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:appsignal, path: "/integration/appsignal-elixir", override: true},
+      {:appsignal_plug, path: "/integration/appsignal-elixir-plug"}
     ]
   end
 end
