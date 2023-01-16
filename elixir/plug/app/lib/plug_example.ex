@@ -1,14 +1,10 @@
 defmodule PlugExample do
-  import Plug.Conn
-  use Appsignal.Plug
+  use Plug.Router
 
-  def init(options) do
-    options
-  end
+  plug :match
+  plug :dispatch
 
-  def call(conn, _opts) do
-    conn
-    |> put_resp_content_type("text/plain")
-    |> send_resp(200, "Hello world")
+  get "/" do
+    send_resp(conn, 200, "Hello world")
   end
 end
