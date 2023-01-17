@@ -9,6 +9,7 @@ defmodule AppsignalPhoenixExampleWeb.ThermostatLive do
     <button phx-click="dec_temperature">-</button>
     <button phx-click="inc_temperature">+</button>
     <button phx-click="raise_exception">raise exception</button>
+    <.live_component module={AppsignalPhoenixExampleWeb.LiveComponent} id="component" />
     """
   end
 
