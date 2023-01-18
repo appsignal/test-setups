@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   end
   mount Sidekiq::Web => "/sidekiq"
 
+  resources :users, only: :index
+
   resources :redis do
     collection do
       get :restful
