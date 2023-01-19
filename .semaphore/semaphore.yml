@@ -73,6 +73,9 @@ blocks:
         - name: nodejs/express-redis
           commands:
             - "rake app=nodejs/express-redis app:test"
+        - name: nodejs/express-redis-v3
+          commands:
+            - "rake app=nodejs/express-redis-v3 app:test"
         - name: nodejs/koa
           commands:
             - "rake app=nodejs/koa app:test"
