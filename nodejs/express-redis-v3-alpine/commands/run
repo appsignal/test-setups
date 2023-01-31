@@ -6,6 +6,7 @@ echo "Install, link and build integration"
 (
   cd /integration
   git checkout main
+  touch ~/.bashrc # hack to make the mono installer happy
   script/setup
   mono bootstrap
   mono clean

@@ -1,10 +1,13 @@
-FROM node:17-buster
+FROM node:17-alpine
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2022-01-25
 
-# Install dependencies
-RUN apt-get update && apt-get install -y redis ruby
+# Install mono and setup script dependencies
+RUN apk add --no-cache ruby bash git curl
+
+# Install integration build dependencies
+RUN apk add --no-cache python3 make g++
 
 # Update npm
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
