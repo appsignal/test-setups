@@ -6,6 +6,9 @@ ENV REFRESHED_AT=2022-01-25
 # Install mono and setup script dependencies
 RUN apk add --no-cache ruby bash git curl
 
+# Disable safe directory checks on newer Git
+RUN git config --global --add safe.directory '*'
+
 # Install integration build dependencies
 RUN apk add --no-cache python3 make g++
 
