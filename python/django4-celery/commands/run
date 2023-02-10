@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+echo "Installing dependencies"
+pip3 install --upgrade pip
+pip3 install -r requirements.txt
+
+echo "Running migrations"
+python3 manage.py migrate
+echo "Starting app"
+/commands/processmon processmon.toml
