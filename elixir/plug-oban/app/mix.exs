@@ -19,14 +19,18 @@ defmodule PlugOban.MixProject do
     ]
   end
 
+  defp integration_path do
+    System.get_env("INTEGRATION_PATH", "../../integration")
+  end
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:plug_cowboy, "~> 2.6.0"},
       {:oban, "~> 2.13"},
-      {:appsignal, path: "/integration/appsignal-elixir", override: true},
       {:jason, "~> 1.1"},
-      {:appsignal_plug, path: "/integration/appsignal-elixir-plug"}
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
+      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true}
     ]
   end
 end
