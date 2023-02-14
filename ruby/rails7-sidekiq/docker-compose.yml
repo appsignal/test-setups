@@ -18,6 +18,7 @@ services:
     environment:
       - APPSIGNAL_APP_NAME=ruby-rails7-sidekiq
       - PORT=4001
+      - APP_REVISION=123xyz
     env_file:
       - postgres.env
       - redis.env
