@@ -26,6 +26,7 @@ defmodule PlugOban.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:postgrex, ">= 0.0.0"},
       {:plug_cowboy, "~> 2.6.0"},
       {:oban, "~> 2.13"},
       {:jason, "~> 1.1"},
