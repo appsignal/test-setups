@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  nginx:
+    build: nginx
+    ports:
+      - "3001:3001"
+    links:
+      - agent
+    volumes:
+      - ./app:/app
+
+  agent:
+    image: appsignal/agent:latest
+    environment:
+      - APPSIGNAL_APP_NAME=nginx-metrics-standalone-test
+      - APPSIGNAL_APP_ENV=development
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal_key.env

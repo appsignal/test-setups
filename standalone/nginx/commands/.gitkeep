@@ -1,0 +1,2 @@
+This folder exists so that the Rake tasks can copy processmon into it.
+Processmon is not used in this test setup.
