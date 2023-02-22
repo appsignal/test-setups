@@ -1,5 +1,5 @@
 defmodule PlugExample.GenServer do
-  use GenServer
+  use Appsignal.GenServer
 
   # Client
   def start_link(init_arg) do
