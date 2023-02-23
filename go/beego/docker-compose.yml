@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  appsignal:
+    image: appsignal/agent:latest
+    ports:
+      - "8099:8099"
+    env_file:
+      - ../../appsignal_key.env
+    environment:
+      - APPSIGNAL_APP_NAME=go/beego
+      - APPSIGNAL_APP_ENV=development
+      - APPSIGNAL_LOG_LEVEL=trace
+  app:
+    build: .
+    image: go/beego
+    depends_on:
+      - appsignal
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app:/app
+
