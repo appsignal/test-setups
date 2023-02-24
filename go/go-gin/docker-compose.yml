@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  appsignal:
+    image: appsignal/agent:latest
+    ports:
+      - "8099:8099"
+    env_file:
+      - ../../appsignal_key.env
+    environment:
+      - APPSIGNAL_APP_NAME=go/go-gin
+      - APPSIGNAL_APP_ENV=development
+      - APPSIGNAL_LOG_LEVEL=trace
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=mydb
+  app:
+    build: .
+    image: go/go-gin
+    depends_on:
+      - appsignal
+      - mysql
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app:/app
+
