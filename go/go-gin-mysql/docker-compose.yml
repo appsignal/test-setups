@@ -6,13 +6,9 @@ services:
     env_file:
       - ../../appsignal_key.env
     environment:
-      - APPSIGNAL_APP_NAME=go/gorilla-mux
+      - APPSIGNAL_APP_NAME=go/go-gin-mysql
       - APPSIGNAL_APP_ENV=development
       - APPSIGNAL_LOG_LEVEL=trace
-  redis:
-    image: redis
-  mongo:
-    image: mongo
   mysql:
     image: mysql
     environment:
@@ -22,7 +18,7 @@ services:
       - MYSQL_DATABASE=mydb
   app:
     build: .
-    image: go/gorilla-mux
+    image: go/go-gin-mysql
     depends_on:
       - appsignal
       - mysql
