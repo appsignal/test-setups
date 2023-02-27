@@ -36,7 +36,7 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 func initTracer() func(context.Context) error {
 	client := otlptracehttp.NewClient(
 		otlptracehttp.WithInsecure(),
-		otlptracehttp.WithEndpoint("0.0.0.0:8099"),
+		otlptracehttp.WithEndpoint("appsignal:8099"),
 	)
 	exporter, err := otlptrace.New(context.Background(), client)
 	if err != nil {
@@ -71,7 +71,7 @@ func main() {
 
 	db, err := otelsql.Open(
 		"mysql",
-		"user:password@tcp(0.0.0.0:3306)/mydb",
+		"user:password@tcp(mysql:3306)/mydb",
 		otelsql.WithAttributes(semconv.DBSystemMySQL),
 	)
 	if err != nil {
@@ -125,5 +125,5 @@ func main() {
 			"message": "Launched MySQL QUERY",
 		})
 	})
-	r.Run()
+	r.Run(":4001")
 }

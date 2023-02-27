@@ -3,8 +3,6 @@ version: '3.8'
 services:
   appsignal:
     image: appsignal/agent:latest
-    ports:
-      - "8099:8099"
     env_file:
       - ../../appsignal_key.env
     environment:
@@ -17,7 +15,7 @@ services:
     depends_on:
       - appsignal
     ports:
-      - "8080:8080"
+      - "4001:4001"
     volumes:
       - ./app:/app
 

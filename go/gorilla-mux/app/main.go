@@ -124,7 +124,7 @@ func redisQuery(w http.ResponseWriter, r *http.Request) {
 	time.Sleep(200 * time.Millisecond)
 	ctx := r.Context()
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "0.0.0.0:6379",
+		Addr: "redis:6379",
 	})
 
 	if err := redisotel.InstrumentTracing(rdb); err != nil {
@@ -153,7 +153,7 @@ func mysqlQuery(w http.ResponseWriter, r *http.Request) {
 
 	db, err := otelsql.Open(
 		"mysql",
-		"root:password@tcp(0.0.0.0:3306)/mydb",
+		"root:password@tcp(mysql:3306)/mydb",
 		otelsql.WithAttributes(semconv.DBSystemMySQL),
 	)
 	if err != nil {
@@ -174,7 +174,7 @@ func mongoQuery(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	opts := options.Client()
 	opts.Monitor = otelmongo.NewMonitor()
-	opts.ApplyURI("mongodb://0.0.0.0:27017")
+	opts.ApplyURI("mongodb://mongo:27017")
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
 		panic(err)
@@ -210,7 +210,7 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 func initTracer() func(context.Context) error {
 	client := otlptracehttp.NewClient(
 		otlptracehttp.WithInsecure(),
-		otlptracehttp.WithEndpoint("0.0.0.0:8099"),
+		otlptracehttp.WithEndpoint("appsignal:8099"),
 	)
 	exporter, err := otlptrace.New(context.Background(), client)
 	if err != nil {
@@ -247,5 +247,5 @@ func main() {
 	router.HandleFunc("/redis-query", redisQuery).Methods("GET")
 	router.HandleFunc("/mongo-query", mongoQuery).Methods("GET")
 	router.HandleFunc("/mysql-query", mysqlQuery).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":4001", router))
 }

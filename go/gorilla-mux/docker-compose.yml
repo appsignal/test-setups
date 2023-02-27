@@ -3,8 +3,6 @@ version: '3.8'
 services:
   appsignal:
     image: appsignal/agent:latest
-    ports:
-      - "8099:8099"
     env_file:
       - ../../appsignal_key.env
     environment:
@@ -13,17 +11,10 @@ services:
       - APPSIGNAL_LOG_LEVEL=trace
   redis:
     image: redis
-    ports:
-      - "6379:6379"
   mongo:
     image: mongo
-    ports:
-      - "27017:27017"
   mysql:
     image: mysql
-    ports:
-      - "3306:3306"
-      - "33060:33060"
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_USER=user
@@ -36,7 +27,7 @@ services:
       - appsignal
       - mysql
     ports:
-      - "8080:8080"
+      - "4001:4001"
     volumes:
       - ./app:/app
 

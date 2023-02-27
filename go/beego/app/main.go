@@ -50,7 +50,7 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 func initTracer() (*sdktrace.TracerProvider, error) {
 	client := otlptracehttp.NewClient(
 		otlptracehttp.WithInsecure(),
-		otlptracehttp.WithEndpoint("0.0.0.0:8099"),
+		otlptracehttp.WithEndpoint("appsignal:8099"),
 	)
 	exporter, err := otlptrace.New(context.Background(), client)
 	if err != nil {
@@ -94,5 +94,5 @@ func main() {
 
 	mware := otelbeego.NewOTelBeegoMiddleWare("beego-example")
 
-	beego.RunWithMiddleWares(":8080", mware)
+	beego.RunWithMiddleWares(":4001", mware)
 }
