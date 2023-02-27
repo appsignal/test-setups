@@ -1,8 +1,0 @@
-push_api_key = "staging-api-key"
-app_name = "opentelemetry-go-gin"
-push_api_endpoint = "https://push.staging.lol"
-environment = "standalone"
-debug_logging = true
-log_level = "trace"
-enable_http = true
-working_dir_path = "/Users/luismiramirez/go/src/github.com/appsignal/opentelemetry-go-gin/tmp/appsignal"
