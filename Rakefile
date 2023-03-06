@@ -7,12 +7,12 @@ PROCESSMON_PATH = "support/processmon/processmon"
 def get_app
   ENV['app'].tap do |app|
     raise "Specify which app you want to run using app=path" if app.nil?
-    raise "#{app} not found" unless File.exists?(app)
+    raise "#{app} not found" unless File.exist?(app)
   end
 end
 
 def clone_from_git(path, repo)
-  if File.exists?(path)
+  if File.exist?(path)
     puts "#{path} already present"
   else
     puts "Cloning #{repo} into #{path}"
@@ -21,7 +21,7 @@ def clone_from_git(path, repo)
 end
 
 def reset_repo(path, branch: "main")
-  if File.exists?(path)
+  if File.exist?(path)
     puts "Resetting #{path}"
     run_command "cd #{path} && git fetch origin"
     run_command "cd #{path} && git switch #{branch}"
@@ -83,7 +83,7 @@ namespace :app do
   desc "Create a test setup skeleton"
   task :new do
     @app = ENV['app']
-    raise "#{@app} already exists" if File.exists?(@app)
+    raise "#{@app} already exists" if File.exist?(@app)
 
     # Create directories
     FileUtils.mkdir_p "#{@app}"
@@ -161,7 +161,7 @@ namespace :app do
   desc "Attach to app and get a console"
   task :console do
     @app = get_app
-    if File.exists?("#{@app}/commands/console")
+    if File.exist?("#{@app}/commands/console")
       puts "Starting console in #{@app}"
       run_command "cd #{@app} && docker-compose exec app /commands/console"
     else
@@ -172,7 +172,7 @@ namespace :app do
   desc "Attach to app and run diagnose"
   task :diagnose do
     @app = get_app
-    if File.exists?("#{@app}/commands/diagnose")
+    if File.exist?("#{@app}/commands/diagnose")
       puts "Runing diagnose in #{@app}"
       run_command "cd #{@app} && docker-compose exec app /commands/diagnose"
     else
