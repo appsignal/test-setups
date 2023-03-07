@@ -127,3 +127,6 @@ blocks:
         - name: ruby/webmachine
           commands:
             - "rake app=ruby/webmachine app:test"
+        - name: python/django4-celery
+          commands:
+            - "rake app=python/django4-celery app:test"
