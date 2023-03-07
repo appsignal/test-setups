@@ -4,19 +4,19 @@ if APP.backend?
       slow_url = APP.url("/slow")
 
       expect {
-        HTTP.timeout(2).get(slow_url)
+        HTTP.follow.timeout(2).get(slow_url)
       }.to(
         raise_error(HTTP::TimeoutError),
         "Expected request to timeout, it did not"
       )
 
-      response = HTTP.get(slow_url)
+      response = HTTP.follow.get(slow_url)
 
       expect(response).to have_status(200)
     end
 
     it "has an error endpoint" do
-      response = HTTP.get(APP.url("/error"))
+      response = HTTP.follow.get(APP.url("/error"))
 
       expect(response).to have_status(500)
     end
