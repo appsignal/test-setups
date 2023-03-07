@@ -23,7 +23,7 @@ def home(request):
     return render(request, 'home.html', {})
 
 def slow(request):
-    time.sleep(1)
+    time.sleep(3)
     return HttpResponse("I was slow!")
 
 def slow_queue(request):
