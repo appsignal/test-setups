@@ -81,3 +81,10 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end
+
+# Configures AppSignal's logger
+config :logger,
+  backends: [
+    :console,
+    {Appsignal.Logger.Backend, [group: "phoenix"]}
+  ]
