@@ -19,16 +19,16 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('admin', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('test', views.home, name='test'),
-    path('slow', views.slow, name='slow'),
-    path('slow_queue', views.slow_queue, name='slow_queue'),
-    path('slow_queue_inline', views.slow_queue_inline, name='slow_queue_inline'),
-    path('error', views.error, name='error'),
-    path('error_queue', views.error_queue, name='error_queue'),
-    path('error_queue_inline', views.error_queue_inline, name='error_queue_inline'),
-    path('make_request', views.make_request, name='make_request'),
-    path('custom_instrumentation', views.custom_instrumentation, name='custom_instrumentation'),
-    path('blog', include("blog.urls"))
+    path('test/', views.home, name='test'),
+    path('slow/', views.slow, name='slow'),
+    path('slow_queue/', views.slow_queue, name='slow_queue'),
+    path('slow_queue_inline/', views.slow_queue_inline, name='slow_queue_inline'),
+    path('error/', views.error, name='error'),
+    path('error_queue/', views.error_queue, name='error_queue'),
+    path('error_queue_inline/', views.error_queue_inline, name='error_queue_inline'),
+    path('make_request/', views.make_request, name='make_request'),
+    path('custom_instrumentation/', views.custom_instrumentation, name='custom_instrumentation'),
+    path('blog/', include("blog.urls"))
 ]
