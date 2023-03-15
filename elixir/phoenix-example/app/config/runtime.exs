@@ -83,8 +83,8 @@ if config_env() == :prod do
 end
 
 # Configures AppSignal's logger
-config :logger,
-  backends: [
-    :console,
-    {Appsignal.Logger.Backend, [group: "phoenix"]}
-  ]
+# config :logger,
+#   backends: [
+#     :console,
+#     {Appsignal.Logger.Backend, [group: "phoenix"]}
+#   ]
