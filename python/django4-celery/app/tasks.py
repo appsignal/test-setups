@@ -1,6 +1,6 @@
 import time
 
-import opentelemetry_config
+from appsignal_config import appsignal
 
 from opentelemetry import trace
 
@@ -10,7 +10,7 @@ from celery.signals import worker_process_init
 
 @worker_process_init.connect(weak=False)
 def init_celery_tracing(*args, **kwargs):
-    opentelemetry_config.add_instrumentation()
+    appsignal.start()
 
 app = Celery('tasks', broker='redis://redis')
 app.conf.task_routes = {

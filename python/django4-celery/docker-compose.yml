@@ -11,30 +11,22 @@ services:
     image: "redis:6.2.7"
     ports:
       - "6379:6379"
-  appsignal:
-    image: appsignal/agent:latest
-    ports:
-      - "8099:8099"
-    env_file:
-      - ../../appsignal_key.env
-    environment:
-      - APPSIGNAL_APP_NAME=python/django4-celery
-      - APPSIGNAL_APP_ENV=development
-      - APPSIGNAL_LOG_LEVEL=trace
   app:
     build: .
     image: python/django4-celery
     depends_on:
-      - appsignal
       - postgres
+      - redis
     ports:
       - "4001:4001"
     env_file:
       - postgres.env
+      - ../../appsignal_key.env
     environment:
       - PORT=4001
     volumes:
       - ./app:/app
+      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests
