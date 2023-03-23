@@ -14,6 +14,7 @@ end
 def clone_from_git(path, repo)
   if File.exist?(path)
     puts "#{path} already present"
+    reset_repo(path)
   else
     puts "Cloning #{repo} into #{path}"
     run_command "git clone git@github.com:appsignal/#{repo}.git #{path}"
@@ -216,10 +217,8 @@ namespace :integrations do
     clone_from_git("elixir/integration/appsignal-elixir-plug", "appsignal-elixir-plug")
     # Clone Node.js
     clone_from_git("nodejs/integration", "appsignal-nodejs")
-    reset_repo("nodejs/integration")
     # Clone JavaScript
     clone_from_git("javascript/integration", "appsignal-javascript")
-    reset_repo("javascript/integration")
   end
 
   desc "Reset integrations"
@@ -227,9 +226,9 @@ namespace :integrations do
     # Ruby
     reset_repo("ruby/integration")
     # Elixir
+    reset_repo("elixir/integration/appsignal-elixir")
     reset_repo("elixir/integration/appsignal-elixir-phoenix")
-    reset_repo("elixir/integration/appsignal-phoenix")
-    reset_repo("elixir/integration/appsignal-plug")
+    reset_repo("elixir/integration/appsignal-elixir-plug")
     # Node.js
     reset_repo("nodejs/integration")
     # JavaScript
