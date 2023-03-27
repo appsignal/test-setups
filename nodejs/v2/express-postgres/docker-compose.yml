@@ -17,13 +17,13 @@ services:
       - APPSIGNAL_APP_NAME=nodejs-express-postgres
     env_file:
       - postgres.env
-      - ../../appsignal.env
-      - ../../appsignal_key.env
+      - ../../../appsignal.env
+      - ../../../appsignal_key.env
     volumes:
       - ./app:/app
-      - ../integration:/integration
+      - ../../integration:/integration
   tests:
-    build: ../../support/server-tests
+    build: ../../../support/server-tests
     image: server-tests
     profiles:
       - tests

@@ -64,30 +64,30 @@ blocks:
         - name: javascript/vue-3
           commands:
             - "rake app=javascript/vue-3 app:test"
-        - name: nodejs/esbuild-express
+        - name: nodejs/v2/esbuild-express
           commands:
-            - "rake app=nodejs/esbuild-express app:test"
-        - name: nodejs/express-apollo
+            - "rake app=nodejs/v2/esbuild-express app:test"
+        - name: nodejs/v2/express-apollo
           commands:
-            - "rake app=nodejs/express-apollo app:test"
-        - name: nodejs/express-postgres
+            - "rake app=nodejs/v2/express-apollo app:test"
+        - name: nodejs/v2/express-postgres
           commands:
-            - "rake app=nodejs/express-postgres app:test"
-        - name: nodejs/express-redis
+            - "rake app=nodejs/v2/express-postgres app:test"
+        - name: nodejs/v2/express-redis
           commands:
-            - "rake app=nodejs/express-redis app:test"
+            - "rake app=nodejs/v2/express-redis app:test"
         - name: nodejs/express-redis-v3
           commands:
             - "rake app=nodejs/express-redis-v3 app:test"
         - name: nodejs/express-redis-v3-alpine
           commands:
             - "rake app=nodejs/express-redis-v3-alpine app:test"
-        - name: nodejs/koa
+        - name: nodejs/v2/koa
           commands:
-            - "rake app=nodejs/koa app:test"
-        - name: nodejs/next-js
+            - "rake app=nodejs/v2/koa app:test"
+        - name: nodejs/v2/next-js
           commands:
-            - "rake app=nodejs/next-js app:test"
+            - "rake app=nodejs/v2/next-js app:test"
         - name: ruby/jruby-rails6
           commands:
             - "rake app=ruby/jruby-rails6 app:test"
