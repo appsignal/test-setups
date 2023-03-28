@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :links
+
   def do_stuff!
     self.email = "#{SecureRandom.uuid}@foo.com"
     save!

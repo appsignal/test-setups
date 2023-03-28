@@ -1,1 +1,7 @@
 <h1>Well, that took forever!</h1>
+
+<ul>
+  <% @users[0..200].each do |user| %>
+    <p><%= user.name %>: <%= user.links.map(&:link) %></p>
+  <% end %>
+</ul>
