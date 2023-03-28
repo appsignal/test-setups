@@ -91,6 +91,9 @@ blocks:
         - name: nodejs/v3/express-yoga
           commands:
             - "rake app=nodejs/v3/express-yoga app:test"
+        - name: nodejs/v3/koa-mongo
+          commands:
+            - "rake app=nodejs/v3/koa-mongo app:test"
         - name: nodejs/v3/nestjs
           commands:
             - "rake app=nodejs/v3/nestjs app:test"
