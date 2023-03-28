@@ -1,10 +1,10 @@
-FROM node:17-buster
+FROM node:16.14-buster
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2023-03-28
 
 # Install dependencies
-RUN apt-get update && apt-get install -y redis ruby
+RUN apt-get update && apt-get install -y ruby
 
 # Update npm
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global

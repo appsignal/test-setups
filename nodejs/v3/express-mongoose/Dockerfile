@@ -1,7 +1,7 @@
 FROM node:16.14-buster
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2021-02-05
+ENV REFRESHED_AT=2023-03-28
 
 # Install dependencies
 RUN apt-get update && apt-get install -y postgresql-client ruby netcat

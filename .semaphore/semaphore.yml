@@ -85,6 +85,9 @@ blocks:
         - name: nodejs/v3/express-mongoose
           commands:
             - "rake app=nodejs/v3/express-mongoose app:test"
+        - name: nodejs/v3/express-apollo
+          commands:
+            - "rake app=nodejs/v3/express-apollo app:test"
         - name: nodejs/v3/nestjs
           commands:
             - "rake app=nodejs/v3/nestjs app:test"
