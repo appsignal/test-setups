@@ -108,7 +108,7 @@ blocks:
             - "rake app=nodejs/v3/nestjs app:test"
         - name: nodejs/express-redis-v3-alpine
           commands:
-            - "rake app=nodejs/express-redis-v3-alpine app:test"
+            - "rake app=nodejs/v3/express-redis-alpine app:test"
         - name: nodejs/v2/koa
           commands:
             - "rake app=nodejs/v2/koa app:test"
