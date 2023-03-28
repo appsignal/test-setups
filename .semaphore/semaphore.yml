@@ -100,6 +100,9 @@ blocks:
         - name: nodejs/v3/fastify
           commands:
             - "rake app=nodejs/v3/fastify app:test"
+        - name: nodejs/v3/restify
+          commands:
+            - "rake app=nodejs/v3/restify app:test"
         - name: nodejs/v3/nestjs
           commands:
             - "rake app=nodejs/v3/nestjs app:test"
