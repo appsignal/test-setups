@@ -2,14 +2,6 @@
 
 set -eu
 
-echo "Checking MongoDB availability"
-until nc -z $DATABASE_HOST 27017; do
-  >&2 echo "Mongo is unavailable - sleeping"
-  sleep 1
-done
-
-export DATABASE_URL="mongodb://$DATABASE_HOST:27017/mongo"
-
 echo "Installing compatible NPM version"
 npm install -g npm@7.18.1
 
@@ -35,9 +27,6 @@ npm link @appsignal/nodejs
 
 echo "Building the app"
 npm run build
-
-echo "Running seed"
-npm run seed
 
 echo "Starting test app server"
 /commands/processmon processmon.toml

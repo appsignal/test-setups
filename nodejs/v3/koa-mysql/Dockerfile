@@ -4,7 +4,7 @@ FROM node:16.14-buster
 ENV REFRESHED_AT=2023-03-28
 
 # Install dependencies
-RUN apt-get update && apt-get install -y ruby netcat
+RUN apt-get update && apt-get install -y postgresql-client ruby
 
 # Update npm
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
