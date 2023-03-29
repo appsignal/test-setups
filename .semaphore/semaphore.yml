@@ -115,6 +115,9 @@ blocks:
         - name: nodejs/v3/nestjs
           commands:
             - "rake app=nodejs/v3/nestjs app:test"
+        - name: nodejs/v3/nestjs-prisma
+          commands:
+            - "rake app=nodejs/v3/nestjs-prisma app:test"
         - name: nodejs/express-redis-v3-alpine
           commands:
             - "rake app=nodejs/v3/express-redis-alpine app:test"
