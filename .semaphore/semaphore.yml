@@ -51,6 +51,9 @@ blocks:
         - name: go/beego
           commands:
             - "rake app=go/beego app:test"
+        - name: go/gin-mysql
+          commands:
+            - "rake app=go/go-gin-mysql app:test"
         - name: javascript/react
           commands:
             - "rake app=javascript/react app:test"
