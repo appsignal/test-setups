@@ -54,6 +54,9 @@ blocks:
         - name: go/gin-mysql
           commands:
             - "rake app=go/go-gin-mysql app:test"
+        - name: go/gorilla-mux-mysql-redis-mongo
+          commands:
+            - "rake app=go/gorilla-mux-mysql-redis-mongo app:test"
         - name: javascript/react
           commands:
             - "rake app=javascript/react app:test"

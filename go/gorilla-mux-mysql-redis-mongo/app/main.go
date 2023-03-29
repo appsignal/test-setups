@@ -199,6 +199,14 @@ func mongoQuery(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "MONGO OPERATION SUCCESSFUL")
 }
 
+func errorReq(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+}
+
+func slowReq(w http.ResponseWriter, r *http.Request) {
+	time.Sleep(3 * time.Second)
+}
+
 func newConsoleExporter() (sdktrace.SpanExporter, error) {
 	return stdouttrace.New(
 		stdouttrace.WithWriter(os.Stdout),
@@ -247,5 +255,7 @@ func main() {
 	router.HandleFunc("/redis-query", redisQuery).Methods("GET")
 	router.HandleFunc("/mongo-query", mongoQuery).Methods("GET")
 	router.HandleFunc("/mysql-query", mysqlQuery).Methods("GET")
+	router.HandleFunc("/error", errorReq).Methods("GET")
+	router.HandleFunc("/slow", slowReq).Methods("GET")
 	log.Fatal(http.ListenAndServe(":4001", router))
 }
