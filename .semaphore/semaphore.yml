@@ -48,6 +48,9 @@ blocks:
         - name: elixir/plug-oban
           commands:
             - "rake app=elixir/plug-oban app:test"
+        - name: go/beego
+          commands:
+            - "rake app=go/beego app:test"
         - name: javascript/react
           commands:
             - "rake app=javascript/react app:test"
