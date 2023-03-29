@@ -30,4 +30,14 @@ services:
       - "4001:4001"
     volumes:
       - ./app:/app
+  tests:
+    image: server-tests
+    build: ../../support/server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=go/gorilla-mux-mysql-redis-mongo
+      - APP_URL=http://app:4001
 

@@ -22,6 +22,14 @@ type exampleController struct {
 	beego.Controller
 }
 
+type slowController struct {
+	beego.Controller
+}
+
+type errorController struct {
+	beego.Controller
+}
+
 func (c *exampleController) Get() {
 	time.Sleep(100 * time.Millisecond)
 	ctx := c.Ctx.Request.Context()
@@ -37,6 +45,15 @@ func (c *exampleController) Template() {
 	if err := otelbeego.Render(&c.Controller); err != nil {
 		c.Abort("500")
 	}
+}
+
+func (c *slowController) Get() {
+	time.Sleep(3 * time.Second)
+	c.Ctx.WriteString("Wow, that took forever!")
+}
+
+func (c *errorController) Get() {
+	c.CustomAbort(500, "Expected test error")
 }
 
 func newConsoleExporter() (sdktrace.SpanExporter, error) {
@@ -91,6 +108,8 @@ func main() {
 
 	beego.Router("/hello", &exampleController{})
 	beego.Router("/", &exampleController{}, "get:Template")
+	beego.Router("/slow", &slowController{})
+	beego.Router("/error", &errorController{})
 
 	mware := otelbeego.NewOTelBeegoMiddleWare("beego-example")
 
