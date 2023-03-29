@@ -1,6 +1,6 @@
-import { Appsignal } from "@appsignal/nodejs"
+const { Appsignal } = require("@appsignal/nodejs")
 
-export default new Appsignal({
+new Appsignal({
   active: true,
   name: "opentelemetry-express-postgres",
   logLevel: "trace",
