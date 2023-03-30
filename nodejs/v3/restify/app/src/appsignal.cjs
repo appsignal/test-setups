@@ -5,6 +5,5 @@ new Appsignal({
   name: "opentelemetry-restify",
   logLevel: "trace",
   log: "file",
-  logPath: "/tmp",
-  pushApiKey: "not-a-real-api-key"
+  logPath: "/tmp"
 });
