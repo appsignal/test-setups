@@ -1,0 +1,11 @@
+default: &defaults
+  debug: true
+
+test:
+  <<: *defaults
+
+development:
+  <<: *defaults
+
+production:
+  <<: *defaults
