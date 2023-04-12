@@ -36,4 +36,5 @@ Rails.application.routes.draw do
   root :to => "examples#index"
   get "/slow", to: "examples#slow"
   get "/error", to: "examples#error"
+  get "/error_reporter", to: "examples#error_reporter"
 end
