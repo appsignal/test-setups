@@ -1,4 +1,4 @@
-FROM jruby:9.3.3
+FROM jruby:9.4.2.0
 
 # Update this if the Docker image changes
 ENV REFRESHED_AT=2022-02-24
