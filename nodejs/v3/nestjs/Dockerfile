@@ -1,4 +1,4 @@
-FROM node:17-buster
+FROM node:18-buster
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2023-03-28
