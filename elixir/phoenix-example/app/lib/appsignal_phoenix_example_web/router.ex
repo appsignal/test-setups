@@ -29,6 +29,12 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     resources "/users", UserController
   end
 
+  forward("/api", Absinthe.Plug, schema: AppsignalPhoenixExampleWeb.Schema)
+
+  if Mix.env() == :dev do
+    forward("/graphiql", Absinthe.Plug.GraphiQL, schema: AppsignalPhoenixExampleWeb.Schema)
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", AppsignalPhoenixExampleWeb do
   #   pipe_through :api
