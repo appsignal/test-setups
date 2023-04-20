@@ -1,4 +1,4 @@
-FROM node:17-alpine
+FROM node:18-alpine
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2022-01-25
