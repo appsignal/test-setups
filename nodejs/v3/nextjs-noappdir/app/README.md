@@ -1,3 +1,9 @@
+# Next.js test setup known issue ⚠️
+
+Because of an issue with Next.js' internal use of Webpack and `npm link`-ed projects, this test setup ignores the version of the integrations that is cloned by `rake integrations:clone`, and instead installs and uses the latest released version from the NPM servers.
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
