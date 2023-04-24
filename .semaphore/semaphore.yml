@@ -48,6 +48,15 @@ blocks:
         - name: elixir/plug-oban
           commands:
             - "rake app=elixir/plug-oban app:test"
+        - name: go/beego
+          commands:
+            - "rake app=go/beego app:test"
+        - name: go/gin-mysql
+          commands:
+            - "rake app=go/go-gin-mysql app:test"
+        - name: go/gorilla-mux-mysql-redis-mongo
+          commands:
+            - "rake app=go/gorilla-mux-mysql-redis-mongo app:test"
         - name: javascript/react
           commands:
             - "rake app=javascript/react app:test"
@@ -64,30 +73,60 @@ blocks:
         - name: javascript/vue-3
           commands:
             - "rake app=javascript/vue-3 app:test"
-        - name: nodejs/esbuild-express
+        - name: nodejs/v2/esbuild-express
           commands:
-            - "rake app=nodejs/esbuild-express app:test"
-        - name: nodejs/express-apollo
+            - "rake app=nodejs/v2/esbuild-express app:test"
+        - name: nodejs/v2/express-apollo
           commands:
-            - "rake app=nodejs/express-apollo app:test"
-        - name: nodejs/express-postgres
+            - "rake app=nodejs/v2/express-apollo app:test"
+        - name: nodejs/v2/express-postgres
           commands:
-            - "rake app=nodejs/express-postgres app:test"
-        - name: nodejs/express-redis
+            - "rake app=nodejs/v2/express-postgres app:test"
+        - name: nodejs/v2/express-redis
           commands:
-            - "rake app=nodejs/express-redis app:test"
-        - name: nodejs/express-redis-v3
+            - "rake app=nodejs/v2/express-redis app:test"
+        - name: nodejs/v3/express-postgres
           commands:
-            - "rake app=nodejs/express-redis-v3 app:test"
+            - "rake app=nodejs/v3/express-postgres app:test"
+        - name: nodejs/v3/express-redis
+          commands:
+            - "rake app=nodejs/v3/express-redis app:test"
+        - name: nodejs/v3/express-mongoose
+          commands:
+            - "rake app=nodejs/v3/express-mongoose app:test"
+        - name: nodejs/v3/express-apollo
+          commands:
+            - "rake app=nodejs/v3/express-apollo app:test"
+        - name: nodejs/v3/express-yoga
+          commands:
+            - "rake app=nodejs/v3/express-yoga app:test"
+        - name: nodejs/v3/koa-mongo
+          commands:
+            - "rake app=nodejs/v3/koa-mongo app:test"
+        - name: nodejs/v3/koa-mysql
+          commands:
+            - "rake app=nodejs/v3/koa-mysql app:test"
+        - name: nodejs/v3/fastify
+          commands:
+            - "rake app=nodejs/v3/fastify app:test"
+        - name: nodejs/v3/restify
+          commands:
+            - "rake app=nodejs/v3/restify app:test"
+        - name: nodejs/v3/nestjs
+          commands:
+            - "rake app=nodejs/v3/nestjs app:test"
+        - name: nodejs/v3/nestjs-prisma
+          commands:
+            - "rake app=nodejs/v3/nestjs-prisma app:test"
         - name: nodejs/express-redis-v3-alpine
           commands:
-            - "rake app=nodejs/express-redis-v3-alpine app:test"
-        - name: nodejs/koa
+            - "rake app=nodejs/v3/express-redis-alpine app:test"
+        - name: nodejs/v2/koa
           commands:
-            - "rake app=nodejs/koa app:test"
-        - name: nodejs/next-js
+            - "rake app=nodejs/v2/koa app:test"
+        - name: nodejs/v2/next-js
           commands:
-            - "rake app=nodejs/next-js app:test"
+            - "rake app=nodejs/v2/next-js app:test"
         - name: ruby/jruby-rails6
           commands:
             - "rake app=ruby/jruby-rails6 app:test"

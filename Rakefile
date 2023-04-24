@@ -206,7 +206,7 @@ namespace :app do
 end
 
 namespace :integrations do
-  desc "Clone integrations"
+  desc "Clone and reset integrations"
   task :clone do
     # Clone Ruby
     clone_from_git("ruby/integration", "appsignal-ruby")
@@ -221,22 +221,6 @@ namespace :integrations do
     clone_from_git("javascript/integration", "appsignal-javascript")
     # Clone Python
     clone_from_git("python/integration", "appsignal-python")
-  end
-
-  desc "Reset integrations"
-  task :reset do
-    # Ruby
-    reset_repo("ruby/integration")
-    # Elixir
-    reset_repo("elixir/integration/appsignal-elixir")
-    reset_repo("elixir/integration/appsignal-elixir-phoenix")
-    reset_repo("elixir/integration/appsignal-elixir-plug")
-    # Node.js
-    reset_repo("nodejs/integration")
-    # JavaScript
-    reset_repo("javascript/integration")
-    # Python
-    reset_repo("python/integration")
   end
 
   desc "Remove integrations"

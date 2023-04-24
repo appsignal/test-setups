@@ -19,6 +19,7 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/propagation"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
 )
@@ -53,6 +54,7 @@ func initTracer() func(context.Context) error {
 		sdktrace.WithBatcher(consoleExporter),
 	)
 	otel.SetTracerProvider(tracerProvider)
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 	return exporter.Shutdown
 }
 
@@ -82,16 +84,22 @@ func main() {
 	r := gin.New()
 	r.Use(otelgin.Middleware("opentelemetry-go-gin"))
 
-	r.GET("/error", func(c *gin.Context) {
+	r.GET("/file-error", func(c *gin.Context) {
 		time.Sleep(200 * time.Millisecond)
 
 		err = ReadFile("potato")
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"unreachable": "response",
+		})
+	})
+
+	r.GET("/error", func(c *gin.Context) {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "expected test error",
 		})
 	})
 
@@ -100,6 +108,14 @@ func main() {
 
 		c.JSON(http.StatusOK, gin.H{
 			"message": "ping",
+		})
+	})
+
+	r.GET("/slow", func(c *gin.Context) {
+		time.Sleep(3 * time.Second)
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Well, that took forever!",
 		})
 	})
 
