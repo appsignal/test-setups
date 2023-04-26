@@ -1,9 +1,14 @@
 import express from "express"
 import { createClient } from "redis"
 import ioredis from "ioredis"
-import { setTag, setCustomData, expressErrorHandler } from "@appsignal/nodejs"
+import { setTag, setCustomData, expressErrorHandler, WinstonTransport } from "@appsignal/nodejs"
 import { trace } from "@opentelemetry/api"
 import cookieParser from "cookie-parser"
+import winston from "winston"
+
+const logger = winston.createLogger({
+  transports: [new WinstonTransport({ group: "app" })],
+});
 
 const redisHost = "redis://redis:6379"
 const port = process.env.PORT
@@ -13,14 +18,17 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 app.get("/", (_req: any, res: any) => {
+  logger.info("Home path");
   res.send("200 OK")
 })
 
 app.get("/error", (_req: any, _res: any) => {
+  logger.error("Expected test error!");
   throw new Error("Expected test error!")
 })
 
 app.get("/redis", async (_req: any, res: any, next: any) => {
+  logger.debug("Redis path")
   try {
     const client = createClient({ url: redisHost })
     client.once("error", (error: Error) => {
@@ -40,6 +48,7 @@ app.get("/redis", async (_req: any, res: any, next: any) => {
 })
 
 app.get("/ioredis", async (_req: any, res: any, next: any) => {
+  logger.warn("ioredis Path")
   try {
     const client = new ioredis(redisHost)
     await client.set("test_key", "Test value")
@@ -54,6 +63,7 @@ app.get("/ioredis", async (_req: any, res: any, next: any) => {
 })
 
 app.get("/custom", (_req: any, res: any) => {
+  logger.info("custom route")
   setCustomData({ custom: "data" })
 
   trace.getTracer("custom").startActiveSpan("Custom span", span => {
