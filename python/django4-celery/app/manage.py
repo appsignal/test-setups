@@ -5,13 +5,13 @@ import sys
 import requests
 import redis
 
-import opentelemetry_config
+from appsignal_config import appsignal
 
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'appsignal_python_opentelemetry.settings')
 
-    opentelemetry_config.add_instrumentation()
+    appsignal.start()
 
     try:
         from django.core.management import execute_from_command_line
