@@ -1,3 +1,16 @@
+defmodule CustomPlug do
+  def init(_params) do
+
+  end
+
+  def call(conn, _params) do
+    IO.inspect(Appsignal.Tracer.root_span)
+    Appsignal.Span.set_sample_data(Appsignal.Tracer.root_span, "tags", %{tags: "yes"})
+
+    conn
+  end
+end
+
 defmodule AppsignalPhoenixExampleWeb.Router do
   use AppsignalPhoenixExampleWeb, :router
 
@@ -8,6 +21,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     plug :put_root_layout, {AppsignalPhoenixExampleWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug CustomPlug
   end
 
   pipeline :api do
