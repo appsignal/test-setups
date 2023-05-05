@@ -51,5 +51,5 @@ defmodule AppsignalPhoenixExampleWeb.Endpoint do
   # TODO: this custom plug has instrumentation that I can't get to work
   plug ChipWeb.CustomPlug
   plug AppsignalPhoenixExampleWeb.Router
-
+  plug CustomPlug
 end

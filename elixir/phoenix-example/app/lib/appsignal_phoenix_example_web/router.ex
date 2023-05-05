@@ -8,7 +8,6 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     plug :put_root_layout, {AppsignalPhoenixExampleWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug CustomPlug
   end
 
   pipeline :api do
