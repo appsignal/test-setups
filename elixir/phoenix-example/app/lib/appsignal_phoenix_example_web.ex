@@ -33,7 +33,7 @@ defmodule AppsignalPhoenixExampleWeb do
         root: "lib/appsignal_phoenix_example_web/templates",
         namespace: AppsignalPhoenixExampleWeb
 
-      use Appsignal.Phoenix.View
+      # use Appsignal.Phoenix.View
 
       # Import convenience functions from controllers
       import Phoenix.Controller,

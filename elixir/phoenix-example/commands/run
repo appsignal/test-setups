@@ -7,6 +7,7 @@ mix local.hex --force
 mix local.rebar --force
 
 cd /app
+rm -rf deps _build
 echo "Running mix deps.get"
 mix deps.get
 

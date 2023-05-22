@@ -3,24 +3,24 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
 
   alias AppsignalPhoenixExample.Accounts
   alias AppsignalPhoenixExample.Accounts.User
-  use Appsignal.Instrumentation.Decorators
+  # use Appsignal.Instrumentation.Decorators
 
   def index(conn, _params) do
     users = Accounts.list_users()
-    slow()
-    try do
-      raise "Exception with set_error!"
-    catch
-      kind, reason ->
-        stack = __STACKTRACE__
-
-        # the following attempt works however what should work
-        Appsignal.Span.add_error(Appsignal.Tracer.root_span, kind, reason, stack)
-        Appsignal.Span.set_sample_data(Appsignal.Tracer.root_span, "tags", %{locale: "en"})
-
-        # however the following does not work (this is how we show in the docs)
-        # Appsignal.add_error(kind, reason, stack)
-    end
+    # slow()
+    # try do
+    #   raise "Exception with set_error!"
+    # catch
+    #   kind, reason ->
+    #     stack = __STACKTRACE__
+    #
+    #     # the following attempt works however what should work
+    #     # Appsignal.Span.add_error(Appsignal.Tracer.root_span, kind, reason, stack)
+    #     # Appsignal.Span.set_sample_data(Appsignal.Tracer.root_span, "tags", %{locale: "en"})
+    #
+    #     # however the following does not work (this is how we show in the docs)
+    #     # Appsignal.add_error(kind, reason, stack)
+    # end
 
     render(conn, "index.html", users: users)
   end
@@ -44,7 +44,7 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
     end
   end
 
-  @decorate transaction(:user)
+  # @decorate transaction(:user)
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)
@@ -80,7 +80,7 @@ defmodule AppsignalPhoenixExampleWeb.UserController do
   end
 
   # Decorate this function to add custom instrumentation
-  @decorate transaction_event()
+  # @decorate transaction_event()
   defp slow do
     :timer.sleep(1000)
   end

@@ -47,8 +47,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :appsignal, :config,
-  otp_app: :appsignal_phoenix_example
+# config :appsignal, :config,
+#   otp_app: :appsignal_phoenix_example,
+#   enable_minutely_probes: false
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
