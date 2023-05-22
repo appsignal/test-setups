@@ -4,7 +4,7 @@ defmodule AppsignalPhoenixExampleWeb.PageController do
   alias AppsignalPhoenixExample.Accounts
   alias AppsignalPhoenixExample.Accounts.User
   require Logger
-  plug DemoPlug, "en"
+  # plug DemoPlug, "en"
 
   def index(conn, _params) do
     users = Accounts.list_users()
