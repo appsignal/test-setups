@@ -4,5 +4,4 @@ appsignal = Appsignal(
     active=True,
     name="python/django4-celery",
     environment="development",
-    log_level="trace",
 )
