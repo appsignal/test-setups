@@ -16,4 +16,5 @@ echo "Running npm install"
 echo "Migrate if needed"
 mix ecto.migrate
 
-/commands/processmon processmon.toml
+#/commands/processmon processmon.toml
+/usr/bin/tini mix phx.server
