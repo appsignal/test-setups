@@ -1,3 +1,15 @@
+defmodule TeslaExample do
+  use Tesla, only: [:get]
+
+  plug Tesla.Middleware.Telemetry
+  plug Tesla.Middleware.PathParams
+  plug Tesla.Middleware.BaseUrl, "https://hex.pm"
+
+  def hex_package(name) do
+    get("/packages/:package", opts: [path_params: [package: "appsignal"]])
+  end
+end
+
 defmodule AppsignalPhoenixExampleWeb.PageController do
   use AppsignalPhoenixExampleWeb, :controller
 
@@ -25,6 +37,15 @@ defmodule AppsignalPhoenixExampleWeb.PageController do
     text(
       conn,
       "Performed an HTTP request using Finch: " <>
+      "response status code is #{response.status}"
+    )
+  end
+
+  def tesla(conn, _params) do
+    {:ok, response} = TeslaExample.hex_package("appsignal")
+    text(
+      conn,
+      "Performed an HTTP request using Tesla: " <>
       "response status code is #{response.status}"
     )
   end
