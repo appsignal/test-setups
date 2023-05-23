@@ -21,6 +21,9 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     get "/slow", PageController, :slow
     get "/error", PageController, :error
     get "/finch", PageController, :finch
+    get "/tesla/vanilla", TeslaController, :vanilla
+    get "/tesla/pathparams", TeslaController, :pathparams
+    get "/tesla/withoutuse", TeslaController, :withoutuse
     resources "/users", UserController
   end
 
