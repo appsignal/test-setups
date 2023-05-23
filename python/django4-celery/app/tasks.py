@@ -1,6 +1,6 @@
 import time
 
-from appsignal_config import appsignal
+from __appsignal__ import appsignal
 
 from opentelemetry import trace
 
