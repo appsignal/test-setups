@@ -169,3 +169,6 @@ blocks:
         - name: python/django4-celery
           commands:
             - "rake app=python/django4-celery app:test"
+        - name: python/flask
+          commands:
+            - "rake app=python/flask app:test"
