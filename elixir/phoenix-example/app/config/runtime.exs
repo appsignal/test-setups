@@ -86,5 +86,5 @@ end
 config :logger,
   backends: [
     :console,
-    {Appsignal.Logger.Backend, [group: "phoenix", format: :logfmt]}
+    {Appsignal.Logger.Backend, [group: "phoenix"]}
   ]
