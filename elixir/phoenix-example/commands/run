@@ -16,4 +16,4 @@ echo "Running npm install"
 echo "Migrate if needed"
 mix ecto.migrate
 
-/commands/processmon processmon.toml
+PHX_HOST=localhost PORT=4000 SECRET_KEY_BASE=HyuxwmHChOY0mqToau8TyFaoV1wIgZbQMdiyD2AzMIdLs2c1FvSG5ZJuXESBDYDJ MIX_ENV=prod mix phx.server
