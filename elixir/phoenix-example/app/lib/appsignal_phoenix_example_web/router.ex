@@ -24,6 +24,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     get "/tesla/vanilla", TeslaController, :vanilla
     get "/tesla/pathparams", TeslaController, :pathparams
     get "/tesla/withoutuse", TeslaController, :withoutuse
+    get "/tesla/error", TeslaController, :throw_error
     resources "/users", UserController
   end
 

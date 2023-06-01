@@ -41,6 +41,15 @@ defmodule TeslaWithoutUseExample do
   end
 end
 
+defmodule TeslaErrorMiddleware do
+  @behaviour Tesla.Middleware
+
+  @impl true
+  def call(_env, _next, _options) do
+    raise "Tesla middleware failed!"
+  end
+end
+
 defmodule AppsignalPhoenixExampleWeb.TeslaController do
   use AppsignalPhoenixExampleWeb, :controller
 
@@ -67,5 +76,22 @@ defmodule AppsignalPhoenixExampleWeb.TeslaController do
       "response status code is #{response.status}"
 
     text(conn, message)
+  end
+
+  def throw_error(conn, _params) do
+    client = Tesla.client([
+      Tesla.Middleware.Telemetry,
+      TeslaErrorMiddleware
+    ])
+    try do
+      Tesla.get!(client, "https://hex.pm/packages/appsignal")
+    catch
+      # We rescue the error so we can see that it's the
+      # Tesla instrumentation reporting it, and not the
+      # Phoenix one.
+      _, _ -> nil
+    end
+
+    text(conn, "An error should've been thrown")
   end
 end
