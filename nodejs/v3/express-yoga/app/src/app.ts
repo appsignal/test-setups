@@ -1,5 +1,5 @@
 import express from "express"
-import { createServer } from "@graphql-yoga/node"
+import { createSchema, createYoga } from "graphql-yoga"
 import { expressErrorHandler } from "@appsignal/nodejs"
 
 const port = process.env.PORT
@@ -37,11 +37,11 @@ const resolvers = {
   }
 }
 
-const yogaServer = createServer({
-  schema: {
+const yogaServer = createYoga({
+  schema: createSchema({
     typeDefs: typeDefs,
     resolvers: resolvers
-  }
+  })
 })
 
 app.use("/graphql", yogaServer)
