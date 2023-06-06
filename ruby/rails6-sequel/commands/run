@@ -3,6 +3,7 @@ set -eu
 echo "Install AppSignal Ruby extension"
 (
   cd /integration
+  git config --global --add safe.directory /integration # avoid git fatal errors about dubious ownership
   rake extension:install
 )
 
