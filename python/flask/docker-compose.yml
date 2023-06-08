@@ -7,6 +7,7 @@ services:
     ports:
       - "4001:4001"
     env_file:
+      - ../../appsignal.env
       - ../../appsignal_key.env
     environment:
       - PORT=4001
