@@ -5,7 +5,7 @@ ENV REFRESHED_AT=2022-01-06
 
 RUN apt-get update && \
   curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-  apt-get install -y nodejs python2 postgresql-client && \
+  apt-get install -y nodejs postgresql-client && \
   npm install -g npm && \
   npm install -g yarn
 
