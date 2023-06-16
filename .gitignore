@@ -6,11 +6,7 @@ appsignal_key.env
 .env
 yarn-error.log
 node_modules
-package-lock.json
-yarn.lock
 .next
 tags
 **/commands/processmon
-Gemfile.lock
-mix.lock
 support/processmon/processmon
