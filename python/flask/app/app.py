@@ -7,8 +7,15 @@ from flask import Flask
 app = Flask(__name__)
 
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def home():
+    return """
+      <h1>Python Flask OpenTelemetry app</h1>
+
+      <ul>
+        <li><a href="/slow">/slow: Trigger a slow request</a></li>
+        <li><a href="/error">/error: Trigger an error</a></li>
+      </ul>
+    """
 
 @app.route("/slow")
 def slow():
