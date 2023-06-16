@@ -12,7 +12,10 @@ from tasks import error_task, performance_task, performance_task2
 def home(request):
     tracer = trace.get_tracer(__name__)
     with tracer.start_as_current_span("something.custom") as span:
+        span.set_attribute("appsignal.tag.custom1", "tag test")
         span.set_attribute("appsignal.category", "something.custom")
+        span.set_attribute("appsignal.name", "Span name")
+        span.set_attribute("appsignal.body", "Span body")
         span.set_attribute(
             "appsignal.request.session_data",
             json.dumps({
@@ -21,6 +24,20 @@ def home(request):
             })
         )
     return render(request, 'home.html', {})
+
+def custom(request):
+    tracer = trace.get_tracer(__name__)
+    with tracer.start_as_current_span("something.custom") as span:
+        span.set_attribute("appsignal.namespace", "custom")
+        span.set_attribute("appsignal.root_name", "GET custom route")
+        span.set_attribute("appsignal.request.parameters", json.dumps({"GET": {"foo": "bar"}}),)
+        span.set_attribute("appsignal.request.session_data", json.dumps({"session": {"foo": "bar"}}),)
+        span.set_attribute("appsignal.request.headers.content_type", "custom")
+        span.set_attribute(
+            "appsignal.custom_data",
+            json.dumps({ "stroopwaffle": True, "coffee": False })
+        )
+    return HttpResponse("Custom route")
 
 def slow(request):
     time.sleep(3)
@@ -37,6 +54,9 @@ def slow_queue_inline(request):
 
 def error(request):
     raise Exception("I am an error!")
+
+def custom_error(request):
+    raise MyException("I am a custom error!")
 
 def error_queue(request):
     error_task.delay()
@@ -59,3 +79,6 @@ def custom_instrumentation(request):
             span.set_attribute("appsignal.category", "sleep.time")
             time.sleep(0.2)
     return HttpResponse("I reported some custom instrumentation!")
+
+class MyException(Exception):
+    pass
