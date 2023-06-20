@@ -5,6 +5,9 @@
   <li><a href="/error">/error</a> - Test error request</li>
   <li><a href="/backtrace_error">/backtrace_error</a> - Test error request for FunctionClauseError</li>
   <li><a href="/finch">/finch</a> - Test an external request with Finch</li>
+  <li><a href="/tesla/vanilla">/tesla/vanilla</a> - Test an external request with Tesla (Vanilla)</li>
+  <li><a href="/tesla/withoutuse">/tesla/withoutuse</a> - Test an external request with Tesla (WithoutUse)</li>
+  <li><a href="/tesla/pathparams">/tesla/pathparams</a> - Test an external request with Tesla (PathParams)</li>
   <li><a href="/custom_instrumentation">/custom_instrumentation</a> - Test custom instrumentation</li>
 </ul>
 
