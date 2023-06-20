@@ -20,13 +20,13 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     get "/", PageController, :index
     get "/slow", PageController, :slow
     get "/error", PageController, :error
+    get "/backtrace_error", PageController, :backtrace_error
     get "/finch", PageController, :finch
     get "/tesla/vanilla", TeslaController, :vanilla
     get "/tesla/pathparams", TeslaController, :pathparams
     get "/tesla/withoutuse", TeslaController, :withoutuse
     resources "/users", UserController
   end
-
 
   # Other scopes may use custom stacks.
   # scope "/api", AppsignalPhoenixExampleWeb do
