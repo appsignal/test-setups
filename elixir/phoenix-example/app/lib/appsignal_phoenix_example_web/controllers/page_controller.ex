@@ -22,10 +22,11 @@ defmodule AppsignalPhoenixExampleWeb.PageController do
 
   def finch(conn, _params) do
     {:ok, response} = Finch.build(:get, "http://hex.pm") |> Finch.request(MyFinch)
+
     text(
       conn,
       "Performed an HTTP request using Finch: " <>
-      "response status code is #{response.status}"
+        "response status code is #{response.status}"
     )
   end
 end
