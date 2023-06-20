@@ -21,6 +21,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     get "/slow", PageController, :slow
     get "/error", PageController, :error
     get "/backtrace_error", PageController, :backtrace_error
+    get "/custom_instrumentation", PageController, :custom_instrumentation
     get "/finch", PageController, :finch
     get "/tesla/vanilla", TeslaController, :vanilla
     get "/tesla/pathparams", TeslaController, :pathparams
