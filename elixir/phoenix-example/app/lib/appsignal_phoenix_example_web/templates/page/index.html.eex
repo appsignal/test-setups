@@ -1,4 +1,10 @@
-<h1>Listing Users</h1>
+<h1>Phoenix test app</h1>
+
+<ul>
+  <li><a href="/slow">/slow</a> - Test slow request</li>
+  <li><a href="/error">/error</a> - Test error request</li>
+  <li><a href="/finch">/finch</a> - Test an external request with Finch</li>
+</ul>
 
 <table>
   <thead>
