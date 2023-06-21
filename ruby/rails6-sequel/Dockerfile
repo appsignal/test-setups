@@ -1,4 +1,4 @@
-FROM ruby:3.2.2
+FROM ruby:3.2.2-bullseye
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2022-01-06
