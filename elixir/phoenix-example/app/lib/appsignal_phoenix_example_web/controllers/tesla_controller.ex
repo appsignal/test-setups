@@ -34,7 +34,7 @@ defmodule TeslaWithoutUseExample do
     # the full base URL, without the interpolated package name.
     middleware = [
       Tesla.Middleware.Telemetry,
-      {Tesla.Middleware.BaseUrl, "https://hex.pm/packages"},
+      {Tesla.Middleware.BaseUrl, "https://hex.pm/packages"}
     ]
 
     Tesla.client(middleware)
@@ -46,16 +46,20 @@ defmodule AppsignalPhoenixExampleWeb.TeslaController do
 
   def pathparams(conn, _params) do
     {:ok, response} = TeslaPathParamsExample.hex_package("appsignal")
-    message = "Performed an HTTP request using Tesla PathParams: " <>
-      "response status code is #{response.status}"
+
+    message =
+      "Performed an HTTP request using Tesla PathParams: " <>
+        "response status code is #{response.status}"
 
     text(conn, message)
   end
 
   def vanilla(conn, _params) do
     {:ok, response} = TeslaVanillaExample.hex_package("appsignal_phoenix")
-    message = "Performed an HTTP request using Tesla Vanilla: " <>
-      "response status code is #{response.status}"
+
+    message =
+      "Performed an HTTP request using Tesla Vanilla: " <>
+        "response status code is #{response.status}"
 
     text(conn, message)
   end
@@ -63,8 +67,10 @@ defmodule AppsignalPhoenixExampleWeb.TeslaController do
   def withoutuse(conn, _params) do
     client = TeslaWithoutUseExample.client()
     {:ok, response} = TeslaWithoutUseExample.hex_package(client, "appsignal_plug")
-    message = "Performed an HTTP request using Tesla WithoutUse: " <>
-      "response status code is #{response.status}"
+
+    message =
+      "Performed an HTTP request using Tesla WithoutUse: " <>
+        "response status code is #{response.status}"
 
     text(conn, message)
   end
