@@ -14,6 +14,7 @@ def home():
       <ul>
         <li><a href="/slow">/slow: Trigger a slow request</a></li>
         <li><a href="/error">/error: Trigger an error</a></li>
+        <li><a href="/hello/world">/hello/&lt;name&gt;: Use parameterised routing</a></li>
       </ul>
     """
 
@@ -26,3 +27,7 @@ def slow():
 @app.route("/error")
 def error():
     raise Exception("I am an error!")
+
+@app.route("/hello/<name>")
+def hello(name):
+    return f"<p>Hello, {name}!"
