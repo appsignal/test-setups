@@ -11,8 +11,6 @@ class WorkersController < ApplicationController
     [:mailer, PerformanceMailer, :default],
     [:mailer, PerformanceMailer, :with_args],
     [:sidekiq_internal, SidekiqInternalJSONParseErrorJob, :default],
-    [:model, User, :delay],
-    [:model, User, :delay_with_error]
   ].freeze
   DELAY_DURATION = 5.minutes
 
@@ -92,28 +90,7 @@ class WorkersController < ApplicationController
   def handle_sidekiq_internal(worker, args:, test:, future:)
     # Insert a bad JSON string that Sidekiq will error on parsing, triggering
     # the Ruby gem 3.0 error handler method of reporting errors to AppSignal.
-    redis = Redis.new(:url => ENV["REDIS_URL"])
-    redis.lpush("queue:default", "{ bad json }")
-  end
-
-  def handle_model(worker, args:, test:, future:)
-    case test.to_sym
-    when :delay
-      user = User.create(:name => "John")
-      if future
-        user.delay_for(DELAY_DURATION).do_stuff!
-      else
-        user.delay.do_stuff!
-      end
-    when :delay_with_error
-      user = User.create(:name => "John")
-      if future
-        user.delay_for(DELAY_DURATION).do_stuff_with_error!
-      else
-        user.delay.do_stuff_with_error!
-      end
-    else
-      raise "Unknown test"
-    end
+    redis = RedisClient.new(:url => ENV["REDIS_URL"])
+    redis.call("LPUSH", "queue:default", "{ bad json }")
   end
 end
