@@ -146,7 +146,7 @@ namespace :app do
     build_app
 
     puts "Building the tests container..."
-    run_command "cd #{@app} && docker-compose build tests"
+    run_command "cd #{@app} && docker-compose build --build-arg TESTING=true tests"
 
     puts "Starting compose with the tests..."
     run_command "cd #{@app} && docker-compose --profile tests up --abort-on-container-exit --exit-code-from tests"

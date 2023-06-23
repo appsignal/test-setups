@@ -1,0 +1,21 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = ["tmp", "log", "public/packs", "/app/public/assets/", "node_modules/.cache"]
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.shakapacker]
+command = "bin/rails"
+args = [
+  "sourcemaps"
+]
+
+[processes.rails]
+command = "bin/rails"
+args = [
+  "server",
+  "--environment=production",
+  "--binding=0.0.0.0"
+]
+working_dir = "/app"
