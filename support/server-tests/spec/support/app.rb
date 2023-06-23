@@ -1,4 +1,6 @@
 class App
+  class HttpResponseError < StandardError; end
+
   def initialize(name, url)
     @name = name
     @url = url
@@ -24,14 +26,21 @@ class App
     retries = 0
 
     begin
-      HTTP.timeout(1).get(@url)
+      response = HTTP.timeout(1).get(@url)
+      unless response.status == 200
+        raise HttpResponseError, "App is returning a #{response.status} status on boot. Retrying..."
+      end
       puts "The app has started!"
-    rescue HTTP::ConnectionError, HTTP::TimeoutError
+    rescue HTTP::ConnectionError, HTTP::TimeoutError, HttpResponseError => error
       if retries >= max_retries
         puts "The app has not started after #{retries} retries. Exiting."
         exit! 1
       elsif retries % 5 == 0
         puts "The app has not started yet. Retrying... (#{retries}/#{max_retries})"
+        if error === HttpResponseError
+          puts "#{e.classs}: #{error}"
+          puts response.body
+        end
       end
 
       sleep 1
