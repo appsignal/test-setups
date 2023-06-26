@@ -1,4 +1,5 @@
 default: &defaults
+  sinatra_sanitized_routes: true
 
 test:
   <<: *defaults
