@@ -1,5 +1,5 @@
 default: &defaults
-  sinatra_sanitized_routes: true
+  filter_metadata: ["path"]
 
 test:
   <<: *defaults
