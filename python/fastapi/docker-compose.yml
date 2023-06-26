@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: python/fastapi
+    ports:
+      - "4001:4001"
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    environment:
+      - PORT=4001
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=python/fastapi
+      - APP_URL=http://app:4001

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -eu
+
+pip3 install --upgrade pip
+
+cd /integration
+
+pip3 install hatch
+hatch clean
+hatch run build:me
+
+cd /app
+
+echo "Installing dependencies"
+pip3 install -r requirements.txt
+pip3 install /integration/dist/* --force-reinstall
+
+echo "Starting app"
+/commands/processmon processmon.toml
