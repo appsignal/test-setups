@@ -22,5 +22,7 @@ get "/slow" do
 end
 
 get "/error" do
+  Appsignal.add_breadcrumb("test", "action")
+  Appsignal.add_breadcrumb("category", "action", "message", { "metadata_key" => "some value" })
   raise "error"
 end
