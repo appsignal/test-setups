@@ -1,6 +1,19 @@
 import express from "express"
 import { createSchema, createYoga } from "graphql-yoga"
-import { expressErrorHandler, setRootName, setNamespace, setTag, setSessionData, setParams, setHeader, setCustomData } from "@appsignal/nodejs"
+import {
+  expressErrorHandler,
+  setRootName,
+  setNamespace,
+  setTag,
+  setSessionData,
+  setParams,
+  setHeader,
+  setCustomData,
+  setCategory,
+  setName,
+  setBody
+} from "@appsignal/nodejs"
+import { trace, Span } from "@opentelemetry/api"
 
 const port = process.env.PORT
 const app = express()
@@ -61,7 +74,15 @@ app.get("/slow", async (_req, res) => {
 })
 
 
-app.get("/custom_instrumentation", (_req, res) => {
+app.get("/custom_instrumentation", async (_req, res) => {
+  await trace.getTracer("custom").startActiveSpan("wait.sleep", async (span: Span) => {
+    setCategory("wait.sleep");
+    setName("Do a sleep ZzZzZ");
+    setBody("Some span body");
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    span.end();
+  })
+
   setRootName("GET /custom_instrumtation action");
   setNamespace("custom");
   setTag("tag1", "value1")
