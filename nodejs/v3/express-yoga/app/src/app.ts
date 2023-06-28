@@ -1,6 +1,6 @@
 import express from "express"
 import { createSchema, createYoga } from "graphql-yoga"
-import { expressErrorHandler } from "@appsignal/nodejs"
+import { expressErrorHandler, setRootName, setNamespace, setTag, setSessionData, setParams, setHeader, setCustomData } from "@appsignal/nodejs"
 
 const port = process.env.PORT
 const app = express()
@@ -58,6 +58,19 @@ app.get("/slow", async (_req, res) => {
   await new Promise((resolve) => setTimeout(resolve, 3000))
 
   res.send("Well, that took forever!")
+})
+
+
+app.get("/custom_instrumentation", (_req, res) => {
+  setRootName("GET /custom_instrumtation action");
+  setNamespace("custom");
+  setTag("tag1", "value1")
+  setTag("tag2", 123)
+  setSessionData({ _csrf_token: "Z11CWRVG+I2egpmiZzuIx/qbFb/60FZssui5eGA8a3g=" })
+  setParams({ action: "show", controller: "homepage" })
+  setHeader("CUSTOM_HEADER", "custom header value")
+  setCustomData({ stroopwaffle: "true", coffee: "false" })
+  res.send("Custom instrumentation set")
 })
 
 app.use(expressErrorHandler())
