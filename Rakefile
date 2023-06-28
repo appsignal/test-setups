@@ -200,6 +200,7 @@ namespace :app do
     desc "Tail appsignal.log"
     task :appsignal do
       @app = get_app
+      run_command "cd #{@app} && docker-compose exec app touch /tmp/appsignal.log"
       run_command "cd #{@app} && docker-compose exec app tail -f /tmp/appsignal.log"
     end
   end
