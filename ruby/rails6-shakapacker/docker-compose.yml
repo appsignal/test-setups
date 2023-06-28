@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - postgres.env
+  app:
+    build: .
+    image: ruby/rails6-shakapacker
+    depends_on:
+      - postgres
+    ports:
+      - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=ruby-rails6-shakapacker
+      - PORT=4001
+    env_file:
+      - postgres.env
+      - appsignal_key.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=ruby/rails6-shakapacker
+      - APP_URL=http://app:4001

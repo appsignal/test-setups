@@ -1,0 +1,25 @@
+# Add your own tasks in files placed in lib/tasks ending in .rake,
+# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
+
+require_relative "config/application"
+
+Rails.application.load_tasks
+
+task :sourcemaps => [:environment, "assets:clean", "webpacker:clobber", "assets:precompile"] do
+  next if ENV.fetch("TESTING", false)
+
+  args = []
+  Dir.glob("public/packs/js/*.js.map").each do |file|
+    puts file
+    args << "-F 'name[]=http://localhost:#{ENV.fetch("PORT")}/#{file.delete_prefix("public/").delete_suffix(".map")}'"
+    args << "-F 'file=@#{file}'"
+  end
+  cmd = <<~COMMAND
+    curl -k -X POST -H 'Content-Type: multipart/form-data' \
+    -F 'revision=#{Appsignal.config[:revision]}' \
+    #{args.join(" ")} \
+    'https://appsignal.com/api/sourcemaps?push_api_key=#{Appsignal.config[:push_api_key]}&app_name=#{Appsignal.config[:name]}&environment=production'
+  COMMAND
+  puts cmd
+  `#{cmd}`
+end

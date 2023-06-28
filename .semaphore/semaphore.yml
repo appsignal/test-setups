@@ -154,6 +154,10 @@ blocks:
         - name: ruby/rails6-sequel
           commands:
             - "rake app=ruby/rails6-sequel app:test"
+        - name: ruby/rails6-shakapacker
+          commands:
+            - echo "APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000" > ruby/rails6-shakapacker/appsignal_key.env
+            - "rake app=ruby/rails6-shakapacker app:test"
         - name: ruby/rails6-shoryuken
           commands:
             - "rake app=ruby/rails6-shoryuken app:test"
