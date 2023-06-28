@@ -12,6 +12,7 @@ get "/" do
     <ul>
       <li><a href="/slow?time=#{time}">Slow request</a></li>
       <li><a href="/error?time=#{time}">Error request</a></li>
+      <li><a href="/item/123?time=#{time}">Route with param request</a></li>
     </ul>
   HTML
 end
@@ -25,4 +26,8 @@ get "/error" do
   Appsignal.add_breadcrumb("test", "action")
   Appsignal.add_breadcrumb("category", "action", "message", { "metadata_key" => "some value" })
   raise "error"
+end
+
+get "/item/:id" do
+  "Item with id #{params[:id]}"
 end

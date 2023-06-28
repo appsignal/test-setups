@@ -1,4 +1,5 @@
 default: &defaults
+  filter_metadata: ["path"]
 
 test:
   <<: *defaults
