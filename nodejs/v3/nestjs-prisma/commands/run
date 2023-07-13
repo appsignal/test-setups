@@ -29,5 +29,8 @@ npm link @appsignal/nodejs
 echo "Building app"
 npm run build
 
+echo "Migrating Prisma database"
+npx prisma migrate dev
+
 echo "Starting test app server"
 /commands/processmon processmon.toml
