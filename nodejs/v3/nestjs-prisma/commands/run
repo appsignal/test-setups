@@ -2,9 +2,6 @@
 
 set -eu
 
-echo "Installing compatible NPM version"
-npm install -g npm@7.18.1
-
 echo "Install, link and build integration"
 (
 cd /integration
@@ -20,11 +17,11 @@ mono build
 
 cd /app
 
+echo "Linking integration"
+npm link @appsignal/nodejs --save --package-lock
+
 echo "Installing app dependencies"
 npm install
-
-echo "Linking integration"
-npm link @appsignal/nodejs
 
 echo "Building app"
 npm run build
