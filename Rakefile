@@ -8,7 +8,7 @@ def get_app
   ENV['app'].tap do |app|
     raise "Specify which app you want to run using app=path" if app.nil?
     raise "#{app} not found" unless File.exist?(app)
-  end
+  end.delete_suffix("/")
 end
 
 def clone_from_git(path, repo)
