@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -eu
+
+source postgres.env
+source appsignal_key.env
+
+export POSTGRES_USER="$POSTGRES_USER"
+export POSTGRES_PASSWORD="$POSTGRES_PASSWORD"
+export POSTGRES_DB="$POSTGRES_DB"
+export APPSIGNAL_PUSH_API_KEY_FOR_APP="$APPSIGNAL_PUSH_API_KEY_FOR_APP"
+
+envsubst < vector/vector.toml.template > vector/vector.toml

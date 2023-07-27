@@ -1,0 +1,16 @@
+[sources.internal_logs]
+type = "internal_logs"
+
+[sources.postgres]
+type = "postgresql_metrics"
+endpoints = [ "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB" ]
+
+[sinks.out]
+type = "console"
+inputs = [ "internal_logs", "postgres" ]
+encoding.codec = "text"
+
+[sinks.appsignal]
+type = "appsignal"
+inputs = [ "internal_logs", "postgres" ]
+push_api_key = "$APPSIGNAL_PUSH_API_KEY_FOR_APP"
