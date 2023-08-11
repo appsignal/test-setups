@@ -8,15 +8,15 @@ export const loader = async () => {
 }
 
 export default function Slow() {
-  const _data = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>();
 
   return (
     <div>
-      <Await resolve={loader()}>
-        <p>Waiting...</p>
-      </Await>
+      <p>Waiting...</p>
 
-      <p>Well, that took forever!</p>
+      <Await resolve={data}>
+        {() => <p>Well, that took forever!</p>}
+      </Await>
     </div>
   );
 }
