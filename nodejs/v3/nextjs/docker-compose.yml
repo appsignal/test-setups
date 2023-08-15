@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=nodejs-nextjs
+    env_file:
+      - ../../../appsignal.env
+      - ../../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../../integration:/integration
+  tests:
+    build: ../../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_URL=http://app:4001
+      - APP_NAME=nodejs/nextjs-appdir

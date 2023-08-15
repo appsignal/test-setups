@@ -127,7 +127,12 @@ namespace :app do
     FileUtils.cp "support/processmon/processmon", "#{@app}/commands/"
 
     puts "Building environment..."
-    run_command "cd #{@app} && docker-compose build"
+    options = ""
+    build_args = ENV["build_arg"]
+    if build_args
+      options = "--build-arg=#{build_args}"
+    end
+    run_command "cd #{@app} && docker-compose build #{options}"
 
     puts "Cleaning processmon"
     FileUtils.rm_f "#{@app}/commands/processmon"
