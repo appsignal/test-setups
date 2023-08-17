@@ -7,13 +7,13 @@ services:
       - postgres.env
   app:
     build: .
-    image: ruby/rails6-postgres
+    image: ruby/rails7-postgres
     depends_on:
       - postgres
     ports:
       - "4001:4001"
     environment:
-      - APPSIGNAL_APP_NAME=ruby-rails6-postgres
+      - APPSIGNAL_APP_NAME=ruby-rails7-postgres
       - PORT=4001
     env_file:
       - postgres.env
@@ -30,5 +30,5 @@ services:
     depends_on:
       - app
     environment:
-      - APP_NAME=ruby/rails6-postgres
+      - APP_NAME=ruby/rails7-postgres
       - APP_URL=http://app:4001
