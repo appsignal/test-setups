@@ -4,10 +4,11 @@ defmodule PlugOban.Application do
   require Logger
 
   def start(_type, _args) do
+    port = String.to_integer(System.get_env("PORT") || "4000")
     children = [
       PlugOban.Repo,
       {Oban, Application.fetch_env!(:plug_oban, Oban)},
-      {Plug.Cowboy, scheme: :http, plug: PlugOban.Router, options: [port: 4000]}
+      {Plug.Cowboy, scheme: :http, plug: PlugOban.Router, options: [port: port]}
     ]
 
     Logger.info("Listening on http://localhost:4001")

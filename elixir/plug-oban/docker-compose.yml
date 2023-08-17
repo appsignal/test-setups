@@ -13,8 +13,9 @@ services:
     depends_on:
       - postgres
     ports:
-      - "4001:4000"
+      - "4001:4001"
     environment:
+      - PORT=4001
       - APPSIGNAL_APP_NAME=elixir-plug-oban
       - INTEGRATION_PATH=/integration
     env_file:
@@ -33,4 +34,4 @@ services:
       - app
     environment:
       - APP_NAME=elixir/plug-oban
-      - APP_URL=http://app:4000
+      - APP_URL=http://app:4001
