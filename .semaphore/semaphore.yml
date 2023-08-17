@@ -115,9 +115,9 @@ blocks:
         - name: nodejs/v3/nestjs
           commands:
             - "rake app=nodejs/v3/nestjs app:test"
-        - name: nodejs/v3/nextjs-appdir
+        - name: nodejs/v3/nextjs
           commands:
-            - "rake app=nodejs/v3/nextjs-appdir app:test"
+            - "rake app=nodejs/v3/nextjs app:test"
         - name: nodejs/v3/nextjs-noappdir
           commands:
             - "rake app=nodejs/v3/nextjs-noappdir app:test"
