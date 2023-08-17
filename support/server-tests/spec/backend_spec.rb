@@ -16,7 +16,7 @@ if APP.backend?
     end
 
     it "has an error endpoint" do
-      response = HTTP.follow.get(APP.url("/error"))
+      response = HTTP.follow.get(APP.url("/error?error=yes"))
 
       expect(response).to have_status(500)
     end

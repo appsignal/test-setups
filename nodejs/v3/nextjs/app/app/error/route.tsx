@@ -13,5 +13,5 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const data = await getData(searchParams)
 
-  return NextResponse.json({ "body": "I should not be shown, but an error should be shown instead", ...data })
+  return NextResponse.json({ "body": "Please add the query param ?error=yes to the route to trigger the error", ...data })
 }
