@@ -1,6 +1,6 @@
 [[paths_to_watch]]
 path = "/app"
-ignore = ["tmp", "log"]
+ignore = ["tmp", "log", "app/assets", "app/javascript"]
 
 [[paths_to_watch]]
 path = "/integration"
