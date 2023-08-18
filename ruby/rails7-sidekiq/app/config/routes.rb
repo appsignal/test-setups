@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   end
   mount Sidekiq::Web => "/sidekiq"
 
+  resources :chat_rooms
+  resources :chat_messages
+
   resources :redis do
     collection do
       get :restful

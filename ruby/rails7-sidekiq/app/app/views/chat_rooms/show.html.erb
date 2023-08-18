@@ -1,0 +1,40 @@
+<h1><%= @chat_room.name %></h1>
+
+<div id="chat-room-messages">
+  <% if @chat_messages.any? %>
+    <% @chat_messages.each do |message| %>
+      <p>
+        <span class="chat-message-date"><%= message.created_at %></span>: <span class="chat-message-body"><%= message.body %></span>
+      </p>
+    <% end %>
+  <% else %>
+    <p>No messages yet.</p>
+  <% end %>
+</div>
+
+<%= form_with(:model => @chat_message) do |form| %>
+  <% if @chat_message.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(message.errors.count, "error") %> prohibited this message from being saved:</h2>
+
+      <ul>
+        <% @chat_message.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <div><%= form.label :body, "Your message:" %></div>
+    <%= form.text_area :body %>
+  </div>
+
+  <%= form.hidden_field :chat_room_id, :value => params[:id] %>
+
+  <div class="actions">
+    <%= form.submit "Send message" %>
+  </div>
+<% end %>
+
+<%= link_to "Back to all rooms", chat_rooms_path %>
