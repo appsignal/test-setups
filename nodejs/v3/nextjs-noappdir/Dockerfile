@@ -21,3 +21,6 @@ RUN chmod +x /commands/*
 
 # Run prepare and start processmon
 CMD /commands/run
+
+ARG NODE_ENV=development
+ENV NODE_ENV=$NODE_ENV

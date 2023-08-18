@@ -33,5 +33,10 @@ npm install
 # echo "Linking integration"
 # npm link @appsignal/nodejs
 
-echo "Starting the app"
-npm run dev
+echo "Starting the app in NODE_ENV='$NODE_ENV' (default: development)"
+if [ "$NODE_ENV" == "production" ]; then
+  npm run build
+  npm run start
+else
+  npm run dev
+fi
