@@ -120,6 +120,7 @@ blocks:
             - "rake app=nodejs/v3/nextjs app:test"
         - name: nodejs/v3/nextjs-noappdir
           commands:
+            - echo "NEXT_PUBLIC_APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000" > nodejs/v3/nextjs-noappdir/appsignal_key.env
             - "rake app=nodejs/v3/nextjs-noappdir app:test"
         - name: nodejs/v3/nestjs-prisma
           commands:
