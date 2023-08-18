@@ -11,6 +11,7 @@ services:
     env_file:
       - ../../../appsignal.env
       - ../../../appsignal_key.env
+      - ./appsignal_key.env
     volumes:
       - ./app:/app
       - ../../integration:/integration
