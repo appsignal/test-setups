@@ -2,9 +2,6 @@
 
 set -eu
 
-echo "Installing compatible NPM version"
-npm install -g npm
-
 echo "Install link and build integration"
 (
 cd /integration
