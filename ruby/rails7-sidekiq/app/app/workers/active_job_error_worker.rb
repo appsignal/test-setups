@@ -6,6 +6,12 @@ class ActiveJobErrorWorker < ActiveJob::Base
     Rails.error.handle do
       1 + '1' # raises TypeError
     end
-    raise "Error #{argument}"
+    raise RetryJobError.new("Something went wrong 4")
+  end
+end
+
+class RetryJobError < StandardError
+  def initialize(msg="default message")
+    super(msg)
   end
 end
