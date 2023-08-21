@@ -1,0 +1,16 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = ["build", "public/build"]
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.node]
+command = "npm"
+args = ["run", "dev"]
+working_dir = "/app"
+
+[triggers.build_integration]
+command = "mono"
+args = ["build"]
+working_dir = "/integration"

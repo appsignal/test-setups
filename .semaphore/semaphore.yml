@@ -128,6 +128,9 @@ blocks:
         - name: nodejs/express-redis-v3-alpine
           commands:
             - "rake app=nodejs/v3/express-redis-alpine app:test"
+        - name: nodejs/v3/remix
+          commands:
+            - "rake app=nodejs/v3/remix app:test"
         - name: nodejs/v2/koa
           commands:
             - "rake app=nodejs/v2/koa app:test"
