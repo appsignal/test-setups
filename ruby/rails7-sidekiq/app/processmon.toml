@@ -4,7 +4,8 @@ ignore = [
   "tmp",
   "log",
   "node_modules",
-  "public/packs"
+  "public/packs",
+  "/app/vendor/bundle"
 ]
 
 [[paths_to_watch]]
