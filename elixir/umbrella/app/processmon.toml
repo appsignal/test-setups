@@ -1,0 +1,16 @@
+[[paths_to_watch]]
+path = "/app"
+
+[[paths_to_watch]]
+path = "/integration"
+ignore = ["appsignal-elixir/priv"]
+
+[processes.phoenix]
+command = "elixir"
+args = ["--sname", "server", "--cookie", "server", "-S", "mix", "phx.server"]
+working_dir = "/app"
+
+[processes.plug]
+command = "mix"
+args = ["run", "--no-halt"]
+working_dir = "/app"

@@ -20,7 +20,7 @@ config :test_app, TestApp.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
-port = String.to_integer(System.get_env("PORT") || "4000")
+port = String.to_integer(System.get_env("PHOENIX_PORT") || "4000")
 config :test_app, TestAppWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.

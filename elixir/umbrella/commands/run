@@ -13,5 +13,5 @@ mix deps.get
 echo "Migrate if needed"
 mix ecto.migrate
 
-tail -f /dev/null
-# /commands/processmon processmon.toml
+# tail -f /dev/null
+/commands/processmon processmon.toml

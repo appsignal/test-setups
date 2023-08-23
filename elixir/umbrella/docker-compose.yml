@@ -14,10 +14,12 @@ services:
       - postgres
     ports:
       - "4001:4001"
+      - "4002:4002"
     environment:
-      - APPSIGNAL_APP_NAME=elixir-phoenix-example
+      - APPSIGNAL_APP_NAME=elixir-umbrella
       - INTEGRATION_PATH=/integration
-      - PORT=4001
+      - PHOENIX_PORT=4001
+      - PLUG_PORT=4002
     env_file:
       - postgres.env
       - ../../appsignal.env
@@ -33,5 +35,5 @@ services:
     depends_on:
       - app
     environment:
-      - APP_NAME=elixir/phoenix-example
-      - APP_URL=http://app:4000
+      - APP_NAME=elixir/umbrella
+      - APP_URL=http://app:4001
