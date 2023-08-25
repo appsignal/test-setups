@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_18_080806) do
     t.bigint "chat_room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["chat_room_id"], name: "index_chat_messages_on_room_id"
+    t.index ["chat_room_id"], name: "index_chat_messages_on_chat_room_id"
   end
 
   create_table "chat_rooms", force: :cascade do |t|
