@@ -1,0 +1,26 @@
+#!/bin/bash
+set -eu
+
+echo "Install AppSignal Ruby extension"
+(
+  cd /integration
+  git config --global --add safe.directory /integration # avoid git fatal errors about dubious ownership
+  rake extension:install
+)
+
+cd /app
+echo "Install dependencies"
+bundle install
+yarn install
+
+echo "Clean tmp"
+rm -rf tmp
+mkdir -p tmp/pids tmp/sockets
+touch tmp/.keep
+touch tmp/pids/.keep
+touch tmp/sockets/.keep
+
+echo "Run migrations"
+bin/rails db:migrate
+
+/commands/processmon processmon.toml

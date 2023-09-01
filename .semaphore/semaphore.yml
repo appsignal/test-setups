@@ -165,6 +165,9 @@ blocks:
         - name: ruby/rails7-delayed-job
           commands:
             - "rake app=ruby/rails7-delayed-job app:test"
+        - name: ruby/rails7-sequel
+          commands:
+            - "rake app=ruby/rails7-sequel app:test"
         - name: ruby/rails7-sidekiq
           commands:
             - "rake app=ruby/rails7-sidekiq app:test"
