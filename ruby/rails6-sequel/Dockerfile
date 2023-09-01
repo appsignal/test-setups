@@ -1,11 +1,16 @@
 FROM ruby:3.2.2-bullseye
 
-# Update this if the docker image changes
-ENV REFRESHED_AT=2022-01-06
+# Update this if the Docker image changes
+ENV REFRESHED_AT=2022-11-07
+ENV NODE_MAJOR=18
 
 RUN apt-get update && \
-  curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
-  apt-get install -y nodejs python2 postgresql-client && \
+  apt-get install -y ca-certificates curl gnupg && \
+  mkdir -p /etc/apt/keyrings && \
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+  echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+  apt-get update && \
+  apt-get install -y nodejs python3 && \
   npm install -g npm yarn
 
 RUN gem update --system && gem install bundler

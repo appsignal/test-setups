@@ -5,9 +5,14 @@ ENV REFRESHED_AT=2023-06-23
 
 ARG TESTING
 ENV TESTING=$TESTING
+ENV NODE_MAJOR=18
 
 RUN apt-get update && \
-  curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
+  apt-get install -y ca-certificates curl gnupg && \
+  mkdir -p /etc/apt/keyrings && \
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+  echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+  apt-get update && \
   apt-get install -y nodejs python2 && \
   npm install -g npm yarn
 
