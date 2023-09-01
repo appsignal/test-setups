@@ -4,7 +4,7 @@ FROM elixir:1.14.1
 ENV REFRESHED_AT=2022-10-27
 
 # Install node 12
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get -y install nodejs
 
 # Copy commands into the container
