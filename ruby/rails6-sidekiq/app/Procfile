@@ -1,2 +1,0 @@
-sidekiq: bundle exec sidekiq --queue default
-rails: bin/rails server --binding=0.0.0.0 --port 4001

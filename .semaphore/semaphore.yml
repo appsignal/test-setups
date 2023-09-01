@@ -146,9 +146,6 @@ blocks:
         - name: ruby/rails7-postgres
           commands:
             - "rake app=ruby/rails7-postgres app:test"
-        - name: ruby/rails6-sidekiq
-          commands:
-            - "rake app=ruby/rails6-sidekiq app:test"
         - name: ruby/rails6-mysql
           commands:
             - "rake app=ruby/rails6-mysql app:test"
