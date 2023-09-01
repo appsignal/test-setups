@@ -4,10 +4,9 @@ FROM jruby:9.4.2.0
 ENV REFRESHED_AT=2022-02-24
 
 RUN apt-get update && \
-  curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+  curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
   apt-get install -y nodejs python2 git && \
-  npm install -g npm && \
-  npm install -g yarn
+  npm install -g npm yarn
 
 RUN gem update --system && gem install bundler
 ENV BUNDLE_PATH=/app/vendor/bundle
