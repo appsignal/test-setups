@@ -3,7 +3,15 @@
 from __appsignal__ import appsignal
 appsignal.start()
 
-from flask import Flask
+from appsignal import (
+    set_params,
+    set_custom_data,
+    set_tag,
+    set_root_name,
+    send_error,
+)
+
+from flask import Flask, request
 app = Flask(__name__)
 
 from typing import Iterable
@@ -43,14 +51,15 @@ meter.create_observable_gauge(
 @app.route("/")
 def home():
     return """
-      <h1>Python Flask OpenTelemetry app</h1>
+        <h1>Python Flask OpenTelemetry app</h1>
 
-      <ul>
-        <li><a href="/slow">/slow: Trigger a slow request</a></li>
-        <li><a href="/error">/error: Trigger an error</a></li>
-        <li><a href="/hello/world">/hello/&lt;name&gt;: Use parameterised routing</a></li>
-        <li><a href="/metrics">/metrics: Emit custom metrics</a></li>
-      </ul>
+        <ul>
+        <li><a href="/slow"><kbd>/slow</kbd> &rarr; Trigger a slow request</a></li>
+        <li><a href="/error"><kbd>/error</kbd> &rarr; Trigger an error (and use error helpers)</a></li>
+        <li><a href="/hello/world"><kbd>/hello/&lt;name&gt;</kbd> &rarr; Use parameterised routing</a></li>
+        <li><a href="/metrics"><kbd>/metrics</kbd> &rarr; Emit custom metrics</a></li>
+        <li><a href="/custom"><kbd>/custom</kbd> &rarr; Use sample data helpers (send a POST request with JSON for params!)</a></li>
+        </ul>
     """
 
 @app.route("/slow")
@@ -61,7 +70,18 @@ def slow():
 
 @app.route("/error")
 def error():
-    raise Exception("I am an error!")
+    class ManuallyHandledError(Exception):
+        pass
+
+    class AutomaticallyHandledError(Exception):
+        pass
+
+    try:
+        raise ManuallyHandledError("I am an error sent manually using send_error!")
+    except ManuallyHandledError as error:
+        send_error(error)
+
+    raise AutomaticallyHandledError("I am an error reported automatically by the Flask instrumentation!")
 
 @app.route("/hello/<name>")
 def hello(name):
@@ -74,3 +94,14 @@ def metrics():
     non_monotonic_counter.add(10)
     non_monotonic_counter.add(-5)
     return "<p>Emitted some custom metrics!</p>"
+
+@app.route("/custom", methods=["GET", "POST"])
+def custom():
+    if request.method == "POST":
+        set_params(request.json or {})
+
+    set_custom_data({"hello": "there"})
+    set_tag("custom", True)
+    set_root_name("Custom endpoint")
+
+    return "<p>Sent custom endpoint data!</p>"
