@@ -143,7 +143,7 @@ namespace :app do
     build_app
 
     puts "Starting compose..."
-    run_command "cd #{@app} && docker-compose up --abort-on-container-exit"
+    run_command "cd #{@app} && docker-compose up --abort-on-container-exit --timestamps"
   end
 
   desc "Start a test app and run the tests on it"

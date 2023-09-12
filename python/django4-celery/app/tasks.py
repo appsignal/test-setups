@@ -5,12 +5,26 @@ from __appsignal__ import appsignal
 from opentelemetry import trace
 
 import redis
+import logging
+import requests
 from celery import Celery
 from celery.signals import worker_process_init
 
 @worker_process_init.connect(weak=False)
 def init_celery_tracing(*args, **kwargs):
     appsignal.start()
+
+    # You must initialize logging, otherwise you'll not see debug output.
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=logging.INFO,
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    logging.getLogger().setLevel(logging.DEBUG)
+
+    requests_log = logging.getLogger("requests.packages.urllib3")
+    requests_log.setLevel(logging.DEBUG)
+    requests_log.propagate = True
 
 app = Celery('tasks', broker='redis://redis')
 app.conf.task_routes = {

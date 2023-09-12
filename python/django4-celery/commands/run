@@ -20,4 +20,5 @@ echo "Running migrations"
 python3 manage.py migrate
 
 echo "Starting app"
-/commands/processmon processmon.toml
+tail -f /dev/null
+# /commands/processmon processmon.toml

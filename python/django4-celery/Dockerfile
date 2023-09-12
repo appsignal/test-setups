@@ -11,5 +11,8 @@ RUN mkdir /commands
 COPY ./commands/* /commands/
 RUN chmod +x /commands/*
 
+RUN apt-get install -y less
+RUN echo "less +F /tmp/appsignal.log" >> ~/.bash_history
+
 # Run the app
 CMD /commands/run
