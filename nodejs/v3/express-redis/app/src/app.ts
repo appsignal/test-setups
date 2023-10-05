@@ -81,6 +81,10 @@ app.get("/slow", async (_req: any, res: any) => {
   res.send("Well, that took forever!")
 })
 
+app.get("/route-param/:id", (req, res) => {
+  res.send(`Route parameter <code>id</code>: ${req.params.id}`)
+})
+
 app.use(expressErrorHandler())
 
 app.listen(port, () => {
