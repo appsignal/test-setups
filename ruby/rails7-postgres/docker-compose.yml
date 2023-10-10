@@ -22,6 +22,14 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
+  vector:
+    image: timberio/vector:0.33.0-debian
+    environment:
+      - VECTOR_LOG=debug
+    depends_on:
+      - postgres
+    volumes:
+      - ./vector:/etc/vector
   tests:
     build: ../../support/server-tests
     image: server-tests

@@ -126,6 +126,8 @@ namespace :app do
     FileUtils.rm_f "#{@app}/commands/processmon"
     FileUtils.cp "support/processmon/processmon", "#{@app}/commands/"
 
+    run_hook @app, :before_build
+
     puts "Building environment..."
     options = ""
     build_args = ENV["build_arg"]
@@ -264,5 +266,15 @@ namespace :global do
   desc "Install bundled processmon"
   task :install_processmon do
     run_command("cd support/processmon && ./build.sh")
+  end
+end
+
+def run_hook(app, event)
+  if event == :before_build
+    hook_file = "hooks/#{event}"
+    hook_file_path = File.join(@app, hook_file)
+    return unless File.exist? hook_file_path
+
+    run_command("cd #{@app} && ./#{hook_file}")
   end
 end
