@@ -1,5 +1,6 @@
 Sidekiq.configure_server do |config|
   console_logger = ActiveSupport::Logger.new(STDOUT)
-  config.logger = console_logger.extend(ActiveSupport::Logger.broadcast(Appsignal::Logger.new("sidekiq")))
+  appsignal_logger = Appsignal::Logger.new("sidekiq")
+  config.logger = ActiveSupport::BroadcastLogger.new(console_logger, appsignal_logger)
   config.logger.formatter = Sidekiq::Logger::Formatters::WithoutTimestamp.new
 end
