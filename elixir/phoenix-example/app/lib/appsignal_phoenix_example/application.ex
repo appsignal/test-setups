@@ -24,6 +24,8 @@ defmodule AppsignalPhoenixExample.Application do
       {Finch, name: MyFinch}
     ]
 
+    Appsignal.Logger.Handler.add("phoenix")
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: AppsignalPhoenixExample.Supervisor]
