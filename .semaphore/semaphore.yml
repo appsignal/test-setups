@@ -143,6 +143,9 @@ blocks:
         - name: ruby/padrino
           commands:
             - "rake app=ruby/padrino app:test"
+        - name: ruby/rails7-goodjob
+          commands:
+            - "rake app=ruby/rails7-goodjob app:test"
         - name: ruby/rails7-postgres
           commands:
             - echo "APPSIGNAL_PUSH_API_KEY_FOR_APP=00000000-0000-0000-0000-000000000000" > ruby/rails7-postgres/appsignal_key.env
