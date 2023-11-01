@@ -4,7 +4,7 @@ FROM ruby:3.2.2-bullseye
 ENV REFRESHED_AT=2021-02-04
 
 RUN apt-get update -qq && \
-    apt-get install -y nodejs npm postgresql-client
+    apt-get install -y nodejs npm postgresql-client less
 
 # Copy commands into the container
 RUN mkdir /commands

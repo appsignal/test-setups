@@ -3,7 +3,7 @@ FROM ruby:3.2.2
 # Update this if the docker image changes
 ENV REFRESHED_AT=2021-03-01
 
-RUN apt-get update
+RUN apt-get update && apt-get install -y less
 
 RUN gem update --system && gem install bundler
 

@@ -211,6 +211,15 @@ namespace :app do
       run_command "cd #{@app} && docker-compose exec app tail -f /tmp/appsignal.log"
     end
   end
+
+  namespace :less do
+    desc "Less +F appsignal.log"
+    task :appsignal do
+      @app = get_app
+      run_command "cd #{@app} && docker-compose exec app touch /tmp/appsignal.log"
+      run_command "cd #{@app} && docker-compose exec app less +F /tmp/appsignal.log"
+    end
+  end
 end
 
 namespace :integrations do

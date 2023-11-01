@@ -18,7 +18,8 @@ RUN apk update && \
       coreutils \
       inotify-tools \
       nodejs \
-      npm
+      npm \
+      less
 
 # Copy commands into the container
 RUN mkdir /commands
