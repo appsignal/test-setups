@@ -40,4 +40,5 @@ Rails.application.routes.draw do
   get "/slow", to: "examples#slow"
   get "/error", to: "examples#error"
   get "/error_reporter", to: "examples#error_reporter"
+  get "/queries", to: "examples#queries"
 end

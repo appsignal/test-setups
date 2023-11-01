@@ -13,4 +13,14 @@ class ExamplesController < ApplicationController
     end
     render :html => "An error has been reported through the Rails error reporter"
   end
+
+  def queries
+    user_count = User.count
+    User.destroy_all if user_count > 10_000
+
+    2.times do |i|
+      User.create!(:name => "User ##{user_count + i}")
+    end
+    @users = User.all
+  end
 end
