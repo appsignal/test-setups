@@ -7,6 +7,6 @@ class JobsController < ApplicationController
       PerformanceJob.new.deliver("performance job")
     end
 
-    redirect_to :action => :index, :notice => "Job queued"
+    redirect_to jobs_path, :notice => "Job queued"
   end
 end
