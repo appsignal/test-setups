@@ -4,7 +4,7 @@ FROM node:16-buster
 ENV REFRESHED_AT=2023-03-28
 
 # Install dependencies
-RUN apt-get update && apt-get install -y ruby
+RUN apt-get update && apt-get install -y ruby less
 
 # Update npm
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global

@@ -5,7 +5,7 @@ ENV REFRESHED_AT=2022-11-07
 
 RUN apt-get update && \
   curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
-  apt-get install -y nodejs python3 && \
+  apt-get install -y nodejs python3 less && \
   npm install -g npm yarn
 
 RUN gem update --system && gem install bundler
