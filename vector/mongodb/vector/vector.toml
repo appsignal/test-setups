@@ -1,0 +1,16 @@
+[sources.internal_logs]
+type = "internal_logs"
+
+[sources.mongodb]
+type = "mongodb_metrics"
+endpoints = [ "${MONGODB_URL_1}", "${MONGODB_URL_2}", "${MONGODB_URL_3}" ]
+
+[sinks.out]
+type = "console"
+inputs = [ "internal_logs", "mongodb" ]
+encoding.codec = "text"
+
+[sinks.appsignal]
+type = "appsignal"
+inputs = [ "mongodb" ]
+push_api_key = "${APPSIGNAL_VECTOR_APP_PUSH_API_KEY}"

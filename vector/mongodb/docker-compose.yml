@@ -1,0 +1,65 @@
+version: '2.1'
+
+services:
+  mongo-1:
+    image: mongo
+    entrypoint: [ "./mongo-entrypoint.sh" ]
+    volumes:
+      - ./mongo-entrypoint.sh:/mongo-entrypoint.sh
+
+  mongo-2:
+    image: mongo
+    command: [ "--bind_ip_all", "--replSet", "mongo-replica-set" ]
+
+  mongo-3:
+    image: mongo
+    command: [ "--bind_ip_all", "--replSet", "mongo-replica-set" ]
+
+  
+  vector:
+    image: timberio/vector:0.33.0-debian
+    environment:
+      - VECTOR_LOG=debug
+      - MONGODB_URL_1=mongodb://mongo-1:27017/
+      - MONGODB_URL_2=mongodb://mongo-2:27017/
+      - MONGODB_URL_3=mongodb://mongo-3:27017/
+    env_file:
+      - ../../appsignal_key.env
+    depends_on:
+      - mongo-1
+      - mongo-2
+      - mongo-3
+    volumes:
+      - ./vector:/etc/vector
+  
+  app-write:
+    build: app
+    environment:
+      - MONGODB_URL=mongodb://mongo-1:27017/
+      - APP_ROLE=write
+    depends_on:
+      - mongo-1
+  
+  app-read:
+    build: app
+    environment:
+      - MONGODB_URL=mongodb://mongo-2:27017/
+      - APP_ROLE=read
+    depends_on:
+      - mongo-1
+  
+  app-update:
+    build: app
+    environment:
+      - MONGODB_URL=mongodb://mongo-3:27017/
+      - APP_ROLE=update
+    depends_on:
+      - mongo-3
+
+  app-delete:
+    build: app
+    environment:
+      - MONGODB_URL=mongodb://mongo-2:27017/
+      - APP_ROLE=delete
+    depends_on:
+      - mongo-2
