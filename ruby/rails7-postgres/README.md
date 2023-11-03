@@ -25,4 +25,4 @@ This test setup includes a very small Vector example as well. To use it, you nee
 - Optional, if you want to test logs: On the app that corresponds to the Push API key, [create a new log source of the type "Vector"](https://appsignal.com/redirect-to/app?to=logs/sources&overlay=logSourceFormOverlay&name=vector&fmt=PLAINTEXT&type=vector).
 - Start the app.
 
-The vector config can be found in `vector/vector.toml/template`. Change the template, and restart the app. Do not change the `vector.toml` file as it will be reset (based on the template) upon boot.
+The vector config can be found in `vector/vector.toml.template`. Change the template, and restart the app. Do not change the `vector.toml` file as it will be reset (based on the template) upon boot.
