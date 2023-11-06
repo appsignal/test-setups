@@ -26,6 +26,9 @@ services:
     image: timberio/vector:0.33.0-debian
     environment:
       - VECTOR_LOG=debug
+    env_file:
+      - postgres.env
+      - ../../appsignal_key.env
     depends_on:
       - postgres
     volumes:
