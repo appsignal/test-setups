@@ -1,7 +1,7 @@
 import express from "express"
 import { createClient } from "redis"
 import ioredis from "ioredis"
-import { setCategory, setName, setBody, setTag, setCustomData, expressErrorHandler, WinstonTransport } from "@appsignal/nodejs"
+import { setTag, setCustomData, expressErrorHandler, WinstonTransport } from "@appsignal/nodejs"
 import { trace } from "@opentelemetry/api"
 import cookieParser from "cookie-parser"
 import winston from "winston"
