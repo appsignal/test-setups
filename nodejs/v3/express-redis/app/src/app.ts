@@ -1,12 +1,13 @@
 import express from "express"
 import { createClient } from "redis"
 import ioredis from "ioredis"
-import { setTag, setCustomData, expressErrorHandler, WinstonTransport } from "@appsignal/nodejs"
+import { setCategory, setName, setBody, setTag, setCustomData, expressErrorHandler, WinstonTransport } from "@appsignal/nodejs"
 import { trace } from "@opentelemetry/api"
 import cookieParser from "cookie-parser"
 import winston from "winston"
 
 const logger = winston.createLogger({
+  format: winston.format.json(),
   transports: [new WinstonTransport({ group: "app" })],
 });
 
@@ -18,7 +19,17 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 app.get("/", (_req: any, res: any) => {
-  logger.info("Home path");
+  logger.info({
+    category: "user",
+    message: "User information log",
+    data: {
+      id: 1,
+      name: "John Doe",
+      email: "john.doe@example.com",
+      role: "admin",
+      active: true
+    }
+  });
   res.send("200 OK")
 })
 
