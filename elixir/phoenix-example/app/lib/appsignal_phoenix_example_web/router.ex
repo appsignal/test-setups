@@ -23,6 +23,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     get "/backtrace_error", PageController, :backtrace_error
     get "/custom_instrumentation", PageController, :custom_instrumentation
     get "/finch", PageController, :finch
+    get "/transactions", PageController, :transactions
     get "/tesla/vanilla", TeslaController, :vanilla
     get "/tesla/pathparams", TeslaController, :pathparams
     get "/tesla/withoutuse", TeslaController, :withoutuse

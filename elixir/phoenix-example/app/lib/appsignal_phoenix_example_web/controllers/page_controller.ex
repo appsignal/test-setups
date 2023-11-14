@@ -132,4 +132,23 @@ defmodule AppsignalPhoenixExampleWeb.PageController do
         "response status code is #{response.status}"
     )
   end
+
+  def transactions(conn, _params) do
+    {:ok, _} = Ecto.Multi.new()
+    |> Ecto.Multi.insert(:first, User.changeset(%User{}, %{age: 123, name: "Foo"}))
+    |> Ecto.Multi.insert(:second, User.changeset(%User{}, %{age: 456, name: "Bar"}))
+    |> Ecto.Multi.insert(:third, User.changeset(%User{}, %{age: 789, name: "Baz"}))
+    |> AppsignalPhoenixExample.Repo.transaction()
+
+    {:error, _, _, _} = Ecto.Multi.new()
+    |> Ecto.Multi.insert(:first, User.changeset(%User{}, %{age: 123, name: "Foo"}))
+    |> Ecto.Multi.insert(:second, User.changeset(%User{}, %{age: 456, name: "Bar"}))
+    |> Ecto.Multi.run(:fail, fn _repo, _ -> {:error, {:just, :because}} end)
+    |> AppsignalPhoenixExample.Repo.transaction()
+
+    text(
+      conn,
+      "Performed a successful and a failed Ecto.Multi transaction"
+    )
+  end
 end
