@@ -26,6 +26,7 @@ def home():
         <ul>
         <li><a href="/slow"><kbd>/slow</kbd> &rarr; Trigger a slow request</a></li>
         <li><a href="/error"><kbd>/error</kbd> &rarr; Trigger an error (and use error helpers)</a></li>
+        <li><a href="/error/nested"><kbd>/error</kbd> &rarr; Trigger a nested error (an error raised while handling another error)</a></li>
         <li><a href="/hello/world"><kbd>/hello/&lt;name&gt;</kbd> &rarr; Use parameterised routing</a></li>
         <li><a href="/metrics"><kbd>/metrics</kbd> &rarr; Emit custom metrics</a></li>
         <li><a href="/custom"><kbd>/custom</kbd> &rarr; Use sample data helpers (send a POST request with JSON for params!)</a></li>
@@ -52,6 +53,25 @@ def error():
         send_error(error)
 
     raise AutomaticallyHandledError("I am an error reported automatically by the Flask instrumentation!")
+
+@app.route("/error/nested")
+def nested_error():
+    class RootError(Exception):
+        pass
+
+    class DerivedError(Exception):
+        pass
+
+    def raise_root_error():
+        raise RootError("I am the root error!")
+
+    def raise_derived_error():
+        try: 
+            raise_root_error()
+        except RootError:
+            raise DerivedError("I am the derived error!")
+            
+    raise_derived_error()
 
 @app.route("/hello/<name>")
 def hello(name):
