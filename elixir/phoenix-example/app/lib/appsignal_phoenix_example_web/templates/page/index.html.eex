@@ -9,6 +9,7 @@
   <li><a href="/tesla/withoutuse">/tesla/withoutuse</a> - Test an external request with Tesla (WithoutUse)</li>
   <li><a href="/tesla/pathparams">/tesla/pathparams</a> - Test an external request with Tesla (PathParams)</li>
   <li><a href="/custom_instrumentation">/custom_instrumentation</a> - Test custom instrumentation</li>
+  <li><a href="/transactions">/transactions</a> - Test Ecto transactions</li>
 </ul>
 
 <table>
