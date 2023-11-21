@@ -1,4 +1,4 @@
-class DefaultJob < ApplicationJob
+class PerformanceJob < ApplicationJob
   queue_as :default
 
   def perform(msg)
