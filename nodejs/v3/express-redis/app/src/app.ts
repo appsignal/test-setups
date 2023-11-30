@@ -5,9 +5,33 @@ import { setTag, setCustomData, expressErrorHandler, WinstonTransport } from "@a
 import { trace } from "@opentelemetry/api"
 import cookieParser from "cookie-parser"
 import winston from "winston"
+const { combine, label, printf } = winston.format;
+
+const customLogLevels = {
+  levels: {
+    trace: 8,
+    debug: 7,
+    info: 6,
+    notice: 5,
+    warn: 4,
+    error: 3,
+    crit: 2,
+    alert: 1,
+    emerg: 0,
+  },
+};
+
+const customformat = printf(({ level, message, label, timestamp }) => {
+  return `${timestamp} [${label}] ${level}: ${message}`;
+});
 
 const logger = winston.createLogger({
-  transports: [new WinstonTransport({ group: "app" })],
+  level: "trace",
+  levels: customLogLevels.levels,
+  format: combine(customformat),
+  transports: [
+    new WinstonTransport({ group: "app" }),
+  ],
 });
 
 const redisHost = "redis://redis:6379"
@@ -19,6 +43,9 @@ app.use(cookieParser())
 
 app.get("/", (_req: any, res: any) => {
   logger.info("Home path");
+  logger.log("alert", "Custom alert log");
+  logger.log("emerg", "Custom emerg(ency) log");
+  logger.log("crit", "Custom crit(ical) log");
   res.send("200 OK")
 })
 
