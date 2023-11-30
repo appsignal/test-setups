@@ -18,6 +18,8 @@ services:
       - APPSIGNAL_APP_NAME=nodejs-koa-mysql
     env_file:
       - mysql.env
+      - ../../../appsignal.env
+      - ../../../appsignal_key.env
     volumes:
       - ./app:/app
       - ../../integration:/integration
