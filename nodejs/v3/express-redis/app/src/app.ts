@@ -43,9 +43,9 @@ app.use(cookieParser())
 
 app.get("/", (_req: any, res: any) => {
   logger.info("Home path");
-  logger.log("alert", "Custom alert log");
-  logger.log("emerg", "Custom emerg(ency) log");
-  logger.log("crit", "Custom crit(ical) log");
+  logger.alert("Custom alert log");
+  logger.emerg("Custom emerg(ency) log");
+  logger.crit("Custom crit(ical) log");
   res.send("200 OK")
 })
 
