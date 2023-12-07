@@ -15,7 +15,6 @@ services:
     image: mongo
     command: [ "--bind_ip_all", "--replSet", "mongo-replica-set" ]
 
-  
   vector:
     image: timberio/vector:0.33.0-debian
     environment:
@@ -31,7 +30,7 @@ services:
       - mongo-3
     volumes:
       - ./vector:/etc/vector
-  
+
   app-write:
     build: app
     environment:
@@ -39,7 +38,7 @@ services:
       - APP_ROLE=write
     depends_on:
       - mongo-1
-  
+
   app-read:
     build: app
     environment:
@@ -47,7 +46,7 @@ services:
       - APP_ROLE=read
     depends_on:
       - mongo-1
-  
+
   app-update:
     build: app
     environment:

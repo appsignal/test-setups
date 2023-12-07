@@ -24,7 +24,7 @@ FRUITS.each do |fruit|
     puts "Connecting to Mongo (#{fruit}, #{role})"
 
     client = Mongo::Client.new(ENV.fetch("MONGODB_URL"))
-    collection = client[:fruits]  
+    collection = client[:fruits]
 
     i = 0
 
@@ -32,18 +32,18 @@ FRUITS.each do |fruit|
       case role
       when "write"
         puts "Inserting #{fruit} documents ##{i}"
-  
+
         collection.insert_one({
           fruit: fruit,
           updated: false,
           i: i
-        })  
+        })
 
       when "read"
         count = collection.find({
           fruit: fruit
         }).count_documents
-    
+
         puts "Counted #{count} #{fruit} documents"
 
       when "update"
@@ -53,7 +53,7 @@ FRUITS.each do |fruit|
         }).first
 
         if document
-          puts "Updating #{fruit} document ##{document[:i]}" 
+          puts "Updating #{fruit} document ##{document[:i]}"
 
           collection.update_one(
             {
@@ -68,7 +68,7 @@ FRUITS.each do |fruit|
             }
           )
         end
-        
+
       when "delete"
         document = collection.find({
           fruit: fruit,
