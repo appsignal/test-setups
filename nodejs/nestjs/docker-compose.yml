@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    image: nodejs/nestjs
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=nodejs-v3-nestjs
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    working_dir: /
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    image: server-tests
+    build: ../../support/server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_URL=http://app:4001
+      - APP_NAME=nodejs/v3/nestjs
