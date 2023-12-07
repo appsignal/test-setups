@@ -10,9 +10,6 @@ done
 
 export DATABASE_URL="mongodb://$DATABASE_HOST:27017/mongoose"
 
-echo "Installing compatible NPM version"
-npm install -g npm@7.18.1
-
 echo "Install, link and build integration"
 (
 cd /integration

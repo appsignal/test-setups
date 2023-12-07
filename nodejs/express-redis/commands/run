@@ -1,8 +1,5 @@
 #!/bin/bash
 
-echo "Installing compatible NPM version"
-npm install -g npm@7.18.1
-
 echo "Install, link and build integration"
 (
 cd /integration

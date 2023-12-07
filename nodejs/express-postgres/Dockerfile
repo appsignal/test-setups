@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y postgresql-client ruby less
 # Update npm
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH=/home/node/.npm-global/bin:$PATH
-RUN mkdir -p $NPM_CONFIG_PREFIX/lib && npm install -g npm@7
+RUN mkdir -p $NPM_CONFIG_PREFIX/lib
 
 # Configure mono
 ENV PATH=/root/mono/bin:$PATH
