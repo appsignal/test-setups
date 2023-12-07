@@ -5,7 +5,6 @@ new Appsignal({
   disableDefaultInstrumentations: [
     "@opentelemetry/instrumentation-http"
   ],
-  logLevel: "trace",
 });
 
 console.log("Appsignal instantiated!")
