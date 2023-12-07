@@ -73,70 +73,52 @@ blocks:
         - name: javascript/vue-3
           commands:
             - "rake app=javascript/vue-3 app:test"
-        - name: nodejs/v2/esbuild-express
+        - name: nodejs/express-postgres
           commands:
-            - "rake app=nodejs/v2/esbuild-express app:test"
-        - name: nodejs/v2/express-apollo
+            - "rake app=nodejs/express-postgres app:test"
+        - name: nodejs/express-redis
           commands:
-            - "rake app=nodejs/v2/express-apollo app:test"
-        - name: nodejs/v2/express-postgres
+            - "rake app=nodejs/express-redis app:test"
+        - name: nodejs/express-mongoose
           commands:
-            - "rake app=nodejs/v2/express-postgres app:test"
-        - name: nodejs/v2/express-redis
+            - "rake app=nodejs/express-mongoose app:test"
+        - name: nodejs/express-apollo
           commands:
-            - "rake app=nodejs/v2/express-redis app:test"
-        - name: nodejs/v3/express-postgres
+            - "rake app=nodejs/express-apollo app:test"
+        - name: nodejs/express-yoga
           commands:
-            - "rake app=nodejs/v3/express-postgres app:test"
-        - name: nodejs/v3/express-redis
+            - "rake app=nodejs/express-yoga app:test"
+        - name: nodejs/koa-mongo
           commands:
-            - "rake app=nodejs/v3/express-redis app:test"
-        - name: nodejs/v3/express-mongoose
+            - "rake app=nodejs/koa-mongo app:test"
+        - name: nodejs/koa-mysql
           commands:
-            - "rake app=nodejs/v3/express-mongoose app:test"
-        - name: nodejs/v3/express-apollo
+            - "rake app=nodejs/koa-mysql app:test"
+        - name: nodejs/fastify
           commands:
-            - "rake app=nodejs/v3/express-apollo app:test"
-        - name: nodejs/v3/express-yoga
+            - "rake app=nodejs/fastify app:test"
+        - name: nodejs/restify
           commands:
-            - "rake app=nodejs/v3/express-yoga app:test"
-        - name: nodejs/v3/koa-mongo
+            - "rake app=nodejs/restify app:test"
+        - name: nodejs/nestjs
           commands:
-            - "rake app=nodejs/v3/koa-mongo app:test"
-        - name: nodejs/v3/koa-mysql
+            - "rake app=nodejs/nestjs app:test"
+        - name: nodejs/nextjs
           commands:
-            - "rake app=nodejs/v3/koa-mysql app:test"
-        - name: nodejs/v3/fastify
+            - "rake app=nodejs/nextjs app:test"
+        - name: nodejs/nextjs-noappdir
           commands:
-            - "rake app=nodejs/v3/fastify app:test"
-        - name: nodejs/v3/restify
+            - echo "NEXT_PUBLIC_APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000" > nodejs/nextjs-noappdir/appsignal_key.env
+            - "rake app=nodejs/nextjs-noappdir app:test"
+        - name: nodejs/nestjs-prisma
           commands:
-            - "rake app=nodejs/v3/restify app:test"
-        - name: nodejs/v3/nestjs
+            - "rake app=nodejs/nestjs-prisma app:test"
+        - name: nodejs/express-redis-alpine
           commands:
-            - "rake app=nodejs/v3/nestjs app:test"
-        - name: nodejs/v3/nextjs
+            - "rake app=nodejs/express-redis-alpine app:test"
+        - name: nodejs/remix
           commands:
-            - "rake app=nodejs/v3/nextjs app:test"
-        - name: nodejs/v3/nextjs-noappdir
-          commands:
-            - echo "NEXT_PUBLIC_APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000" > nodejs/v3/nextjs-noappdir/appsignal_key.env
-            - "rake app=nodejs/v3/nextjs-noappdir app:test"
-        - name: nodejs/v3/nestjs-prisma
-          commands:
-            - "rake app=nodejs/v3/nestjs-prisma app:test"
-        - name: nodejs/express-redis-v3-alpine
-          commands:
-            - "rake app=nodejs/v3/express-redis-alpine app:test"
-        - name: nodejs/v3/remix
-          commands:
-            - "rake app=nodejs/v3/remix app:test"
-        - name: nodejs/v2/koa
-          commands:
-            - "rake app=nodejs/v2/koa app:test"
-        - name: nodejs/v2/next-js
-          commands:
-            - "rake app=nodejs/v2/next-js app:test"
+            - "rake app=nodejs/remix app:test"
         - name: ruby/jruby-rails6
           commands:
             - "rake app=ruby/jruby-rails6 app:test"

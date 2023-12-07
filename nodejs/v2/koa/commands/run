@@ -1,6 +1,0 @@
-#!/bin/bash
-
-set -eu
-
-cd /app
-/commands/processmon processmon.toml

@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=mongoose
+  app:
+    build: .
+    image: nodejs/express-mongoose
+    depends_on:
+      - mongo
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - DATABASE_HOST=mongo
+      - APPSIGNAL_APP_NAME=nodejs-express-mongoose
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_URL=http://app:4001
+      - APP_NAME=nodejs/express-mongoose

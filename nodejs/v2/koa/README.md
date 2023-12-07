@@ -1,3 +1,0 @@
-# Koa
-
-Koa example app.
