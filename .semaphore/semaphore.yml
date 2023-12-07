@@ -73,18 +73,6 @@ blocks:
         - name: javascript/vue-3
           commands:
             - "rake app=javascript/vue-3 app:test"
-        - name: nodejs/v2/esbuild-express
-          commands:
-            - "rake app=nodejs/v2/esbuild-express app:test"
-        - name: nodejs/v2/express-apollo
-          commands:
-            - "rake app=nodejs/v2/express-apollo app:test"
-        - name: nodejs/v2/express-postgres
-          commands:
-            - "rake app=nodejs/v2/express-postgres app:test"
-        - name: nodejs/v2/express-redis
-          commands:
-            - "rake app=nodejs/v2/express-redis app:test"
         - name: nodejs/v3/express-postgres
           commands:
             - "rake app=nodejs/v3/express-postgres app:test"
@@ -131,12 +119,6 @@ blocks:
         - name: nodejs/v3/remix
           commands:
             - "rake app=nodejs/v3/remix app:test"
-        - name: nodejs/v2/koa
-          commands:
-            - "rake app=nodejs/v2/koa app:test"
-        - name: nodejs/v2/next-js
-          commands:
-            - "rake app=nodejs/v2/next-js app:test"
         - name: ruby/jruby-rails6
           commands:
             - "rake app=ruby/jruby-rails6 app:test"

@@ -1,6 +1,0 @@
-#!/bin/bash
-
-set -eu
-
-echo "TODO: Implement running diagnose"
-exit 1
