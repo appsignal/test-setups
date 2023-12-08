@@ -17,12 +17,10 @@ server.get("/error", function (req: any, res: any, next: any) {
   throw new Error("Expected test error")
 })
 
-server.get("/slow", async function (req: any, res: any, next: any) {
+server.get("/slow", async function (req: any, res: any) {
   await new Promise((resolve) => setTimeout(resolve, 3000))
 
   res.send("home")
-
-  return next()
 })
 
 function sendV1(req: any, res: any, next: any) {
