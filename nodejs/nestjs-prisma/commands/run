@@ -27,7 +27,7 @@ echo "Building app"
 npm run build
 
 echo "Migrating Prisma database"
-npx prisma migrate dev
+npx prisma migrate deploy
 
 echo "Starting test app server"
 /commands/processmon processmon.toml
