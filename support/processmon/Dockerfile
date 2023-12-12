@@ -1,4 +1,4 @@
-FROM rust:1.68.1-alpine3.17
+FROM rust:1.74.1-alpine3.17
 
 RUN apk update
 RUN apk add musl-dev

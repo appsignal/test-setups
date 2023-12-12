@@ -22,10 +22,16 @@ get "/slow" do
   "ZzZzZzZ.."
 end
 
+def original_error
+  raise "I am the original error!"
+end
+
 get "/error" do
   Appsignal.add_breadcrumb("test", "action")
   Appsignal.add_breadcrumb("category", "action", "message", { "metadata_key" => "some value" })
-  raise "error"
+  original_error
+rescue
+  raise "I am a wrapper error!"
 end
 
 get "/item/:id" do
