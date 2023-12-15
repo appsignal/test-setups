@@ -157,6 +157,9 @@ blocks:
         - name: ruby/sinatra
           commands:
             - "rake app=ruby/sinatra app:test"
+        - name: ruby/sinatra-alpine
+          commands:
+            - "rake app=ruby/sinatra-alpine app:test"
         - name: ruby/sinatra-puma
           commands:
             - "rake app=ruby/sinatra-puma app:test"
