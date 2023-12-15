@@ -9,6 +9,7 @@ from __appsignal__ import appsignal
 
 def main():
     """Run administrative tasks."""
+    os.environ["OTEL_SERVICE_NAME"] = "django-app"
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'appsignal_python_opentelemetry.settings')
 
     appsignal.start()

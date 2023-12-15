@@ -55,8 +55,17 @@ def slow(request):
 
 
 def slow_queue(request):
-    performance_task.delay("argument 1", "argument 2")
-    performance_task2.delay("argument 3", "argument 4")
+    tracer = trace.get_tracer(__name__)
+    with tracer.start_as_current_span("Queue tasks"):
+        set_category("add_to_queue.tasks")
+
+        performance_task.delay("argument 1", "argument 2")
+
+        with tracer.start_as_current_span("Sleep"):
+            set_category("custom.sleep")
+            time.sleep(0.2)
+
+        performance_task2.delay("argument 3", "argument 4")
     return HttpResponse("I queued an performance_task!")
 
 
