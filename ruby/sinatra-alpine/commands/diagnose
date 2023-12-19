@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd /app
+bundle exec appsignal diagnose --environment=production
