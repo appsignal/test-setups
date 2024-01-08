@@ -14,8 +14,10 @@ RUN apk update && \
       openssl-dev \
       netcat-openbsd \
       git \
-      alpine-sdk \
-      coreutils \
+      make \
+      gcc \
+      musl-dev \
+      musl-utils \
       inotify-tools \
       nodejs \
       npm \
