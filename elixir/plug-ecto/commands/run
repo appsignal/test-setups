@@ -1,0 +1,16 @@
+#!/bin/bash
+set -eu
+
+echo "Running mix local hex and rebar"
+mix local.hex --force
+mix local.rebar --force
+
+echo "Prepare integration"
+cd /integration/appsignal-elixir
+make clean
+
+cd /app
+echo "Running mix deps.get"
+mix deps.get
+
+mix run --no-halt

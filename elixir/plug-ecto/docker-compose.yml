@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: elixir/plug-ecto
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=elixir-plug-ecto
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=elixir/plug-ecto
+      - APP_URL=http://app:4001
