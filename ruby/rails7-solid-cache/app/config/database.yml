@@ -1,8 +1,6 @@
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  host: postgres
-  pool: 5
+  adapter: mysql2
+  host: mysql
   username: app
   password: password
 

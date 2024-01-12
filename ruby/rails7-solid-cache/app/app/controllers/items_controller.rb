@@ -30,7 +30,7 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     @item = Item.new(item_params)
-    @item.description = Array.new(3000) { SecureRandom.hex }.join("")
+    @item.description = Array.new(30) { SecureRandom.hex }.join("")
 
     respond_to do |format|
       if @item.save

@@ -1,22 +1,24 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres
+  mysql:
+    image: mysql
+    cap_add:
+      - SYS_NICE # To silent non-important errors
     env_file:
-      - postgres.env
+      - mysql.env
   app:
     build: .
     image: ruby/rails7-solid-cache
     depends_on:
-      - postgres
+      - mysql
     ports:
       - "4001:4001"
     environment:
-      - APPSIGNAL_APP_NAME=ruby-rails7-solid-cache-2
+      - APPSIGNAL_APP_NAME=ruby-rails7-solid-cache
       - PORT=4001
     env_file:
-      - postgres.env
+      - mysql.env
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
