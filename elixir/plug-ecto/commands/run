@@ -13,4 +13,7 @@ cd /app
 echo "Running mix deps.get"
 mix deps.get
 
+echo "Running migrations"
+mix ecto.migrate
+
 mix run --no-halt

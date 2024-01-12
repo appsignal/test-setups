@@ -1,6 +1,12 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres
+    env_file:
+      - postgres.env
+    ports:
+      - 5432
   app:
     build: .
     image: elixir/plug-ecto
@@ -10,6 +16,7 @@ services:
       - PORT=4001
       - APPSIGNAL_APP_NAME=elixir-plug-ecto
     env_file:
+      - postgres.env
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
