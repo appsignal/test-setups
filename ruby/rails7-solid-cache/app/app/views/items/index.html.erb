@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Items <%= ActiveRecord::Base.connection_pool.stat %></h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @items.each do |item| %>
+      <% cache item do %>
+        <tr>
+          <td><%= item.name %></td>
+          <td><%= item.description %></td>
+          <td><%= link_to 'Show', item %></td>
+          <td><%= link_to 'Edit', edit_item_path(item) %></td>
+          <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <%= Array.new(30000) { "a" }.join("") %>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<%= Item.all %>
+
+<br>
+
+<%= link_to 'New Item', new_item_path %>
