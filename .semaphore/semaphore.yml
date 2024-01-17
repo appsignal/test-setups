@@ -154,9 +154,9 @@ blocks:
         - name: ruby/rails7-sidekiq
           commands:
             - "rake app=ruby/rails7-sidekiq app:test"
-        - name: ruby/sinatra
+        - name: ruby/sinatra-redis
           commands:
-            - "rake app=ruby/sinatra app:test"
+            - "rake app=ruby/sinatra-redis app:test"
         - name: ruby/sinatra-alpine
           commands:
             - "rake app=ruby/sinatra-alpine app:test"

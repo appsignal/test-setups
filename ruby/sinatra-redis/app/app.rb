@@ -1,6 +1,7 @@
 require "active_support"
 require "action_mailer"
 require "sinatra"
+require "redis"
 require "appsignal"
 require "appsignal/integrations/sinatra"
 
@@ -12,6 +13,7 @@ get "/" do
     <ul>
       <li><a href="/slow?time=#{time}">Slow request</a></li>
       <li><a href="/error?time=#{time}">Error request</a></li>
+      <li><a href="/redis?time=#{time}">Redis request</a></li>
       <li><a href="/item/123?time=#{time}">Route with param request</a></li>
     </ul>
   HTML
@@ -32,6 +34,14 @@ get "/error" do
   original_error
 rescue
   raise "I am a wrapper error!"
+end
+
+get "/redis" do
+  redis = Redis.new(url: ENV.fetch("REDIS_URL"))
+  greetings = ["hi", "hello", "howdy"]
+
+  redis.set("greeting", greetings.sample)
+  "Redis says #{redis.get("greeting")}!"
 end
 
 get "/item/:id" do
