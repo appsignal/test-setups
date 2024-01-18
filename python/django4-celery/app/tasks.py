@@ -8,9 +8,11 @@ import redis
 from celery import Celery
 from celery.signals import worker_process_init
 
+
 @worker_process_init.connect(weak=False)
 def init_celery_tracing(*args, **kwargs):
     appsignal.start()
+
 
 app = Celery('tasks', broker='redis://redis')
 app.conf.task_routes = {
@@ -19,12 +21,14 @@ app.conf.task_routes = {
     'tasks.error_task': { 'queue': 'high-priority' }
 }
 
+
 @app.task
 def performance_task(argument1, argument2):
     r = redis.Redis(host='redis', port=6379, db=0)
     r.set('some_key', 'some_value')
     redis_value = r.get('some_key')
     time.sleep(1)
+
 
 @app.task
 def performance_task2(argument1, argument2):
