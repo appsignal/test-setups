@@ -45,6 +45,9 @@ blocks:
         - name: elixir/plug
           commands:
             - "rake app=elixir/plug app:test"
+        - name: elixir/plug-ecto
+          commands:
+            - "rake app=elixir/plug-ecto app:test"
         - name: elixir/plug-oban
           commands:
             - "rake app=elixir/plug-oban app:test"
@@ -172,3 +175,9 @@ blocks:
         - name: python/flask
           commands:
             - "rake app=python/flask app:test"
+        - name: python/fastapi
+          commands:
+            - "rake app=python/fastapi app:test"
+        - name: python/starlette
+          commands:
+            - "rake app=python/starlette app:test"
