@@ -10,6 +10,7 @@ class ExamplesController < ApplicationController
   class StreamingBody
     def each
       yield "1"
+      sleep 0.5
       yield "2"
       yield "3"
       raise "Rails error in streaming body"
