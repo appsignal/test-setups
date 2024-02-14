@@ -12,7 +12,6 @@ cd /app
 echo "Install dependencies"
 bundle config set path vendor/bundle
 bundle install
-yarn install
 
 echo "Clean tmp"
 rm -rf tmp
