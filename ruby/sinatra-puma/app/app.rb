@@ -12,7 +12,7 @@ get "/" do
     <ul>
       <li><a href="/slow?time=#{time}">Slow request</a></li>
       <li><a href="/error?time=#{time}">Error request</a></li>
-      <li><a href="/stream?time=#{time}">Error in response body</a></li>
+      <li><a href="/stream?time=#{time}">Streaming response</a></li>
     </ul>
   HTML
 end
