@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   root :to => "examples#index"
   get "/slow", to: "examples#slow"
   get "/error", to: "examples#error"
+  get "/streaming-error", to: "examples#streaming_error_in_body"
   get "/error_reporter", to: "examples#error_reporter"
   get "/queries", to: "examples#queries"
 end

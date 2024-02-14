@@ -12,6 +12,7 @@ get "/" do
     <ul>
       <li><a href="/slow?time=#{time}">Slow request</a></li>
       <li><a href="/error?time=#{time}">Error request</a></li>
+      <li><a href="/stream?time=#{time}">Streaming response</a></li>
     </ul>
   HTML
 end
@@ -23,4 +24,13 @@ end
 
 get "/error" do
   raise "error"
+end
+
+get "/stream" do
+  stream do |out|
+    out << "a"
+    sleep 0.5
+    out << "b"
+    raise "Ouch"
+  end
 end
