@@ -14,7 +14,7 @@ bundle config set path vendor/bundle
 bundle install
 
 echo "Clean tmp"
-git clean -fx tmp
+rm -rf tmp/pids/*.pid
 
 echo "Run migrations"
 bin/rails db:migrate
