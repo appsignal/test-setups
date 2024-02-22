@@ -10,6 +10,7 @@ echo "Install appsignal"
 cd /app
 
 # Paths for Puma
+rm -rf shared
 mkdir -p shared/sockets shared/pids shared/log
 
 echo "Install dependencies"

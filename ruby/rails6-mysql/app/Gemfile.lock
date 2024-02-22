@@ -1,7 +1,7 @@
 PATH
   remote: /integration
   specs:
-    appsignal (3.4.0)
+    appsignal (3.5.5)
       rack
 
 GEM
@@ -231,7 +231,7 @@ DEPENDENCIES
   webpacker (~> 5.0)
 
 RUBY VERSION
-   ruby 3.2.1p31
+   ruby 3.2.2p53
 
 BUNDLED WITH
-   2.4.11
+   2.5.6

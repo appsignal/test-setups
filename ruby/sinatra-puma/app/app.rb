@@ -12,6 +12,8 @@ get "/" do
     <ul>
       <li><a href="/slow?time=#{time}">Slow request</a></li>
       <li><a href="/error?time=#{time}">Error request</a></li>
+      <li><a href="/stream/slow?time=#{time}">Slow streaming request</a></li>
+      <li><a href="/stream/error?time=#{time}">Streaming request with error</a></li>
     </ul>
   HTML
 end
@@ -23,4 +25,24 @@ end
 
 get "/error" do
   raise "error"
+end
+
+get "/stream/slow" do
+  stream do |out|
+    sleep 1
+    out << "1"
+    sleep 1
+    out << "2"
+    sleep 1
+    out << "3"
+  end
+end
+
+get "/stream/error" do
+  stream do |out|
+    out << "a"
+    sleep 0.5
+    out << "b"
+    raise "Sinatra error in streaming body"
+  end
 end
