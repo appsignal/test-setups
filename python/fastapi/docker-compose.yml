@@ -11,7 +11,7 @@ services:
       - ../../appsignal_key.env
     environment:
       - PORT=4001
-      - APP_NAME=python/fastapi
+      - APPSIGNAL_APP_NAME=python/fastapi
     volumes:
       - ./app:/app
       - ../integration:/integration

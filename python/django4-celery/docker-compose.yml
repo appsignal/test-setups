@@ -25,7 +25,7 @@ services:
       - ../../appsignal_key.env
     environment:
       - PORT=4001
-      - APP_NAME=python/django4-celery
+      - APPSIGNAL_APP_NAME=python/django4-celery
     volumes:
       - ./app:/app
       - ../integration:/integration
