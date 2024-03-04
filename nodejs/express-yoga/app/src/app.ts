@@ -75,9 +75,19 @@ app.get("/slow", async (_req, res) => {
 
 
 app.get("/custom_instrumentation", async (_req, res) => {
-  await trace.getTracer("custom").startActiveSpan("wait.sleep", async (span: Span) => {
-    setCategory("wait.sleep");
-    setName("Do a sleep ZzZzZ");
+  const tracer = trace.getTracer('custom');
+
+  await tracer.startActiveSpan("fetch.company", async (span: Span) => {
+    setCategory("company.get.street.sorci");
+    setName("Fetching company details");
+    setBody("Some span body");
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    span.end();
+  })
+
+  await tracer.startActiveSpan('persist.company', async (span: Span) => {
+    setCategory("company.persist.street.sorci");
+    setName("Persist company details");
     setBody("Some span body");
     await new Promise(resolve => setTimeout(resolve, 1000));
     span.end();
