@@ -10,6 +10,8 @@ import {
 import { UserService } from './user.service';
 import { PostService } from './post.service';
 import { User as UserModel, Post as PostModel } from '@prisma/client';
+import { setCategory, setName } from "@appsignal/nodejs"
+import { trace, Span } from "@opentelemetry/api"
 
 @Controller()
 export class AppController {
@@ -95,6 +97,21 @@ export class AppController {
   @Get("/slow")
   async getSlow(): Promise<string> {
     await new Promise(resolve => setTimeout(resolve, 3000))
+
+    const tracer = trace.getTracer('custom');
+    await tracer.startActiveSpan('Fetching Company', async (span: Span) => {
+      setCategory('first.span.sorci');
+      setName('Fetching first company');
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      span.end();
+    });
+
+    await tracer.startActiveSpan('Coucou Company', async (span: Span) => {
+      setCategory('second.span.sorci');
+      setName('Fetching second company');
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      span.end();
+    });
 
     return "Well, that took forever!"
   }
