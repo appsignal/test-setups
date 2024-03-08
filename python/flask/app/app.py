@@ -11,6 +11,7 @@ from appsignal import (
     send_error,
     set_gauge,
     increment_counter,
+    add_distribution_value
 )
 
 from flask import Flask, request
@@ -84,6 +85,8 @@ def metrics():
     increment_counter("some_counter_with_tags", 1, {"tag1": "value1", "tag2": "value2"})
     set_gauge("some_gauge", randrange(1, 100))
     set_gauge("some_gauge_with_tags", randrange(1, 100), {"tag1": "value1", "tag2": "value2"})
+    add_distribution_value("some_histogram", randrange(1, 100))
+    add_distribution_value("some_histogram_with_tags", randrange(1, 100), {"tag1": "value1", "tag2": "value2"})
 
     return "<p>Emitted some custom metrics!</p>"
 
