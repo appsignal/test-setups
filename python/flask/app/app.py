@@ -1,6 +1,6 @@
 # Important to import and start appsignal before any other imports
 # otherwise the automatic instrumentation won't work
-from __appsignal__ import appsignal
+import appsignal
 appsignal.start()
 
 from appsignal import (

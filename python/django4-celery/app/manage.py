@@ -5,7 +5,7 @@ import sys
 import requests
 import redis
 
-from __appsignal__ import appsignal
+import appsignal
 
 def main():
     """Run administrative tasks."""
