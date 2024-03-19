@@ -4,7 +4,6 @@ Jinja2
 psycopg2
 redis
 requests
-opentelemetry-instrumentation-wsgi
 opentelemetry-instrumentation-celery
 opentelemetry-instrumentation-django
 opentelemetry-instrumentation-psycopg2

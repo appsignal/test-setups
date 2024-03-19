@@ -20,4 +20,5 @@ echo "Running migrations"
 python3 manage.py migrate
 
 echo "Starting app"
+export UVICORN_PORT="$PORT"
 /commands/processmon processmon.toml

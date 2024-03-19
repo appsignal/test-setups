@@ -2,11 +2,9 @@
 path = "/app"
 
 [processes.django]
-command = "python3"
+command = "gunicorn"
 args = [
-  "manage.py",
-  "runserver",
-  "0.0.0.0:4001"
+  "appsignal_python_opentelemetry.wsgi"
 ]
 working_dir = "/app"
 

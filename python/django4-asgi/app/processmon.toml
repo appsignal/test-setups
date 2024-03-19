@@ -4,9 +4,11 @@ path = "/app"
 [processes.django]
 command = "python3"
 args = [
-  "manage.py",
-  "runserver",
-  "0.0.0.0:4001"
+  "-m",
+  "uvicorn",
+  "appsignal_python_opentelemetry.asgi:application",
+  "--host",
+  "0.0.0.0"
 ]
 working_dir = "/app"
 
