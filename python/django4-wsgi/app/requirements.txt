@@ -1,0 +1,13 @@
+celery
+django
+Jinja2
+psycopg2
+redis
+requests
+opentelemetry-instrumentation-wsgi
+opentelemetry-instrumentation-celery
+opentelemetry-instrumentation-django
+opentelemetry-instrumentation-psycopg2
+opentelemetry-instrumentation-redis
+opentelemetry-instrumentation-jinja2
+opentelemetry-instrumentation-requests
