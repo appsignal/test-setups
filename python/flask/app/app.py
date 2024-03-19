@@ -11,13 +11,21 @@ from appsignal import (
     send_error,
     set_gauge,
     increment_counter,
-    add_distribution_value
+    add_distribution_value,
+    probes
 )
 
 from flask import Flask, request
 app = Flask(__name__)
 
 from random import randrange
+
+def report_some_metrics():
+    increment_counter("probe_counter", randrange(1, 100))
+    set_gauge("probe_gauge", randrange(1, 100))
+    add_distribution_value("probe_histogram", randrange(1, 100))
+
+probes.register("report_some_metrics", report_some_metrics)
 
 @app.route("/")
 def home():
