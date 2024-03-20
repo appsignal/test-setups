@@ -1,4 +1,4 @@
-from __appsignal__ import appsignal
+import appsignal
 from starlette.applications import Starlette
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Route

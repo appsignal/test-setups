@@ -1,4 +1,4 @@
-from __appsignal__ import appsignal
+import appsignal
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
