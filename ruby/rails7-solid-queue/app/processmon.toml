@@ -1,0 +1,26 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  "tmp",
+  "log",
+  "node_modules",
+  "public/packs"
+]
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.solid_queue]
+command = "bin/rake"
+args = [
+  "solid_queue:start"
+]
+working_dir = "/app"
+
+[processes.rails]
+command = "bin/rails"
+args = [
+  "server",
+  "--binding=0.0.0.0"
+]
+working_dir = "/app"
