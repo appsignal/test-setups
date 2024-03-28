@@ -24,3 +24,10 @@ args = [
   "--binding=0.0.0.0"
 ]
 working_dir = "/app"
+
+[processes.enqueue_jobs]
+command = "bin/rake"
+args = [
+  "enqueue_jobs"
+]
+working_dir = "/app"
