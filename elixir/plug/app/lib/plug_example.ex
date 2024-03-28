@@ -19,6 +19,14 @@ defmodule PlugExample do
     raise "Whoops!"
   end
 
+  get "/heartbeats" do
+    Appsignal.heartbeat("custom-heartbeat", fn ->
+      :timer.sleep(3000)
+    end)
+
+    send_resp(conn, 200, "Heartbeat sent!")
+  end
+
   get "/custom_instrumentation" do
     Appsignal.Span.set_namespace(Appsignal.Tracer.root_span(), "custom")
 
