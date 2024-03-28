@@ -14,6 +14,7 @@ get "/" do
       <li><a href="/error?time=#{time}">Error request</a></li>
       <li><a href="/stream/slow?time=#{time}">Slow streaming request</a></li>
       <li><a href="/stream/error?time=#{time}">Streaming request with error</a></li>
+      <li><a href="/heartbeat?time=#{time}">Custom heartbeat</a></li>
     </ul>
   HTML
 end
@@ -45,4 +46,12 @@ get "/stream/error" do
     out << "b"
     raise "Sinatra error in streaming body"
   end
+end
+
+get "/heartbeat" do
+  Appsignal.heartbeat("custom-heartbeat") do
+    sleep 3
+  end
+
+  "Heartbeat sent!"
 end
