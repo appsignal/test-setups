@@ -1,3 +1,9 @@
+PATH
+  remote: /integration
+  specs:
+    appsignal (3.6.4)
+      rack
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -68,8 +74,6 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
-    appsignal (3.4.1)
-      rack
     bindex (0.8.1)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
@@ -214,7 +218,7 @@ PLATFORMS
   aarch64-linux
 
 DEPENDENCIES
-  appsignal (~> 3.2)
+  appsignal!
   bootsnap
   capybara
   debug

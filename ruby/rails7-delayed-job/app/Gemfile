@@ -63,4 +63,4 @@ end
 
 gem "delayed_job_active_record", "~> 4.1"
 
-gem "appsignal", "~> 3.2"
+gem "appsignal", :path => "/integration"

@@ -61,6 +61,6 @@ group :test do
   gem "webdrivers"
 end
 
-gem "appsignal", "~> 3.2"
+gem 'appsignal', :path => '/integration'
 
 gem "solid_queue"
