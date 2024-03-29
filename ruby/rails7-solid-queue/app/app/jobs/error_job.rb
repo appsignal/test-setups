@@ -1,5 +1,5 @@
 class ErrorJob < ApplicationJob
-  def deliver(argument)
+  def perform(argument)
     raise "Error #{argument}"
   end
 end
