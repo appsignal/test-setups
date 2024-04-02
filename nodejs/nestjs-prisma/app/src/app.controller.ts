@@ -82,20 +82,25 @@ export class AppController {
     return this.postService.deletePost({ id: Number(id) });
   }
 
-  @Get("/")
+  @Get('/')
   getHome(): string {
-    return "Hello, world!"
+    return (
+      '<h1>Next.js + Prisma test app</h1><ul>' +
+      '<li><a href="/error">GET /error</a></li>' +
+      '<li><a href="/slow">GET /slow</a></li>' +
+      '</ul>'
+    );
   }
 
-  @Get("/error")
+  @Get('/error')
   getError(): string {
-    throw new Error("Expected test error")
+    throw new Error('Expected test error');
   }
 
-  @Get("/slow")
+  @Get('/slow')
   async getSlow(): Promise<string> {
-    await new Promise(resolve => setTimeout(resolve, 3000))
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    return "Well, that took forever!"
+    return 'Well, that took forever!';
   }
 }
