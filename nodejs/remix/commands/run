@@ -6,7 +6,6 @@ echo "Install link and build integration"
 (
 cd /integration
 git config --global --add safe.directory /integration # avoid git fatal errors about dubious ownership
-git checkout main
 touch ~/.bashrc # hack to make the mono installer happy
 script/setup
 mono bootstrap
