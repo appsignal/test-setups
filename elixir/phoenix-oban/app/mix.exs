@@ -34,6 +34,7 @@ defmodule TestApp.MixProject do
     [
       {:phoenix, "~> 1.7.11"},
       {:phoenix_ecto, "~> 4.4"},
+      {:oban, "~> 2.17"},
       {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
       {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true},
       {:appsignal_phoenix, path: "#{integration_path()}/appsignal-elixir-phoenix", override: true},

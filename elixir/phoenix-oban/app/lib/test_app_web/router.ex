@@ -20,6 +20,8 @@ defmodule TestAppWeb.Router do
     get "/", PageController, :home
     get "/slow", PageController, :slow
     get "/error", PageController, :error
+    get "/slow_job", PageController, :slow_job
+    get "/error_job", PageController, :error_job
   end
 
   # Other scopes may use custom stacks.

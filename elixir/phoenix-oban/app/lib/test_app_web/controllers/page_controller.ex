@@ -13,6 +13,24 @@ defmodule TestAppWeb.PageController do
   end
 
   def error(_conn, _params) do
-    raise "This is a Phoenix error!"
+    raise "This is an error!"
+  end
+
+  def slow_job(conn, _params) do
+    TestApp.PerformanceWorker.new(%{a: "b"})
+    |> Oban.insert()
+
+    conn
+    |> put_flash(:info, "Queued slow job")
+    |> redirect(to: "/")
+  end
+
+  def error_job(conn, _params) do
+    TestApp.ErrorWorker.new(%{a: "b"})
+    |> Oban.insert()
+
+    conn
+    |> put_flash(:info, "Queued error job")
+    |> redirect(to: "/")
   end
 end

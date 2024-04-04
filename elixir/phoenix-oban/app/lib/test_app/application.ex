@@ -7,6 +7,8 @@ defmodule TestApp.Application do
 
   @impl true
   def start(_type, _args) do
+    Oban.Telemetry.attach_default_logger()
+
     children = [
       TestAppWeb.Telemetry,
       TestApp.Repo,
@@ -17,7 +19,8 @@ defmodule TestApp.Application do
       # Start a worker by calling: TestApp.Worker.start_link(arg)
       # {TestApp.Worker, arg},
       # Start to serve requests, typically the last entry
-      TestAppWeb.Endpoint
+      TestAppWeb.Endpoint,
+      {Oban, Application.fetch_env!(:test_app, Oban)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
