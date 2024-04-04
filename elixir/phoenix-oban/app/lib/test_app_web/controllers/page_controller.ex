@@ -33,4 +33,13 @@ defmodule TestAppWeb.PageController do
     |> put_flash(:info, "Queued error job")
     |> redirect(to: "/")
   end
+
+  def user_job(conn, _params) do
+    TestApp.UserWorker.new(%{name: "Tom", email: "tom@example.com"})
+    |> Oban.insert()
+
+    conn
+    |> put_flash(:info, "Queued user job")
+    |> redirect(to: "/")
+  end
 end
