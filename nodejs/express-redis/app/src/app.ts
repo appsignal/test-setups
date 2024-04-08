@@ -1,10 +1,11 @@
 import express from "express"
 import { createClient } from "redis"
 import ioredis from "ioredis"
-import { setTag, setCustomData, expressErrorHandler, WinstonTransport } from "@appsignal/nodejs"
+import { setTag, setCustomData, expressErrorHandler, WinstonTransport, heartbeat } from "@appsignal/nodejs"
 import { trace } from "@opentelemetry/api"
 import cookieParser from "cookie-parser"
 import winston from "winston"
+
 const { combine, label, printf } = winston.format;
 
 const customLogLevels = {
@@ -110,6 +111,14 @@ app.get("/slow", async (_req: any, res: any) => {
 
 app.get("/route-param/:id", (req, res) => {
   res.send(`Route parameter <code>id</code>: ${req.params.id}`)
+})
+
+app.get("/heartbeat", async (req, res) => {
+  await heartbeat("custom-heartbeat", () => 
+    new Promise((resolve) => setTimeout(resolve, 3000))
+  )
+  
+  res.send("Heartbeat sent!")
 })
 
 app.use(expressErrorHandler())
