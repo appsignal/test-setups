@@ -12,13 +12,15 @@ from appsignal import (
     set_gauge,
     increment_counter,
     add_distribution_value,
-    probes
+    probes,
+    Heartbeat
 )
 
 from flask import Flask, request
 app = Flask(__name__)
 
 from random import randrange
+from time import sleep
 
 def report_some_metrics():
     increment_counter("probe_counter", randrange(1, 100))
@@ -97,6 +99,13 @@ def metrics():
     add_distribution_value("some_histogram_with_tags", randrange(1, 100), {"tag1": "value1", "tag2": "value2"})
 
     return "<p>Emitted some custom metrics!</p>"
+
+@app.route("/heartbeat")
+def heartbeat():
+    with Heartbeat("custom-heartbeat"):
+        sleep(3)
+
+    return "<p>Sent a heartbeat!</p>"
 
 @app.route("/custom", methods=["GET", "POST"])
 def custom():
