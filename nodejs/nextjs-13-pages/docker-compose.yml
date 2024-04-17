@@ -7,10 +7,11 @@ services:
       - "4001:4001"
     environment:
       - PORT=4001
-      - APPSIGNAL_APP_NAME=nodejs-nextjs-14-noappdir
+      - APPSIGNAL_APP_NAME=nodejs-nextjs-13-pages
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env
+      - ./appsignal_key.env
     volumes:
       - ./app:/app
       - ../integration:/integration
@@ -23,4 +24,4 @@ services:
       - app
     environment:
       - APP_URL=http://app:4001
-      - APP_NAME=nodejs/nextjs-14-noappdir
+      - APP_NAME=nodejs/nextjs-13-pages

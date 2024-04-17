@@ -109,13 +109,19 @@ blocks:
         - name: nodejs/nestjs
           commands:
             - "rake app=nodejs/nestjs app:test"
-        - name: nodejs/nextjs
+        - name: nodejs/nextjs-13-app
           commands:
-            - "rake app=nodejs/nextjs app:test"
-        - name: nodejs/nextjs-noappdir
+            - "rake app=nodejs/nextjs-13-app app:test"
+        - name: nodejs/nextjs-13-pages
           commands:
-            - echo "NEXT_PUBLIC_APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000" > nodejs/nextjs-noappdir/appsignal_key.env
-            - "rake app=nodejs/nextjs-noappdir app:test"
+            - echo "NEXT_PUBLIC_APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000" > nodejs/nextjs-13-pages/appsignal_key.env
+            - "rake app=nodejs/nextjs-13-pages app:test"
+        - name: nodejs/nextjs-14-app
+          commands:
+            - "rake app=nodejs/nextjs-14-app app:test"
+        - name: nodejs/nextjs-14-pages
+          commands:
+            - "rake app=nodejs/nextjs-14-pages app:test"
         - name: nodejs/nestjs-prisma
           commands:
             - "rake app=nodejs/nestjs-prisma app:test"
