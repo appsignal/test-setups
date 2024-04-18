@@ -25,6 +25,7 @@ To start a test setup:
 ```
 rake app=elixir/alpine-release app:up
 rake app=elixir/phoenix-example app:up
+rake app=elixir/phoenix-oban app:up
 rake app=elixir/plug app:up
 rake app=elixir/plug-ecto app:up
 rake app=elixir/plug-oban app:up
@@ -63,8 +64,10 @@ rake app=nodejs/koa-mongo app:up
 rake app=nodejs/koa-mysql app:up
 rake app=nodejs/nestjs app:up
 rake app=nodejs/nestjs-prisma app:up
-rake app=nodejs/nextjs app:up
-rake app=nodejs/nextjs-noappdir app:up
+rake app=nodejs/nextjs-13-app app:up
+rake app=nodejs/nextjs-13-pages app:up
+rake app=nodejs/nextjs-14-app app:up
+rake app=nodejs/nextjs-14-pages app:up
 rake app=nodejs/remix app:up
 rake app=nodejs/restify app:up
 rake app=javascript/Dockerfile app:up
@@ -86,6 +89,7 @@ To restart the app container after making changes to an integration:
 ```
 rake app=elixir/alpine-release app:restart
 rake app=elixir/phoenix-example app:restart
+rake app=elixir/phoenix-oban app:restart
 rake app=elixir/plug app:restart
 rake app=elixir/plug-ecto app:restart
 rake app=elixir/plug-oban app:restart
@@ -124,8 +128,10 @@ rake app=nodejs/koa-mongo app:restart
 rake app=nodejs/koa-mysql app:restart
 rake app=nodejs/nestjs app:restart
 rake app=nodejs/nestjs-prisma app:restart
-rake app=nodejs/nextjs app:restart
-rake app=nodejs/nextjs-noappdir app:restart
+rake app=nodejs/nextjs-13-app app:restart
+rake app=nodejs/nextjs-13-pages app:restart
+rake app=nodejs/nextjs-14-app app:restart
+rake app=nodejs/nextjs-14-pages app:restart
 rake app=nodejs/remix app:restart
 rake app=nodejs/restify app:restart
 rake app=javascript/Dockerfile app:restart
@@ -143,6 +149,7 @@ To run bash:
 ```
 rake app=elixir/alpine-release app:bash
 rake app=elixir/phoenix-example app:bash
+rake app=elixir/phoenix-oban app:bash
 rake app=elixir/plug app:bash
 rake app=elixir/plug-ecto app:bash
 rake app=elixir/plug-oban app:bash
@@ -181,8 +188,10 @@ rake app=nodejs/koa-mongo app:bash
 rake app=nodejs/koa-mysql app:bash
 rake app=nodejs/nestjs app:bash
 rake app=nodejs/nestjs-prisma app:bash
-rake app=nodejs/nextjs app:bash
-rake app=nodejs/nextjs-noappdir app:bash
+rake app=nodejs/nextjs-13-app app:bash
+rake app=nodejs/nextjs-13-pages app:bash
+rake app=nodejs/nextjs-14-app app:bash
+rake app=nodejs/nextjs-14-pages app:bash
 rake app=nodejs/remix app:bash
 rake app=nodejs/restify app:bash
 rake app=javascript/Dockerfile app:bash
@@ -200,6 +209,7 @@ To run the console (if implemented in the test app):
 ```
 rake app=elixir/alpine-release app:console
 rake app=elixir/phoenix-example app:console
+rake app=elixir/phoenix-oban app:console
 rake app=elixir/plug app:console
 rake app=elixir/plug-ecto app:console
 rake app=elixir/plug-oban app:console
@@ -238,8 +248,10 @@ rake app=nodejs/koa-mongo app:console
 rake app=nodejs/koa-mysql app:console
 rake app=nodejs/nestjs app:console
 rake app=nodejs/nestjs-prisma app:console
-rake app=nodejs/nextjs app:console
-rake app=nodejs/nextjs-noappdir app:console
+rake app=nodejs/nextjs-13-app app:console
+rake app=nodejs/nextjs-13-pages app:console
+rake app=nodejs/nextjs-14-app app:console
+rake app=nodejs/nextjs-14-pages app:console
 rake app=nodejs/remix app:console
 rake app=nodejs/restify app:console
 rake app=javascript/Dockerfile app:console
@@ -257,6 +269,7 @@ To send in a diagnose (if implemented in the test app);
 ```
 rake app=elixir/alpine-release app:diagnose
 rake app=elixir/phoenix-example app:diagnose
+rake app=elixir/phoenix-oban app:diagnose
 rake app=elixir/plug app:diagnose
 rake app=elixir/plug-ecto app:diagnose
 rake app=elixir/plug-oban app:diagnose
@@ -295,8 +308,10 @@ rake app=nodejs/koa-mongo app:diagnose
 rake app=nodejs/koa-mysql app:diagnose
 rake app=nodejs/nestjs app:diagnose
 rake app=nodejs/nestjs-prisma app:diagnose
-rake app=nodejs/nextjs app:diagnose
-rake app=nodejs/nextjs-noappdir app:diagnose
+rake app=nodejs/nextjs-13-app app:diagnose
+rake app=nodejs/nextjs-13-pages app:diagnose
+rake app=nodejs/nextjs-14-app app:diagnose
+rake app=nodejs/nextjs-14-pages app:diagnose
 rake app=nodejs/remix app:diagnose
 rake app=nodejs/restify app:diagnose
 rake app=javascript/Dockerfile app:diagnose
@@ -314,6 +329,7 @@ Tail the appsignal log:
 ```
 rake app=elixir/alpine-release app:tail:appsignal
 rake app=elixir/phoenix-example app:tail:appsignal
+rake app=elixir/phoenix-oban app:tail:appsignal
 rake app=elixir/plug app:tail:appsignal
 rake app=elixir/plug-ecto app:tail:appsignal
 rake app=elixir/plug-oban app:tail:appsignal
@@ -352,8 +368,10 @@ rake app=nodejs/koa-mongo app:tail:appsignal
 rake app=nodejs/koa-mysql app:tail:appsignal
 rake app=nodejs/nestjs app:tail:appsignal
 rake app=nodejs/nestjs-prisma app:tail:appsignal
-rake app=nodejs/nextjs app:tail:appsignal
-rake app=nodejs/nextjs-noappdir app:tail:appsignal
+rake app=nodejs/nextjs-13-app app:tail:appsignal
+rake app=nodejs/nextjs-13-pages app:tail:appsignal
+rake app=nodejs/nextjs-14-app app:tail:appsignal
+rake app=nodejs/nextjs-14-pages app:tail:appsignal
 rake app=nodejs/remix app:tail:appsignal
 rake app=nodejs/restify app:tail:appsignal
 rake app=javascript/Dockerfile app:tail:appsignal
