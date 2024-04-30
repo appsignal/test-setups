@@ -1,5 +1,4 @@
 flask<3
 opentelemetry-instrumentation-flask
 opentelemetry-instrumentation-sqlalchemy
-opentelemetry-instrumentation-sqlite3
 sqlalchemy
