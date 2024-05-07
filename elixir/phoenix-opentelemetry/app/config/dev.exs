@@ -86,3 +86,13 @@ config :phoenix_live_view,
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+# config :opentelemetry, traces_exporter: {:otel_exporter_stdout, []}
+
+config :opentelemetry,
+  span_processor: :batch,
+  traces_exporter: :otlp
+
+config :opentelemetry_exporter,
+  otlp_protocol: :http_protobuf,
+  otlp_endpoint: "http://appsignal-agent:8099/enriched"
