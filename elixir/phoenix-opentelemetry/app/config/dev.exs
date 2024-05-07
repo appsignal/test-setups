@@ -2,10 +2,11 @@ import Config
 
 # Configure your database
 config :elixir_phoenix_opentelemetry, ElixirPhoenixOpentelemetry.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "elixir_phoenix_opentelemetry_dev",
+  username: System.get_env("POSTGRES_USER", "postgres"),
+  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
+  database: System.get_env("POSTGRES_DB", "appsignal_opentelemetry_example_dev"),
+  hostname: System.get_env("POSTGRES_HOST", "localhost"),
+  port: System.get_env("POSTGRES_PORT", "5432"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
