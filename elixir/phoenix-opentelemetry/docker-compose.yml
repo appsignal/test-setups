@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - postgres.env
+    ports:
+      - 5432
+  app:
+    build: .
+    image: elixir/phoenix-opentelemetry
+    depends_on:
+      - postgres
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=elixir-phoenix-opentelemetry
+      - INTEGRATION_PATH=/integration
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=elixir/phoenix-opentelemetry
+      - APP_URL=http://app:4001
