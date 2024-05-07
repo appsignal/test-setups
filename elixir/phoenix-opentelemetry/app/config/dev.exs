@@ -22,7 +22,7 @@ config :elixir_phoenix_opentelemetry, ElixirPhoenixOpentelemetryWeb.Endpoint,
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
-  code_reloader: true,
+  code_reloader: false,
   debug_errors: true,
   secret_key_base: "B4/cJA23PurQGGkI5IWHbBnTNPnC+a/ntw3n917pDrRP/4/RXeKQqa3K59twH3n4",
   watchers: [
