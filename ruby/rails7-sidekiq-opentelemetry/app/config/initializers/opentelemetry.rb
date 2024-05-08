@@ -2,7 +2,12 @@ require "opentelemetry/sdk"
 require "opentelemetry/instrumentation/all"
 
 OpenTelemetry::SDK.configure do |c|
-  c.service_name = "Rails server"
+  c.service_name =
+    if Sidekiq.server?
+      "Sidekiq worker"
+    else
+      "Rails server"
+    end
   c.resource = OpenTelemetry::SDK::Resources::Resource.create(
     "appsignal.config.app_name" => ENV.fetch("APPSIGNAL_APP_NAME"),
     "appsignal.config.app_environment" => ENV.fetch("APPSIGNAL_APP_ENV"),
