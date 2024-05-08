@@ -121,6 +121,15 @@ app.get("/heartbeat", async (req, res) => {
   res.send("Heartbeat sent!")
 })
 
+app.get("/fetch", async (req, res, next) => {
+  try {
+    const response = await fetch("https://google.com")
+    res.send(`Fetched google.com: status code ${response.status}`)
+  } catch (e) {
+    next(e)
+  }
+})
+
 app.use(expressErrorHandler())
 
 app.listen(port, () => {
