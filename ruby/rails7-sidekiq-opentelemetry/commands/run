@@ -13,4 +13,5 @@ rm -rf tmp/pids/*.pid
 echo "Run migrations"
 bin/rails db:migrate
 
-/commands/processmon processmon.toml
+tail -f /dev/null
+# /commands/processmon processmon.toml

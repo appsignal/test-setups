@@ -6,7 +6,7 @@ services:
   redis:
     image: "redis:6.2.7"
   appsignal-agent:
-    image: appsignal/agent:latest
+    image: appsignal/agent:local_linux_amd64
     environment:
       - APPSIGNAL_APP_NAME=ruby/rails-sidekiq-opentelemetry
       - APPSIGNAL_APP_ENV=development
