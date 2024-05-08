@@ -14,7 +14,11 @@ OpenTelemetry::SDK.configure do |c|
     "appsignal.config.push_api_key" => ENV.fetch("APPSIGNAL_PUSH_API_KEY"),
     "appsignal.config.app_path" => Rails.root.to_s
   )
-  c.use_all() # enables all instrumentation!
+  c.use_all(
+    "OpenTelemetry::Instrumentation::Sidekiq" => {
+      :span_naming => :job_class
+    },
+  ) # enables all instrumentation
 end
 
 puts "!!! opentelemetry start"
