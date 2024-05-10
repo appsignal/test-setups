@@ -1,7 +1,7 @@
 PATH
   remote: /integration
   specs:
-    appsignal (3.4.13)
+    appsignal (3.6.4)
       rack
 
 GEM
@@ -135,6 +135,8 @@ GEM
     nio4r (2.5.9)
     nokogiri (1.15.4-aarch64-linux)
       racc (~> 1.4)
+    nokogiri (1.15.4-x86_64-linux)
+      racc (~> 1.4)
     pg (1.5.4)
     psych (5.1.0)
       stringio
@@ -210,6 +212,10 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    view_component (3.12.1)
+      activesupport (>= 5.2.0, < 8.0)
+      concurrent-ruby (~> 1.0)
+      method_source (~> 1.0)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -229,6 +235,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  x86_64-linux
 
 DEPENDENCIES
   appsignal!
@@ -246,6 +253,7 @@ DEPENDENCIES
   stimulus-rails
   turbo-rails
   tzinfo-data
+  view_component
   web-console
   webdrivers
 
