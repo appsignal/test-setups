@@ -68,4 +68,6 @@ end
 gem "sequel-rails", "~> 1.2"
 gem "pg", "~> 1.5"
 
+gem "view_component"
+
 gem "appsignal", :path => "/integration"
