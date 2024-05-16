@@ -1,3 +1,9 @@
+class CustomWrapperError < StandardError
+end
+
+class CustomError < StandardError
+end
+
 class ExamplesController < ApplicationController
   def slow
     sleep 3
@@ -5,6 +11,12 @@ class ExamplesController < ApplicationController
 
   def error
     raise "This is a Rails error!"
+  end
+
+  def error_with_cause
+    internal_error
+    rescue => e
+      raise CustomWrapperError, "wrapped error"
   end
 
   def error_reporter
@@ -22,5 +34,9 @@ class ExamplesController < ApplicationController
       User.create!(:name => "User ##{user_count + i}")
     end
     @users = User.all
+  end
+
+  def internal_error
+    raise CustomError, "Hello error"
   end
 end
