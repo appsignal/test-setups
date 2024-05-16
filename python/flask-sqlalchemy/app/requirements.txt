@@ -1,4 +1,4 @@
-flask<3
+flask>=3
 opentelemetry-instrumentation-flask
 opentelemetry-instrumentation-sqlalchemy
 sqlalchemy
