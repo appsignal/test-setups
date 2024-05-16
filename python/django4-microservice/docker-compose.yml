@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - postgres.env
+  redis:
+    image: "redis:6.2.7"
+
+  appsignal-agent:
+    image: appsignal/agent:latest
+    environment:
+      - APPSIGNAL_APP_NAME=unset-app-name
+      - APPSIGNAL_APP_ENV=unset-app-env
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal_key.env
+
+  app:
+    build: .
+    image: python/django4-microservice-parent
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "4001:4001"
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=python/django4-microservice
+      - APPSIGNAL_APP_ENV=development
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+
+  app_child:
+    build: .
+    image: python/django4-microservice-child
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "4002:4002"
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    environment:
+      - PORT=4002
+      - APPSIGNAL_APP_NAME=python/django4-microservice
+      - APPSIGNAL_APP_ENV=development
+    volumes:
+      - ./app2:/app
+      - ../integration:/integration
+
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=python/django4-celery
+      - APP_URL=http://app:4001
