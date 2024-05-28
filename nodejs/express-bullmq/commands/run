@@ -1,0 +1,31 @@
+#!/bin/bash
+
+echo "Install, build and link integration"
+(
+cd /integration
+npm install
+npm run build
+npm link
+)
+
+echo "Build and link BullMQ instrumentation"
+(
+cd /bullmq
+npm install
+npm run compile
+npm link
+)
+
+cd /app
+
+echo "Installing app dependencies"
+npm install
+
+echo "Linking integration"
+npm link @appsignal/nodejs @jenniferplusplus/opentelemetry-instrumentation-bullmq
+
+echo "Building app"
+npm run build
+
+echo "Starting test app server"
+/commands/processmon processmon.toml

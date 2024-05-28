@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ ! -d "../opentelemetry-instrumentation-bullmq" ]; then
+  echo "Cloning opentelemetry-instrumentation-bullmq"
+  git clone https://github.com/unflxw/opentelemetry-instrumentation-bullmq.git \
+    ../opentelemetry-instrumentation-bullmq
+else
+  echo "Not cloning opentelemetry-instrumentation-bullmq; already present"
+fi

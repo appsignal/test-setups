@@ -79,6 +79,9 @@ blocks:
         - name: javascript/vue-3
           commands:
             - "rake app=javascript/vue-3 app:test"
+        - name: nodejs/express-bullmq
+          commands:
+            - "rake app=nodejs/express-bullmq app:test"
         - name: nodejs/express-postgres
           commands:
             - "rake app=nodejs/express-postgres app:test"

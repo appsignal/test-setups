@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis
+  app:
+    build: .
+    image: nodejs/express-bullmq
+    depends_on:
+      - redis
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=nodejs-express-bullmq
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    working_dir: /
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+      - ../opentelemetry-instrumentation-bullmq:/bullmq
+  tests:
+    image: server-tests
+    build: ../../support/server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=nodejs/express-bullmq
+      - APP_URL=http://app:4001
