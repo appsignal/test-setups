@@ -27,6 +27,10 @@ defmodule AppsignalPhoenixExample.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
+  defp integration_path do
+    System.get_env("INTEGRATION_PATH", "../../integration")
+  end
+
   # Specifies your project dependencies.
   #
   # Type `mix help deps` for examples and options.
@@ -57,7 +61,10 @@ defmodule AppsignalPhoenixExample.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.2"}
+      {:bandit, "~> 1.2"},
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
+      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true},
+      {:appsignal_phoenix, path: "#{integration_path()}/appsignal-elixir-phoenix", override: true}
     ]
   end
 
