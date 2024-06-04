@@ -18,6 +18,11 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+  forward("/api", Absinthe.Plug, schema: AppsignalPhoenixExampleWeb.Schema)
+
+  if Mix.env() == :dev do
+    forward("/graphiql", Absinthe.Plug.GraphiQL, schema: AppsignalPhoenixExampleWeb.Schema)
   end
 
   # Other scopes may use custom stacks.
