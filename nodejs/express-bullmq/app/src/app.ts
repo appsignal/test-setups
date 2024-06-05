@@ -1,6 +1,6 @@
 import express from "express"
 import { expressErrorHandler } from "@appsignal/nodejs"
-import { Job, Queue, Worker } from "bullmq"
+import { Job, JobsOptions, Queue, Worker } from "bullmq"
 import { sampleJobProcessor } from "./worker"
 
 const connection = {
@@ -27,6 +27,7 @@ app.get("/", (_req: any, res: any) => {
       <li><a href="/slow">Slow</a></li>
       <li><a href="/queue/external">Queue a job to be processed by an external worker</a></li>
       <li><a href="/queue/process">Queue a job to be processed within the server process</a></li>
+      <li><a href="/queue/error">Queue a job that will fail and be re-attempted</a></li>
     </ul>
   </body></html>`)
 })
@@ -36,16 +37,24 @@ function sampleName() {
   return names[Math.floor(Math.random() * names.length)];
 }
 
-async function addSampleJob(queue: Queue): Promise<Job> {
+async function addSampleJob(
+  queue: Queue,
+  data: Record<string, any> = {},
+  opts: JobsOptions = {}
+): Promise<Job> {
   const name = sampleName();
   const jobName = `cookies for ${name}`;
-  return await externalQueue.add(jobName, { name: name }, { delay: 5000 });
+  return await queue.add(jobName, { name: name, ...data }, { delay: 2000, ...opts });
 }
 
-function addQueueRequestHandler(queue: Queue) {
+function addQueueRequestHandler(
+  queue: Queue,
+  data: Record<string, any> = {},
+  opts: JobsOptions = {}
+) {
   return async (req: any, res: any, next: any) => {
     try {
-      const job = await addSampleJob(queue);
+      const job = await addSampleJob(queue, data, opts);
       res.send(`Job ${job.id} ("${job.name}") added to queue ${queue.name}`);
     } catch (e) {
       next(e)
@@ -56,6 +65,8 @@ function addQueueRequestHandler(queue: Queue) {
 app.get("/queue/external", addQueueRequestHandler(externalQueue))
 
 app.get("/queue/process", addQueueRequestHandler(processQueue))
+
+app.get("/queue/error", addQueueRequestHandler(processQueue, { fail: "once" }, { attempts: 5 }))
 
 app.get("/error", (_req: any, _res: any) => {
   throw new Error("Expected test error!")
