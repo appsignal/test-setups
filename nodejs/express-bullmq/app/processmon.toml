@@ -4,9 +4,6 @@ path = "/app"
 [[paths_to_watch]]
 path = "/integration"
 
-[[paths_to_watch]]
-path = "/bullmq"
-
 [processes.server]
 command = "npm"
 args = ["run", "server"]
@@ -21,8 +18,3 @@ working_dir = "/app"
 command = "mono"
 args = ["build"]
 working_dir = "/integration"
-
-[triggers.build_bullmq]
-command = "npm"
-args = ["run", "compile"]
-working_dir = "/bullmq"

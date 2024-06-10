@@ -20,7 +20,6 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
-      - ../opentelemetry-instrumentation-bullmq:/bullmq
   tests:
     image: server-tests
     build: ../../support/server-tests

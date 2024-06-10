@@ -8,21 +8,11 @@ npm run build
 npm link
 )
 
-echo "Build and link BullMQ instrumentation"
-(
-cd /bullmq
-npm install
-npm run compile
-npm link
-)
-
 cd /app
 
-echo "Installing app dependencies"
-npm install
-
-echo "Linking integration"
-npm link @appsignal/nodejs @jenniferplusplus/opentelemetry-instrumentation-bullmq
+echo "Installing dependencies and linking integration"
+# Implicitly runs npm install
+npm link @appsignal/nodejs
 
 echo "Building app"
 npm run build
