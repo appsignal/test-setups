@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc --version; tsc -p tsconfig.json",
     "server": "node --require ./src/appsignal.cjs dist/app.js",
-    "worker": "node --require ./src/appsignal.cjs dist/worker.js"
+    "worker": "sleep 1; node --require ./src/appsignal.cjs dist/worker.js"
   },
   "author": "",
   "license": "ISC",
