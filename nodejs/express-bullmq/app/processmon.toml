@@ -1,0 +1,20 @@
+[[paths_to_watch]]
+path = "/app"
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.server]
+command = "npm"
+args = ["run", "server"]
+working_dir = "/app"
+
+[processes.worker]
+command = "npm"
+args = ["run", "worker"]
+working_dir = "/app"
+
+[triggers.build_integration]
+command = "mono"
+args = ["build"]
+working_dir = "/integration"

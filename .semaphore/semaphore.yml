@@ -27,7 +27,7 @@ blocks:
                 rake global:install_processmon
                 cache store $CACHE_VERSION-processmon support/processmon/processmon
               fi
-  - name: Run tests for each test setup
+  - name: Run tests for Elixir test setups
     dependencies: ["Build processmon"]
     task:
       prologue:
@@ -54,6 +54,15 @@ blocks:
         - name: elixir/plug-oban
           commands:
             - "rake app=elixir/plug-oban app:test"
+  - name: Run tests for Go test setups
+    dependencies: ["Build processmon"]
+    task:
+      prologue:
+        commands:
+          - "cache restore $CACHE_VERSION-processmon"
+          - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
+          - "rake integrations:clone"
+      jobs:
         - name: go/beego
           commands:
             - "rake app=go/beego app:test"
@@ -63,6 +72,15 @@ blocks:
         - name: go/gorilla-mux-mysql-redis-mongo
           commands:
             - "rake app=go/gorilla-mux-mysql-redis-mongo app:test"
+  - name: Run tests for JavaScript test setups
+    dependencies: ["Build processmon"]
+    task:
+      prologue:
+        commands:
+          - "cache restore $CACHE_VERSION-processmon"
+          - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
+          - "rake integrations:clone"
+      jobs:
         - name: javascript/react
           commands:
             - "rake app=javascript/react app:test"
@@ -79,6 +97,18 @@ blocks:
         - name: javascript/vue-3
           commands:
             - "rake app=javascript/vue-3 app:test"
+  - name: Run tests for Node.js test setups
+    dependencies: ["Build processmon"]
+    task:
+      prologue:
+        commands:
+          - "cache restore $CACHE_VERSION-processmon"
+          - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
+          - "rake integrations:clone"
+      jobs:
+        - name: nodejs/express-bullmq
+          commands:
+            - "rake app=nodejs/express-bullmq app:test"
         - name: nodejs/express-postgres
           commands:
             - "rake app=nodejs/express-postgres app:test"
@@ -131,6 +161,15 @@ blocks:
         - name: nodejs/remix
           commands:
             - "rake app=nodejs/remix app:test"
+  - name: Run tests for Ruby test setups
+    dependencies: ["Build processmon"]
+    task:
+      prologue:
+        commands:
+          - "cache restore $CACHE_VERSION-processmon"
+          - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
+          - "rake integrations:clone"
+      jobs:
         - name: ruby/jruby-rails6
           commands:
             - "rake app=ruby/jruby-rails6 app:test"
@@ -178,6 +217,15 @@ blocks:
         - name: ruby/webmachine
           commands:
             - "rake app=ruby/webmachine app:test"
+  - name: Run tests for Python test setups
+    dependencies: ["Build processmon"]
+    task:
+      prologue:
+        commands:
+          - "cache restore $CACHE_VERSION-processmon"
+          - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
+          - "rake integrations:clone"
+      jobs:
         - name: python/django4-celery
           commands:
             - "rake app=python/django4-celery app:test"

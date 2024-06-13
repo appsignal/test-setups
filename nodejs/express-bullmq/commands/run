@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo "Install, build and link integration"
+(
+cd /integration
+npm install
+npm run build
+npm link
+)
+
+cd /app
+
+echo "Installing dependencies and linking integration"
+# Implicitly runs npm install
+npm link @appsignal/nodejs
+
+echo "Building app"
+npm run build
+
+echo "Starting test app server"
+/commands/processmon processmon.toml

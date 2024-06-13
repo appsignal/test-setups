@@ -1,6 +1,7 @@
 **/tmp/**
 **/vendor/**
 */integration
+nodejs/opentelemetry-instrumentation-bullmq
 .DS_Store
 appsignal_key.env
 .env
