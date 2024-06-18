@@ -1,0 +1,4 @@
+flask>=3
+pika>=1.2
+opentelemetry-instrumentation-flask
+opentelemetry-instrumentation-pika
