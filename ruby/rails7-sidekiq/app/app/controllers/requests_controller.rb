@@ -2,12 +2,12 @@ class RequestsController < ApplicationController
   skip_forgery_protection
 
   def perform_excon_get
-    handle_response Excon.get("http://localhost:3000/requests/excon_get")
+    handle_response Excon.get("http://localhost:4001/requests/excon_get?query=param")
   end
 
   def perform_excon_post
     handle_response Excon.post(
-      "http://localhost:3000/requests/excon_post",
+      "http://localhost:4001/requests/excon_post",
       :body => URI.encode_www_form(:language => "ruby", :class => "fog"),
       :headers => { "Content-Type" => "application/x-www-form-urlencoded" }
     )
@@ -15,7 +15,7 @@ class RequestsController < ApplicationController
 
   def perform_excon_put
     handle_response Excon.put(
-      "http://localhost:3000/requests/excon_put",
+      "http://localhost:4001/requests/excon_put",
       :body => URI.encode_www_form(:language => "ruby", :class => "fog"),
       :headers => { "Content-Type" => "application/x-www-form-urlencoded" }
     )
@@ -23,22 +23,22 @@ class RequestsController < ApplicationController
 
   def perform_excon_delete
     handle_response Excon.delete(
-      "http://localhost:3000/requests/excon_delete",
+      "http://localhost:4001/requests/excon_delete",
       :body => URI.encode_www_form(:language => "ruby", :class => "fog"),
       :headers => { "Content-Type" => "application/x-www-form-urlencoded" }
     )
   end
 
   def perform_excon_head
-    handle_response Excon.head("http://localhost:3000/requests/excon_get")
+    handle_response Excon.head("http://localhost:4001/requests/excon_get")
   end
 
   def perform_excon_options
-    handle_response Excon.options("http://localhost:3000/requests/excon_options")
+    handle_response Excon.options("http://localhost:4001/requests/excon_options")
   end
 
   def perform_excon_trace
-    handle_response Excon.trace("http://localhost:3000/requests/excon_trace")
+    handle_response Excon.trace("http://localhost:4001/requests/excon_trace")
   end
 
   def handle_response(response)
