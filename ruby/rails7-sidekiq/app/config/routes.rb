@@ -1,6 +1,20 @@
 require "sidekiq/web"
+require 'sinatra/base'
+require "appsignal/integrations/sinatra"
+
+class SinatraApp < Sinatra::Base
+  get '/' do
+    'Hello from Sinatra!'
+  end
+
+  get '/example' do
+    'This is an example route in Sinatra.'
+  end
+end
 
 Rails.application.routes.draw do
+  mount SinatraApp, at: "/sinatra"
+
   resources :workers do
     collection do
       get :queue

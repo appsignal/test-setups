@@ -5,6 +5,8 @@ ruby "3.1.2"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.0"
+gem "sinatra"
+gem "sinatra-contrib", require: false
 
 gem "sidekiq", "~> 7.1.6"
 gem "appsignal", :path => "/integration"
