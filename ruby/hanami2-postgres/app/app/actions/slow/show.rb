@@ -1,9 +1,10 @@
 module Hanami2Postgres
   module Actions
-    module Home
+    module Slow
       class Show < Hanami2Postgres::Action
         def handle(request, response)
-          response.body = "Hello from action #{self.class.name}: #{request.params.to_h}"
+          sleep 3
+          response.body = "Well that was slow"
         end
       end
     end

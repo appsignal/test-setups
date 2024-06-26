@@ -1,9 +1,9 @@
 module Hanami2Postgres
   module Actions
-    module Home
+    module Errors
       class Show < Hanami2Postgres::Action
         def handle(request, response)
-          response.body = "Hello from action #{self.class.name}: #{request.params.to_h}"
+          raise "This is an error from an Hanami action"
         end
       end
     end
