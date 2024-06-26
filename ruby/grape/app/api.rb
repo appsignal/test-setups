@@ -27,58 +27,73 @@ module MyApp
     insert_before Grape::Middleware::Error, Appsignal::Grape::Middleware
   end
 
-  class PostsAPI < BaseAPI
-    version "v1", :using => :header, :vendor => :unknown
-    format :json
-    prefix :api
+  module PostsAPI
+    class V2 < BaseAPI
+      version "v2", :using => :accept_version_header
+      format :json
+      prefix :api
 
-    resource :posts do
-      desc "Return a list of posts."
-      get do
-        Posts.all
-      end
-
-      desc "Return a post."
-      params do
-        requires :id, :type => Integer, :desc => "Post ID."
-      end
-      route_param :id do
+      resource :posts do
+        desc "Return a list of posts."
         get do
-          Posts.find_by_id(params[:id])
+          Posts.all.reverse
+        end
+
+        desc "Return a post."
+        params do
+          requires :id, :type => Integer, :desc => "Post ID."
+        end
+        route_param :id do
+          get do
+            Posts.find_by_id(params[:id])
+          end
+        end
+
+        desc "Create a post."
+        params do
+          requires :title, :type => String, :desc => "Post title"
+        end
+        post do
+          post_id = Posts.max_post_id + 1
+          post = { :id => post_id, :title => params[:title] }
+          Posts.all << post
+          post
+        end
+
+        desc "Update a post."
+        params do
+          requires :id, :type => Integer, :desc => "Post ID."
+          requires :title, :type => String, :desc => "Post title"
+        end
+        put ":id" do
+          post = Posts.find_by_id(params[:id])
+          post[:title] = params[:title]
+          post
+        end
+
+        desc "Delete a post."
+        params do
+          requires :id, :type => Integer, :desc => "Post ID."
+        end
+        delete ":id" do
+          unless Posts.find_by_id(params[:id])
+            raise "Post with id '#{params[:id]}' not found!"
+          end
+          Posts.all.delete_if { |post| post[:id] == params[:id] }
         end
       end
+    end
 
-      desc "Create a post."
-      params do
-        requires :title, :type => String, :desc => "Post title"
-      end
-      post do
-        post_id = Posts.max_post_id + 1
-        post = { :id => post_id, :title => params[:title] }
-        Posts.all << post
-        post
-      end
+    class V1 < BaseAPI
+      version "v1", :using => :accept_version_header
+      format :json
+      prefix :api
 
-      desc "Update a post."
-      params do
-        requires :id, :type => Integer, :desc => "Post ID."
-        requires :title, :type => String, :desc => "Post title"
-      end
-      put ":id" do
-        post = Posts.find_by_id(params[:id])
-        post[:title] = params[:title]
-        post
-      end
-
-      desc "Delete a post."
-      params do
-        requires :id, :type => Integer, :desc => "Post ID."
-      end
-      delete ":id" do
-        unless Posts.find_by_id(params[:id])
-          raise "Post with id '#{params[:id]}' not found!"
+      resource :posts do
+        desc "Return a list of posts."
+        get do
+          Posts.all
         end
-        Posts.all.delete_if { |post| post[:id] == params[:id] }
       end
     end
   end
@@ -87,7 +102,8 @@ module MyApp
     version "v1", :using => :header, :vendor => :unknown
     content_type :html, "text/html"
     format :html
-    mount PostsAPI
+    mount PostsAPI::V2
+    mount PostsAPI::V1
 
     desc "Index page"
     get do
@@ -113,7 +129,8 @@ module MyApp
         <ul>
           <li><a href="/slow">Slow request</a></li>
           <li><a href="/error">Error request</a></li>
-          <li><a href="/api/posts">Posts API index <code>/api/posts</code></a></li>
+          <li><a href="/api/posts">Posts API v2 index <code>/api/posts</code></a></li>
+          <li>Posts API v1 index: <code>curl -H Content-Type:application/json -H Accept-Version:v2 http://localhost:4001/api/posts</code></a></li>
         </ul>
 
         <h2>Posts</h2>

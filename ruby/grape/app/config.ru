@@ -1,7 +1,7 @@
 require "appsignal"
 
 Appsignal.config = Appsignal::Config.new(
-  File.expand_path("../", __FILE__),
+  Dir.pwd,
   ENV.fetch("RACK_ENV", "development")
 )
 Appsignal.start
