@@ -176,6 +176,9 @@ blocks:
         - name: ruby/hanami2-postgres
           commands:
             - "rake app=ruby/hanami2-postgres app:test"
+        - name: ruby/rack
+          commands:
+            - "rake app=ruby/rack app:test"
         - name: ruby/padrino
           commands:
             - "rake app=ruby/padrino app:test"
