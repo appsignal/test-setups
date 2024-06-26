@@ -1,0 +1,17 @@
+#!/bin/bash
+set -eu
+
+echo "Install AppSignal gem extension"
+(
+  cd /integration
+  rake extension:install
+)
+
+cd /app
+
+echo "Install dependencies"
+bundle config set --local path "vendor/bundle"
+bundle install
+
+echo "Starting app"
+/commands/processmon processmon.toml
