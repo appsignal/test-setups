@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.8
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  app:
+    build: .
+    image: python/flask
+    ports:
+      - "4001:4001"
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=python/flask-pika
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=python/flask-pika
+      - APP_URL=http://app:4001
