@@ -173,6 +173,9 @@ blocks:
         - name: ruby/jruby-rails6
           commands:
             - "rake app=ruby/jruby-rails6 app:test"
+        - name: ruby/grape
+          commands:
+            - "rake app=ruby/grape app:test"
         - name: ruby/hanami2-postgres
           commands:
             - "rake app=ruby/hanami2-postgres app:test"

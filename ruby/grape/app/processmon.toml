@@ -1,0 +1,15 @@
+[[paths_to_watch]]
+path = "/app"
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.rack]
+command = "bundle"
+args = [
+  "exec",
+  "puma",
+  "--environment=development",
+  "--port=4001"
+]
+working_dir = "/app"
