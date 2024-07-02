@@ -5,7 +5,6 @@ Appsignal.config = Appsignal::Config.new(
   Dir.pwd,
   "development"
 )
-Appsignal.start_logger
 Appsignal.start
 
 Webmachine.application.configure do |config|

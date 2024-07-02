@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+gem "webmachine", "~> 2.0"
+gem "webrick"
+gem "appsignal", :path => "/integration"
+gem "pry"
+gem "rackup"
