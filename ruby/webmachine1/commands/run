@@ -10,4 +10,5 @@ echo "Install dependencies"
 bundle config set --local path 'vendor/bundle'
 bundle install
 
+echo "Starting app"
 /commands/processmon processmon.toml

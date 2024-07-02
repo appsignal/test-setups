@@ -223,9 +223,12 @@ blocks:
         - name: ruby/sinatra-puma
           commands:
             - "rake app=ruby/sinatra-puma app:test"
-        - name: ruby/webmachine
+        - name: ruby/webmachine1
           commands:
-            - "rake app=ruby/webmachine app:test"
+            - "rake app=ruby/webmachine1 app:test"
+        - name: ruby/webmachine2
+          commands:
+            - "rake app=ruby/webmachine2 app:test"
   - name: Run tests for Python test setups
     dependencies: ["Build processmon"]
     task:
