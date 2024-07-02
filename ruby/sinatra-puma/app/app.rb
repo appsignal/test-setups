@@ -1,5 +1,4 @@
 require "sinatra"
-require "appsignal"
 require "appsignal/integrations/sinatra"
 
 get "/" do

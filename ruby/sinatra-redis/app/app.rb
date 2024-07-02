@@ -2,7 +2,6 @@ require "active_support"
 require "action_mailer"
 require "sinatra"
 require "redis"
-require "appsignal"
 require "appsignal/integrations/sinatra"
 
 get "/" do
