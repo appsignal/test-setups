@@ -1,6 +1,6 @@
 [[paths_to_watch]]
 path = "/app"
-ignore = ["prisma/dev.db", "prisma/dev.db-journal"]
+ignore = ["prisma/dev.db", "prisma/dev.db-journal", "dist"]
 
 [[paths_to_watch]]
 path = "/integration"
