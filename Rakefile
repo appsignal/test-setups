@@ -25,7 +25,7 @@ def reset_repo(path, branch: "main")
   if File.exist?(path)
     puts "Resetting #{path}"
     run_command "cd #{path} && git fetch origin"
-    run_command "cd #{path} && git switch #{branch}"
+    run_command "cd #{path} && git switch -f #{branch}"
     run_command "cd #{path} && git reset --hard origin/#{branch}"
   else
     puts "#{path} not present"
