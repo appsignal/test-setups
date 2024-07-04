@@ -27,6 +27,7 @@ def reset_repo(path, branch: "main")
     run_command "cd #{path} && git fetch origin"
     run_command "cd #{path} && git switch -f #{branch}"
     run_command "cd #{path} && git reset --hard origin/#{branch}"
+    run_command "cd #{path} && git clean -dfx ."
   else
     puts "#{path} not present"
   end
