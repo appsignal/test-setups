@@ -8,6 +8,9 @@ if (chatRoomId) {
   consumer.subscriptions.create({ channel: "ChatRoomChannel", chat_room_id: chatRoomId }, {
     connected() {
       console.log(`Subscribed to ${chatRoomId}`)
+      // You would do this from the channel itself, but this triggers an action
+      // in the Channel so that we can test if instrument the action.
+      this.perform("add_connected_message")
     },
 
     disconnected() {

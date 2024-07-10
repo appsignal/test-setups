@@ -17,4 +17,12 @@ class ChatRoomChannel < ApplicationCable::Channel
     data.delete("action")
     transmit data
   end
+
+  def add_connected_message
+    message = ChatMessage.new(
+      :body => "You're connected to the chat room!",
+      :created_at => Time.zone.now,
+    )
+    transmit message
+  end
 end
