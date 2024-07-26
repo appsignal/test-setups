@@ -14,6 +14,7 @@ get "/" do
       <li><a href="/stream/slow?time=#{time}">Slow streaming request</a></li>
       <li><a href="/stream/error?time=#{time}">Streaming request with error</a></li>
       <li><a href="/heartbeat?time=#{time}">Custom heartbeat</a></li>
+      <li><a href="/errors?time=#{time}">Multiple errors with custom instrumentation</a></li>
     </ul>
   HTML
 end
@@ -25,6 +26,31 @@ end
 
 get "/error" do
   raise "error"
+end
+
+class SomeCustomError < StandardError
+end
+
+class AnotherCustomError < StandardError
+end
+
+get "/errors" do
+  transaction = Appsignal::Transaction.current
+
+  [SomeCustomError, AnotherCustomError, StandardError].each do |cls|
+    begin
+      raise cls.new("I am one of multiple errors")
+    rescue => e
+      transaction.add_error(e)
+    end
+  end
+
+  Appsignal.set_custom_data({
+    "time" => Time.now.to_s,
+    "custom" => "data"
+  })
+
+  "Errors sent!"
 end
 
 get "/stream/slow" do
