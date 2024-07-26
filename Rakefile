@@ -11,13 +11,14 @@ def get_app
   end.delete_suffix("/")
 end
 
-def clone_from_git(path, repo)
+def clone_from_git(path, repo, branch: nil)
   if File.exist?(path)
     puts "#{path} already present"
-    reset_repo(path)
+    reset_repo(path, :branch => branch)
   else
     puts "Cloning #{repo} into #{path}"
-    run_command "git clone git@github.com:appsignal/#{repo}.git #{path}"
+    branch_arg = "--branch #{branch}" if branch
+    run_command "git clone #{branch_arg} git@github.com:appsignal/#{repo}.git #{path}"
   end
 end
 
@@ -238,7 +239,7 @@ namespace :integrations do
   desc "Clone and reset integrations"
   task :clone do
     # Clone Ruby
-    clone_from_git("ruby/integration", "appsignal-ruby")
+    clone_from_git("ruby/integration", "appsignal-ruby", :branch => "main")
     # Clone Elixir, it currently consists of multiple repos
     FileUtils.mkdir_p("elixir/integration")
     clone_from_git("elixir/integration/appsignal-elixir", "appsignal-elixir")
