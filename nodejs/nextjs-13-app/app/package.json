@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_OPTIONS=--enable-source-maps next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@appsignal/nodejs": "^3.0.17",
+    "@appsignal/nodejs": "latest",
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
