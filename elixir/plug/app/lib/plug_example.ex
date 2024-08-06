@@ -19,12 +19,12 @@ defmodule PlugExample do
     raise "Whoops!"
   end
 
-  get "/heartbeats" do
-    Appsignal.heartbeat("custom-heartbeat", fn ->
+  get "/cron" do
+    Appsignal.CheckIn.cron("custom-cron-checkin", fn ->
       :timer.sleep(3000)
     end)
 
-    send_resp(conn, 200, "Heartbeat sent!")
+    send_resp(conn, 200, "Cron check-in sent!")
   end
 
   get "/custom_instrumentation" do

@@ -13,8 +13,8 @@ get "/" do
       <li><a href="/error?time=#{time}">Error request</a></li>
       <li><a href="/stream/slow?time=#{time}">Slow streaming request</a></li>
       <li><a href="/stream/error?time=#{time}">Streaming request with error</a></li>
-      <li><a href="/heartbeat?time=#{time}">Custom heartbeat</a></li>
       <li><a href="/errors?time=#{time}">Multiple errors with custom instrumentation</a></li>
+      <li><a href="/cron?time=#{time}">Custom cron check-in</a></li>
     </ul>
   HTML
 end
@@ -73,10 +73,10 @@ get "/stream/error" do
   end
 end
 
-get "/heartbeat" do
-  Appsignal.heartbeat("custom-heartbeat") do
+get "/cron" do
+  Appsignal::CheckIn.cron("custom-cron-checkin") do
     sleep 3
   end
 
-  "Heartbeat sent!"
+  "Cron check-in sent!"
 end

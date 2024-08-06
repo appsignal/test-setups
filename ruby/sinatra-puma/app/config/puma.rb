@@ -15,7 +15,7 @@ shared_dir = "#{app_dir}/shared"
 environment "production"
 
 # Set up socket location
-bind "unix:///#{shared_dir}/sockets/puma.sock"
+bind "unix:///var/run/puma.sock"
 
 # stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
 
