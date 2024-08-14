@@ -40,6 +40,7 @@ def home():
         <li><a href="/hello/world"><kbd>/hello/&lt;name&gt;</kbd> &rarr; Use parameterised routing</a></li>
         <li><a href="/metrics"><kbd>/metrics</kbd> &rarr; Emit custom metrics</a></li>
         <li><a href="/custom"><kbd>/custom</kbd> &rarr; Use sample data helpers (send a POST request with JSON for params!)</a></li>
+        <li><a href="/cron"><kbd>/cron</kbd> &rarr; Send a cron check-in</a></li>
         </ul>
     """
 
@@ -99,14 +100,14 @@ def metrics():
 
     return "<p>Emitted some custom metrics!</p>"
 
-@app.route("/heartbeat")
-def heartbeat():
-    from appsignal import Heartbeat
+@app.route("/cron")
+def cron():
+    from appsignal.check_in import Cron
 
-    with Heartbeat("custom-heartbeat"):
+    with Cron("custom-cron-checkin"):
         sleep(3)
 
-    return "<p>Sent a heartbeat!</p>"
+    return "<p>Sent a cron check-in!</p>"
 
 @app.route("/custom", methods=["GET", "POST"])
 def custom():
