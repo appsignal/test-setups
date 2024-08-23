@@ -1,11 +1,11 @@
-FROM ruby:3.0
+FROM ruby:2.7
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2021-02-16
+ENV REFRESHED_AT=2024-06-24
 
 RUN apt-get update && apt-get install -y less
 
-RUN gem update --system && gem install bundler
+RUN gem install bundler -v 2.4.22
 
 # Copy commands into the container
 RUN mkdir /commands
