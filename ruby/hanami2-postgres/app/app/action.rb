@@ -11,7 +11,7 @@ module Hanami2Postgres
 
     def handle_standard_error(request, response, exception)
       # Report the error to AppSignal
-      Appsignal.set_error(exception)
+      Appsignal.report_error(exception)
 
       # Render custom error page
       response.status = 500
