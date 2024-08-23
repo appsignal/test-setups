@@ -239,7 +239,7 @@ namespace :integrations do
   desc "Clone and reset integrations"
   task :clone do
     # Clone Ruby
-    clone_from_git("ruby/integration", "appsignal-ruby", :branch => "main")
+    clone_from_git("ruby/integration", "appsignal-ruby")
     # Clone Elixir, it currently consists of multiple repos
     FileUtils.mkdir_p("elixir/integration")
     clone_from_git("elixir/integration/appsignal-elixir", "appsignal-elixir")
