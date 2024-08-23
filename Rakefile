@@ -165,7 +165,7 @@ namespace :app do
   task :bash do
     @app = get_app
     puts "Starting bash in #{@app}"
-    run_command "cd #{@app} && docker-compose exec app /bin/bash"
+    run_command "cd #{@app} && docker-compose exec --workdir /app app /bin/bash"
   end
 
   desc "Attach to app and get a console"
