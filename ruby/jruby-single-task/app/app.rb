@@ -7,11 +7,7 @@ require "securerandom"
 # Setup AppSignal
 require "appsignal"
 require "appsignal/integrations/object"
-Appsignal.config = Appsignal::Config.new(
-  File.expand_path(File.dirname(__FILE__)),
-  "production"
-)
-Appsignal.start_logger
+
 Appsignal.start
 
 at_exit do

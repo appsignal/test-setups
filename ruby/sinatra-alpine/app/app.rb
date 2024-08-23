@@ -2,7 +2,10 @@ require "active_support"
 require "action_mailer"
 require "sinatra"
 require "appsignal"
-require "appsignal/integrations/sinatra"
+require "appsignal"
+
+Appsignal.load(:sinatra)
+Appsignal.start
 
 get "/" do
   time = Time.now.strftime("%H:%M")

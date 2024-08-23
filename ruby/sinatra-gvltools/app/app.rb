@@ -2,7 +2,9 @@ require "active_support"
 require "action_mailer"
 require "sinatra"
 require "appsignal"
-require "appsignal/integrations/sinatra"
+
+Appsignal.load(:sinatra)
+Appsignal.start
 
 get "/" do
   time = Time.now.strftime("%H:%M")
@@ -31,7 +33,7 @@ get "/threads" do
   end.each do |thread|
     thread.join
   end
-  
+
   "Spawned and joined some threads!"
 end
 
