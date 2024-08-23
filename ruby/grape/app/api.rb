@@ -1,5 +1,4 @@
 require "grape"
-require "appsignal/integrations/grape"
 
 # In memory database for posts
 class Posts
@@ -24,7 +23,7 @@ end
 
 module MyApp
   class BaseAPI < Grape::API
-    insert_before Grape::Middleware::Error, Appsignal::Grape::Middleware
+    insert_before Grape::Middleware::Error, Appsignal::Rack::GrapeMiddleware
   end
 
   module PostsAPI

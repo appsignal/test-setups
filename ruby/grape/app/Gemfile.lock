@@ -1,7 +1,7 @@
 PATH
   remote: /integration
   specs:
-    appsignal (3.9.1)
+    appsignal (4.0.0)
       rack
 
 GEM

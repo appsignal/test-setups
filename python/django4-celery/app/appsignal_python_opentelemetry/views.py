@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+from random import randrange
 
 from opentelemetry import trace
 
@@ -19,7 +20,10 @@ from appsignal import (
     set_root_name,
     set_category,
     set_name,
-    set_body
+    set_body,
+    set_gauge,
+    increment_counter,
+    add_distribution_value
 )
 
 
@@ -101,6 +105,13 @@ def custom_instrumentation(request):
             set_category("sleep.time")
             time.sleep(0.2)
     return HttpResponse("I reported some custom instrumentation!")
+
+
+def metrics(request):
+    increment_counter("python_counter", randrange(1, 100))
+    set_gauge("python_gauge", randrange(1, 100))
+    add_distribution_value("python_distribution", randrange(1, 100))
+    return HttpResponse("I reported some metrics instrumentation!")
 
 
 class MyException(Exception):

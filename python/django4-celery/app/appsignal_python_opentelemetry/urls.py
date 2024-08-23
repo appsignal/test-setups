@@ -32,5 +32,6 @@ urlpatterns = [
     path('error_queue_inline/', views.error_queue_inline, name='error_queue_inline'),
     path('make_request/', views.make_request, name='make_request'),
     path('custom_instrumentation/', views.custom_instrumentation, name='custom_instrumentation'),
+    path('metrics/', views.metrics, name='metrics'),
     path('blog/', include("blog.urls"))
 ]

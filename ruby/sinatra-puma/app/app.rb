@@ -1,22 +1,32 @@
+require "appsignal"
 require "sinatra"
-require "appsignal/integrations/sinatra"
+
+Appsignal.load(:sinatra)
+Appsignal.start
 
 get "/" do
-  time = Time.now.strftime("%H:%M")
-  <<~HTML
-    <h1>Sinatra + Puma example app</h1>
+  time =
+    Appsignal.instrument "fetch.time" do
+      Time.now.strftime("%H:%M")
+    end
+  Appsignal.instrument "render.view" do
+    <<~HTML
+      <h1>Sinatra + Puma example app</h1>
 
-    <p>Run the <code>console</code> command for this app to "phased restart" this app.</p>
+      <p>Run the <code>console</code> command for this app to "phased restart" this app.</p>
 
-    <ul>
-      <li><a href="/slow?time=#{time}">Slow request</a></li>
-      <li><a href="/error?time=#{time}">Error request</a></li>
-      <li><a href="/stream/slow?time=#{time}">Slow streaming request</a></li>
-      <li><a href="/stream/error?time=#{time}">Streaming request with error</a></li>
-      <li><a href="/errors?time=#{time}">Multiple errors with custom instrumentation</a></li>
-      <li><a href="/cron?time=#{time}">Custom cron check-in</a></li>
-    </ul>
-  HTML
+      <ul>
+        <li><a href="/slow?time=#{time}">Slow request</a></li>
+        <li><a href="/error?time=#{time}">Error request</a></li>
+        <li><a href="/stream/slow?time=#{time}">Slow streaming request</a></li>
+        <li><a href="/stream/error?time=#{time}">Streaming request with error</a></li>
+        <li><a href="/heartbeat?time=#{time}">Custom heartbeat</a></li>
+        <li><a href="/errors?time=#{time}">Multiple errors with custom instrumentation</a></li>
+        <li><a href="/array?time=#{time}">Array response body</a></li>
+        <li><a href="/cron?time=#{time}">Custom cron check-in</a></li>
+      </ul>
+    HTML
+  end
 end
 
 get "/slow" do
@@ -54,6 +64,7 @@ get "/errors" do
 end
 
 get "/stream/slow" do
+  sleep 0.5
   stream do |out|
     sleep 1
     out << "1"
@@ -79,4 +90,29 @@ get "/cron" do
   end
 
   "Cron check-in sent!"
+end
+
+class MyResponseBody
+  def initialize
+    @body = []
+  end
+
+  def <<(value)
+    @body << value
+  end
+
+  def to_ary
+    @body
+  end
+end
+
+get "/array" do
+  body = MyResponseBody.new
+  Appsignal.instrument "do.stuff" do
+    body << "abc"
+    Appsignal.instrument "do_more.stuff" do
+      body << "def"
+    end
+  end
+  [200, body]
 end

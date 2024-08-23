@@ -1,10 +1,6 @@
 require "webmachine"
 require "appsignal"
 
-Appsignal.config = Appsignal::Config.new(
-  Dir.pwd,
-  "development"
-)
 Appsignal.start
 
 Webmachine.application.configure do |config|

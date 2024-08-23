@@ -1,6 +1,7 @@
 require "sidekiq/web"
 require 'sinatra/base'
-require "appsignal/integrations/sinatra"
+
+Appsignal.load(:sinatra)
 
 class SinatraApp < Sinatra::Base
   get '/' do

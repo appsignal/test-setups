@@ -1,6 +1,8 @@
 require "sinatra"
 require "appsignal"
-require "appsignal/integrations/sinatra"
+
+Appsignal.load(:sinatra)
+Appsignal.start
 
 ARM_ARCH = "aarch64".freeze
 

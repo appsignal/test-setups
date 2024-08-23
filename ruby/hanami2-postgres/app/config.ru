@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
+require "appsignal"
 require "hanami/boot"
-require "appsignal/integrations/hanami"
 
-pp Hanami.app.config
+Appsignal.load(:hanami)
+Appsignal.start
 
 run Hanami.app

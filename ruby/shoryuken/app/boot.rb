@@ -2,12 +2,7 @@ require "shoryuken"
 require "json"
 require "appsignal"
 
-Appsignal.config = Appsignal::Config.new(
-  File.expand_path(File.dirname(__FILE__)),
-  "production"
-)
 Appsignal.start
-Appsignal.start_logger
 
 Shoryuken.configure_client do |config|
   config.sqs_client = Aws::SQS::Client.new(
