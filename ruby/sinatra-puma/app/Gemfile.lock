@@ -1,20 +1,19 @@
 PATH
   remote: /integration
   specs:
-    appsignal (3.5.5)
+    appsignal (4.0.0)
       rack
 
 GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.2.0)
-    multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.7.0)
     puma (6.4.2)
       nio4r (~> 2.0)
-    rack (3.0.9)
+    rack (3.1.7)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)
@@ -27,12 +26,6 @@ GEM
       rack-protection (= 4.0.0)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sinatra-contrib (4.0.0)
-      multi_json (>= 0.0.2)
-      mustermann (~> 3.0)
-      rack-protection (= 4.0.0)
-      sinatra (= 4.0.0)
-      tilt (~> 2.0)
     tilt (2.3.0)
 
 PLATFORMS
@@ -42,7 +35,6 @@ DEPENDENCIES
   appsignal!
   puma
   sinatra
-  sinatra-contrib
 
 BUNDLED WITH
    2.2.33

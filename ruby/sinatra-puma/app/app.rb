@@ -1,5 +1,8 @@
+require "appsignal"
 require "sinatra"
-require "appsignal/integrations/sinatra"
+
+Appsignal.load(:sinatra)
+Appsignal.start
 
 get "/" do
   time = Time.now.strftime("%H:%M")
