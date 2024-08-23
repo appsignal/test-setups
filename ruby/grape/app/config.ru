@@ -1,15 +1,12 @@
 require "appsignal"
-
-Appsignal.config = Appsignal::Config.new(
-  Dir.pwd,
-  ENV.fetch("RACK_ENV", "development")
-)
-Appsignal.start
-Appsignal.start_logger
-
-require_relative "api"
+require "grape"
 
 use ::Rack::Events, [Appsignal::Rack::EventHandler.new]
+
+Appsignal.load(:grape)
+Appsignal.start
+
+require_relative "api"
 
 MyApp::API.compile!
 run MyApp::API
