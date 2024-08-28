@@ -1,4 +1,9 @@
 class ExamplesController < ApplicationController
+  def index
+    session[:user_id] = :some_user_id_123
+    session[:menu] = { :state => :open, :view => :full }
+  end
+
   def slow
     sleep 3
   end
