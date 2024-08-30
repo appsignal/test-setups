@@ -8,7 +8,7 @@ ignore = [
 
 [[paths_to_watch]]
 path = "/integration"
-ignore = ["appsignal-elixir/priv"]
+ignore = ["appsignal-elixir/_build", "appsignal-elixir/priv"]
 
 [processes.app]
 command = "elixir"
