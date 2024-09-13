@@ -24,6 +24,7 @@ get "/" do
         <li><a href="/errors?time=#{time}">Multiple errors with custom instrumentation</a></li>
         <li><a href="/array?time=#{time}">Array response body</a></li>
         <li><a href="/cron?time=#{time}">Custom cron check-in</a></li>
+        <li><a href="/heartbeat?time=#{time}">Custom heartbeat check-in</a></li>
       </ul>
     HTML
   end
@@ -91,6 +92,14 @@ get "/cron" do
 
   "Cron check-in sent!"
 end
+
+get "/heartbeat" do
+  Appsignal::CheckIn.heartbeat("custom-heartbeat-checkin")
+
+  "Heartbeat check-in sent!"
+end
+
+Appsignal::CheckIn.heartbeat("continuous-heartbeat-checkin", continuous: true)
 
 class MyResponseBody
   def initialize
