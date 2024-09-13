@@ -27,6 +27,12 @@ defmodule PlugExample do
     send_resp(conn, 200, "Cron check-in sent!")
   end
 
+  get "/heartbeat" do
+    Appsignal.CheckIn.heartbeat("custom-heartbeat-checkin")
+
+    send_resp(conn, 200, "Heartbeat check-in sent!")
+  end
+
   get "/custom_instrumentation" do
     Appsignal.Span.set_namespace(Appsignal.Tracer.root_span(), "custom")
 

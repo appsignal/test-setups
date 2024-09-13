@@ -9,7 +9,8 @@ defmodule PlugExample.Application do
   def start(_type, _args) do
     port = String.to_integer(System.get_env("PORT") || "4000")
     children = [
-      {Plug.Cowboy, scheme: :http, plug: PlugExample, options: [port: port]}
+      {Plug.Cowboy, scheme: :http, plug: PlugExample, options: [port: port]},
+      {Appsignal.CheckIn.Heartbeat, "continuous-heartbeat-checkin"}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
