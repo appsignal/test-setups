@@ -121,6 +121,14 @@ app.get("/cron", async (req, res) => {
   res.send("Cron check-in sent!")
 })
 
+app.get("/heartbeat", async (req, res) => {
+  checkIn.heartbeat("custom-heartbeat-checkin")
+
+  res.send("Heartbeat check-in sent!")
+})
+
+checkIn.heartbeat("continuous-heartbeat-checkin", {continuous: true})
+
 app.get("/fetch", async (req, res, next) => {
   try {
     const response = await fetch("https://google.com")
