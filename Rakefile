@@ -51,7 +51,7 @@ def child_processes
 end
 
 # "Trap" an interrupt from the user and wait for the child processes to end
-# first before exiting this process. Docker-compose if interrupted gracefully
+# first before exiting this process. Docker compose if interrupted gracefully
 # stops all its containers first before truely exiting, wait for this graceful
 # exit.
 Signal.trap "INT" do
@@ -136,7 +136,7 @@ namespace :app do
     if build_args
       options = "--build-arg=#{build_args}"
     end
-    run_command "cd #{@app} && docker-compose build #{options}"
+    run_command "cd #{@app} && docker compose build #{options}"
 
     puts "Cleaning processmon"
     FileUtils.rm_f "#{@app}/commands/processmon"
@@ -147,7 +147,7 @@ namespace :app do
     build_app
 
     puts "Starting compose..."
-    run_command "cd #{@app} && docker-compose up --abort-on-container-exit"
+    run_command "cd #{@app} && docker compose up --abort-on-container-exit"
   end
 
   desc "Start a test app and run the tests on it"
@@ -155,17 +155,17 @@ namespace :app do
     build_app
 
     puts "Building the tests container..."
-    run_command "cd #{@app} && docker-compose build --build-arg TESTING=true tests"
+    run_command "cd #{@app} && docker compose build --build-arg TESTING=true tests"
 
     puts "Starting compose with the tests..."
-    run_command "cd #{@app} && docker-compose --profile tests up --abort-on-container-exit --exit-code-from tests"
+    run_command "cd #{@app} && docker compose --profile tests up --abort-on-container-exit --exit-code-from tests"
   end
 
   desc "Attach to app and get bash"
   task :bash do
     @app = get_app
     puts "Starting bash in #{@app}"
-    run_command "cd #{@app} && docker-compose exec --workdir /app app /bin/bash"
+    run_command "cd #{@app} && docker compose exec --workdir /app app /bin/bash"
   end
 
   desc "Attach to app and get a console"
@@ -173,7 +173,7 @@ namespace :app do
     @app = get_app
     if File.exist?("#{@app}/commands/console")
       puts "Starting console in #{@app}"
-      run_command "cd #{@app} && docker-compose exec app /commands/console"
+      run_command "cd #{@app} && docker compose exec app /commands/console"
     else
       puts "Starting a console in #{@app} is not supported"
     end
@@ -184,7 +184,7 @@ namespace :app do
     @app = get_app
     if File.exist?("#{@app}/commands/diagnose")
       puts "Runing diagnose in #{@app}"
-      run_command "cd #{@app} && docker-compose exec app /commands/diagnose"
+      run_command "cd #{@app} && docker compose exec app /commands/diagnose"
     else
       puts "Running diagnose in #{@app} is not supported"
     end
@@ -195,7 +195,7 @@ namespace :app do
     @app = get_app
     if File.exist?("#{@app}/commands/demo")
       puts "Runing demo in #{@app}"
-      run_command "cd #{@app} && docker-compose exec app /commands/demo"
+      run_command "cd #{@app} && docker compose exec app /commands/demo"
     else
       puts "Running demo in #{@app} is not supported"
     end
@@ -205,14 +205,14 @@ namespace :app do
   task :restart do
     @app = get_app
     puts "Restarting #{@app}"
-    run_command "cd #{@app} && docker-compose restart app"
+    run_command "cd #{@app} && docker compose restart app"
   end
 
   desc "Bring compose down and remove cached app docker image"
   task :down do
     @app = get_app
     puts "Bringing compose down..."
-    run_command "cd #{@app} && docker-compose --profile tests down --rmi=local"
+    run_command "cd #{@app} && docker compose --profile tests down --rmi=local"
     run_command "docker image rm -f #{@app}:latest"
   end
 
@@ -220,8 +220,8 @@ namespace :app do
     desc "Tail appsignal.log"
     task :appsignal do
       @app = get_app
-      run_command "cd #{@app} && docker-compose exec app touch /tmp/appsignal.log"
-      run_command "cd #{@app} && docker-compose exec app tail -f /tmp/appsignal.log"
+      run_command "cd #{@app} && docker compose exec app touch /tmp/appsignal.log"
+      run_command "cd #{@app} && docker compose exec app tail -f /tmp/appsignal.log"
     end
   end
 
@@ -229,8 +229,8 @@ namespace :app do
     desc "Less +F appsignal.log"
     task :appsignal do
       @app = get_app
-      run_command "cd #{@app} && docker-compose exec app touch /tmp/appsignal.log"
-      run_command "cd #{@app} && docker-compose exec app less +F /tmp/appsignal.log"
+      run_command "cd #{@app} && docker compose exec app touch /tmp/appsignal.log"
+      run_command "cd #{@app} && docker compose exec app less +F /tmp/appsignal.log"
     end
   end
 end
