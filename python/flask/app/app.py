@@ -109,6 +109,17 @@ def cron():
 
     return "<p>Sent a cron check-in!</p>"
 
+from appsignal.check_in import heartbeat as heartbeat_checkin
+
+@app.route("/heartbeat")
+def heartbeat():
+
+    heartbeat_checkin("custom-heartbeat-checkin")
+
+    return "<p>Heartbeat check-in sent!</p>"
+
+heartbeat_checkin("continuous-heartbeat-checkin", continuous=True)
+
 @app.route("/custom", methods=["GET", "POST"])
 def custom():
     if request.method == "POST":
