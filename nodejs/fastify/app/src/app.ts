@@ -1,9 +1,13 @@
 import Fastify from "fastify"
+import pino from "pino"
+import { Appsignal, AppsignalPinoTransport } from "@appsignal/nodejs"
 
 const port = Number(process.env.PORT)
 
+const logger = pino(AppsignalPinoTransport({client: Appsignal.client, group: "application"}))
+
 const fastify = Fastify({
-  logger: true
+  logger: logger
 })
 
 fastify.get("/", function (_request, reply) {
