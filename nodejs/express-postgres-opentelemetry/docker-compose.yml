@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - postgres.env
+  appsignal-agent:
+    image: appsignal/agent:latest
+    environment:
+      - APPSIGNAL_APP_NAME=nodejs/express-postgres-opentelemetry
+      - APPSIGNAL_APP_ENV=development
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal_key.env
+  app:
+    build: .
+    image: nodejs/express-postgres
+    depends_on:
+      - postgres
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=nodejs/express-postgres-opentelemetry
+      - APPSIGNAL_APP_ENV=development
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    working_dir: /
+    volumes:
+      - ./app:/app
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_URL=http://app:4001
+      - APP_NAME=nodejs/v3/express-postgres
