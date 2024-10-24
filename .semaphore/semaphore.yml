@@ -241,6 +241,9 @@ blocks:
         - name: python/django4-celery
           commands:
             - "rake app=python/django4-celery app:test"
+        - name: python/django4-celery-opentelemetry
+          commands:
+            - "rake app=python/django4-celery-opentelemetry app:test"
         - name: python/flask
           commands:
             - "rake app=python/flask app:test"
