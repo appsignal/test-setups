@@ -12,14 +12,10 @@ export DATABASE_URL="mongodb://$DATABASE_HOST:27017/mongoose"
 
 echo "Install, link and build integration"
 (
-cd /integration
-git config --global --add safe.directory /integration # avoid git fatal errors about dubious ownership
-touch ~/.bashrc # hack to make the mono installer happy
-script/setup
-mono bootstrap
-mono clean
-mono run -- npm run install
-mono build
+  cd /integration
+  npm install
+  npm run build
+  npm link
 )
 
 cd /app
