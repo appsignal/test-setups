@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+echo "Installing app dependencies"
+npm install
+
+echo "Building app"
+npm run build
+
+echo "Starting test app server"
+/commands/processmon processmon.toml
