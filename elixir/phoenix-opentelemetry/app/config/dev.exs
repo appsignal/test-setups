@@ -18,6 +18,7 @@ config :elixir_phoenix_opentelemetry, ElixirPhoenixOpentelemetry.Repo,
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
 port = String.to_integer(System.get_env("PORT") || "4001")
+
 config :elixir_phoenix_opentelemetry, ElixirPhoenixOpentelemetryWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
@@ -89,9 +90,24 @@ config :swoosh, :api_client, false
 
 # config :opentelemetry, traces_exporter: {:otel_exporter_stdout, []}
 
+# Add AppSignal and app configuration
+# {revision, _exitcode} = System.cmd("git", ["log", "--pretty=format:%h", "-n 1"])
+
 config :opentelemetry,
   span_processor: :batch,
-  traces_exporter: :otlp
+  traces_exporter: :otlp,
+  resource: [
+    {"appsignal.config.app_name", "elixir/phoenix-opentelemetry"},
+    {"appsignal.config.app_environment", "dev"},
+    {"appsignal.config.push_api_key", System.get_env("APPSIGNAL_PUSH_API_KEY")},
+    # {"appsignal.config.language_integration", revision},
+    {"appsignal.config.language_integration", "elixir"},
+    {"appsignal.config.app_path", File.cwd()},
+    # Customize the service name
+    {"service.name", "Phoenix"}
+  ]
+
+# Configure the OpenTelemetry HTTP exporter
 
 config :opentelemetry_exporter,
   otlp_protocol: :http_protobuf,
