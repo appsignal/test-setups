@@ -10,8 +10,8 @@ services:
   appsignal-agent:
     image: appsignal/agent:latest
     environment:
-      - APPSIGNAL_APP_NAME=ruby/rails-sidekiq-opentelemetry
-      - APPSIGNAL_APP_ENV=development
+      - APPSIGNAL_APP_NAME=elixir/phoenix-opentelemetry
+      - APPSIGNAL_APP_ENV=dev
       - APPSIGNAL_LOG_LEVEL=trace
     env_file:
       - ../../appsignal_key.env
@@ -24,7 +24,7 @@ services:
       - "4001:4001"
     environment:
       - PORT=4001
-      - APPSIGNAL_APP_NAME=elixir-phoenix-opentelemetry
+      - APPSIGNAL_APP_NAME=elixir/phoenix-opentelemetry
       - INTEGRATION_PATH=/integration
     env_file:
       - postgres.env
