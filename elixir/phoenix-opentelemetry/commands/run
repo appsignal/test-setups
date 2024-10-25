@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -eu
+
+echo "Running mix local hex and rebar"
+mix local.hex --force
+mix local.rebar --force
+
+echo "Prepare integration"
+cd /integration/appsignal-elixir
+make clean
+
+cd /app
+echo "Running mix setup"
+mix setup
+
+echo "Migrate if needed"
+mix ecto.migrate
+
+/commands/processmon processmon.toml
