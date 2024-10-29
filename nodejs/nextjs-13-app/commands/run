@@ -2,22 +2,16 @@
 
 set -eu
 
-# The following block is commented because of an issue with
-# Next.js' internal use of Webpack and `npm link`-ed projects.
-# Instead, this test setup ignores the version of the integrations
-# cloned by `rake integrations:clone`, and installs and uses the
-# latest released version from the NPM servers.
+# Because of an issue with Next.js' internal use of Webpack and `npm link`-ed
+# projects, instead of using `npm link`, we copy the built integration to
+# the app's node_modules directory.
 
-# echo "Install, link and build integration"
-# (
-# cd /integration
-# touch ~/.bashrc # hack to make the mono installer happy
-# script/setup
-# mono bootstrap
-# mono clean
-# mono run -- npm run install
-# mono build
-# )
+echo "Install and build integration"
+(
+  cd /integration
+  npm install
+  npm run build
+)
 
 cd /app
 
@@ -26,8 +20,8 @@ npm install
 
 # See comment above.
 
-# echo "Linking integration"
-# npm link @appsignal/nodejs
+rm -rf /app/node_modules/@appsignal/nodejs
+cp -r /integration /app/node_modules/@appsignal/nodejs
 
 echo "Starting the app in NODE_ENV='$NODE_ENV' (default: development)"
 if [ "$NODE_ENV" == "production" ]; then
