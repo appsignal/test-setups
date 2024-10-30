@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  warp-cors:
+    image: bassetts/warp-cors
+    ports:
+      - "3030:3030"
+  appsignal-agent:
+    image: appsignal/agent
+    environment:
+      - APPSIGNAL_APP_NAME=javascript/react-otel
+      - APPSIGNAL_APP_ENV=development
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal_key.env
+    ports:
+      - "8099:8099"
+  app:
+    build:
+      context: .
+      dockerfile: ../Dockerfile
+    image: javascript/react
+    ports:
+      - "4001:3000"
+    environment:
+      - APPSIGNAL_APP_NAME=javascript/react-otel
+      - APPSIGNAL_APP_ENV=development
+    volumes:
+      - ./app:/app
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=javascript/react-otel
+      - APP_URL=http://app:3000
