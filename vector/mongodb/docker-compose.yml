@@ -16,7 +16,7 @@ services:
     command: [ "--bind_ip_all", "--replSet", "mongo-replica-set" ]
 
   vector:
-    image: timberio/vector:0.33.0-debian
+    image: timberio/vector:0.42.0-debian
     environment:
       - VECTOR_LOG=debug
       - MONGODB_URL_1=mongodb://mongo-1:27017/
@@ -30,6 +30,7 @@ services:
       - mongo-3
     volumes:
       - ./vector:/etc/vector
+    command: "--config /etc/vector/vector.toml"
 
   app-write:
     build: app
