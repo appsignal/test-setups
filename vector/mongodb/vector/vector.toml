@@ -1,16 +1,34 @@
 [sources.internal_logs]
 type = "internal_logs"
 
+[sources.internal_metrics]
+type = "internal_metrics"
+
+# Very silly data to demonstrate a aggregate transformation
+[sources.demo]
+type = "demo_logs"
+interval = 1 # 1-second interval for log generation
+format = "apache_common"
+[transforms.parse_json]
+type = "remap" # Parse the log message to JSON format
+inputs = ["demo"]
+source = '''
+  . = parse_json!(.message)
+'''
+[transforms.aggregate]
+type = "aggregate"
+inputs = ["parse_json"]
+
 [sources.mongodb]
 type = "mongodb_metrics"
 endpoints = [ "${MONGODB_URL_1}", "${MONGODB_URL_2}", "${MONGODB_URL_3}" ]
 
-[sinks.out]
+[sinks.console_out]
 type = "console"
-inputs = [ "internal_logs", "mongodb" ]
+inputs = [ "internal_logs", "mongodb", "internal_metrics" ]
 encoding.codec = "text"
 
 [sinks.appsignal]
 type = "appsignal"
-inputs = [ "mongodb" ]
+inputs = [ "mongodb", "internal_metrics", "aggregate" ]
 push_api_key = "${APPSIGNAL_VECTOR_APP_PUSH_API_KEY}"
