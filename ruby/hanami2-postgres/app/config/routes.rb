@@ -5,5 +5,7 @@ module ExampleApp
     root to: "home.show"
     post "/", to: "home.show"
 
+    get "/slow", to: "slow.show"
+    get "/error", to: "error.show"
   end
 end
