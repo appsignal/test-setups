@@ -1,0 +1,8 @@
+<h1>Hanami 2 test app</h1>
+
+<p>Hello from action <%= self.class.name %>: <%= request.params.to_h %></p>
+
+<form action="/?test_query_param=my_test" method="post">
+  <input type="text" name="my_input" />
+  <button>Submit</button>
+</form>

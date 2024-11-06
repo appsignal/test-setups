@@ -7,11 +7,12 @@ rake extension:install
 
 echo "Install dependencies"
 cd /app
-bundle config set --local path 'vendor/bundle'
 bundle install
+npm install
 
 echo "Run migrations"
-bundle exec rake db:setup
-bundle exec rake db:migrate
+bundle exec hanami db create
+bundle exec hanami db migrate
 
-/commands/processmon processmon.toml
+echo "Start app"
+bundle exec hanami dev

@@ -1,10 +1,11 @@
-module Hanami2Postgres
+# frozen_string_literal: true
+
+module ExampleApp
   module Actions
     module Slow
-      class Show < Hanami2Postgres::Action
+      class Show < ExampleApp::Action
         def handle(request, response)
           sleep 3
-          response.body = "Well that was slow"
         end
       end
     end
