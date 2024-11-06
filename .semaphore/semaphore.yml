@@ -145,10 +145,6 @@ blocks:
         - name: nodejs/nextjs-13-app
           commands:
             - "rake app=nodejs/nextjs-13-app app:test"
-        - name: nodejs/nextjs-13-pages
-          commands:
-            - echo "NEXT_PUBLIC_APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000" > nodejs/nextjs-13-pages/appsignal_key.env
-            - "rake app=nodejs/nextjs-13-pages app:test"
         - name: nodejs/nextjs-14-app
           commands:
             - "rake app=nodejs/nextjs-14-app app:test"
