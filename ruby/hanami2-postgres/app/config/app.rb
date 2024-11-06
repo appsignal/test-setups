@@ -2,8 +2,7 @@
 
 require "hanami"
 
-module Hanami2Postgres
+module ExampleApp
   class App < Hanami::App
-    config.middleware.use :body_parser, :json
   end
 end

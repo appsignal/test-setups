@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-plugin :appsignal
-
 #
 # Environment and port
 #

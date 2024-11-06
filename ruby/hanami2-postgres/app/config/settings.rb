@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-module Hanami2Postgres
+module ExampleApp
   class Settings < Hanami::Settings
-    setting :database_url, constructor: Types::String
+    # Define your app settings here, for example:
+    #
+    # setting :my_flag, default: false, constructor: Types::Params::Bool
   end
 end

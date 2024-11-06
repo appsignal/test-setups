@@ -1,1 +1,1 @@
-# Hanami2Postgres
+# ExampleApp

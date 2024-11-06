@@ -2,7 +2,7 @@
 
 require "dry/types"
 
-module Hanami2Postgres
+module ExampleApp
   Types = Dry.Types
 
   module Types
