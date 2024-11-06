@@ -8,6 +8,11 @@ rake extension:install
 echo "Install dependencies"
 cd /app
 bundle install
+npm install
+
+echo "Run migrations"
+bundle exec hanami db create
+bundle exec hanami db migrate
 
 echo "Start app"
 bundle exec hanami dev

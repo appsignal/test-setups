@@ -7,5 +7,6 @@ module ExampleApp
 
     get "/slow", to: "slow.show"
     get "/error", to: "error.show"
+    get "/books", to: "books.index"
   end
 end
