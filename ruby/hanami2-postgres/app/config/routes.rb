@@ -3,6 +3,7 @@
 module Hanami2Postgres
   class Routes < Hanami::Routes
     root to: "home.show"
+    post "/", to: "home.show"
     get "/slow", to: "slow.show"
     get "/error", to: "errors.show"
     get "/books", to: "books.index"

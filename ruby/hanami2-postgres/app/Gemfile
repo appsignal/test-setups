@@ -4,12 +4,12 @@ source "https://rubygems.org"
 
 gem "appsignal", :path => "/integration"
 
-gem "hanami", "~> 2.1.0"
-gem "hanami-router", "~> 2.1.0"
-gem "hanami-controller", "~> 2.1.0"
-gem "hanami-validations", "~> 2.1.0"
-gem "hanami-assets", "~> 2.1"
-gem "hanami-view", "~> 2.1"
+gem "hanami", "~> 2.2.0"
+gem "hanami-router", "~> 2.2.0"
+gem "hanami-controller", "~> 2.2.0"
+gem "hanami-validations", "~> 2.2.0"
+gem "hanami-assets", "~> 2.2"
+gem "hanami-view", "~> 2.2"
 
 group :development do
   gem "hanami-webconsole", "~> 2.1"
@@ -26,6 +26,7 @@ gem "rake"
 gem "rom", "~> 5.3"
 gem "rom-sql", "~> 3.6"
 gem "pg"
+gem "pry"
 
 group :development, :test do
   gem "dotenv"
@@ -37,10 +38,6 @@ end
 
 group :cli, :development, :test do
   gem "hanami-rspec"
-end
-
-group :development do
-  gem "guard-puma"
 end
 
 group :test do
