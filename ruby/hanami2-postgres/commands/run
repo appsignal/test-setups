@@ -7,7 +7,6 @@ rake extension:install
 
 echo "Install dependencies"
 cd /app
-bundle config set --local path 'vendor/bundle'
 bundle install
 
 echo "Run migrations"

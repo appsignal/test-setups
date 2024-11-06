@@ -13,7 +13,6 @@ RUN apt-get update && \
   apt-get install -y nodejs python3 && \
   npm install -g npm
 RUN gem update --system && gem install bundler
-ENV BUNDLE_PATH=/app/vendor/bundle
 
 # Copy commands into the container
 RUN mkdir /commands
