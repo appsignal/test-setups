@@ -9,8 +9,5 @@ echo "Install dependencies"
 cd /app
 bundle install
 
-echo "Run migrations"
-bundle exec rake db:setup
-bundle exec rake db:migrate
-
-/commands/processmon processmon.toml
+echo "Start app"
+bundle exec hanami dev
