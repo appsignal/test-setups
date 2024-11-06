@@ -15,6 +15,7 @@ gem "dry-operation"
 gem "puma"
 gem "rake"
 gem "pg"
+gem "appsignal", :path => "/integration"
 
 group :development do
   gem "hanami-webconsole", "~> 2.2"

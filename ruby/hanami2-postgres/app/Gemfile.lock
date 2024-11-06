@@ -1,3 +1,10 @@
+PATH
+  remote: /integration
+  specs:
+    appsignal (4.1.2)
+      logger
+      rack
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -295,6 +302,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  appsignal!
   capybara
   database_cleaner-sequel
   dotenv
@@ -316,4 +324,4 @@ DEPENDENCIES
   rake
 
 BUNDLED WITH
-   2.5.23
+   2.5.22
