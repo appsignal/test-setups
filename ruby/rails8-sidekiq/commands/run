@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -eu
+
+echo "Install appsignal"
+(
+  cd /integration
+  rake extension:install
+)
+
+cd /app
+echo "Install dependencies"
+bundle config set path vendor/bundle
+bundle install
+
+echo "Clean tmp"
+rm -rf tmp/pids/*.pid
+
+echo "Run migrations"
+bin/rails db:migrate
+
+/commands/processmon processmon.toml
