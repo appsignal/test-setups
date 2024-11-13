@@ -1,10 +1,40 @@
 import Fastify from "fastify"
 import pino from "pino"
-import { Appsignal, AppsignalPinoTransport } from "@appsignal/nodejs"
+import { AppsignalPinoTransport } from "@appsignal/nodejs"
 
 const port = Number(process.env.PORT)
 
-const logger = pino(AppsignalPinoTransport({client: Appsignal.client, group: "application"}))
+// A Pino logger using the AppSignal Pino transport *as a destination*.
+function pinoAppsignalDestination() {
+  return pino(AppsignalPinoTransport({
+    group: "application"
+  }))
+}
+
+// A Pino logger using the AppSignal Pino transport *as a transport*.
+function pinoAppsignalTransport() {
+  return pino({
+    transport: {
+      target: "@appsignal/nodejs/pino",
+      options: { group: "application" }
+    }
+  })
+}
+
+// A Pino logger using the AppSignal Pino transport *as a transport* and logging to
+// standard output.
+function pinoAppsignalTransportAndStdout() {
+  return pino({
+    transport: {
+      targets: [
+        { target: "@appsignal/nodejs/pino", options: { group: "application" } },
+        { target: "pino/file" }
+      ] as unknown as pino.TransportTargetOptions[]
+    }
+  })
+}
+
+const logger = pinoAppsignalTransportAndStdout()
 
 const fastify = Fastify({
   logger: logger
