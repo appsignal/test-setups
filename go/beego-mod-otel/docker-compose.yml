@@ -1,0 +1,28 @@
+services:
+  appsignal:
+    image: appsignal/agent:latest
+    env_file:
+      - ../../appsignal_key.env
+    environment:
+      - APPSIGNAL_APP_NAME=go/beego-mod-otel
+      - APPSIGNAL_APP_ENV=development
+      - APPSIGNAL_LOG_LEVEL=trace
+  app:
+    build: .
+    image: go/beego-mod-otel
+    depends_on:
+      - appsignal
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./app:/app
+  tests:
+    image: server-tests
+    build: ../../support/server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=go/beego-mod-otel
+      - APP_URL=http://app:4001

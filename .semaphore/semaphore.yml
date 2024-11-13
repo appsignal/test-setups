@@ -69,6 +69,9 @@ blocks:
         - name: go/beego
           commands:
             - "rake app=go/beego app:test"
+        - name: go/beego-mod-otel
+          commands:
+            - "rake app=go/beego-mod-otel app:test"
         - name: go/gin-mysql
           commands:
             - "rake app=go/go-gin-mysql app:test"
