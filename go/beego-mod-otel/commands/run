@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+echo "Cleaning modules"
+go mod tidy
+
+echo "Starting app"
+/commands/processmon processmon.toml
+
