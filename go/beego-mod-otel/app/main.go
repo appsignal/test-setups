@@ -6,10 +6,12 @@ import (
 	"log"
 	"time"
 	"os"
+	"fmt"
 
 	"github.com/beego/beego/v2/server/web"
 	beecontext "github.com/beego/beego/v2/server/web/context"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -52,6 +54,7 @@ func initTracer() func() {
 			attribute.String("appsignal.config.app_environment", app_env),
 			attribute.String("appsignal.config.push_api_key", push_api_key),
 			attribute.String("appsignal.config.language_integration", "go"),
+			attribute.String("appsignal.config.revision", "test123"),
 		),
 	)
 	if err != nil {
@@ -104,8 +107,22 @@ func (c *MainController) Slow() {
 	c.ServeJSON()
 }
 
+type MyError struct {
+    Message string
+    Code    int
+}
+
+func (e *MyError) Error() string {
+    return fmt.Sprintf("error %d: %s", e.Code, e.Message)
+}
+
 func (c *MainController) Error() {
 	_, span := tracer.Start(context.Background(), "error-handler")
+	err := &MyError{Message: "something went wrong", Code: 500}
+	if err != nil {
+		span.SetStatus(codes.Error, err.Error())
+		span.RecordError(err)
+	}
 	defer span.End()
 	c.Ctx.Output.SetStatus(500)
 	c.Data["json"] = map[string]string{"error": "Internal Server Error"}
