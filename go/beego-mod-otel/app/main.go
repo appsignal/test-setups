@@ -5,6 +5,7 @@ import (
 	"context"
 	"log"
 	"time"
+	"os"
 
 	"github.com/beego/beego/v2/server/web"
 	beecontext "github.com/beego/beego/v2/server/web/context"
@@ -29,14 +30,28 @@ func initTracer() func() {
 		log.Fatal(err)
 	}
 
+	app_name := os.Getenv("APPSIGNAL_APP_NAME")
+	if app_name == "" {
+		panic("No APPSIGNAL_APP_NAME env var");
+	}
+	app_env := os.Getenv("APPSIGNAL_APP_ENV")
+	if app_env == "" {
+		panic("No APPSIGNAL_APP_ENV env var");
+	}
+	push_api_key := os.Getenv("APPSIGNAL_PUSH_API_KEY")
+	if push_api_key == "" {
+		panic("No APPSIGNAL_PUSH_API_KEY env var");
+	}
+
 	res, err := resource.Merge(
 		resource.Default(),
 		resource.NewWithAttributes(
 			semconv.SchemaURL,
 			semconv.ServiceName("beego-mod-otel"),
-			attribute.String("appsignal.config.app_name", "beego-mod-otel"),
+			attribute.String("appsignal.config.app_name", app_name),
+			attribute.String("appsignal.config.app_environment", app_env),
+			attribute.String("appsignal.config.push_api_key", push_api_key),
 			attribute.String("appsignal.config.language_integration", "go"),
-			attribute.String("appsignal.config.revision", "1234a"),
 		),
 	)
 	if err != nil {

@@ -16,6 +16,13 @@ services:
       - "4001:4001"
     volumes:
       - ./app:/app
+    environment:
+      - APPSIGNAL_APP_NAME=go/beego-mod-otel
+      - APPSIGNAL_APP_ENV=development
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
   tests:
     image: server-tests
     build: ../../support/server-tests
