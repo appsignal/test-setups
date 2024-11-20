@@ -18,6 +18,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/live", DemoLive
   end
 
   forward("/api", Absinthe.Plug, schema: AppsignalPhoenixExampleWeb.Schema)
