@@ -4,6 +4,8 @@ defmodule AppsignalPhoenixExampleWeb.DemoLive do
   def render(assigns) do
     ~H"""
     Hello LiveView!
+
+    <.live_component module={AppsignalPhoenixExampleWeb.LiveComponent} id="component" />
     """
   end
 end
