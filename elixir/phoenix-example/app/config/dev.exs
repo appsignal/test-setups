@@ -4,8 +4,8 @@ import Config
 config :appsignal_phoenix_example, AppsignalPhoenixExample.Repo,
   username: System.get_env("POSTGRES_USER", "postgres"),
   password: System.get_env("POSTGRES_PASSWORD", "postgres"),
-  database: System.get_env("POSTGRES_DB", "appsignal_phoenix_example_dev"),
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
+  database: System.get_env("POSTGRES_DB", "appsignal_phoenix_example_dev"),
   port: System.get_env("POSTGRES_PORT", "5432"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
@@ -15,8 +15,8 @@ config :appsignal_phoenix_example, AppsignalPhoenixExample.Repo,
 # debugging and code reloading.
 #
 # The watchers configuration can be used to run external
-# watchers to your application. For example, we use it
-# with esbuild to bundle .js and .css sources.
+# watchers to your application. For example, we can use it
+# to bundle .js and .css sources.
 port = String.to_integer(System.get_env("PORT") || "4000")
 config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
@@ -25,10 +25,11 @@ config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "GySSHuBe+s0dXqRfHnEYMPoA4eRjyA3fMMCp4psrp4RhN3K+BrfowUS10zN0j4x6",
+  secret_key_base: "WwOZdtFSngz7DrtXHkco0fXMI0Nz73db7QJWaTEBaILtqszOeUJpYeORa2J1IAaV",
   watchers: [
-    # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild:
+      {Esbuild, :install_and_run, [:appsignal_phoenix_example, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:appsignal_phoenix_example, ~w(--watch)]}
   ]
 
 # ## SSL Support
@@ -39,7 +40,6 @@ config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
 #
 #     mix phx.gen.cert
 #
-# Note that this task requires Erlang/OTP 20 or later.
 # Run `mix help phx.gen.cert` for more information.
 #
 # The `http:` config above can be replaced with:
@@ -59,15 +59,17 @@ config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
 config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/appsignal_phoenix_example_web/(live|views)/.*(ex)$",
-      ~r"lib/appsignal_phoenix_example_web/templates/.*(eex)$"
+      ~r"lib/appsignal_phoenix_example_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
+# Enable dev routes for dashboard and mailbox
+config :appsignal_phoenix_example, dev_routes: true
+
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: {LogfmtEx, :format}
+config :logger, :console, format: "[$level] $message\n"
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
@@ -75,3 +77,12 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :phoenix_live_view,
+  # Include HEEx debug annotations as HTML comments in rendered markup
+  debug_heex_annotations: true,
+  # Enable helpful, but potentially expensive runtime checks
+  enable_expensive_runtime_checks: true
+
+# Disable swoosh api client as it is only required for production adapters.
+config :swoosh, :api_client, false
