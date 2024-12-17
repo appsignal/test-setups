@@ -13,7 +13,7 @@ RUN apt-get update && \
   apt-get install -y nodejs python2 && \
   npm install -g npm yarn
 
-RUN gem update --system && gem install bundler
+RUN gem update --system 3.5.23 && gem install bundler
 ENV BUNDLE_PATH=/app/vendor/bundle
 
 # Copy commands into the container
