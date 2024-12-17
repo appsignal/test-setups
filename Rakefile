@@ -19,6 +19,7 @@ def clone_from_git(path, repo, branch: nil)
     puts "Cloning #{repo} into #{path}"
     branch_arg = "--branch #{branch}" if branch
     run_command "git clone #{branch_arg} git@github.com:appsignal/#{repo}.git #{path}"
+    puts "Cloned #{repo} at #{path} is at commit #{`cd #{path} && git rev-parse HEAD`.strip}"
   end
 end
 
