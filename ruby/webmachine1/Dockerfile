@@ -1,7 +1,7 @@
-FROM ruby:3.0
+FROM ruby:3.2.2-bullseye
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2021-02-12
+ENV REFRESHED_AT=2024-12-17
 
 RUN apt-get update && apt-get install -y less
 
