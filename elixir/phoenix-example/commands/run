@@ -14,9 +14,6 @@ cd /app
 echo "Running mix deps.get"
 mix deps.get
 
-echo "Running npm install"
-(cd /app/assets && npm install)
-
 echo "Migrate if needed"
 mix ecto.migrate
 

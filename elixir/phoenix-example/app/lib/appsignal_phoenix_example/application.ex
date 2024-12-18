@@ -10,21 +10,17 @@ defmodule AppsignalPhoenixExample.Application do
     Appsignal.Phoenix.LiveView.attach()
 
     children = [
-      # Start the Ecto repository
-      AppsignalPhoenixExample.Repo,
-      # Start the Telemetry supervisor
       AppsignalPhoenixExampleWeb.Telemetry,
-      # Start the PubSub system
+      AppsignalPhoenixExample.Repo,
+      {DNSCluster, query: Application.get_env(:appsignal_phoenix_example, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: AppsignalPhoenixExample.PubSub},
-      # Start the Endpoint (http/https)
-      AppsignalPhoenixExampleWeb.Endpoint,
+      # Start the Finch HTTP client for sending emails
+      {Finch, name: AppsignalPhoenixExample.Finch},
       # Start a worker by calling: AppsignalPhoenixExample.Worker.start_link(arg)
-      # {AppsignalPhoenixExample.Worker, arg}
-      # Start Finch HTTP client
-      {Finch, name: MyFinch}
+      # {AppsignalPhoenixExample.Worker, arg},
+      # Start to serve requests, typically the last entry
+      AppsignalPhoenixExampleWeb.Endpoint
     ]
-
-    Appsignal.Logger.Handler.add("phoenix")
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

@@ -7,10 +7,13 @@ defmodule AppsignalPhoenixExampleWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_appsignal_phoenix_example_key",
-    signing_salt: "6TWzksTz"
+    signing_salt: "ZLZpFGji",
+    same_site: "Lax"
   ]
 
-  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
+  socket "/live", Phoenix.LiveView.Socket,
+    websocket: [connect_info: [session: @session_options]],
+    longpoll: [connect_info: [session: @session_options]]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -20,7 +23,7 @@ defmodule AppsignalPhoenixExampleWeb.Endpoint do
     at: "/",
     from: :appsignal_phoenix_example,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: AppsignalPhoenixExampleWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -46,8 +49,5 @@ defmodule AppsignalPhoenixExampleWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-
-  # TODO: this custom plug has instrumentation that I can't get to work
-  plug ChipWeb.CustomPlug
   plug AppsignalPhoenixExampleWeb.Router
 end
