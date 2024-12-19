@@ -39,9 +39,9 @@ blocks:
         - name: elixir/alpine-release
           commands:
             - "rake app=elixir/alpine-release app:test"
-        - name: elixir/phoenix-example
+        - name: elixir/phoenix
           commands:
-            - "rake app=elixir/phoenix-example app:test"
+            - "rake app=elixir/phoenix app:test"
         - name: elixir/phoenix-opentelemetry
           commands:
             - "rake app=elixir/phoenix-opentelemetry app:test"
