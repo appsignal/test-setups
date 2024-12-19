@@ -9,14 +9,14 @@ services:
       - 5432
   app:
     build: .
-    image: elixir/phoenix-example
+    image: elixir/phoenix
     depends_on:
       - postgres
     ports:
       - "4001:4001"
     environment:
       - PORT=4001
-      - APPSIGNAL_APP_NAME=elixir-phoenix-example
+      - APPSIGNAL_APP_NAME=elixir-phoenix
       - INTEGRATION_PATH=/integration
     env_file:
       - postgres.env
@@ -33,5 +33,5 @@ services:
     depends_on:
       - app
     environment:
-      - APP_NAME=elixir/phoenix-example
+      - APP_NAME=elixir/phoenix
       - APP_URL=http://app:4001
