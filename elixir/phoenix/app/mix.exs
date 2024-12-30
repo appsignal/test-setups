@@ -66,7 +66,8 @@ defmodule AppsignalPhoenixExample.MixProject do
       {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true},
       {:appsignal_phoenix,
        path: "#{integration_path()}/appsignal-elixir-phoenix", override: true},
-      {:absinthe_plug, "~> 1.5"}
+      {:absinthe_plug, "~> 1.5"},
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
     ]
   end
 
