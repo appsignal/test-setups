@@ -1,5 +1,6 @@
 defmodule AppsignalPhoenixExampleWeb.PageController do
   use AppsignalPhoenixExampleWeb, :controller
+  use Appsignal.Instrumentation.Decorators
 
   def home(conn, _params) do
     render(conn, :home)
@@ -12,5 +13,10 @@ defmodule AppsignalPhoenixExampleWeb.PageController do
 
   def error(conn, _params) do
     raise "Oops!"
+  end
+
+  @decorate transaction_event()
+  def decorated(conn, _params) do
+    render(conn, :home)
   end
 end
