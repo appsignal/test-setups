@@ -61,8 +61,9 @@ defmodule ElixirPhoenixOpentelemetry.MixProject do
       {:opentelemetry, "~> 1.3"},
       {:opentelemetry_api, "~> 1.2"},
       {:opentelemetry_exporter, "~> 1.6"},
-      {:opentelemetry_phoenix, "~> 1.1"},
-      {:opentelemetry_bandit, "~> 0.1.4"},
+      {:opentelemetry_phoenix, "~> 2.0"},
+      {:opentelemetry_bandit, "~> 0.1"},
+      {:opentelemetry_ecto, "~> 1.2"},
     ]
   end
 
