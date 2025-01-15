@@ -13,6 +13,7 @@ defmodule PlugExample do
 
       <ul>
         <li><a href="/preload"><kbd>/preload</kbd></a>: Perform an Ecto preload query
+        <li><a href="/transaction"><kbd>/transaction</kbd></a>: Perform an Ecto transaction query
       </ul>
     """
     )
@@ -32,5 +33,14 @@ defmodule PlugExample do
     movies = Repo.all(from m in Movie, preload: [:characters, :actors])
 
     send_resp(conn, 200, "<p>Here's some movies for you:</p><pre>#{inspect(movies)}</pre>")
+  end
+
+  get "/transaction" do
+    Repo.transaction(fn ->
+      Repo.insert!(%Movie{title: "The Room"})
+      Repo.insert!(%Movie{title: "The Disaster Artist"})
+    end)
+
+    send_resp(conn, 200, "<p>Inserted some movies in a transaction!</p>")
   end
 end
