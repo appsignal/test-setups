@@ -1,7 +1,7 @@
 PATH
   remote: /integration
   specs:
-    appsignal (4.1.2)
+    appsignal (4.3.2)
       logger
       rack
 
@@ -189,6 +189,7 @@ GEM
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     ostruct (0.6.1)
+    ownership (0.4.0)
     parallel (1.26.3)
     parser (3.3.6.0)
       ast (~> 2.4.1)
@@ -380,6 +381,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal
+  ownership
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.0)

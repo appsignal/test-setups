@@ -64,3 +64,4 @@ end
 
 gem "sidekiq"
 gem "appsignal", :path => "/integration"
+gem "ownership"

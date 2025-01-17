@@ -1,6 +1,8 @@
 class ReportError < StandardError; end
 
 class ExamplesController < ApplicationController
+  owner :examples
+
   def index
     session[:user_id] = :some_user_id_123
     session[:menu] = { :state => :open, :view => :full }
