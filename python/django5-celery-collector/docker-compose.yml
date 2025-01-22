@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - postgres.env
+  redis:
+    image: "redis:6.2.7"
+    ports:
+      - "6379:6379"
+  appsignal-agent:
+    image: appsignal/collector:latest
+    environment:
+      - APPSIGNAL_APP_NAME=python/django5-celery-collector
+      - APPSIGNAL_APP_ENV=dev
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal_key.env
+  app:
+    build: .
+    image: python/django5-celery
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "4001:4001"
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=python/django5-celery-collector
+      - APPSIGNAL_APP_ENV=dev
+    volumes:
+      - ./app:/app
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=python/django5-celery
+      - APP_URL=http://app:4001
