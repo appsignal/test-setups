@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import subprocess
+import socket
 from opentelemetry import trace
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
@@ -142,17 +143,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# revision = subprocess.check_output(
-#     "git rev-parse --short HEAD", shell=True, text=True
-# ).strip()
-
 # Add AppSignal and app configuration
 resource = Resource(attributes={
-    "appsignal.config.app_name": os.environ.get("APPSIGNAL_APP_NAME") or "",
-    "appsignal.config.app_environment": os.environ.get("APPSIGNAL_APP_ENV") or "",
+    "appsignal.config.name": os.environ.get("APPSIGNAL_APP_NAME") or "",
+    "appsignal.config.environment": os.environ.get("APPSIGNAL_APP_ENV") or "",
     "appsignal.config.push_api_key": os.environ.get("APPSIGNAL_PUSH_API_KEY") or "",
-    # "appsignal.config.revision": revision,
+    "appsignal.config.revision": "test-setups",
     "appsignal.config.language_integration": "python",
+    "host.name": socket.gethostname(),
     "appsignal.config.app_path": os.getcwd(),
     # Customize the service name
     "service.name": "Django",
@@ -160,7 +158,7 @@ resource = Resource(attributes={
 provider = TracerProvider(resource=resource)
 
 # Configure the OpenTelemetry HTTP exporter
-span_processor = BatchSpanProcessor(OTLPSpanExporter(endpoint="http://appsignal-agent:8099/enriched/v1/traces"))
+span_processor = BatchSpanProcessor(OTLPSpanExporter(endpoint="http://appsignal-collector:8099/v1/traces"))
 provider.add_span_processor(span_processor)
 trace.set_tracer_provider(provider)
 
