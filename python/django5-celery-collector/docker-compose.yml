@@ -11,12 +11,10 @@ services:
     image: "redis:6.2.7"
     ports:
       - "6379:6379"
-  appsignal-agent:
+  appsignal-collector:
     image: appsignal/collector:latest
     environment:
-      - APPSIGNAL_APP_NAME=python/django5-celery-collector
-      - APPSIGNAL_APP_ENV=dev
-      - APPSIGNAL_LOG_LEVEL=trace
+      - PUSH_API_ENDPOINT=https://push.staging.lol
     env_file:
       - ../../appsignal_key.env
   app:
