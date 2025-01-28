@@ -17,6 +17,8 @@ defmodule AppsignalPhoenixExampleWeb.Schema do
       arg(:id, non_null(:id))
 
       resolve(fn %{id: item_id}, _ ->
+        raise "query error!"
+
         {:ok, @items[item_id]}
       end)
     end
