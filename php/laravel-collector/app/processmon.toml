@@ -1,0 +1,17 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  "storage",
+  "public",
+  "database"
+]
+
+[processes.laravel]
+command = "php"
+args = [
+  "artisan",
+  "serve",
+  "--host=0.0.0.0",
+  "--port=4001"
+]
+working_dir = "/app"

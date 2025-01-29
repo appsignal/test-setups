@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  appsignal-collector:
+    image: appsignal/collector:latest
+    environment:
+      - PUSH_API_ENDPOINT=https://push.staging.lol
+    env_file:
+      - ../../appsignal_key.env
+  app:
+    build: .
+    image: php/laravel
+    ports:
+      - "4001:4001"
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    environment:
+      - APPSIGNAL_APP_ENV=dev
+      - APPSIGNAL_APP_NAME=php/laravel-collector
+    volumes:
+      - ./app:/app
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=php/laravel-collector
+      - APP_URL=http://app:4001
