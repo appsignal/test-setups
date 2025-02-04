@@ -14,11 +14,27 @@ from pathlib import Path
 import os
 import subprocess
 import socket
-from opentelemetry import trace
+from opentelemetry import trace, metrics
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.metrics import (
+    Counter,
+    Histogram,
+    MeterProvider,
+    ObservableCounter,
+    ObservableGauge,
+    ObservableUpDownCounter,
+    UpDownCounter,
+)
+from opentelemetry.sdk.metrics.export import (
+    AggregationTemporality,
+    PeriodicExportingMetricReader,
+)
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.http.metric_exporter import (
+    OTLPMetricExporter
+)
 from opentelemetry.instrumentation.django import DjangoInstrumentor
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -155,11 +171,35 @@ resource = Resource(attributes={
     # Customize the service name
     "service.name": "Django",
 })
-provider = TracerProvider(resource=resource)
+trace_provider = TracerProvider(resource=resource)
 
 # Configure the OpenTelemetry HTTP exporter
 span_processor = BatchSpanProcessor(OTLPSpanExporter(endpoint="http://appsignal-collector:8099/v1/traces"))
-provider.add_span_processor(span_processor)
-trace.set_tracer_provider(provider)
+trace_provider.add_span_processor(span_processor)
+trace.set_tracer_provider(trace_provider)
 
 DjangoInstrumentor().instrument()
+
+# Metrics
+METRICS_PREFERRED_TEMPORALITY: dict[type, AggregationTemporality] = {
+    Counter: AggregationTemporality.DELTA,
+    UpDownCounter: AggregationTemporality.DELTA,
+    ObservableCounter: AggregationTemporality.DELTA,
+    ObservableGauge: AggregationTemporality.CUMULATIVE,
+    ObservableUpDownCounter: AggregationTemporality.DELTA,
+    Histogram: AggregationTemporality.DELTA,
+}
+
+
+metric_exporter = OTLPMetricExporter(
+    endpoint="http://appsignal-collector:8099/v1/metrics",
+    preferred_temporality=METRICS_PREFERRED_TEMPORALITY,
+)
+metric_reader = PeriodicExportingMetricReader(
+    metric_exporter, export_interval_millis=10000
+)
+metric_provider = MeterProvider(
+    resource=resource,
+    metric_readers=[metric_reader]
+)
+metrics.set_meter_provider(metric_provider)

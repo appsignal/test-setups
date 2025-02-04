@@ -2,8 +2,10 @@ import requests
 import json
 import time
 from random import randrange
+import datetime
 
 from opentelemetry import trace
+from opentelemetry.metrics import get_meter
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -80,8 +82,40 @@ def custom_instrumentation(request):
 
 
 def metrics(request):
-    # Not implemented yet
-    return HttpResponse("I reported some metrics instrumentation!")
+    meter = get_meter("my_meter")
+
+    # Counter
+    my_counter = meter.create_counter(
+        "my_counter",
+        unit="1",
+        description="My counter"
+    )
+    count_value = randrange(1, 3)
+    my_counter.add(count_value, {"my_tag": "tag_value"})
+
+    # Gauge
+    my_gauge = meter.create_gauge(
+        "my_gauge",
+        unit="1",
+        description="My gauge"
+    )
+    gauge_value = randrange(1, 25)
+    my_gauge.set(gauge_value, {"my_tag": "tag_value"})
+
+    # Histogram
+    histogram = meter.create_histogram(
+        "my_histogram",
+        unit="1",
+        description="My histogram"
+    )
+    histogram_value = randrange(10, 25)
+    histogram.record(histogram_value, {"my_tag": "tag_value"})
+
+    time = datetime.datetime.now()
+    return HttpResponse(
+        f"{time}: Reported metrics: Counter: {count_value}, " +
+        f"Gauge: {gauge_value}, Histogram: {histogram_value}\n"
+    )
 
 
 class MyException(Exception):
