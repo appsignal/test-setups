@@ -2,23 +2,18 @@ import time
 import os
 import socket
 
-from opentelemetry import trace
+from appsignal_python_opentelemetry.opentelemetry import Appsignal
 
 import redis
 from celery import Celery
 from celery.signals import worker_process_init
-from opentelemetry import trace
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.celery import CeleryInstrumentor
 
 
 @worker_process_init.connect(weak=False)
 def init_celery_tracing(*args, **kwargs):
-    # Do something?
-    args
+    Appsignal("Celery")
+    CeleryInstrumentor().instrument()
 
 
 app = Celery('tasks', broker='redis://redis')
@@ -27,27 +22,6 @@ app.conf.task_routes = {
     'tasks.performance_task2': { 'queue': 'low-priority' },
     'tasks.error_task': { 'queue': 'high-priority' }
 }
-
-# Add AppSignal and app configuration
-resource = Resource(attributes={
-    "appsignal.config.name": os.environ.get("APPSIGNAL_APP_NAME") or "",
-    "appsignal.config.environment": os.environ.get("APPSIGNAL_APP_ENV") or "",
-    "appsignal.config.push_api_key": os.environ.get("APPSIGNAL_PUSH_API_KEY") or "",
-    "appsignal.config.revision": "test-setups",
-    "appsignal.config.language_integration": "python",
-    "host.name": socket.gethostname(),
-    "appsignal.config.app_path": os.getcwd(),
-    # Customize the service name
-    "service.name": "Django",
-})
-provider = TracerProvider(resource=resource)
-
-# Configure the OpenTelemetry HTTP exporter
-span_processor = BatchSpanProcessor(OTLPSpanExporter(endpoint="http://appsignal-collector:8099/v1/traces"))
-provider.add_span_processor(span_processor)
-trace.set_tracer_provider(provider)
-
-CeleryInstrumentor().instrument()
 
 
 @app.task
