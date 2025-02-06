@@ -118,6 +118,9 @@ blocks:
         - name: nodejs/express-postgres
           commands:
             - "rake app=nodejs/express-postgres app:test"
+        - name: nodejs/express-postgres-collector
+          commands:
+            - "rake app=nodejs/express-postgres-collector app:test"
         - name: nodejs/express-redis
           commands:
             - "rake app=nodejs/express-redis app:test"
