@@ -12,29 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-import subprocess
 import socket
-from opentelemetry import trace, metrics
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.sdk.metrics import (
-    Counter,
-    Histogram,
-    MeterProvider,
-    ObservableCounter,
-    ObservableGauge,
-    ObservableUpDownCounter,
-    UpDownCounter,
-)
-from opentelemetry.sdk.metrics.export import (
-    AggregationTemporality,
-    PeriodicExportingMetricReader,
-)
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
-from opentelemetry.exporter.otlp.proto.http.metric_exporter import (
-    OTLPMetricExporter
-)
+
+from .opentelemetry import Appsignal
 from opentelemetry.instrumentation.django import DjangoInstrumentor
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -159,47 +139,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Add AppSignal and app configuration
-resource = Resource(attributes={
-    "appsignal.config.name": os.environ.get("APPSIGNAL_APP_NAME") or "",
-    "appsignal.config.environment": os.environ.get("APPSIGNAL_APP_ENV") or "",
-    "appsignal.config.push_api_key": os.environ.get("APPSIGNAL_PUSH_API_KEY") or "",
-    "appsignal.config.revision": "test-setups",
-    "appsignal.config.language_integration": "python",
-    "host.name": socket.gethostname(),
-    "appsignal.config.app_path": os.getcwd(),
-    # Customize the service name
-    "service.name": "Django",
-})
-trace_provider = TracerProvider(resource=resource)
-
-# Configure the OpenTelemetry HTTP exporter
-span_processor = BatchSpanProcessor(OTLPSpanExporter(endpoint="http://appsignal-collector:8099/v1/traces"))
-trace_provider.add_span_processor(span_processor)
-trace.set_tracer_provider(trace_provider)
-
+Appsignal("Django")
 DjangoInstrumentor().instrument()
-
-# Metrics
-METRICS_PREFERRED_TEMPORALITY: dict[type, AggregationTemporality] = {
-    Counter: AggregationTemporality.DELTA,
-    UpDownCounter: AggregationTemporality.DELTA,
-    ObservableCounter: AggregationTemporality.DELTA,
-    ObservableGauge: AggregationTemporality.CUMULATIVE,
-    ObservableUpDownCounter: AggregationTemporality.DELTA,
-    Histogram: AggregationTemporality.DELTA,
-}
-
-
-metric_exporter = OTLPMetricExporter(
-    endpoint="http://appsignal-collector:8099/v1/metrics",
-    preferred_temporality=METRICS_PREFERRED_TEMPORALITY,
-)
-metric_reader = PeriodicExportingMetricReader(
-    metric_exporter, export_interval_millis=10000
-)
-metric_provider = MeterProvider(
-    resource=resource,
-    metric_readers=[metric_reader]
-)
-metrics.set_meter_provider(metric_provider)
