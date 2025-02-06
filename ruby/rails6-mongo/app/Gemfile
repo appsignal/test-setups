@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.3'
 
+gem "logger"
 gem 'mongoid', '~> 7.3.3'
 gem "appsignal", :path => "/integration"
 

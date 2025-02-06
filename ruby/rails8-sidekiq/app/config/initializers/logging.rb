@@ -1,3 +1,5 @@
 Rails.application.config.log_tags = [:request_id]
+
 appsignal_logger = Appsignal::Logger.new("rails")
-Rails.logger.broadcast_to(appsignal_logger)
+appsignal_logger.broadcast_to(Rails.logger)
+Rails.logger = ActiveSupport::TaggedLogging.new(appsignal_logger)
