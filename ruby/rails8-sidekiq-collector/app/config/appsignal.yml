@@ -1,0 +1,10 @@
+default: &defaults
+  enable_rake_performance_instrumentation: true
+
+development:
+  <<: *defaults
+  active: true
+
+production:
+  <<: *defaults
+  active: true
