@@ -219,6 +219,9 @@ blocks:
         - name: ruby/rails8-sidekiq
           commands:
             - "rake app=ruby/rails8-sidekiq app:test"
+        - name: ruby/rails8-sidekiq-collector
+          commands:
+            - "rake app=ruby/rails8-sidekiq-collector app:test"
         - name: ruby/sinatra-redis
           commands:
             - "rake app=ruby/sinatra-redis app:test"
