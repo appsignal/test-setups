@@ -11,6 +11,14 @@ defmodule AppsignalPhoenixExampleWeb.Plugs.ExamplePlug do
 
   def call(%{request_path: "/plug/error"} = plug, _options) do
     try do
+      Appsignal.Span.set_sample_data(
+	Appsignal.Tracer.root_span(),
+	"tags",
+	%{
+	  user_id: 42
+	}
+      )
+
       raise "Error raised from ExamplePlug"
     catch
       kind, reason ->
