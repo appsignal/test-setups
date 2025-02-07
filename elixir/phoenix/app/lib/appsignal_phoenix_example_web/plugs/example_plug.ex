@@ -22,8 +22,16 @@ defmodule AppsignalPhoenixExampleWeb.Plugs.ExamplePlug do
       raise "Error raised from ExamplePlug"
     catch
       kind, reason ->
-	Appsignal.set_error(kind, reason, __STACKTRACE__)
-    end
+	stack = __STACKTRACE__
+
+	Appsignal.Tracer.root_span()
+	|> Appsignal.Plug.handle_error(kind, reason, stack, conn)
+	|> Appsignal.Span.set_name("ExamplePlug#call")
+	|> Appsignal.Tracer.close_span()
+
+        Appsignal.Tracer.ignore()
+        :erlang.raise(kind, reason, stack)
+      end
 
     conn
   end
