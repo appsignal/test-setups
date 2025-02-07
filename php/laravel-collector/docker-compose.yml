@@ -4,7 +4,7 @@ services:
   appsignal-collector:
     image: appsignal/collector:latest
     environment:
-      - PUSH_API_ENDPOINT=https://push.staging.lol
+      - APPSIGNAL_LOG_LEVEL=trace
     env_file:
       - ../../appsignal_key.env
   app:
@@ -17,13 +17,9 @@ services:
       - ../../appsignal.env
       - ../../appsignal_key.env
     environment:
-      - APPSIGNAL_APP_ENV=dev
       - APPSIGNAL_APP_NAME=php/laravel-collector
+      - APPSIGNAL_APP_ENV=dev
       - OTEL_PHP_AUTOLOAD_ENABLED=true
-      - OTEL_SERVICE_NAME=laravel-collector
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http:http://appsignal-collector:8099/v1/traces
     volumes:
       - ./app:/app
   tests:
