@@ -8,6 +8,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     plug :put_root_layout, html: {AppsignalPhoenixExampleWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug AppsignalPhoenixExampleWeb.Plugs.ExamplePlug
   end
 
   pipeline :api do
@@ -21,6 +22,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     get "/slow", PageController, :slow
     get "/error", PageController, :error
     get "/decorated", PageController, :decorated
+    get "/plug", PageController, :home
     live "/live", DemoLive
   end
 
