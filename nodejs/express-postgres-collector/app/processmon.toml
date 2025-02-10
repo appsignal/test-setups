@@ -1,0 +1,7 @@
+[[paths_to_watch]]
+path = "/app"
+
+[processes.node]
+command = "npm"
+args = ["run", "server"]
+working_dir = "/app"
