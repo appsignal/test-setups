@@ -11,6 +11,7 @@ OpenTelemetry::SDK.configure do |c|
     "appsignal.config.push_api_key" => ENV["APPSIGNAL_PUSH_API_KEY"],
     "appsignal.config.revision" => "test-setups",
     "appsignal.config.language_integration" => "ruby",
+    "appsignal.config.app_path" => Dir.pwd,
     "host.name" => Socket.gethostname,
   )
   # Customize the service name

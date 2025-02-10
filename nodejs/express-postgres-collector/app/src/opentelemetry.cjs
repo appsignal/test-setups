@@ -23,6 +23,7 @@ const resource = new Resource({
   "appsignal.config.push_api_key": process.env.APPSIGNAL_PUSH_API_KEY,
   "appsignal.config.revision": "test-setups",
   "appsignal.config.language_integration": "node.js",
+  "appsignal.config.app_path": process.cwd(),
   "host.name": os.hostname(),
   // Customize the service name
   [SemanticResourceAttributes.SERVICE_NAME]: "Express server",

@@ -45,6 +45,7 @@ class Appsignal:
             "host.name": socket.gethostname(),
             # Customize the service name
             "service.name": service_name,
+            "appsignal.config.app_path": os.getcwd(),
         })
         trace_provider = TracerProvider(resource=resource)
 

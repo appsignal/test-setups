@@ -73,10 +73,11 @@ config :opentelemetry,
   traces_exporter: :otlp,
   resource: [
     {"appsignal.config.name", System.get_env("APPSIGNAL_APP_NAME")},
-    {"appsignal.config.environment", Mix.env()},
+    {"appsignal.config.environment", to_string(Mix.env())},
     {"appsignal.config.push_api_key", System.get_env("APPSIGNAL_PUSH_API_KEY")},
     {"appsignal.config.revision", "test-setups"},
     {"appsignal.config.language_integration", "elixir"},
+    {"appsignal.config.app_path", File.cwd!()},
     {"service.name", "Phoenix"},
     {"host.name", hostname}
   ]
