@@ -1,0 +1,10 @@
+[[paths_to_watch]]
+path = "/app"
+
+[processes.beego]
+command = "go"
+args = [
+  "run",
+  "main.go"
+]
+working_dir = "/app"
