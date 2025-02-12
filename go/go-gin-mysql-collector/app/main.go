@@ -16,6 +16,8 @@ import (
 	"github.com/XSAM/otelsql"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
@@ -37,7 +39,7 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 func initTracer() func(context.Context) error {
 	client := otlptracehttp.NewClient(
 		otlptracehttp.WithInsecure(),
-		otlptracehttp.WithEndpoint("appsignal:8099"),
+		otlptracehttp.WithEndpoint("appsignal-collector:8099"),
 	)
 	exporter, err := otlptrace.New(context.Background(), client)
 	if err != nil {
@@ -49,9 +51,26 @@ func initTracer() func(context.Context) error {
 		log.Fatal("creating OTLP console exporter: %w")
 	}
 
+	hostname, err := os.Hostname()
+	if err != nil {
+		hostname = "unknown"
+	}
+
+	res := resource.NewSchemaless(
+		attribute.String("appsignal.config.name", os.Getenv("APPSIGNAL_APP_NAME")),
+		attribute.String("appsignal.config.environment", os.Getenv("APPSIGNAL_APP_ENV")),
+		attribute.String("appsignal.config.push_api_key", os.Getenv("APPSIGNAL_PUSH_API_KEY")),
+		attribute.String("appsignal.config.revision", "abcd123"),
+		attribute.String("appsignal.config.language_integration", "golang"),
+		attribute.String("appsignal.config.app_path", os.Getenv("PWD")),
+		attribute.String("service.name", "Gin"),
+		attribute.String("host.name", hostname),
+	)
+
 	tracerProvider := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exporter),
 		sdktrace.WithBatcher(consoleExporter),
+		sdktrace.WithResource(res),
 	)
 	otel.SetTracerProvider(tracerProvider)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))

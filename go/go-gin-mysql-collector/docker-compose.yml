@@ -1,14 +1,12 @@
 version: '3.8'
 
 services:
-  appsignal:
-    image: appsignal/agent:latest
+  appsignal-collector:
+    image: appsignal/collector:latest
+    environment:
+      - APPSIGNAL_LOG_LEVEL=trace
     env_file:
       - ../../appsignal_key.env
-    environment:
-      - APPSIGNAL_APP_NAME=go/go-gin-mysql
-      - APPSIGNAL_APP_ENV=development
-      - APPSIGNAL_LOG_LEVEL=trace
   mysql:
     image: mysql
     environment:
@@ -18,12 +16,17 @@ services:
       - MYSQL_DATABASE=mydb
   app:
     build: .
-    image: go/go-gin-mysql
+    image: go/go-gin-mysql-collector
     depends_on:
-      - appsignal
+      - appsignal-collector
       - mysql
     ports:
       - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=go/go-gin-mysql-collector
+      - APPSIGNAL_APP_ENV=development
+    env_file:
+      - ../../appsignal_key.env
     volumes:
       - ./app:/app
   tests:
@@ -34,6 +37,6 @@ services:
     depends_on:
       - app
     environment:
-      - APP_NAME=go/gin-mysql
+      - APP_NAME=go/gin-mysql-collector
       - APP_URL=http://app:4001
 
