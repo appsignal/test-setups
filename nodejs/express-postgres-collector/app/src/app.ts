@@ -1,7 +1,9 @@
 import { Pool } from "pg"
 import express from "express"
-import opentelemetry from "@opentelemetry/api"
+import { Span, trace, metrics } from "@opentelemetry/api"
 import { expressErrorHandler } from "./error_reporter"
+
+const tracer = trace.getTracer('my-tracer');
 
 const pgPool = new Pool()
 const port = process.env.PORT
@@ -10,6 +12,39 @@ const app = express()
 app.use(express.urlencoded({ extended: true }))
 
 app.get("/", (_req: any, res: any) => {
+  tracer.startActiveSpan("custom_span", (span: Span) => {
+    span.setAttribute("appsignal.request.parameters", JSON.stringify({
+      "password": "super secret",
+      "email": "test@example.com",
+      "cvv": 123,
+      "test_param": "test value",
+      "nested": {
+        "password": "super secret nested",
+        "test_param": "test value",
+      }
+    }))
+    span.setAttribute("appsignal.request.session_data", JSON.stringify({
+      "token": "super secret",
+      "user_id": 123,
+      "test_param": "test value",
+      "nested": {
+        "token": "super secret nested",
+        "test_param": "test value",
+      }
+    }))
+    span.setAttribute("appsignal.function.parameters", JSON.stringify({
+      "hash": "super secret",
+      "salt": "shoppai",
+      "test_param": "test value",
+      "nested": {
+        "hash": "super secret nested",
+        "test_param": "test value",
+      }
+    }))
+
+    span.end();
+  });
+
   res.write("<h1>Node.js OpenTelemetry example app</h1>")
   res.write("<ul>")
   res.write("<li><a href='/slow'>/slow</a></li>")
@@ -40,7 +75,7 @@ app.get("/pg-query", (_req: any, res: any) => {
   })
 })
 
-const meter = opentelemetry.metrics.getMeter(
+const meter = metrics.getMeter(
   "instrumentation-scope-name",
   "1.0.0",
 );

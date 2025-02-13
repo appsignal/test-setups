@@ -42,6 +42,18 @@ class Appsignal:
                 os.environ.get("APPSIGNAL_PUSH_API_KEY") or "",
             "appsignal.config.revision": "test-setups",
             "appsignal.config.language_integration": "python",
+            "appsignal.config.filter_request_parameters": [
+                "password",
+                "email",
+                "cvv"
+                ],
+            "appsignal.config.filter_request_session_data": [
+                "token",
+                ],
+            "appsignal.config.filter_function_parameters": [
+                "hash",
+                "salt",
+                ],
             "host.name": socket.gethostname(),
             # Customize the service name
             "service.name": service_name,
