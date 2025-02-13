@@ -151,7 +151,7 @@ func main() {
 	r.GET("/mysql-query", func(c *gin.Context) {
 		time.Sleep(200 * time.Millisecond)
 
-		_, err := db.QueryContext(c, "SELECT 1 + 1 AS solution")
+		_, err := db.QueryContext(c.Request.Context(), "SELECT 1 + 1 AS solution")
 		if err != nil {
 			panic(err)
 		}
