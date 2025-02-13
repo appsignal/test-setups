@@ -12,6 +12,18 @@ OpenTelemetry::SDK.configure do |c|
     "appsignal.config.revision" => "test-setups",
     "appsignal.config.language_integration" => "ruby",
     "appsignal.config.app_path" => Dir.pwd,
+    "appsignal.config.filter_request_parameters" => [
+      "password",
+      "email",
+      "cvv"
+    ],
+    "appsignal.config.filter_request_session_data" => [
+      "token",
+    ],
+    "appsignal.config.filter_function_parameters" => [
+      "hash",
+      "salt",
+    ],
     "host.name" => Socket.gethostname,
   )
   # Customize the service name

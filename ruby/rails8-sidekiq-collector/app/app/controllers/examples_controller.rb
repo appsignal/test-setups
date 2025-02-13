@@ -4,6 +4,36 @@ class ExamplesController < ApplicationController
   def index
     session[:user_id] = :some_user_id_123
     session[:menu] = { :state => :open, :view => :full }
+
+    span = OpenTelemetry::Trace.current_span
+    span.set_attribute("appsignal.request.parameters", JSON.dump({
+      "password": "super secret",
+      "email": "test@example.com",
+      "cvv": 123,
+      "test_param": "test value",
+      "nested": {
+        "password": "super secret nested",
+        "test_param": "test value",
+      }
+    }))
+    span.set_attribute("appsignal.request.session_data", JSON.dump({
+      "token": "super secret",
+      "user_id": 123,
+      "test_param": "test value",
+      "nested": {
+        "token": "super secret nested",
+        "test_param": "test value",
+      }
+    }))
+    span.set_attribute("appsignal.function.parameters", JSON.dump({
+      "hash": "super secret",
+      "salt": "shoppai",
+      "test_param": "test value",
+      "nested": {
+        "hash": "super secret nested",
+        "test_param": "test value",
+      }
+    }))
   end
 
   def slow

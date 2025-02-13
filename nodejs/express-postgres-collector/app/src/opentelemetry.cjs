@@ -24,6 +24,18 @@ const resource = new Resource({
   "appsignal.config.revision": "test-setups",
   "appsignal.config.language_integration": "node.js",
   "appsignal.config.app_path": process.cwd(),
+  "appsignal.config.filter_request_parameters": [
+    "password",
+    "email",
+    "cvv"
+  ],
+  "appsignal.config.filter_request_session_data": [
+    "token",
+  ],
+  "appsignal.config.filter_function_parameters": [
+    "hash",
+    "salt",
+  ],
   "host.name": os.hostname(),
   // Customize the service name
   [SemanticResourceAttributes.SERVICE_NAME]: "Express server",

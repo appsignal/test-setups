@@ -78,6 +78,9 @@ config :opentelemetry,
     {"appsignal.config.revision", "test-setups"},
     {"appsignal.config.language_integration", "elixir"},
     {"appsignal.config.app_path", File.cwd!()},
+    {"appsignal.config.filter_request_parameters", "password,email,cvv"},
+    {"appsignal.config.filter_request_session_data", "token"},
+    {"appsignal.config.filter_function_parameters", "hash,salt"},
     {"service.name", "Phoenix"},
     {"host.name", hostname}
   ]

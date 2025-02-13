@@ -64,6 +64,7 @@ defmodule ElixirPhoenixOpentelemetry.MixProject do
       {:opentelemetry_phoenix, "~> 2.0"},
       {:opentelemetry_bandit, "~> 0.1"},
       {:opentelemetry_ecto, "~> 1.2"},
+      {:json, "~> 1.4"}
     ]
   end
 
@@ -80,7 +81,10 @@ defmodule ElixirPhoenixOpentelemetry.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind elixir_phoenix_opentelemetry", "esbuild elixir_phoenix_opentelemetry"],
+      "assets.build": [
+        "tailwind elixir_phoenix_opentelemetry",
+        "esbuild elixir_phoenix_opentelemetry"
+      ],
       "assets.deploy": [
         "tailwind elixir_phoenix_opentelemetry --minify",
         "esbuild elixir_phoenix_opentelemetry --minify",
