@@ -83,6 +83,7 @@ func main() {
 
 	r := gin.New()
 	r.Use(otelgin.Middleware("opentelemetry-go-gin"))
+	r.LoadHTMLFiles("index.html")
 
 	r.GET("/file-error", func(c *gin.Context) {
 		time.Sleep(200 * time.Millisecond)
@@ -106,9 +107,7 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		time.Sleep(200 * time.Millisecond)
 
-		c.JSON(http.StatusOK, gin.H{
-			"message": "ping",
-		})
+		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 
 	r.GET("/slow", func(c *gin.Context) {
