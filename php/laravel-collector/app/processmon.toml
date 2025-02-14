@@ -3,7 +3,8 @@ path = "/app"
 ignore = [
   "storage",
   "public",
-  "database"
+  "database",
+  "bootstrap/cache"
 ]
 
 [processes.laravel]
