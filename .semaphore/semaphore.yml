@@ -151,6 +151,9 @@ blocks:
         - name: nodejs/nestjs
           commands:
             - "rake app=nodejs/nestjs app:test"
+        - name: nodejs/nestjs-11
+          commands:
+            - "rake app=nodejs/nestjs-11 app:test"
         - name: nodejs/nextjs-13-app
           commands:
             - "rake app=nodejs/nextjs-13-app app:test"
