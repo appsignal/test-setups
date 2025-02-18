@@ -4,4 +4,4 @@ WORKDIR /app
 
 EXPOSE 8080
 
-CMD gradle :opentelemetry-examples-spring-native:bootRun --no-daemon
+CMD gradle bootRun --no-daemon
