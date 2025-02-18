@@ -3,3 +3,9 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+
+.light .bar {
+  display: inline-block;
+  height: 20px;
+  background-color: yellow;
+}
