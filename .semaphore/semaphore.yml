@@ -60,6 +60,18 @@ blocks:
         - name: elixir/plug-oban
           commands:
             - "rake app=elixir/plug-oban app:test"
+  - name: Run tests for Java test setups
+    dependencies: ["Build processmon"]
+    task:
+      prologue:
+        commands:
+          - "cache restore $CACHE_VERSION-processmon"
+          - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
+          - "rake integrations:clone"
+      jobs:
+        - name: java/spring-native-collector
+          commands:
+            - "rake app=java/spring-native-collector app:test"
   - name: Run tests for Go test setups
     dependencies: ["Build processmon"]
     task:
@@ -75,9 +87,12 @@ blocks:
         - name: go/beego-mod-otel
           commands:
             - "rake app=go/beego-mod-otel app:test"
-        - name: go/gin-mysql
+        - name: go/go-gin-mysql
           commands:
             - "rake app=go/go-gin-mysql app:test"
+        - name: go/go-gin-mysql-collector
+          commands:
+            - "rake app=go/go-gin-mysql-collector app:test"
         - name: go/gorilla-mux-mysql-redis-mongo
           commands:
             - "rake app=go/gorilla-mux-mysql-redis-mongo app:test"
