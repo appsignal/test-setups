@@ -72,6 +72,9 @@ blocks:
         - name: java/spring-native-collector
           commands:
             - "rake app=java/spring-native-collector app:test"
+        - name: java/spring-agent-collector
+          commands:
+            - "rake app=java/spring-agent-collector app:test"
   - name: Run tests for Go test setups
     dependencies: ["Build processmon"]
     task:

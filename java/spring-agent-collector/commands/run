@@ -1,0 +1,37 @@
+#!/bin/sh
+
+cd /app
+
+AGENT_JAR="opentelemetry-javaagent.jar"
+AGENT_URL="https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar"
+
+# Download agent if it doesn't exist
+if [ -f "$AGENT_JAR" ]; then
+    echo "Using already downloaded OpenTelemetry Java agent at /app/$AGENT_JAR..."
+else
+    echo "Downloading OpenTelemetry Java agent..."
+    if ! curl -L -o "$AGENT_JAR" "$AGENT_URL"; then
+        echo "Failed to download agent"
+        exit 1
+    fi
+fi
+
+# Build resource attributes string
+# (these could be in `agent.properties` but are here
+# so that environment variables can be interpolated in them)
+RESOURCE_ATTRS="appsignal.config.name=$APPSIGNAL_APP_NAME,\
+appsignal.config.environment=$APPSIGNAL_APP_ENV,\
+appsignal.config.push_api_key=$APPSIGNAL_PUSH_API_KEY,\
+appsignal.config.revision=abcd123,\
+appsignal.config.language_integration=java,\
+appsignal.config.app_path=$PWD,\
+host.name=${HOSTNAME:-$(hostname)}"
+
+JAVA_OPTS="-javaagent:/app/$AGENT_JAR \
+    -Dotel.javaagent.configuration-file=/app/agent.properties \
+    -Dotel.resource.attributes=$RESOURCE_ATTRS"
+
+gradle bootRun \
+    --no-daemon \
+    -Pargs="--spring.profiles.active=local" \
+    -Pjvmargs="$JAVA_OPTS"
