@@ -111,6 +111,10 @@ blocks:
         - name: javascript/react
           commands:
             - "rake app=javascript/react app:test"
+        - name: javascript/react-vite-collector
+          commands:
+            - "cp javascript/react-vite-collector/app/{.example,}.env"
+            - "rake app=javascript/react-vite-collector app:test"
         - name: javascript/ember
           commands:
             - "rake app=javascript/ember app:test"
