@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+echo "Installing dependencies"
+npm install && npm run build
+
+echo "Starting app"
+/commands/processmon processmon.toml

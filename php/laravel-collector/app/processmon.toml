@@ -1,0 +1,16 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  "storage",
+  "public",
+  "database",
+  "bootstrap/cache"
+]
+
+[processes.laravel]
+command = "composer"
+args = [
+  "run",
+  "dev"
+]
+working_dir = "/app"
