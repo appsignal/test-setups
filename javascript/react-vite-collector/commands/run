@@ -1,0 +1,30 @@
+#!/bin/bash
+set -eu
+
+cd /app
+
+# Check that the `.env` file is present and contains
+# the VITE_APPSIGNAL_FRONTEND_PUSH_API_KEY environment
+# variable.
+if [ ! -f .env ]; then
+  echo ".env file not found in app folder!"
+  exit 1
+fi
+
+if ! grep -q "VITE_APPSIGNAL_FRONTEND_PUSH_API_KEY=" .env; then
+  echo "VITE_APPSIGNAL_FRONTEND_PUSH_API_KEY not found in .env file in app folder!"
+  exit 1
+fi
+
+echo "Install dependencies"
+# using `--force` because the `@opentelemetry/react-load-plugin`
+# package expects React 16, but we're using React 19.
+npm install --force
+
+export VITE_APPSIGNAL_APP_NAME="$APPSIGNAL_APP_NAME"
+export VITE_APPSIGNAL_APP_ENV="$APPSIGNAL_APP_ENV"
+export VITE_PWD="$PWD"
+export VITE_HOSTNAME="$(hostname)"
+
+echo "Starting app"
+npm run dev
