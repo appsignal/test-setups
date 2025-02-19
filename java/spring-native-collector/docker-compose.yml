@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    volumes:
+      - ./app:/app
+    environment:
+      OTEL_LOGS_EXPORTER: "none"
+      APPSIGNAL_APP_NAME: java/spring-native-collector
+      APPSIGNAL_APP_ENV: development
+      SERVER_PORT: "4001"
+    env_file:
+      - ../../appsignal_key.env
+    ports:
+      - "4001:4001"
+    depends_on:
+      - appsignal-collector
+  appsignal-collector:
+    image: appsignal/collector:latest
+    environment:
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal_key.env
+  tests:
+    image: server-tests
+    build: ../../support/server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=java/spring-native-collector
+      - APP_URL=http://app:4001
