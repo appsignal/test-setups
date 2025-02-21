@@ -68,18 +68,8 @@ class Appsignal:
         trace_provider.add_span_processor(span_processor)
         trace.set_tracer_provider(trace_provider)
 
-        # Configure the OpenTelemetry HTTP metrics exporter
-        METRICS_PREFERRED_TEMPORALITY: dict[type, AggregationTemporality] = {
-            Counter: AggregationTemporality.DELTA,
-            UpDownCounter: AggregationTemporality.DELTA,
-            ObservableCounter: AggregationTemporality.DELTA,
-            ObservableGauge: AggregationTemporality.CUMULATIVE,
-            ObservableUpDownCounter: AggregationTemporality.DELTA,
-            Histogram: AggregationTemporality.DELTA,
-        }
         metric_exporter = OTLPMetricExporter(
             endpoint=f"{collector_host}/v1/metrics",
-            preferred_temporality=METRICS_PREFERRED_TEMPORALITY
         )
         metric_reader = PeriodicExportingMetricReader(
             metric_exporter,

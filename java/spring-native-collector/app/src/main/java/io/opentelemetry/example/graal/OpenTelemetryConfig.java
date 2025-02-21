@@ -97,14 +97,6 @@ public class OpenTelemetryConfig {
     if (exporter instanceof OtlpHttpMetricExporter) {
       return OtlpHttpMetricExporter.builder()
           .setEndpoint("http://appsignal-collector:8099/v1/metrics")
-          .setAggregationTemporalitySelector(instrumentType -> {
-            switch (instrumentType) {
-              case OBSERVABLE_GAUGE:
-                return AggregationTemporality.CUMULATIVE;
-              default:
-                return AggregationTemporality.DELTA;
-            }
-          })
           .build();
     }
     return exporter;
