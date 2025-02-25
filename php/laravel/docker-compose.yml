@@ -48,3 +48,9 @@ services:
                 - '-ppassword'
             retries: 3
             timeout: 5s
+    appsignal-collector:
+        image: appsignal/collector:latest
+        environment:
+            - APPSIGNAL_LOG_LEVEL=trace
+        env_file:
+            - ../../appsignal_key.env
