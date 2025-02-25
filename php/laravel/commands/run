@@ -7,10 +7,25 @@ echo "extension=opentelemetry.so" > /etc/php/8.4/cli/conf.d/99-sail.ini
 
 cd /var/www/html
 
+export OTEL_RESOURCE_ATTRIBUTES="appsignal.config.name=$APPSIGNAL_APP_NAME,\
+appsignal.config.environment=$APPSIGNAL_APP_ENV,\
+appsignal.config.push_api_key=$APPSIGNAL_PUSH_API_KEY,\
+appsignal.config.revision=abcd123,\
+appsignal.config.language_integration=php,\
+appsignal.config.app_path=$PWD,\
+host.name=${HOSTNAME:-$(hostname)}"
+
 echo "Installing dependencies..."
 composer install
 
 echo "Migrating database..."
-/var/www/html/artisan migrate
+
+until mysqladmin ping -h${DB_HOST} -u${DB_USERNAME} -p${DB_PASSWORD} --silent; do
+  echo "Waiting for database to start..."
+  sleep 1
+done
+
+echo "Database started!"
+/var/www/html/artisan migrate:fresh
 
 start-container

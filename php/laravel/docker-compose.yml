@@ -24,6 +24,16 @@ services:
             APP_DEBUG: 'true'
             APP_ENV: local
             APP_KEY: 'J0TeTiVkAlJ2eUndVMKCi5EGjNPittlM'
+            OTEL_PHP_AUTOLOAD_ENABLED: 'true'
+            OTEL_SERVICE_NAME: Laravel
+            OTEL_TRACES_EXPORTER: otlp
+            OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+            OTEL_EXPORTER_OTLP_ENDPOINT: http://appsignal-collector:8099
+            OTEL_PROPAGATORS: baggage,tracecontext
+            APPSIGNAL_APP_NAME: php/laravel
+            APPSIGNAL_APP_ENV: development
+        env_file:
+            - ../../appsignal_key.env
         volumes:
             - './app:/var/www/html'
             - './commands:/commands'
