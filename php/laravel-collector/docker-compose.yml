@@ -30,7 +30,7 @@ services:
             OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
             OTEL_EXPORTER_OTLP_ENDPOINT: http://appsignal-collector:8099
             OTEL_PROPAGATORS: baggage,tracecontext
-            APPSIGNAL_APP_NAME: php/laravel
+            APPSIGNAL_APP_NAME: php/laravel-collector
             APPSIGNAL_APP_ENV: development
         env_file:
             - ../../appsignal_key.env
