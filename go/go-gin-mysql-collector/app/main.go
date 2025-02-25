@@ -6,8 +6,10 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
+	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 
@@ -22,6 +24,7 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/trace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
 )
@@ -56,7 +59,7 @@ func initTracer() func(context.Context) error {
 		hostname = "unknown"
 	}
 
-	res := resource.NewSchemaless(
+	resource := resource.NewSchemaless(
 		attribute.String("appsignal.config.name", os.Getenv("APPSIGNAL_APP_NAME")),
 		attribute.String("appsignal.config.environment", os.Getenv("APPSIGNAL_APP_ENV")),
 		attribute.String("appsignal.config.push_api_key", os.Getenv("APPSIGNAL_PUSH_API_KEY")),
@@ -70,11 +73,70 @@ func initTracer() func(context.Context) error {
 	tracerProvider := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exporter),
 		sdktrace.WithBatcher(consoleExporter),
-		sdktrace.WithResource(res),
+		sdktrace.WithResource(resource),
 	)
 	otel.SetTracerProvider(tracerProvider)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 	return exporter.Shutdown
+}
+
+func recordParameters(c *gin.Context) {
+	span := trace.SpanFromContext(c.Request.Context())
+
+	// Query parameters
+	queryParametersKey := attribute.Key("appsignal.request.query_parameters")
+	requestQueryParameters := c.Request.URL.Query()
+	attributeQueryParameters := make(map[string]any)
+	for k, v := range requestQueryParameters {
+		attributeQueryParameters[k] = v
+	}
+
+	if len(attributeQueryParameters) > 0 {
+		serializedQueryParams, err := json.Marshal(attributeQueryParameters)
+		if err == nil {
+			span.SetAttributes(queryParametersKey.String(string(serializedQueryParams)))
+		}
+	}
+
+	// Request body payload
+	var serializedBodyPayload string
+	payloadKey := attribute.Key("appsignal.request.payload")
+	var payload map[string]interface{}
+	requestBodyPayload, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		c.Next()
+		return
+	}
+	contentType := c.GetHeader("Content-Type")
+	if contentType == "application/json" {
+		serializedBodyPayload = string(requestBodyPayload)
+	} else if contentType == "application/x-www-form-urlencoded" {
+		// Parse form-urlencoded body
+		values, err := url.ParseQuery(string(requestBodyPayload))
+		if err != nil {
+			c.Next()
+			return
+		}
+
+		// Convert form values to a JSON-compatible map
+		payload = make(map[string]interface{})
+		for key, val := range values {
+			if len(val) == 1 {
+				payload[key] = val[0]
+			} else {
+				payload[key] = val
+			}
+		}
+		json, _ := json.Marshal(payload)
+		serializedBodyPayload = string(json)
+	} else {
+		c.Next()
+		return
+	}
+	if len(serializedBodyPayload) > 0 {
+		span.SetAttributes(payloadKey.String(serializedBodyPayload))
+	}
+	c.Next()
 }
 
 func ReadFile(file string) error {
@@ -102,6 +164,7 @@ func main() {
 
 	r := gin.New()
 	r.Use(otelgin.Middleware("opentelemetry-go-gin"))
+	r.Use(recordParameters)
 	r.LoadHTMLFiles("index.html")
 
 	r.GET("/file-error", func(c *gin.Context) {
