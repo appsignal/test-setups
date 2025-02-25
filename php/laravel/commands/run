@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /var/www/html
+
 echo "Installing dependencies..."
 composer install
 

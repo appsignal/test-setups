@@ -1,0 +1,4 @@
+These files were extracted from the `laravel/sail` GitHub repo, which would ordinarily be mounted at `/vendor/laravel/sail` after a `composer install` is ran on the app. Doing so allows the Docker image to be built without having to run Composer in the host.
+
+- `create-testing-database.sh`: https://github.com/laravel/sail/blob/06b4e13b63329540da2310f191f49b599dc935a5/database/mysql/create-testing-database.sh
+- All other files: https://github.com/laravel/sail/tree/06b4e13b63329540da2310f191f49b599dc935a5/runtimes/8.4
