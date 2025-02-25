@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo "Installing OpenTelemetry extension..."
+pecl install opentelemetry
+# The path here matches the path that `php.ini` is written to in the Dockerfile
+echo "extension=opentelemetry.so" > /etc/php/8.4/cli/conf.d/99-sail.ini
+
 cd /var/www/html
 
 echo "Installing dependencies..."
