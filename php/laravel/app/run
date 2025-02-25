@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Installing dependencies..."
+composer install
+
 echo "Migrating database..."
 /var/www/html/artisan migrate
 
