@@ -37,10 +37,8 @@ class App
         exit! 1
       elsif retries % 5 == 0
         puts "The app has not started yet. Retrying... (#{retries}/#{max_retries})"
-        if error === HttpResponseError
-          puts "#{e.classs}: #{error}"
-          puts response.body
-        end
+        puts "#{error.class}: #{error}"
+        puts response&.body
       end
 
       sleep 1
