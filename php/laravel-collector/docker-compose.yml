@@ -64,3 +64,13 @@ services:
             - APPSIGNAL_LOG_LEVEL=trace
         env_file:
             - ../../appsignal_key.env
+    tests:
+      build: ../../support/server-tests
+      image: server-tests
+      profiles:
+        - tests
+      depends_on:
+        - app
+      environment:
+        - APP_NAME=php/laravel-collector
+        - APP_URL=http://app:4001
