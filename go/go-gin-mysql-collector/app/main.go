@@ -8,8 +8,10 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"time"
 	"encoding/json"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -63,11 +65,16 @@ func initTracer() func(context.Context) error {
 		attribute.String("appsignal.config.name", os.Getenv("APPSIGNAL_APP_NAME")),
 		attribute.String("appsignal.config.environment", os.Getenv("APPSIGNAL_APP_ENV")),
 		attribute.String("appsignal.config.push_api_key", os.Getenv("APPSIGNAL_PUSH_API_KEY")),
-		attribute.String("appsignal.config.revision", "abcd123"),
+		attribute.String("appsignal.config.revision", "test-setups"),
 		attribute.String("appsignal.config.language_integration", "golang"),
 		attribute.String("appsignal.config.app_path", os.Getenv("PWD")),
 		attribute.String("service.name", "Gin"),
 		attribute.String("host.name", hostname),
+		attribute.StringSlice("appsignal.config.filter_function_parameters", []string{"password", "token"}),
+		attribute.StringSlice("appsignal.config.filter_query_parameters", []string{"password", "token"}),
+		attribute.StringSlice("appsignal.config.filter_request_payload", []string{"password", "token"}),
+		attribute.StringSlice("appsignal.config.filter_session_data", []string{"password", "token"}),
+		// attribute.Bool("appsignal.config.send_function_parameters", false),
 	)
 
 	tracerProvider := sdktrace.NewTracerProvider(
@@ -189,6 +196,48 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		time.Sleep(200 * time.Millisecond)
 
+		span := trace.SpanFromContext(c.Request.Context())
+
+		functionParams := map[string]interface{}{
+			"password": "super secret",
+			"test_function_param": "test value",
+			"nested": map[string]interface{}{
+				"password": "super secret",
+				"test_function_param": "test value",
+			},
+		}
+		span.SetAttributes(attribute.Key("appsignal.function.parameters").String(mapToJSON(functionParams)))
+
+		queryParams := map[string]interface{}{
+			"password": "super secret",
+			"test_query": "test value",
+			"nested": map[string]interface{}{
+				"password": "super secret",
+				"test_query": "test value",
+			},
+		}
+		span.SetAttributes(attribute.Key("appsignal.request.query_parameters").String(mapToJSON(queryParams)))
+
+		payloadData := map[string]interface{}{
+			"password": "super secret",
+			"test_payload": "test value",
+			"nested": map[string]interface{}{
+				"password": "super secret",
+				"test_payload": "test value",
+			},
+		}
+		span.SetAttributes(attribute.Key("appsignal.request.payload").String(mapToJSON(payloadData)))
+
+		sessionData := map[string]interface{}{
+			"password": "super secret",
+			"test_payload": "test value",
+			"nested": map[string]interface{}{
+				"password": "super secret",
+				"test_payload": "test value",
+			},
+		}
+		span.SetAttributes(attribute.Key("appsignal.request.session_data").String(mapToJSON(sessionData)))
+
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 
@@ -223,4 +272,12 @@ func main() {
 		})
 	})
 	r.Run(":4001")
+}
+
+func mapToJSON(m map[string]interface{}) string {
+	jsonBytes, err := json.Marshal(m)
+	if err != nil {
+		return "{}" // Return empty JSON object on error
+	}
+	return string(jsonBytes)
 }
