@@ -9,6 +9,9 @@ echo "extension=opentelemetry.so" > /etc/php/8.4/cli/conf.d/99-sail.ini
 
 cd /var/www/html
 
+# Fix file permissions on CI
+chmod -R 777 /var/www/html
+
 export OTEL_RESOURCE_ATTRIBUTES="appsignal.config.name=$APPSIGNAL_APP_NAME,\
 appsignal.config.environment=$APPSIGNAL_APP_ENV,\
 appsignal.config.push_api_key=$APPSIGNAL_PUSH_API_KEY,\
