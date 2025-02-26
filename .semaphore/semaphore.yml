@@ -297,6 +297,9 @@ blocks:
   - name: Run tests for PHP test setups
     dependencies: ["Build processmon"]
     task:
+      prologue:
+        commands:
+          - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
       jobs:
         - name: php/laravel-collector
           commands:
