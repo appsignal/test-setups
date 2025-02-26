@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 echo "Installing OpenTelemetry extension..."
 pecl install opentelemetry
 # The path here matches the path that `php.ini` is written to in the Dockerfile
