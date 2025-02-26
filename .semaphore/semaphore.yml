@@ -294,3 +294,10 @@ blocks:
         - name: python/starlette
           commands:
             - "rake app=python/starlette app:test"
+  - name: Run tests for PHP test setups
+    dependencies: ["Build processmon"]
+    task:
+      jobs:
+        - name: php/laravel-collector
+          commands:
+            - "rake app=php/laravel-collector app:test"
