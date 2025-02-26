@@ -37,7 +37,7 @@ class App
         exit! 1
       elsif retries % 5 == 0
         puts "The app has not started yet. Retrying... (#{retries}/#{max_retries})"
-        puts "#{e.classs}: #{error}"
+        puts "#{error.class}: #{error}"
         puts response.body
       end
 
