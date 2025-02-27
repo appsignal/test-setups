@@ -10,6 +10,7 @@ import (
 	"os"
 	"time"
 	"encoding/json"
+	"bytes"
 
 	"github.com/gin-gonic/gin"
 
@@ -89,7 +90,6 @@ func recordParameters(c *gin.Context) {
 	span := trace.SpanFromContext(c.Request.Context())
 
 	// Query parameters
-	queryParametersKey := attribute.Key("appsignal.request.query_parameters")
 	requestQueryParameters := c.Request.URL.Query()
 	attributeQueryParameters := make(map[string]any)
 	for k, v := range requestQueryParameters {
@@ -99,19 +99,20 @@ func recordParameters(c *gin.Context) {
 	if len(attributeQueryParameters) > 0 {
 		serializedQueryParams, err := json.Marshal(attributeQueryParameters)
 		if err == nil {
-			span.SetAttributes(queryParametersKey.String(string(serializedQueryParams)))
+			span.SetAttributes(attribute.String("appsignal.request.query_parameters", string(serializedQueryParams)))
 		}
 	}
 
 	// Request body payload
 	var serializedBodyPayload string
-	payloadKey := attribute.Key("appsignal.request.payload")
 	var payload map[string]interface{}
+
 	requestBodyPayload, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
 		c.Next()
 		return
 	}
+	c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(requestBodyPayload))
 	contentType := c.GetHeader("Content-Type")
 	if contentType == "application/json" {
 		serializedBodyPayload = string(requestBodyPayload)
@@ -139,7 +140,7 @@ func recordParameters(c *gin.Context) {
 		return
 	}
 	if len(serializedBodyPayload) > 0 {
-		span.SetAttributes(payloadKey.String(serializedBodyPayload))
+		span.SetAttributes(attribute.String("appsignal.request.payload", serializedBodyPayload))
 	}
 	c.Next()
 }
@@ -254,7 +255,7 @@ func main() {
 			panic(err)
 		}
 
-		c.JSON(http.StatusOK, bodyParams)
+		c.JSON(http.StatusOK, string(bodyParams))
 	})
 
 	r.GET("/mysql-query", func(c *gin.Context) {
