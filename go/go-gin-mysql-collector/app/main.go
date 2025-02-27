@@ -8,10 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"os/exec"
 	"time"
 	"encoding/json"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 
