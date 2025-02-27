@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+echo "Installing dependencies"
+go install main.go
+
+echo "Starting app"
+tail -f /dev/null
+# /commands/processmon processmon.toml
