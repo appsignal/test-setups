@@ -205,7 +205,7 @@ func main() {
 				"test_function_param": "test value",
 			},
 		}
-		span.SetAttributes(attribute.Key("appsignal.function.parameters").String(mapToJSON(functionParams)))
+		span.SetAttributes(attribute.String("appsignal.function.parameters", mapToJSON(functionParams)))
 
 		queryParams := map[string]interface{}{
 			"password": "super secret",
@@ -215,7 +215,7 @@ func main() {
 				"test_query": "test value",
 			},
 		}
-		span.SetAttributes(attribute.Key("appsignal.request.query_parameters").String(mapToJSON(queryParams)))
+		span.SetAttributes(attribute.String("appsignal.request.query_parameters", mapToJSON(queryParams)))
 
 		payloadData := map[string]interface{}{
 			"password": "super secret",
@@ -225,7 +225,7 @@ func main() {
 				"test_payload": "test value",
 			},
 		}
-		span.SetAttributes(attribute.Key("appsignal.request.payload").String(mapToJSON(payloadData)))
+		span.SetAttributes(attribute.String("appsignal.request.payload", mapToJSON(payloadData)))
 
 		sessionData := map[string]interface{}{
 			"password": "super secret",
@@ -235,7 +235,9 @@ func main() {
 				"test_payload": "test value",
 			},
 		}
-		span.SetAttributes(attribute.Key("appsignal.request.session_data").String(mapToJSON(sessionData)))
+		span.SetAttributes(attribute.String("appsignal.request.session_data", mapToJSON(sessionData)))
+
+		span.SetAttributes(attribute.StringSlice("http.response.header.custom-header", []string{"abc", "def"}))
 
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
