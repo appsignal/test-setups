@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  appsignal-collector:
+    image: appsignal/collector:latest
+    environment:
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal_key.env
+  redis:
+    image: redis
+  mongo:
+    image: mongo
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=mydb
+  app:
+    build: .
+    image: go/gorilla-mux-mysql-redis-mongo-collector
+    depends_on:
+      - appsignal-collector
+      - mysql
+    ports:
+      - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=go/gorilla-mux-mysql-redis-mongo-collector
+      - APPSIGNAL_APP_ENV=development
+    env_file:
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+  tests:
+    image: server-tests
+    build: ../../support/server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=go/gorilla-mux-mysql-redis-mongo-collector
+      - APP_URL=http://app:4001
+

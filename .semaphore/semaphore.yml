@@ -99,6 +99,9 @@ blocks:
         - name: go/gorilla-mux-mysql-redis-mongo
           commands:
             - "rake app=go/gorilla-mux-mysql-redis-mongo app:test"
+        - name: go/gorilla-mux-mysql-redis-mongo-collector
+          commands:
+            - "rake app=go/gorilla-mux-mysql-redis-mongo-collector app:test"
   - name: Run tests for JavaScript test setups
     dependencies: ["Build processmon"]
     task:
