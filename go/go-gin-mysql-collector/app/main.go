@@ -70,9 +70,9 @@ func initTracer() func(context.Context) error {
 		attribute.String("service.name", "Gin"),
 		attribute.String("host.name", hostname),
 		attribute.StringSlice("appsignal.config.filter_function_parameters", []string{"password", "token"}),
-		attribute.StringSlice("appsignal.config.filter_query_parameters", []string{"password", "token"}),
+		attribute.StringSlice("appsignal.config.filter_request_query_parameters", []string{"password", "token"}),
 		attribute.StringSlice("appsignal.config.filter_request_payload", []string{"password", "token"}),
-		attribute.StringSlice("appsignal.config.filter_session_data", []string{"password", "token"}),
+		attribute.StringSlice("appsignal.config.filter_request_session_data", []string{"password", "token"}),
 		// attribute.Bool("appsignal.config.send_function_parameters", false),
 	)
 
