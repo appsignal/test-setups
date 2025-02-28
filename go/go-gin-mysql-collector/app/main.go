@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -23,10 +24,13 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
+	"go.opentelemetry.io/otel/metric"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
 )
 
@@ -40,27 +44,13 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 	)
 }
 
-func initTracer() func(context.Context) error {
-	client := otlptracehttp.NewClient(
-		otlptracehttp.WithInsecure(),
-		otlptracehttp.WithEndpoint("appsignal-collector:8099"),
-	)
-	exporter, err := otlptrace.New(context.Background(), client)
-	if err != nil {
-		log.Fatal("creating OTLP trace exporter: %w")
-	}
-
-	consoleExporter, err := newConsoleExporter()
-	if err != nil {
-		log.Fatal("creating OTLP console exporter: %w")
-	}
-
+func initInstrumentation() (*sdktrace.TracerProvider, *sdkmetric.MeterProvider, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
 	}
 
-	resource := resource.NewSchemaless(
+	res := resource.NewSchemaless(
 		attribute.String("appsignal.config.name", os.Getenv("APPSIGNAL_APP_NAME")),
 		attribute.String("appsignal.config.environment", os.Getenv("APPSIGNAL_APP_ENV")),
 		attribute.String("appsignal.config.push_api_key", os.Getenv("APPSIGNAL_PUSH_API_KEY")),
@@ -76,14 +66,46 @@ func initTracer() func(context.Context) error {
 		// attribute.Bool("appsignal.config.send_function_parameters", false),
 	)
 
+	// Tracing
+	traceClient := otlptracehttp.NewClient(
+		otlptracehttp.WithInsecure(),
+		otlptracehttp.WithEndpoint("appsignal-collector:8099"),
+	)
+	traceExporter, err := otlptrace.New(context.Background(), traceClient)
+	if err != nil {
+		log.Fatal("creating OTLP trace exporter: %w")
+	}
+
+	consoleExporter, err := newConsoleExporter()
+	if err != nil {
+		log.Fatal("creating OTLP console exporter: %w")
+	}
+
 	tracerProvider := sdktrace.NewTracerProvider(
-		sdktrace.WithBatcher(exporter),
+		sdktrace.WithBatcher(traceExporter),
 		sdktrace.WithBatcher(consoleExporter),
-		sdktrace.WithResource(resource),
+		sdktrace.WithResource(res),
 	)
 	otel.SetTracerProvider(tracerProvider)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
-	return exporter.Shutdown
+
+	// Metrics
+	metricExporter, err := otlpmetrichttp.New(
+		context.Background(),
+		otlpmetrichttp.WithInsecure(),
+		otlpmetrichttp.WithEndpoint("appsignal-collector:8099"),
+	)
+	if err != nil {
+		log.Fatal("creating OTLP metric exporter: %w")
+	}
+
+	meterProvider := sdkmetric.NewMeterProvider(
+		sdkmetric.WithReader(sdkmetric.NewPeriodicReader(metricExporter)),
+		sdkmetric.WithResource(res),
+	)
+	otel.SetMeterProvider(meterProvider)
+
+	return tracerProvider, meterProvider, nil
 }
 
 func recordParameters(c *gin.Context) {
@@ -155,8 +177,18 @@ func ReadFile(file string) error {
 }
 
 func main() {
-	cleanup := initTracer()
-	defer cleanup(context.Background())
+	tracerProvider, meterProvider, err := initInstrumentation()
+	if err != nil {
+		log.Fatalf("Failed to initialize instrumentation: %v", err)
+	}
+	defer func() {
+		if err := tracerProvider.Shutdown(context.Background()); err != nil {
+			log.Println("Error shutting down tracer provider:", err)
+		}
+		if err := meterProvider.Shutdown(context.Background()); err != nil {
+			log.Println("Error shutting down meter provider:", err)
+		}
+	}()
 
 	db, err := otelsql.Open(
 		"mysql",
@@ -258,6 +290,60 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, string(bodyParams))
+	})
+
+	r.GET("/metrics", func(c *gin.Context) {
+		time.Sleep(200 * time.Millisecond)
+
+		var meter = otel.Meter("example.io/package/name")
+		ctx := c.Request.Context()
+
+		// Counter metric
+		myCounter, err := meter.Int64Counter(
+			"my_counter",
+			metric.WithDescription("My counter"),
+			metric.WithUnit("1"),
+		)
+		if err != nil {
+			panic(err)
+		}
+		myCounter.Add(
+			ctx,
+			int64(rand.Intn(25) + 3), // Value between 1 and 3
+			metric.WithAttributes(attribute.String("my_tag", "tag_value")),
+		)
+
+		// Gauge
+		myGauge, err := meter.Int64Gauge(
+			"my_guage",
+			metric.WithDescription("My gauge"),
+			metric.WithUnit("1"),
+		)
+		if err != nil {
+			panic(err)
+		}
+		myGauge.Record(
+			ctx,
+			int64(rand.Intn(25) + 10), // Value between 1 and 25
+			metric.WithAttributes(attribute.String("my_tag", "tag_value")),
+		)
+
+		// Histogram
+		myHistogram, err := meter.Float64Histogram(
+			"my_histogram",
+			metric.WithDescription("My Histogram"),
+			metric.WithUnit("1"),
+		)
+		myHistogram.Record(
+			ctx,
+			float64(rand.Intn(16) + 10), // Value between 10 and 25
+			metric.WithAttributes(attribute.String("my_tag", "tag_value")),
+		)
+
+		response := map[string]interface{}{
+			"message": "Metrics were sent",
+		}
+		c.JSON(http.StatusOK, response)
 	})
 
 	r.GET("/mysql-query", func(c *gin.Context) {
