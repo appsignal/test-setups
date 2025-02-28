@@ -44,24 +44,6 @@ const resource = new Resource({
 // Specify AppSignal collector location
 const collectorHost = "http://appsignal-collector:8099"
 
-// Custom metrics aggregation temporality selector
-// This requires a patch because the Node.js exporter doesn't allow this to be
-// specified per metric type.
-const customAggregationTemporality = {
-  COUNTER: AggregationTemporality.DELTA,
-  UP_DOWN_COUNTER: AggregationTemporality.DELTA,
-  OBSERVABLE_COUNTER: AggregationTemporality.DELTA,
-  OBSERVABLE_GAUGE: AggregationTemporality.CUMULATIVE,
-  OBSERVABLE_UP_DOWN_COUNTER: AggregationTemporality.DELTA,
-  HISTOGRAM: AggregationTemporality.DELTA
-}
-class PatchedOTLPMetricExporter extends OTLPMetricExporter {
-  selectAggregationTemporality(instrumentType) {
-    const aggregationTemporality = customAggregationTemporality[instrumentType]
-    return aggregationTemporality != undefined ? aggregationTemporality :
-      super.selectAggregationTemporality(instrumentType);
-  }
-}
 // Configure the OpenTelemetry HTTP exporter
 const sdk = new NodeSDK({
   resource,
@@ -70,7 +52,7 @@ const sdk = new NodeSDK({
   }),
   metricReader: new PeriodicExportingMetricReader({
     exportIntervalMillis: 1000,
-    exporter: new PatchedOTLPMetricExporter({
+    exporter: new OTLPMetricExporter({
       url: `${collectorHost}/v1/metrics`,
     })
   }),
