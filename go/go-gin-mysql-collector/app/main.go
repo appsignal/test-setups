@@ -271,6 +271,19 @@ func main() {
 
 		span.SetAttributes(attribute.StringSlice("http.response.header.custom-header", []string{"abc", "def"}))
 
+		// Tags
+		span.SetAttributes(attribute.String("appsignal.tag.tag_string", "tag value"))
+		span.SetAttributes(attribute.StringSlice("appsignal.tag.tag_int64", []string{"abc", "def"}))
+		span.SetAttributes(attribute.Bool("appsignal.tag.tag_bool_true", true))
+		span.SetAttributes(attribute.Bool("appsignal.tag.tag_bool_false", false))
+		span.SetAttributes(attribute.BoolSlice("appsignal.tag.tag_bool_slice", []bool{true, false}))
+		span.SetAttributes(attribute.Float64("appsignal.tag.tag_float64", 12.34))
+		span.SetAttributes(attribute.Float64Slice("appsignal.tag.tag_float64_slice", []float64{12.34, 56.78}))
+		span.SetAttributes(attribute.Int("appsignal.tag.tag_int", 1234))
+		span.SetAttributes(attribute.IntSlice("appsignal.tag.tag_int", []int{1234, 5678}))
+		span.SetAttributes(attribute.Int64("appsignal.tag.tag_int64", 1234))
+		span.SetAttributes(attribute.Int64Slice("appsignal.tag.tag_int64_slice", []int64{1234, 5678}))
+
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 
