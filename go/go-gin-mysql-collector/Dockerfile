@@ -1,6 +1,6 @@
-FROM golang:1.18-buster
+FROM golang:1.24-bookworm
 
-ENV REFRESHED_AT=2023-02-23
+ENV REFRESHED_AT=2025-02-28
 
 # Copy commands into the container
 RUN mkdir /commands
