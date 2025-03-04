@@ -15,6 +15,12 @@ defmodule AppsignalPhoenixExampleWeb.PageController do
     raise "Oops!"
   end
 
+  def instrumented(conn, _params) do
+    Appsignal.instrument("instrumented", fn ->
+      render(conn, :home)
+    end)
+  end
+
   @decorate transaction_event()
   def decorated(conn, _params) do
     render(conn, :home)
