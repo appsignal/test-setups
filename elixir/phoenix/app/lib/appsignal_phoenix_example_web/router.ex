@@ -20,6 +20,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     get "/", PageController, :home
     get "/slow", PageController, :slow
     get "/error", PageController, :error
+    get "/instrumented", PageController, :instrumented
     get "/decorated", PageController, :decorated
     live "/live", DemoLive
   end
