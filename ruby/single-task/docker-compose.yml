@@ -1,11 +1,10 @@
-version: '3.8'
-
 services:
   app:
     build: .
     image: ruby/single-task
     environment:
       - APPSIGNAL_APP_NAME=ruby-single-task
+      - APPSIGNAL_APP_ENV=development
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env
