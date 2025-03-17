@@ -16,7 +16,17 @@ from tasks import error_task, performance_task, performance_task2
 def home(request):
     tracer = trace.get_tracer(__name__)
     with tracer.start_as_current_span("something.custom") as span:
-        span.set_attribute("appsignal.request.parameters", json.dumps({
+        span.set_attribute("appsignal.request.query_parameters", json.dumps({
+            "password": "super secret",
+            "email": "test@example.com",
+            "cvv": 123,
+            "test_param": "test value",
+            "nested": {
+                "password": "super secret nested",
+                "test_param": "test value",
+            }
+        }))
+        span.set_attribute("appsignal.request.payload", json.dumps({
             "password": "super secret",
             "email": "test@example.com",
             "cvv": 123,
@@ -44,6 +54,9 @@ def home(request):
                 "test_param": "test value",
             }
         }))
+        span.set_attribute("http.request.header.content-type",
+                           ["application/json"])
+        span.set_attribute("http.request.header.custom-header", ["abc", "def"])
     return render(request, 'home.html', {})
 
 

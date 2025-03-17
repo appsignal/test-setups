@@ -42,7 +42,7 @@ class Appsignal:
                 os.environ.get("APPSIGNAL_PUSH_API_KEY") or "",
             "appsignal.config.revision": "test-setups",
             "appsignal.config.language_integration": "python",
-            "appsignal.config.filter_request_parameters": [
+            "appsignal.config.filter_request_query_parameters": [
                 "password",
                 "email",
                 "cvv"
