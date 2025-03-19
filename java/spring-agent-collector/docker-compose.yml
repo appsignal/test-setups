@@ -5,7 +5,6 @@ services:
     volumes:
       - ./app:/app
     environment:
-      OTEL_LOGS_EXPORTER: "none"
       APPSIGNAL_APP_NAME: java/spring-agent-collector
       APPSIGNAL_APP_ENV: development
       SERVER_PORT: "4001"
