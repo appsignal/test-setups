@@ -1,7 +1,6 @@
 import { Pool } from "pg"
 import express from "express"
 import { Span, trace, metrics } from "@opentelemetry/api"
-import { expressErrorHandler } from "./error_reporter"
 
 const tracer = trace.getTracer('my-tracer');
 
@@ -56,7 +55,7 @@ app.get("/", (_req: any, res: any) => {
 })
 
 app.get("/error", (req, res) => {
-  throw new Error("Expected test error")
+  throw new Error("Expected test error without reporter!")
 })
 
 app.get("/slow", async (_req, res) => {
@@ -102,8 +101,6 @@ app.get("/metrics", (_req, res) => {
 
   res.send("I sent some test metrics!")
 })
-
-app.use(expressErrorHandler());
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
