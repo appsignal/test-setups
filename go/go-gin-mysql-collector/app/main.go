@@ -25,13 +25,19 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/metric"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
+	sdklog "go.opentelemetry.io/otel/sdk/log"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
+
+	"go.opentelemetry.io/otel/log/global"
+
+	"go.opentelemetry.io/contrib/bridges/otelslog"
 )
 
 var tracer = otel.Tracer("opentelemetry-go-gin")
@@ -44,7 +50,7 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 	)
 }
 
-func initInstrumentation() (*sdktrace.TracerProvider, *sdkmetric.MeterProvider, error) {
+func initInstrumentation() (*sdktrace.TracerProvider, *sdkmetric.MeterProvider, *sdklog.LoggerProvider, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
@@ -105,7 +111,25 @@ func initInstrumentation() (*sdktrace.TracerProvider, *sdkmetric.MeterProvider, 
 	)
 	otel.SetMeterProvider(meterProvider)
 
-	return tracerProvider, meterProvider, nil
+	// Logs
+	logExporter, err := otlploghttp.New(
+		context.Background(),
+		otlploghttp.WithInsecure(),
+		otlploghttp.WithEndpoint("appsignal-collector:8099"),
+	)
+	if err != nil {
+		log.Fatal("creating OTLP log exporter: %w")
+	}
+
+	loggerProvider := sdklog.NewLoggerProvider(
+		sdklog.WithResource(res),
+		sdklog.WithProcessor(
+			sdklog.NewBatchProcessor(logExporter),
+		),
+	)
+	global.SetLoggerProvider(loggerProvider)
+
+	return tracerProvider, meterProvider, loggerProvider, nil
 }
 
 func recordParameters(c *gin.Context) {
@@ -177,7 +201,7 @@ func ReadFile(file string) error {
 }
 
 func main() {
-	tracerProvider, meterProvider, err := initInstrumentation()
+	tracerProvider, meterProvider, loggerProvider, err := initInstrumentation()
 	if err != nil {
 		log.Fatalf("Failed to initialize instrumentation: %v", err)
 	}
@@ -187,6 +211,9 @@ func main() {
 		}
 		if err := meterProvider.Shutdown(context.Background()); err != nil {
 			log.Println("Error shutting down meter provider:", err)
+		}
+		if err := loggerProvider.Shutdown(context.Background()); err != nil {
+			log.Println("Error shutting down logger provider:", err)
 		}
 	}()
 
@@ -292,6 +319,17 @@ func main() {
 
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Well, that took forever!",
+		})
+	})
+
+	r.GET("/logs", func(c *gin.Context) {
+		logger := otelslog.NewLogger("some-name")
+		logger.Info("This is an info message")
+		logger.Error("This is an error message")
+		logger.Info("This is an info message with a tag", "tag", "value")
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Logs were sent",
 		})
 	})
 
