@@ -18,3 +18,9 @@ Route::get('/error', function () {
 Route::get('/extension', function () {
     return extension_loaded("opentelemetry") ? "yes" : "no";
 });
+
+Route::get('/logs', function () {
+    Log::info('Logging a message');
+    Log::error('Logging an error message');
+    Log::info('Logging a fancy message', ['some' => 'context']);
+});
