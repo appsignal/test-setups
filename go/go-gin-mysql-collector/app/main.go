@@ -50,7 +50,7 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 	)
 }
 
-func initInstrumentation() (*sdktrace.TracerProvider, *sdkmetric.MeterProvider, *sdklog.LoggerProvider, error) {
+func initInstrumentation() func() {
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
@@ -129,7 +129,17 @@ func initInstrumentation() (*sdktrace.TracerProvider, *sdkmetric.MeterProvider, 
 	)
 	global.SetLoggerProvider(loggerProvider)
 
-	return tracerProvider, meterProvider, loggerProvider, nil
+	return func() {
+		if err := tracerProvider.Shutdown(context.Background()); err != nil {
+			log.Println("Error shutting down tracer provider:", err)
+		}
+		if err := meterProvider.Shutdown(context.Background()); err != nil {
+			log.Println("Error shutting down meter provider:", err)
+		}
+		if err := loggerProvider.Shutdown(context.Background()); err != nil {
+			log.Println("Error shutting down logger provider:", err)
+		}
+	}
 }
 
 func recordParameters(c *gin.Context) {
@@ -201,21 +211,8 @@ func ReadFile(file string) error {
 }
 
 func main() {
-	tracerProvider, meterProvider, loggerProvider, err := initInstrumentation()
-	if err != nil {
-		log.Fatalf("Failed to initialize instrumentation: %v", err)
-	}
-	defer func() {
-		if err := tracerProvider.Shutdown(context.Background()); err != nil {
-			log.Println("Error shutting down tracer provider:", err)
-		}
-		if err := meterProvider.Shutdown(context.Background()); err != nil {
-			log.Println("Error shutting down meter provider:", err)
-		}
-		if err := loggerProvider.Shutdown(context.Background()); err != nil {
-			log.Println("Error shutting down logger provider:", err)
-		}
-	}()
+	cleanup := initInstrumentation()
+	defer cleanup()
 
 	db, err := otelsql.Open(
 		"mysql",
