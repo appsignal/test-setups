@@ -45,9 +45,6 @@ blocks:
         - name: elixir/phoenix-collector
           commands:
             - "rake app=elixir/phoenix-collector app:test"
-        - name: elixir/phoenix-opentelemetry
-          commands:
-            - "rake app=elixir/phoenix-opentelemetry app:test"
         - name: elixir/phoenix-oban
           commands:
             - "rake app=elixir/phoenix-oban app:test"
