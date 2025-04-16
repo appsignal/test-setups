@@ -62,6 +62,6 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "sidekiq"
+gem "sidekiq", "8.0.0"
 gem "appsignal", :path => "/integration"
 gem "ownership"
