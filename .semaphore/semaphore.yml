@@ -277,6 +277,9 @@ blocks:
           - "echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env"
           - "rake integrations:clone"
       jobs:
+        - name: python/django5-celery
+          commands:
+            - "rake app=python/django5-celery app:test"
         - name: python/django5-celery-collector
           commands:
             - "rake app=python/django5-celery-collector app:test"
