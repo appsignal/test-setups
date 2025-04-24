@@ -1,10 +1,9 @@
 const os = require("os");
 const { NodeSDK } = require('@opentelemetry/sdk-node');
-const { NodeTracerProvider } = require("@opentelemetry/sdk-trace-node");
-const { PeriodicExportingMetricReader, AggregationTemporality } = require("@opentelemetry/sdk-metrics");
-const { Resource } = require("@opentelemetry/resources");
+const { PeriodicExportingMetricReader } = require("@opentelemetry/sdk-metrics");
+const { resourceFromAttributes } = require("@opentelemetry/resources");
 const {
-  SemanticResourceAttributes,
+  ATTR_SERVICE_NAME,
 } = require("@opentelemetry/semantic-conventions");
 const {
   OTLPTraceExporter,
@@ -17,7 +16,7 @@ const {
 } = require("@opentelemetry/auto-instrumentations-node");
 
 // Add AppSignal and app configuration
-const resource = new Resource({
+const resource = resourceFromAttributes({
   "appsignal.config.name": process.env.APPSIGNAL_APP_NAME,
   "appsignal.config.environment": process.env.NODE_ENV || "development",
   "appsignal.config.push_api_key": process.env.APPSIGNAL_PUSH_API_KEY,
@@ -38,7 +37,7 @@ const resource = new Resource({
   ],
   "host.name": os.hostname(),
   // Customize the service name
-  [SemanticResourceAttributes.SERVICE_NAME]: "Express server",
+  [ATTR_SERVICE_NAME]: "Express server",
 });
 
 // Specify AppSignal collector location
