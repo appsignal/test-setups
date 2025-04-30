@@ -13,6 +13,7 @@ config :plug_oban,
 config :plug_oban, Oban,
   repo: PlugOban.Repo,
   plugins: [Oban.Plugins.Pruner],
-  queues: [default: 3, slow: 1]
+  queues: [default: 3, slow: 1],
+  prefix: "some_prefix"
 
 import_config "appsignal.exs"
