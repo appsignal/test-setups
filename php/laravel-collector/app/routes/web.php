@@ -48,6 +48,11 @@ Route::get('/extension', function () {
     return extension_loaded("opentelemetry") ? "yes" : "no";
 });
 
+Route::get('/queue', function () {
+    \App\Jobs\ExampleJob::dispatch(['time' => time()]);
+    return "Job dispatched";
+});
+
 Route::get('/logs', function () {
     Log::info('Logging a message');
     Log::error('Logging an error message');
