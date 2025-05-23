@@ -12,12 +12,20 @@ cd /var/www/html
 # Fix file permissions on CI
 chmod -R 777 /var/www/html
 
+function encode() {
+  echo -n "$@" | sed 's/,/%2C/g'
+}
+
 export OTEL_RESOURCE_ATTRIBUTES="appsignal.config.name=$APPSIGNAL_APP_NAME,\
 appsignal.config.environment=$APPSIGNAL_APP_ENV,\
 appsignal.config.push_api_key=$APPSIGNAL_PUSH_API_KEY,\
 appsignal.config.revision=abcd123,\
 appsignal.config.language_integration=php,\
 appsignal.config.app_path=$PWD,\
+foo.bar=$(encode "123,456"),\
+empty.string=,\
+baz.qux=%48%65%6C%6C%6F%20%77%6F%72%6C%64%21,\
+white.space=Yes please,\
 host.name=${HOSTNAME:-$(hostname)}"
 
 echo "Installing dependencies..."
