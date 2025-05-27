@@ -1,0 +1,324 @@
+name: Appsignal test setups tests
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    types:
+    - opened
+    - reopened
+    - synchronize
+  schedule:
+  - cron: 0 0 * * 1-5
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: "${{ !contains(github.ref, 'main')}}"
+
+env:
+  CACHE_VERSION: v1
+  RUNNING_IN_CI: true
+
+jobs:
+  build-processmon:
+    name: Build processmon
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        id: cache-processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Build processmon
+        if: steps.cache-processmon.outputs.cache-hit != 'true'
+        run: rake global:install_processmon
+
+  test-elixir:
+    name: Run tests for Elixir test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - elixir/alpine-release
+          - elixir/phoenix
+          - elixir/phoenix-collector
+          - elixir/phoenix-oban
+          - elixir/plug
+          - elixir/plug-ecto
+          - elixir/plug-oban
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Setup environment
+        run: |
+          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+          rake integrations:clone
+
+      - name: Run tests
+        run: rake app=${{ matrix.app }} app:test
+
+  test-java:
+    name: Run tests for Java test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - java/spring-native-collector
+          - java/spring-agent-collector
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Setup environment
+        run: |
+          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+          rake integrations:clone
+
+      - name: Run tests
+        run: rake app=${{ matrix.app }} app:test
+
+  test-go:
+    name: Run tests for Go test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - go/beego
+          - go/beego-mod-otel
+          - go/go-gin-mysql
+          - go/go-gin-mysql-collector
+          - go/gorilla-mux-mysql-redis-mongo
+          - go/gorilla-mux-mysql-redis-mongo-collector
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Setup environment
+        run: |
+          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+          rake integrations:clone
+
+      - name: Run tests
+        run: rake app=${{ matrix.app }} app:test
+
+  test-javascript:
+    name: Run tests for JavaScript test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - javascript/react
+          - javascript/react-vite-collector
+          - javascript/ember
+          - javascript/vanilla
+          - javascript/vue-2
+          - javascript/vue-3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Setup environment
+        run: |
+          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+          rake integrations:clone
+
+      - name: Setup react-vite-collector config
+        if: matrix.app == 'javascript/react-vite-collector'
+        run: cp javascript/react-vite-collector/app/{.example,}.env
+
+      - name: Setup vanilla config
+        if: matrix.app == 'javascript/vanilla'
+        run: cp javascript/vanilla/appsignal_key.env{.example,}
+
+      - name: Run tests
+        run: rake app=${{ matrix.app }} app:test
+
+  test-nodejs:
+    name: Run tests for Node.js test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - nodejs/express-bullmq
+          - nodejs/express-postgres
+          - nodejs/express-postgres-collector
+          - nodejs/express-redis
+          - nodejs/express-mongoose
+          - nodejs/express-apollo
+          - nodejs/express-yoga
+          - nodejs/koa-mongo
+          - nodejs/koa-mysql
+          - nodejs/fastify
+          - nodejs/restify
+          - nodejs/nestjs
+          - nodejs/nestjs-10
+          - nodejs/nextjs-13-app
+          - nodejs/nextjs-14-app
+          - nodejs/nextjs-14-pages
+          - nodejs/nestjs-prisma
+          - nodejs/express-redis-alpine
+          - nodejs/remix
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Setup environment
+        run: |
+          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+          rake integrations:clone
+
+      - name: Run tests
+        run: rake app=${{ matrix.app }} app:test
+
+  test-ruby:
+    name: Run tests for Ruby test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - ruby/jruby-rails6
+          - ruby/grape
+          - ruby/hanami2-postgres
+          - ruby/rack
+          - ruby/padrino
+          - ruby/rails7-goodjob
+          - ruby/rails7-postgres
+          - ruby/rails6-mysql
+          - ruby/rails6-mongo
+          - ruby/rails6-shakapacker
+          - ruby/rails6-shoryuken
+          - ruby/rails7-delayed-job
+          - ruby/rails7-sequel
+          - ruby/rails7-sidekiq
+          - ruby/rails8-sidekiq
+          - ruby/rails8-sidekiq-collector
+          - ruby/sinatra-redis
+          - ruby/sinatra-alpine
+          - ruby/sinatra-puma
+          - ruby/webmachine1
+          - ruby/webmachine2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Setup environment
+        run: |
+          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+          rake integrations:clone
+
+      - name: Setup rails7-postgres config
+        if: matrix.app == 'ruby/rails7-postgres'
+        run: echo "APPSIGNAL_PUSH_API_KEY_FOR_APP=00000000-0000-0000-0000-000000000000" > ruby/rails7-postgres/appsignal_key.env
+
+      - name: Setup rails6-shakapacker config
+        if: matrix.app == 'ruby/rails6-shakapacker'
+        run: echo "APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000" > ruby/rails6-shakapacker/appsignal_key.env
+
+      - name: Run tests
+        run: rake app=${{ matrix.app }} app:test
+
+  test-python:
+    name: Run tests for Python test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - python/django5-celery
+          - python/django5-celery-collector
+          - python/django4-celery
+          - python/flask
+          - python/fastapi
+          - python/starlette
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Setup environment
+        run: |
+          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+          rake integrations:clone
+
+      - name: Run tests
+        run: rake app=${{ matrix.app }} app:test
+
+  test-php:
+    name: Run tests for PHP test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - php/laravel-collector
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        run: echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+
+      - name: Run tests
+        run: rake app=${{ matrix.app }} app:test
