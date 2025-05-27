@@ -1,9 +1,25 @@
 <?php
 
+use OpenTelemetry\API\Trace\Span;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $span = OpenTelemetry\API\Trace\Span::getCurrent();
+    $params = [
+        'param1' => 'value1',
+        'param2' => 'value2',
+        'nested' => [
+            'param3' => 'value3',
+            'param4' => 'value4',
+        ],
+    ];
+    $json = json_encode($params);
+    
+    $span = Span::getCurrent();
+    $span->setAttribute(
+        'appsignal.function.parameters',
+        $json
+    );
+
     $span->setAttribute("appsignal.tag.user_id", 123);
     $span->setAttribute("appsignal.tag.my_tag_string", "tag value");
     $span->setAttribute("appsignal.tag.my_tag_string_slice", ["abc", "def"]);
@@ -30,6 +46,11 @@ Route::get('/error', function () {
 
 Route::get('/extension', function () {
     return extension_loaded("opentelemetry") ? "yes" : "no";
+});
+
+Route::get('/queue', function () {
+    \App\Jobs\ExampleJob::dispatch(['time' => time()]);
+    return "Job dispatched";
 });
 
 Route::get('/logs', function () {
