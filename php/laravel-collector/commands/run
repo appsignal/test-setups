@@ -16,8 +16,18 @@ install_opentelemetry_extension_with_pie() {
   pie install open-telemetry/ext-opentelemetry
 }
 
+install_opentelemetry_extension_with_pickle() {
+  echo "Installing PHP pickle..."
+  curl -L https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar -o /usr/local/bin/pickle
+  chmod +x /usr/local/bin/pickle
+
+  echo "Installing OpenTelemetry extension..."
+  pickle install opentelemetry
+}
+
 # install_opentelemetry_extension_with_pecl
-install_opentelemetry_extension_with_pie
+# install_opentelemetry_extension_with_pie
+install_opentelemetry_extension_with_pickle
 
 # The path here matches the path that `php.ini` is written to in the Dockerfile
 echo "extension=opentelemetry.so" > /etc/php/8.4/cli/conf.d/99-sail.ini
