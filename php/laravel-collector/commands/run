@@ -2,8 +2,23 @@
 
 set -eu
 
-echo "Installing OpenTelemetry extension..."
-pecl install opentelemetry
+install_opentelemetry_extension_with_pecl() {
+  echo "Installing OpenTelemetry extension..."
+  pecl install opentelemetry
+}
+
+install_opentelemetry_extension_with_pie() {
+  echo "Installing PHP pie..."
+  curl -L https://github.com/php/pie/releases/latest/download/pie.phar -o /usr/local/bin/pie
+  chmod +x /usr/local/bin/pie
+
+  echo "Installing OpenTelemetry extension..."
+  pie install open-telemetry/ext-opentelemetry
+}
+
+# install_opentelemetry_extension_with_pecl
+install_opentelemetry_extension_with_pie
+
 # The path here matches the path that `php.ini` is written to in the Dockerfile
 echo "extension=opentelemetry.so" > /etc/php/8.4/cli/conf.d/99-sail.ini
 
