@@ -18,7 +18,14 @@ def clone_from_git(path, repo, branch: nil)
   else
     puts "Cloning #{repo} into #{path}"
     branch_arg = "--branch #{branch}" if branch
-    run_command "git clone #{branch_arg} git@github.com:appsignal/#{repo}.git #{path}"
+    repo_location =
+      if ENV["RUNNING_IN_CI"]
+        # Download using HTTPS on CI because it has no SSH authentication configured
+        "https://github.com/appsignal/#{repo}.git"
+      else
+        "git@github.com:appsignal/#{repo}.git"
+      end
+    run_command "git clone #{branch_arg} #{repo_location} #{path}"
     puts "Cloned #{repo} at #{path} is at commit #{`cd #{path} && git rev-parse HEAD`.strip}"
   end
 end
