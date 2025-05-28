@@ -173,7 +173,13 @@ namespace :app do
   task :bash do
     @app = get_app
     puts "Starting bash in #{@app}"
-    run_command "cd #{@app} && docker compose exec --workdir /app app /bin/bash"
+    workdir =
+      if @app.start_with?("php/")
+        "/var/www/html"
+      else
+        "/app"
+      end
+    run_command "cd #{@app} && docker compose exec --workdir #{workdir} app /bin/bash"
   end
 
   desc "Attach to app and get a console"
