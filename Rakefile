@@ -42,6 +42,12 @@ def reset_repo(path, branch: "main")
   end
 end
 
+class FailedCommand < StandardError
+  def initialize(cmd, exitcode)
+    @messsage = "The command '#{cmd}' failed with '#{exitcode}' exit code"
+  end
+end
+
 def run_command(command)
   puts "Running '#{command}'"
   # Spawn child process with parent process STDIN, STDOUT and STDERR
@@ -51,7 +57,7 @@ def run_command(command)
   # Wait for child process to end
   _pid, status = Process.wait2(pid)
   # Exit with the error status code if an error occurred in the child process
-  exit status.exitstatus unless status.success?
+  raise FailedCommand.new(command, status.exitstatus) unless status.success?
 end
 
 def child_processes
@@ -180,6 +186,11 @@ namespace :app do
         "/app"
       end
     run_command "cd #{@app} && docker compose exec --workdir #{workdir} app /bin/bash"
+  rescue FailedCommand
+    puts "Failed to open '#{workdir}' working directory. Does it exist?"
+    puts
+    puts "Starting bash in #{@app} in root '/' fallback directory"
+    run_command "cd #{@app} && docker compose exec --workdir / app /bin/bash"
   end
 
   desc "Attach to app and get a console"
