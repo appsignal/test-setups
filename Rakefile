@@ -1,7 +1,7 @@
 require 'erb'
 require 'fileutils'
 
-LANGUAGES = %w(elixir ruby nodejs javascript)
+LANGUAGES = %w(elixir go java javascript nodejs php python ruby standalone vector)
 PROCESSMON_PATH = "support/processmon/processmon"
 
 def get_app
