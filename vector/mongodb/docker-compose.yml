@@ -23,6 +23,7 @@ services:
       - MONGODB_URL_2=mongodb://mongo-2:27017/
       - MONGODB_URL_3=mongodb://mongo-3:27017/
     env_file:
+      - ../../appsignal.env
       - ../../appsignal_key.env
     depends_on:
       - mongo-1

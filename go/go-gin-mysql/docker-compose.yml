@@ -4,6 +4,7 @@ services:
   appsignal:
     image: appsignal/agent:latest
     env_file:
+      - ../../appsignal.env
       - ../../appsignal_key.env
     environment:
       - APPSIGNAL_APP_NAME=go/go-gin-mysql

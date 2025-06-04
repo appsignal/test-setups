@@ -28,6 +28,7 @@ services:
       - VECTOR_LOG=debug
     env_file:
       - postgres.env
+      - ../../appsignal.env
       - ../../appsignal_key.env
     depends_on:
       - postgres
