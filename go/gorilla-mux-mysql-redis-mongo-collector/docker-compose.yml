@@ -6,6 +6,7 @@ services:
     environment:
       - APPSIGNAL_LOG_LEVEL=trace
     env_file:
+      - ../../appsignal.env
       - ../../appsignal_key.env
   redis:
     image: redis
@@ -30,6 +31,7 @@ services:
       - APPSIGNAL_APP_NAME=go/gorilla-mux-mysql-redis-mongo-collector
       - APPSIGNAL_APP_ENV=development
     env_file:
+      - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
       - ./app:/app

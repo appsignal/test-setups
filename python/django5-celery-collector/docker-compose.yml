@@ -16,6 +16,7 @@ services:
     environment:
       - APPSIGNAL_LOG_LEVEL=debug
     env_file:
+      - ../../appsignal.env
       - ../../appsignal_key.env
   app:
     build: .

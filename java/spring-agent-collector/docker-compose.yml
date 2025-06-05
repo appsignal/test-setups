@@ -9,6 +9,7 @@ services:
       APPSIGNAL_APP_ENV: development
       SERVER_PORT: "4001"
     env_file:
+      - ../../appsignal.env
       - ../../appsignal_key.env
     ports:
       - "4001:4001"
@@ -19,6 +20,7 @@ services:
     environment:
       - APPSIGNAL_LOG_LEVEL=trace
     env_file:
+      - ../../appsignal.env
       - ../../appsignal_key.env
   tests:
     image: server-tests
