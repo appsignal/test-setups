@@ -13,21 +13,48 @@ import org.apache.logging.log4j.message.MapMessage;
 import org.apache.logging.log4j.message.StructuredDataMessage;
 import org.apache.logging.log4j.ThreadContext;
 
+import io.opentelemetry.api.common.AttributeKey;
+import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.trace.Span;
+
+import java.util.Arrays;
+
 @RestController
 public class Controller {
+
+  private void setSpanAttributes() {
+    Span span = Span.current();
+    span.setAttribute("appsignal.tag.user_id", 123);
+    span.setAttribute("appsignal.tag.my_tag_string", "tag value");
+    span.setAttribute(AttributeKey.stringArrayKey("appsignal.tag.my_tag_string_array"), Arrays.asList("abc", "def"));
+    span.setAttribute("appsignal.tag.my_tag_bool_true", true);
+    span.setAttribute("appsignal.tag.my_tag_bool_false", false);
+    span.setAttribute(AttributeKey.booleanArrayKey("appsignal.tag.my_tag_bool_array"), Arrays.asList(true, false));
+    span.setAttribute("appsignal.tag.my_tag_float64", 12.34);
+    span.setAttribute(AttributeKey.doubleArrayKey("appsignal.tag.my_tag_float64_array"), Arrays.asList(12.34, 56.78));
+    span.setAttribute("appsignal.tag.my_tag_int", 1234);
+    span.setAttribute(AttributeKey.longArrayKey("appsignal.tag.my_tag_int_array"), Arrays.asList(1234L, 5678L));
+    span.setAttribute("appsignal.tag.my_tag_int64", 1234);
+    span.setAttribute(AttributeKey.longArrayKey("appsignal.tag.my_tag_int64_array"), Arrays.asList(1234L, 5678L));
+  }
+
   @GetMapping("/slow")
   public String slow() throws InterruptedException {
+    setSpanAttributes();
     Thread.sleep(3000);
     return "Well, that took forever!";
   }
 
   @GetMapping("/error")
   public String error() {
+    setSpanAttributes();
     throw new RuntimeException("Whoops!");
   }
 
   @GetMapping("/logs")
   public String logs() throws InterruptedException {
+    setSpanAttributes();
+
     for (int i = 0; i < 10; i++) {
       // Set ThreadContext key-value:
       ThreadContext.put("something", "threadcontext");
@@ -69,6 +96,8 @@ public class Controller {
 
   @GetMapping("/")
   public String root() {
+    setSpanAttributes();
+
     return "<html>" +
            "<body>" +
            "<h1>Java + Spring Boot test setup:</h1>" +
