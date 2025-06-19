@@ -4,6 +4,14 @@ class ExamplesController < ApplicationController
   owner :examples
 
   def index
+    Rails.logger.info(
+      "Test log message",
+      abc: "def",
+      # Attribute value with quotes in them
+      params: { "foo" => "bar", "abc" => "def" },
+      # This tag should also show up
+      final_tag: "test"
+    )
     session[:user_id] = :some_user_id_123
     session[:menu] = { :state => :open, :view => :full }
   end

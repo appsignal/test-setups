@@ -65,3 +65,7 @@ end
 gem "sidekiq", "8.0.0"
 gem "appsignal", :path => "/integration"
 gem "ownership"
+
+# Enable these lines when testing semantic logger
+# gem "rails_semantic_logger", "4.17.0"
+# gem "semantic_logger", "4.16.1"
