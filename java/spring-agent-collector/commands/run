@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -eu
 
 cd /app
 
@@ -16,6 +18,10 @@ else
     fi
 fi
 
+function encode() {
+  echo -n "$@" | sed 's/,/%2C/g'
+}
+
 # Build resource attributes string
 # (these could be in `agent.properties` but are here
 # so that environment variables can be interpolated in them)
@@ -25,6 +31,7 @@ appsignal.config.push_api_key=$APPSIGNAL_PUSH_API_KEY,\
 appsignal.config.revision=abcd123,\
 appsignal.config.language_integration=java,\
 appsignal.config.app_path=$PWD,\
+appsignal.config.request_headers=$(encode "request-method,path-info,content-type,custom-header"),\
 host.name=${HOSTNAME:-$(hostname)}"
 
 JAVA_OPTS="-javaagent:/app/$AGENT_JAR \

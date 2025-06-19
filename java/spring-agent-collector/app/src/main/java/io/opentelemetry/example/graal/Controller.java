@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import java.util.HashMap;
 import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.message.ObjectMessage;
 import org.apache.logging.log4j.message.MapMessage;
 import org.apache.logging.log4j.message.StructuredDataMessage;
@@ -36,6 +37,40 @@ public class Controller {
     span.setAttribute(AttributeKey.longArrayKey("appsignal.tag.my_tag_int_array"), Arrays.asList(1234L, 5678L));
     span.setAttribute("appsignal.tag.my_tag_int64", 1234);
     span.setAttribute(AttributeKey.longArrayKey("appsignal.tag.my_tag_int64_array"), Arrays.asList(1234L, 5678L));
+
+    // Create nested HashMap structure and serialize to JSON
+    Map<String, Object> queryParams = new HashMap<>();
+    queryParams.put("param1", "value1");
+    queryParams.put("param2", "value2");
+
+    Map<String, String> nested = new HashMap<>();
+    nested.put("param3", "value3");
+    nested.put("param4", "value4");
+    queryParams.put("nested", nested);
+
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      String jsonString = mapper.writeValueAsString(queryParams);
+      span.setAttribute("appsignal.request.query_parameters", jsonString);
+      span.setAttribute("appsignal.request.payload", jsonString);
+      span.setAttribute("appsignal.request.session_data", jsonString);
+      span.setAttribute("appsignal.function.parameters", jsonString);
+    } catch (Exception e) {
+      Logger logger = LogManager.getLogger(Controller.class);
+      logger.error("Failed to serialize query parameters to JSON", e);
+    }
+
+    // Set single header values
+    span.setAttribute("http.request.header.content-length", 123);
+    span.setAttribute("http.request.header.request-method", "GET");
+    span.setAttribute("http.request.header.path-info", "/some-path");
+    span.setAttribute("http.request.header.content-type", "application/json");
+
+    // Set header with multiple values (array)
+    span.setAttribute(
+      AttributeKey.stringArrayKey("http.request.header.custom-header"),
+      Arrays.asList("value1", "value2")
+    );
   }
 
   @GetMapping("/slow")
