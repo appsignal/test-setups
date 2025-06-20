@@ -14,9 +14,12 @@ import org.apache.logging.log4j.message.MapMessage;
 import org.apache.logging.log4j.message.StructuredDataMessage;
 import org.apache.logging.log4j.ThreadContext;
 
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
 
 import java.util.Arrays;
 
@@ -130,8 +133,21 @@ public class Controller {
   }
 
   @GetMapping("/")
-  public String root() {
+  public String root() throws InterruptedException {
     setSpanAttributes();
+
+    // Get OpenTelemetry tracer
+    Tracer tracer = GlobalOpenTelemetry.getTracer("my-app");
+    // Create a new span
+    Span span = tracer.spanBuilder("custom-span").startSpan();
+    try (Scope scope = span.makeCurrent()) {
+      // Do something
+      Thread.sleep(10);
+      span.setAttribute("custom-attribute", "my custom attribute value");
+    } finally {
+      // Close the span
+        span.end();
+    }
 
     return "<html>" +
            "<body>" +
