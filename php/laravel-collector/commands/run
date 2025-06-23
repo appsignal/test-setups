@@ -5,6 +5,9 @@ set -eu
 install_opentelemetry_extension_with_pecl() {
   echo "Installing OpenTelemetry extension..."
   pecl install opentelemetry
+
+  # The path here matches the path that `php.ini` is written to in the Dockerfile
+  echo "extension=opentelemetry.so" > /etc/php/8.4/cli/conf.d/99-sail.ini
 }
 
 install_opentelemetry_extension_with_pie() {
@@ -14,6 +17,9 @@ install_opentelemetry_extension_with_pie() {
 
   echo "Installing OpenTelemetry extension..."
   pie install open-telemetry/ext-opentelemetry
+
+  # No need to add the extension to the php.ini file,
+  # as `pie` does this automatically
 }
 
 install_opentelemetry_extension_with_pickle() {
@@ -23,35 +29,38 @@ install_opentelemetry_extension_with_pickle() {
 
   echo "Installing OpenTelemetry extension..."
   pickle install opentelemetry
+
+  # The path here matches the path that `php.ini` is written to in the Dockerfile
+  echo "extension=opentelemetry.so" > /etc/php/8.4/cli/conf.d/99-sail.ini
 }
 
 # install_opentelemetry_extension_with_pecl
-# install_opentelemetry_extension_with_pie
-install_opentelemetry_extension_with_pickle
-
-# The path here matches the path that `php.ini` is written to in the Dockerfile
-echo "extension=opentelemetry.so" > /etc/php/8.4/cli/conf.d/99-sail.ini
+install_opentelemetry_extension_with_pie
+# install_opentelemetry_extension_with_pickle
 
 cd /var/www/html
 
 # Fix file permissions on CI
 chmod -R 777 /var/www/html
 
-function encode() {
-  echo -n "$@" | sed 's/,/%2C/g'
-}
+# Fix environment variable file
+echo "Creating .env file..."
 
-export OTEL_RESOURCE_ATTRIBUTES="appsignal.config.name=$APPSIGNAL_APP_NAME,\
-appsignal.config.environment=$APPSIGNAL_APP_ENV,\
-appsignal.config.push_api_key=$APPSIGNAL_PUSH_API_KEY,\
-appsignal.config.revision=abcd123,\
-appsignal.config.language_integration=php,\
-appsignal.config.app_path=$PWD,\
-foo.bar=$(encode "123,456"),\
-empty.string=,\
-baz.qux=%48%65%6C%6C%6F%20%77%6F%72%6C%64%21,\
-white.space=Yes please,\
-host.name=${HOSTNAME:-$(hostname)}"
+rm .env || true
+
+cp .env.example .env
+
+echo "APPSIGNAL_APP_NAME=${APPSIGNAL_APP_NAME}" >> .env
+echo "APPSIGNAL_APP_ENV=${APPSIGNAL_APP_ENV}" >> .env
+echo "APPSIGNAL_PUSH_API_KEY=${APPSIGNAL_PUSH_API_KEY}" >> .env
+
+# It is necessary to unexport these environment variables.
+# If an environment variable is both exported and set in the `.env` file,
+# the variable will be unset in `$_ENV` when the Composer autoloader files
+# are generated.
+export -n APPSIGNAL_APP_NAME
+export -n APPSIGNAL_APP_ENV
+export -n APPSIGNAL_PUSH_API_KEY
 
 echo "Installing dependencies..."
 composer install
@@ -66,4 +75,12 @@ done
 echo "Database started!"
 /var/www/html/artisan migrate:fresh
 
+echo "Cleaning caches..."
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan event:clear
+php artisan cache:clear
+
+echo "Starting the application..."
 start-container
