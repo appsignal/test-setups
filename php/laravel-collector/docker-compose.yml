@@ -12,26 +12,15 @@ services:
             - '4001:4001'
             - '5173:5173'
         environment:
-            WWWUSER: '1000'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: 'off'
-            XDEBUG_CONFIG: 'client_host=host.docker.internal'
-            IGNITION_LOCAL_SITES_PATH: '${PWD}/app'
-            DB_CONNECTION: mysql
+            # These environment variables are used by /commands/run
+            # to wait for the database to be ready.
             DB_HOST: mysql
             DB_PASSWORD: password
             DB_USERNAME: laravel
-            APP_DEBUG: 'true'
-            APP_ENV: local
-            APP_KEY: 'J0TeTiVkAlJ2eUndVMKCi5EGjNPittlM'
-            OTEL_PHP_AUTOLOAD_ENABLED: 'true'
-            OTEL_SERVICE_NAME: Laravel
-            OTEL_TRACES_EXPORTER: otlp
-            OTEL_METRICS_EXPORTER: otlp
-            OTEL_LOGS_EXPORTER: otlp
-            OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
-            OTEL_EXPORTER_OTLP_ENDPOINT: http://appsignal-collector:8099
-            OTEL_PROPAGATORS: baggage,tracecontext
+            # All other environment variables for the Laravel
+            # application are set in the `.env` file, either hardcoded,
+            # or by setting then in `/commands/run` from the ones
+            # defined here and in `env_file`:
             APPSIGNAL_APP_NAME: php/laravel-collector
             APPSIGNAL_APP_ENV: development
         env_file:
