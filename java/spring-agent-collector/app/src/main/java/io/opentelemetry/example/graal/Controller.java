@@ -22,9 +22,16 @@ import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class Controller {
+
+  @Autowired
+  private ElasticsearchService elasticsearchService;
 
   private void setSpanAttributes() {
     Span span = Span.current();
@@ -132,6 +139,30 @@ public class Controller {
     return "Check the logs!";
   }
 
+  @GetMapping("/elasticsearch")
+  public String elasticsearch(@RequestParam(required = false) String name) {
+    setSpanAttributes();
+    
+    try {
+      List<Map<String, Object>> results;
+      if (name != null && !name.isEmpty()) {
+        results = elasticsearchService.searchUsersByName(name);
+      } else {
+        results = elasticsearchService.searchUsers("");
+      }
+      
+      StringBuilder response = new StringBuilder();
+      response.append("Elasticsearch query results:<br>");
+      for (Map<String, Object> result : results) {
+        response.append("User: ").append(result.toString()).append("<br>");
+      }
+      
+      return response.toString();
+    } catch (Exception e) {
+      return "Error querying Elasticsearch: " + e.getMessage();
+    }
+  }
+
   @GetMapping("/")
   public String root() throws InterruptedException {
     setSpanAttributes();
@@ -156,6 +187,8 @@ public class Controller {
            "<li><a href=\"/slow\">/slow</a></li>" +
            "<li><a href=\"/error\">/error</a></li>" +
            "<li><a href=\"/logs\">/logs</a></li>" +
+           "<li><a href=\"/elasticsearch\">/elasticsearch</a></li>" +
+           "<li><a href=\"/elasticsearch?name=John\">/elasticsearch?name=John</a></li>" +
            "</ul>" +
            "</body>" +
            "</html>";
