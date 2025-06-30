@@ -57,6 +57,7 @@
                     <li><a href="/error" class="text-[#f53003] dark:text-[#FF4433] underline hover:text-[#d42a00]">/error</a></li>
                     <li><a href="/logs" class="text-[#f53003] dark:text-[#FF4433] underline hover:text-[#d42a00]">/logs</a></li>
                     <li><a href="/queue" class="text-[#f53003] dark:text-[#FF4433] underline hover:text-[#d42a00]">/queue</a></li>
+                    <li><a href="/io" class="text-[#f53003] dark:text-[#FF4433] underline hover:text-[#d42a00]">/io</a></li>
                 </ul>
             </div>
             <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
