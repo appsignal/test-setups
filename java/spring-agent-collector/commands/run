@@ -22,23 +22,38 @@ function encode() {
   echo -n "$@" | sed 's/,/%2C/g'
 }
 
+export OTEL_TRACES_EXPORTER=otlp
+export OTEL_METRICS_EXPORTER=otlp
+export OTEL_LOGS_EXPORTER=otlp
+export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://appsignal-collector:8099
+
+export OTEL_SERVICE_NAME=Spring
 # Build resource attributes string
 # (these could be in `agent.properties` but are here
 # so that environment variables can be interpolated in them)
-RESOURCE_ATTRS="appsignal.config.name=$APPSIGNAL_APP_NAME,\
+export OTEL_RESOURCE_ATTRIBUTES="\
+appsignal.config.name=$APPSIGNAL_APP_NAME,\
 appsignal.config.environment=$APPSIGNAL_APP_ENV,\
 appsignal.config.push_api_key=$APPSIGNAL_PUSH_API_KEY,\
 appsignal.config.revision=abcd123,\
 appsignal.config.language_integration=java,\
 appsignal.config.app_path=$PWD,\
-appsignal.config.request_headers=$(encode "request-method,path-info,content-type,custom-header"),\
 host.name=${HOSTNAME:-$(hostname)}"
 
-JAVA_OPTS="-javaagent:/app/$AGENT_JAR \
-    -Dotel.javaagent.configuration-file=/app/agent.properties \
-    -Dotel.resource.attributes=$RESOURCE_ATTRS"
+# Log4J instrumentation configuration
+export OTEL_INSTRUMENTATION_LOG4J_APPENDER_EXPERIMENTAL_CAPTURE_CODE_ATTRIBUTES="true"
+export OTEL_INSTRUMENTATION_LOG4J_APPENDER_EXPERIMENTAL_CAPTURE_MAP_MESSAGE_ATTRIBUTES="true"
+export OTEL_INSTRUMENTATION_LOG4J_APPENDER_EXPERIMENTAL_CAPTURE_MDC_ATTRIBUTES="*"
+
+# HTTP instrumentation configuration - capture request headers
+export OTEL_INSTRUMENTATION_HTTP_CLIENT_CAPTURE_REQUEST_HEADERS="content-length,accept,accept-charset,accept-encoding,accept-language,cache-control,connection,range,host"
+export OTEL_INSTRUMENTATION_HTTP_SERVER_CAPTURE_REQUEST_HEADERS="content-length,accept,accept-charset,accept-encoding,accept-language,cache-control,connection,range,host"
+
+# HTTP request parameter configuration
+# Note that this adds the request params to a servlet.request.parameter.<key> attribute
+export OTEL_INSTRUMENTATION_SERVLET_EXPERIMENTAL_CAPTURE_REQUEST_PARAMETERS=time
 
 gradle bootRun \
     --no-daemon \
-    -Pargs="--spring.profiles.active=local" \
-    -Pjvmargs="$JAVA_OPTS"
+    -Pargs="--spring.profiles.active=local"

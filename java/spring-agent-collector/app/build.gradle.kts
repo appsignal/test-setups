@@ -37,6 +37,7 @@ spotless {
 }
 
 tasks.bootRun {
+    jvmArgs = listOf("-javaagent:/app/opentelemetry-javaagent.jar")
     if (project.hasProperty("jvmargs")) {
         jvmArgs = (project.property("jvmargs") as String).split("\\s+".toRegex())
     }
