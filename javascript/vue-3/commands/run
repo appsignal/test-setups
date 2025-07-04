@@ -12,8 +12,8 @@ set -eu
 cd /app
 
 echo "Install dependencies"
-yarn install
-yarn link @appsignal/types @appsignal/core @appsignal/vue @appsignal/javascript
+npm install
+npm link @appsignal/types @appsignal/core @appsignal/vue @appsignal/javascript
 
 echo "Run server"
-yarn serve
+npm run dev
