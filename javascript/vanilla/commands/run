@@ -12,8 +12,8 @@ set -eu
 cd /app
 
 echo "Install dependencies"
-yarn install
-yarn link @appsignal/types @appsignal/core @appsignal/javascript
+npm install
+npm link @appsignal/types @appsignal/core @appsignal/javascript
 
 echo "Starting app"
-yarn server
+npm run server
