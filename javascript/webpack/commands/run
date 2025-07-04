@@ -12,8 +12,8 @@ set -eu
 cd /app
 
 echo "Install dependencies"
-yarn install
-yarn link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/plugin-window-events @appsignal/webpack
+npm install
+npm link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/plugin-window-events @appsignal/webpack
 
 npm install -g http-server
 

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "build:watch": "webpack --watch --config webpack.dev.js",
-    "start": "yarn build && http-server --port $PORT ./dist"
+    "start": "npm run build && http-server --port $PORT ./dist"
   },
   "keywords": [],
   "author": "",

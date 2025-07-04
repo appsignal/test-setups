@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "node build.js",
-    "preserver": "yarn build",
+    "preserver": "npm run build",
     "server": "http-server --port 4001 dist/"
   },
   "devDependencies": {}
