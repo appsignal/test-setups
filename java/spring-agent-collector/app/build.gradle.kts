@@ -23,6 +23,10 @@ dependencies {
     implementation("com.h2database:h2")
     implementation("io.opentelemetry:opentelemetry-api")
     implementation("com.fasterxml.jackson.core:jackson-databind")
+
+    // Elasticsearch dependencies
+    implementation("co.elastic.clients:elasticsearch-java:8.11.0")
+    implementation("com.fasterxml.jackson.core:jackson-core")
 }
 
 spotless {
