@@ -273,7 +273,7 @@ namespace :integrations do
     # Clone Node.js
     clone_from_git("nodejs/integration", "appsignal-nodejs")
     # Clone JavaScript
-    clone_from_git("javascript/integration", "appsignal-javascript")
+    clone_from_git("javascript/integration", "appsignal-javascript", :branch => "npm-manager")
     # Clone Python
     clone_from_git("python/integration", "appsignal-python")
   end
