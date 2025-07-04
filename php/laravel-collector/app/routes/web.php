@@ -13,7 +13,7 @@ Route::get('/', function () {
         ],
     ];
     $json = json_encode($params);
-    
+
     $span = Span::getCurrent();
     $span->setAttribute(
         'appsignal.function.parameters',
@@ -57,4 +57,42 @@ Route::get('/logs', function () {
     Log::info('Logging a message');
     Log::error('Logging an error message');
     Log::info('Logging a fancy message', ['some' => 'context']);
+});
+
+Route::get('/io', function () {
+    $results = [];
+    $tempFile = storage_path('app/temp_io_test.txt');
+
+    // file_put_contents - Write data to file
+    $content = "IO test content - " . date('Y-m-d H:i:s') . "\n";
+    file_put_contents($tempFile, $content);
+    $results[] = "file_put_contents: File written to " . $tempFile;
+
+    // file_get_contents - Read entire file into string
+    $readContent = file_get_contents($tempFile);
+    $results[] = "file_get_contents: Read content - " . trim($readContent);
+
+    // fopen - Open file for stream operations
+    $stream = fopen($tempFile, 'a+');
+    $results[] = "fopen: Opened file stream for " . $tempFile;
+
+    // fwrite - Write to file stream
+    $additionalContent = "Additional line via fwrite\n";
+    fwrite($stream, $additionalContent);
+    $results[] = "fwrite: Wrote additional content to stream";
+
+    // fread - Read from file stream
+    rewind($stream); // Reset to beginning
+    $streamContent = fread($stream, 100);
+    $results[] = "fread: Read from stream - " . trim($streamContent);
+
+    // Close stream and clean up
+    fclose($stream);
+    unlink($tempFile);
+    $results[] = "Cleanup: File deleted";
+
+    return response()->json([
+        'message' => 'OpenTelemetry IO instrumentation test completed',
+        'results' => $results
+    ]);
 });

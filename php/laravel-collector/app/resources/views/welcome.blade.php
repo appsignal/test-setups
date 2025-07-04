@@ -50,6 +50,16 @@
             @endif
         </header>
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
+            <div class="mb-6 p-6 bg-white dark:bg-[#161615] rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4 text-[#1B1B18] dark:text-[#EDEDEC]">PHP + Laravel test setup:</h2>
+                <ul class="space-y-2">
+                    <li><a href="/slow" class="text-[#f53003] dark:text-[#FF4433] underline hover:text-[#d42a00]">/slow</a></li>
+                    <li><a href="/error" class="text-[#f53003] dark:text-[#FF4433] underline hover:text-[#d42a00]">/error</a></li>
+                    <li><a href="/logs" class="text-[#f53003] dark:text-[#FF4433] underline hover:text-[#d42a00]">/logs</a></li>
+                    <li><a href="/queue" class="text-[#f53003] dark:text-[#FF4433] underline hover:text-[#d42a00]">/queue</a></li>
+                    <li><a href="/io" class="text-[#f53003] dark:text-[#FF4433] underline hover:text-[#d42a00]">/io</a></li>
+                </ul>
+            </div>
             <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
                 <div class="text-[13px] leading-[20px] flex-1 p-6 pb-12 lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none">
                     <h1 class="mb-1 font-medium">Let's get started</h1>
