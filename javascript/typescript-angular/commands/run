@@ -12,8 +12,8 @@ set -eu
 cd /app
 
 echo "Install dependencies"
-yarn install
-yarn link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/angular @appsignal/webpack
+npm install
+npm link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/angular @appsignal/webpack
 
 echo "Host running"
 echo "To test the app, run the following command:"

@@ -3,4 +3,4 @@ set -eu
 
 echo "Starting app"
 cd /app
-yarn start
+npm start
