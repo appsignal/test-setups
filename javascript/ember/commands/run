@@ -13,8 +13,8 @@ set -eu
 cd /app
 
 echo "Install dependencies"
-yarn install
-yarn link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/ember
+npm install
+npm link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/ember
 
 echo "Starting app"
-yarn start
+npm run start
