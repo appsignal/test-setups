@@ -9,8 +9,6 @@ services:
     environment:
       - APPSIGNAL_APP_NAME=javascript/vue-3
       - NODE_ENV=test
-    env_file:
-      - app.env
     volumes:
       - ./app:/app
       - ../integration:/integration

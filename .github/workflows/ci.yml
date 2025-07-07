@@ -161,9 +161,11 @@ jobs:
           echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
           rake integrations:clone
 
-      - name: Setup react-vite-collector config
-        if: matrix.app == 'javascript/react-vite-collector'
-        run: cp javascript/react-vite-collector/app/{.example,}.env
+      - name: Setup .env config
+        run: |
+          if [ -f "${{ matrix.app }}/app/.example.env" ]; then
+            cp "${{ matrix.app }}/app/.example.env" "${{ matrix.app }}/app/.env"
+          fi
 
       - name: Setup vanilla config
         if: matrix.app == 'javascript/vanilla'
