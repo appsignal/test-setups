@@ -132,13 +132,14 @@ func initInstrumentation() func() {
 	global.SetLoggerProvider(loggerProvider)
 
 	return func() {
-		if err := tracerProvider.Shutdown(context.Background()); err != nil {
+		ctx := context.Background()
+		if err := tracerProvider.Shutdown(ctx); err != nil {
 			log.Println("Error shutting down tracer provider:", err)
 		}
-		if err := meterProvider.Shutdown(context.Background()); err != nil {
+		if err := meterProvider.Shutdown(ctx); err != nil {
 			log.Println("Error shutting down meter provider:", err)
 		}
-		if err := loggerProvider.Shutdown(context.Background()); err != nil {
+		if err := loggerProvider.Shutdown(ctx); err != nil {
 			log.Println("Error shutting down logger provider:", err)
 		}
 	}
