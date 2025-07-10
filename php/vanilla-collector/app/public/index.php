@@ -26,6 +26,12 @@ try {
         echo "<h1>Vanilla PHP App with OpenTelemetry</h1>";
         echo "<p>Welcome to the vanilla PHP app!</p>";
         echo "<p><a href='/error'>Test Error Handling</a></p>";
+        echo "<p><a href='/slow'>Test Slow Request</a></p>";
+    } elseif ($requestUri === '/slow') {
+        echo "<h1>Slow Request</h1>";
+        sleep(3);
+        echo "<p>This request took 3 seconds to complete.</p>";
+        echo "<p><a href='/'>Go back</a></p>";
     } elseif ($requestUri === '/error') {
         echo "<h1>Error Test</h1>";
 
