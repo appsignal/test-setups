@@ -23,7 +23,6 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
@@ -32,6 +31,7 @@ import (
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/metric"
+	sdkresource "go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
 	sdklog "go.opentelemetry.io/otel/sdk/log"
@@ -58,7 +58,7 @@ func initInstrumentation() func() {
 		hostname = "unknown"
 	}
 
-	res := resource.NewSchemaless(
+	resource := sdkresource.NewSchemaless(
 		attribute.String("appsignal.config.name", os.Getenv("APPSIGNAL_APP_NAME")),
 		attribute.String("appsignal.config.environment", os.Getenv("APPSIGNAL_APP_ENV")),
 		attribute.String("appsignal.config.push_api_key", os.Getenv("APPSIGNAL_PUSH_API_KEY")),
@@ -92,7 +92,7 @@ func initInstrumentation() func() {
 	tracerProvider := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(traceExporter),
 		sdktrace.WithBatcher(consoleExporter),
-		sdktrace.WithResource(res),
+		sdktrace.WithResource(resource),
 	)
 	otel.SetTracerProvider(tracerProvider)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
@@ -109,7 +109,7 @@ func initInstrumentation() func() {
 
 	meterProvider := sdkmetric.NewMeterProvider(
 		sdkmetric.WithReader(sdkmetric.NewPeriodicReader(metricExporter)),
-		sdkmetric.WithResource(res),
+		sdkmetric.WithResource(resource),
 	)
 	otel.SetMeterProvider(meterProvider)
 
@@ -124,7 +124,7 @@ func initInstrumentation() func() {
 	}
 
 	loggerProvider := sdklog.NewLoggerProvider(
-		sdklog.WithResource(res),
+		sdklog.WithResource(resource),
 		sdklog.WithProcessor(
 			sdklog.NewBatchProcessor(logExporter),
 		),
