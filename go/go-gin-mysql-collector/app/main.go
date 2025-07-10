@@ -84,12 +84,12 @@ func initInstrumentation() func() {
 	)
 	traceExporter, err := otlptrace.New(context.Background(), traceClient)
 	if err != nil {
-		log.Fatal("creating OTLP trace exporter: %w")
+		log.Fatalf("creating OTLP trace exporter: %v", err)
 	}
 
 	consoleExporter, err := newConsoleExporter()
 	if err != nil {
-		log.Fatal("creating OTLP console exporter: %w")
+		log.Fatalf("creating OTLP console exporter: %v", err)
 	}
 
 	tracerProvider := sdktrace.NewTracerProvider(
@@ -107,7 +107,7 @@ func initInstrumentation() func() {
 		otlpmetrichttp.WithEndpoint("appsignal-collector:8099"),
 	)
 	if err != nil {
-		log.Fatal("creating OTLP metric exporter: %w")
+		log.Fatalf("creating OTLP metric exporter: %v", err)
 	}
 
 	meterProvider := sdkmetric.NewMeterProvider(
@@ -123,7 +123,7 @@ func initInstrumentation() func() {
 		otlploghttp.WithEndpoint("appsignal-collector:8099"),
 	)
 	if err != nil {
-		log.Fatal("creating OTLP log exporter: %w")
+		log.Fatalf("creating OTLP log exporter: %v", err)
 	}
 
 	loggerProvider := sdklog.NewLoggerProvider(
