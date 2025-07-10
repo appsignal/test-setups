@@ -1,0 +1,28 @@
+{
+    "name": "appsignal/vanilla-php-collector",
+    "type": "project",
+    "description": "Vanilla PHP application with OpenTelemetry and AppSignal",
+    "require": {
+        "php": "^8.2",
+        "nyholm/psr7": "^1.8",
+        "open-telemetry/exporter-otlp": "^1.2.0",
+        "open-telemetry/sdk": "^1.2.2",
+        "symfony/http-client": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "tbachert/spi": false
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
