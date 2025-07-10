@@ -20,7 +20,7 @@ try {
     $span->setAttribute('http.method', $_SERVER['REQUEST_METHOD']);
     $span->setAttribute('http.url', $_SERVER['REQUEST_URI']);
 
-    $requestUri = $_SERVER['REQUEST_URI'];
+    $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
     if ($requestUri === '/') {
         echo "<h1>Vanilla PHP App with OpenTelemetry</h1>";
