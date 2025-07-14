@@ -33,8 +33,6 @@ try {
         echo "<p>This request took 3 seconds to complete.</p>";
         echo "<p><a href='/'>Go back</a></p>";
     } elseif ($requestUri === '/error') {
-        echo "<h1>Error Test</h1>";
-
         try {
             $errorHandler = new ErrorHandler();
             $errorHandler->throwError();
@@ -44,15 +42,20 @@ try {
             $span->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
 
             // Also log the error
-            $logRecord = (new LogRecord('Error occurred'))
-                ->setSeverity(Severity::ERROR)
-                ->setAttributes([
+            $logRecord = new LogRecord(
+                'Error occurred',
+                null,
+                Severity::ERROR,
+                [
                     'exception.type' => get_class($e),
                     'exception.message' => $e->getMessage(),
                     'exception.stacktrace' => $e->getTraceAsString(),
-                ]);
+                ]
+            );
             $logger->emit($logRecord);
 
+            http_response_code(500);
+            echo "<h1>Error Test</h1>";
             echo "<p>An error occurred: " . htmlspecialchars($e->getMessage()) . "</p>";
             echo "<p>The error has been reported to AppSignal via OpenTelemetry.</p>";
             echo "<p><a href='/'>Go back</a></p>";

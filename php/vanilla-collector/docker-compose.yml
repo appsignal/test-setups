@@ -1,15 +1,12 @@
 services:
     app:
-        entrypoint: '/commands/run'
         build:
-            context: './docker'
+            context: "."
             dockerfile: Dockerfile
-            args:
-                WWWGROUP: '1000'
         extra_hosts:
-            - 'host.docker.internal:host-gateway'
+            - "host.docker.internal:host-gateway"
         ports:
-            - '4001:4001'
+            - "4001:80"
         environment:
             APPSIGNAL_APP_NAME: php/vanilla-collector
             APPSIGNAL_APP_ENV: development
@@ -17,8 +14,8 @@ services:
             - ../../appsignal.env
             - ../../appsignal_key.env
         volumes:
-            - './app:/var/www/html'
-            - './commands:/commands'
+            - "./app:/var/www/html"
+            - "./commands:/commands"
     appsignal-collector:
         image: appsignal/collector:latest
         environment:
@@ -35,4 +32,4 @@ services:
             - app
         environment:
             - APP_NAME=php/vanilla-collector
-            - APP_URL=http://app:4001
+            - APP_URL=http://app:80

@@ -40,14 +40,12 @@ install_opentelemetry_extension_with_pie
 
 cd /var/www/html
 
-# Fix file permissions on CI
-chmod -R 777 /var/www/html
+# Install OpenTelemetry extension
+install_opentelemetry_extension_with_pie
 
-# Environment variables are passed directly from Docker Compose
-# No need to create .env file or unexport variables
-
+# Install dependencies
 echo "Installing dependencies..."
 composer install
 
 echo "Starting the application..."
-php -S 0.0.0.0:4001 -t public
+exec apache2-foreground
