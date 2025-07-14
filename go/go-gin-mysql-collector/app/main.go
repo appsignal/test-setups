@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -21,6 +22,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
@@ -232,19 +234,46 @@ func main() {
 	r.GET("/file-error", func(c *gin.Context) {
 		time.Sleep(200 * time.Millisecond)
 
+		span := trace.SpanFromContext(c.Request.Context())
 		err = ReadFile("potato")
 		if err != nil {
-			log.Fatal(err)
+			// Record the error in OpenTelemetry with stacktrace
+			span.RecordError(err, trace.WithStackTrace(true))
+			span.SetStatus(codes.Error, err.Error())
+
+			// Also log the error
+			logger := otelslog.NewLogger("file-error")
+			logger.Error("File read error", "error", err.Error())
+
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "File not found",
+				"message": err.Error(),
+			})
+			return
 		}
 
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"unreachable": "response",
+		c.JSON(http.StatusOK, gin.H{
+			"message": "File read successfully",
 		})
 	})
 
 	r.GET("/error", func(c *gin.Context) {
+		span := trace.SpanFromContext(c.Request.Context())
+
+		// Create a test error
+		testErr := errors.New("expected test error")
+
+		// Record the error in OpenTelemetry with stacktrace
+		span.RecordError(testErr, trace.WithStackTrace(true))
+		span.SetStatus(codes.Error, testErr.Error())
+
+		// Also log the error
+		logger := otelslog.NewLogger("error-endpoint")
+		logger.Error("Test error occurred", "error", testErr.Error())
+
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "expected test error",
+			"error": testErr.Error(),
 		})
 	})
 
