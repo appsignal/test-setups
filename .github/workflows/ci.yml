@@ -144,7 +144,6 @@ jobs:
           - javascript/react-vite-collector
           - javascript/ember
           - javascript/vanilla
-          - javascript/vue-2
           - javascript/vue-3
     steps:
       - name: Checkout
