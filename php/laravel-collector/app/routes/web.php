@@ -96,3 +96,5 @@ Route::get('/io', function () {
         'results' => $results
     ]);
 });
+
+Route::get('/backtrace', [App\Http\Controllers\BacktraceController::class, 'backtrace']);
