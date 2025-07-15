@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -eu
+
+cd /var/www/html
+
+# Install dependencies
+echo "Installing dependencies..."
+composer install
+
+echo "Starting the application..."
+exec apache2-foreground

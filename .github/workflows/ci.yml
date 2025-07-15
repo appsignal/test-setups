@@ -314,6 +314,7 @@ jobs:
       matrix:
         app:
           - php/laravel-collector
+          - php/vanilla-collector
     steps:
       - name: Checkout
         uses: actions/checkout@v4
