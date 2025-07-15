@@ -5,9 +5,9 @@ services:
     build: .
     image: javascript/vue-3
     ports:
-      - "4001:8080"
+      - "4001:4001"
     environment:
-      - APPSIGNAL_APP_NAME=javascript-vue-3
+      - APPSIGNAL_APP_NAME=javascript/vue-3
       - NODE_ENV=test
     volumes:
       - ./app:/app
@@ -21,4 +21,4 @@ services:
       - app
     environment:
       - APP_NAME=javascript/vue-3
-      - APP_URL=http://app:8080
+      - APP_URL=http://app:4001
