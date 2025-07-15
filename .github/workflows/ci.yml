@@ -313,6 +313,7 @@ jobs:
       fail-fast: false
       matrix:
         app:
+          - php/symfony-collector
           - php/laravel-collector
           - php/vanilla-collector
     steps:
