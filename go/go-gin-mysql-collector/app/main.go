@@ -55,7 +55,7 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 	)
 }
 
-func initInstrumentation() func() {
+func initOpenTelemetry() func() {
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
@@ -217,7 +217,7 @@ func ReadFile(file string) error {
 }
 
 func main() {
-	cleanup := initInstrumentation()
+	cleanup := initOpenTelemetry()
 	defer cleanup()
 
 	db, err := otelsql.Open(
