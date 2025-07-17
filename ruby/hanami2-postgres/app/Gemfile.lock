@@ -1,9 +1,9 @@
 PATH
   remote: /integration
   specs:
-    appsignal (4.1.2)
+    appsignal (4.5.17)
       logger
-      rack
+      rack (>= 2.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -324,4 +324,4 @@ DEPENDENCIES
   rake
 
 BUNDLED WITH
-   2.5.22
+   2.7.0
