@@ -18,28 +18,31 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 
-	"github.com/XSAM/otelsql"
-	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	// From our installer
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/sdk/resource"
+	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
-	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
-	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp"
-	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/log/global"
 	"go.opentelemetry.io/otel/propagation"
-	"go.opentelemetry.io/otel/trace"
-	"go.opentelemetry.io/otel/metric"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
 	sdklog "go.opentelemetry.io/otel/sdk/log"
+	sdkresource "go.opentelemetry.io/otel/sdk/resource"
+
+	// For custom instrumentation
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
 
-	"go.opentelemetry.io/otel/log/global"
-
+	// Additional instrumentation
+	"github.com/XSAM/otelsql"
 	"go.opentelemetry.io/contrib/bridges/otelslog"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 var tracer = otel.Tracer("opentelemetry-go-gin")
@@ -52,13 +55,13 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 	)
 }
 
-func initInstrumentation() func() {
+func initOpenTelemetry() func() {
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
 	}
 
-	res := resource.NewSchemaless(
+	resource := sdkresource.NewSchemaless(
 		attribute.String("appsignal.config.name", os.Getenv("APPSIGNAL_APP_NAME")),
 		attribute.String("appsignal.config.environment", os.Getenv("APPSIGNAL_APP_ENV")),
 		attribute.String("appsignal.config.push_api_key", os.Getenv("APPSIGNAL_PUSH_API_KEY")),
@@ -81,18 +84,18 @@ func initInstrumentation() func() {
 	)
 	traceExporter, err := otlptrace.New(context.Background(), traceClient)
 	if err != nil {
-		log.Fatal("creating OTLP trace exporter: %w")
+		log.Fatalf("creating OTLP trace exporter: %v", err)
 	}
 
 	consoleExporter, err := newConsoleExporter()
 	if err != nil {
-		log.Fatal("creating OTLP console exporter: %w")
+		log.Fatalf("creating OTLP console exporter: %v", err)
 	}
 
 	tracerProvider := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(traceExporter),
 		sdktrace.WithBatcher(consoleExporter),
-		sdktrace.WithResource(res),
+		sdktrace.WithResource(resource),
 	)
 	otel.SetTracerProvider(tracerProvider)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
@@ -104,12 +107,12 @@ func initInstrumentation() func() {
 		otlpmetrichttp.WithEndpoint("appsignal-collector:8099"),
 	)
 	if err != nil {
-		log.Fatal("creating OTLP metric exporter: %w")
+		log.Fatalf("creating OTLP metric exporter: %v", err)
 	}
 
 	meterProvider := sdkmetric.NewMeterProvider(
 		sdkmetric.WithReader(sdkmetric.NewPeriodicReader(metricExporter)),
-		sdkmetric.WithResource(res),
+		sdkmetric.WithResource(resource),
 	)
 	otel.SetMeterProvider(meterProvider)
 
@@ -120,11 +123,11 @@ func initInstrumentation() func() {
 		otlploghttp.WithEndpoint("appsignal-collector:8099"),
 	)
 	if err != nil {
-		log.Fatal("creating OTLP log exporter: %w")
+		log.Fatalf("creating OTLP log exporter: %v", err)
 	}
 
 	loggerProvider := sdklog.NewLoggerProvider(
-		sdklog.WithResource(res),
+		sdklog.WithResource(resource),
 		sdklog.WithProcessor(
 			sdklog.NewBatchProcessor(logExporter),
 		),
@@ -132,13 +135,14 @@ func initInstrumentation() func() {
 	global.SetLoggerProvider(loggerProvider)
 
 	return func() {
-		if err := tracerProvider.Shutdown(context.Background()); err != nil {
+		ctx := context.Background()
+		if err := tracerProvider.Shutdown(ctx); err != nil {
 			log.Println("Error shutting down tracer provider:", err)
 		}
-		if err := meterProvider.Shutdown(context.Background()); err != nil {
+		if err := meterProvider.Shutdown(ctx); err != nil {
 			log.Println("Error shutting down meter provider:", err)
 		}
-		if err := loggerProvider.Shutdown(context.Background()); err != nil {
+		if err := loggerProvider.Shutdown(ctx); err != nil {
 			log.Println("Error shutting down logger provider:", err)
 		}
 	}
@@ -213,7 +217,7 @@ func ReadFile(file string) error {
 }
 
 func main() {
-	cleanup := initInstrumentation()
+	cleanup := initOpenTelemetry()
 	defer cleanup()
 
 	db, err := otelsql.Open(
