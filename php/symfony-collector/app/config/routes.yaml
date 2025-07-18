@@ -1,0 +1,17 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+home:
+    path: /
+    controller: App\Controller\HomeController::index
+
+slow:
+    path: /slow
+    controller: App\Controller\HomeController::slow
+
+error:
+    path: /error
+    controller: App\Controller\HomeController::error
