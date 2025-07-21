@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -e
+
+cd /var/www/html
+
+# Set up env vars
+rm .env || true
+cp .env.example .env
+
+# Write env vars to .env file
+{
+  echo "APPSIGNAL_APP_NAME=${APPSIGNAL_APP_NAME}"
+  echo "APPSIGNAL_APP_ENV=${APPSIGNAL_APP_ENV}"
+  echo "APPSIGNAL_PUSH_API_KEY=${APPSIGNAL_PUSH_API_KEY}"
+} >> .env
+
+# It is necessary to unexport these environment variables.
+# If an environment variable is both exported and set in the `.env` file,
+# the variable will be unset in `$_ENV` when the Composer autoloader files
+# are generated.
+export -n APPSIGNAL_APP_NAME
+export -n APPSIGNAL_APP_ENV
+export -n APPSIGNAL_PUSH_API_KEY
+
+# Install dependencies
+composer install --no-dev --optimize-autoloader
+
+# Ensure cache and log directories exist with proper permissions
+mkdir -p var/cache/dev var/log
+chown -R www-data:www-data var/
+chmod -R 775 var/
+
+# Start Apache
+exec apache2-foreground

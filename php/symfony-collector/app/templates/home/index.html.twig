@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Symfony app{% endblock %}
+
+{% block body %}
+  <h1>{{ message }}</h1>
+  <p>This is a simple Symfony application with AppSignal OpenTelemetry integration.</p>
+
+  <div class="links">
+    <h2>Test routes</h2>
+    <ul>
+      <li><a href="/slow">Slow Route (3 second delay)</a></li>
+      <li><a href="/error">Error Route (throws exception)</a></li>
+    </ul>
+  </div>
+{% endblock %}
