@@ -56,19 +56,33 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 }
 
 func initOpenTelemetry() func() {
+	// Replace these values with your AppSignal application name, environment
+	// and push API key. These are used by the resource attributes configuration below.
+	name := os.Getenv("APPSIGNAL_APP_NAME")
+	push_api_key := os.Getenv("APPSIGNAL_PUSH_API_KEY")
+	environment := os.Getenv("APPSIGNAL_APP_ENV")
+
+	// Set the name of the service that is being monitored. A common choice is the
+	// name of the framework used. This is used to group traces and metrics in AppSignal.
+	service_name := "Gin"
+
+	// Replace endpoint with the address of your AppSignal collector
+	// if it's running on another host.
+	endpoint := "appsignal-collector:8099"
+
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
 	}
 
 	resource := sdkresource.NewSchemaless(
-		attribute.String("appsignal.config.name", os.Getenv("APPSIGNAL_APP_NAME")),
-		attribute.String("appsignal.config.environment", os.Getenv("APPSIGNAL_APP_ENV")),
-		attribute.String("appsignal.config.push_api_key", os.Getenv("APPSIGNAL_PUSH_API_KEY")),
+		attribute.String("appsignal.config.name", name),
+		attribute.String("appsignal.config.environment", environment),
+		attribute.String("appsignal.config.push_api_key", push_api_key),
 		attribute.String("appsignal.config.revision", "test-setups"),
 		attribute.String("appsignal.config.language_integration", "golang"),
 		attribute.String("appsignal.config.app_path", os.Getenv("PWD")),
-		attribute.String("service.name", "Gin"),
+		attribute.String("service.name", service_name),
 		attribute.String("host.name", hostname),
 		attribute.StringSlice("appsignal.config.filter_function_parameters", []string{"password", "token"}),
 		attribute.StringSlice("appsignal.config.filter_request_query_parameters", []string{"password", "token"}),
@@ -80,7 +94,7 @@ func initOpenTelemetry() func() {
 	// Tracing
 	traceClient := otlptracehttp.NewClient(
 		otlptracehttp.WithInsecure(),
-		otlptracehttp.WithEndpoint("appsignal-collector:8099"),
+		otlptracehttp.WithEndpoint(endpoint),
 	)
 	traceExporter, err := otlptrace.New(context.Background(), traceClient)
 	if err != nil {
@@ -104,7 +118,7 @@ func initOpenTelemetry() func() {
 	metricExporter, err := otlpmetrichttp.New(
 		context.Background(),
 		otlpmetrichttp.WithInsecure(),
-		otlpmetrichttp.WithEndpoint("appsignal-collector:8099"),
+		otlpmetrichttp.WithEndpoint(endpoint),
 	)
 	if err != nil {
 		log.Fatalf("creating OTLP metric exporter: %v", err)
@@ -120,7 +134,7 @@ func initOpenTelemetry() func() {
 	logExporter, err := otlploghttp.New(
 		context.Background(),
 		otlploghttp.WithInsecure(),
-		otlploghttp.WithEndpoint("appsignal-collector:8099"),
+		otlploghttp.WithEndpoint(endpoint),
 	)
 	if err != nil {
 		log.Fatalf("creating OTLP log exporter: %v", err)
