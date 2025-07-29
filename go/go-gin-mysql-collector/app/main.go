@@ -75,21 +75,27 @@ func initOpenTelemetry() func() {
 		hostname = "unknown"
 	}
 
-	resource := sdkresource.NewSchemaless(
-		attribute.String("appsignal.config.name", name),
-		attribute.String("appsignal.config.environment", environment),
-		attribute.String("appsignal.config.push_api_key", push_api_key),
-		attribute.String("appsignal.config.revision", "test-setups"),
-		attribute.String("appsignal.config.language_integration", "golang"),
-		attribute.String("appsignal.config.app_path", os.Getenv("PWD")),
-		attribute.String("service.name", service_name),
-		attribute.String("host.name", hostname),
-		attribute.StringSlice("appsignal.config.filter_function_parameters", []string{"password", "token"}),
-		attribute.StringSlice("appsignal.config.filter_request_query_parameters", []string{"password", "token"}),
-		attribute.StringSlice("appsignal.config.filter_request_payload", []string{"password", "token"}),
-		attribute.StringSlice("appsignal.config.filter_request_session_data", []string{"password", "token"}),
-		// attribute.Bool("appsignal.config.send_function_parameters", false),
+	resource, err := sdkresource.Merge(
+		sdkresource.Default(),
+		sdkresource.NewSchemaless(
+			attribute.String("appsignal.config.name", name),
+			attribute.String("appsignal.config.environment", environment),
+			attribute.String("appsignal.config.push_api_key", push_api_key),
+			attribute.String("appsignal.config.revision", "test-setups"),
+			attribute.String("appsignal.config.language_integration", "golang"),
+			attribute.String("appsignal.config.app_path", os.Getenv("PWD")),
+			attribute.String("service.name", service_name),
+			attribute.String("host.name", hostname),
+			attribute.StringSlice("appsignal.config.filter_function_parameters", []string{"password", "token"}),
+			attribute.StringSlice("appsignal.config.filter_request_query_parameters", []string{"password", "token"}),
+			attribute.StringSlice("appsignal.config.filter_request_payload", []string{"password", "token"}),
+			attribute.StringSlice("appsignal.config.filter_request_session_data", []string{"password", "token"}),
+			// attribute.Bool("appsignal.config.send_function_parameters", false),
+		),
 	)
+	if err != nil {
+		log.Fatalf("creating resource: %v", err)
+	}
 
 	// Tracing
 	traceClient := otlptracehttp.NewClient(

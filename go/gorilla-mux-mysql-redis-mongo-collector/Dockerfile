@@ -1,4 +1,4 @@
-FROM golang:1.18-buster
+FROM golang:1.24-bookworm
 
 ENV REFRESHED_AT=2023-02-23
 

@@ -27,7 +27,7 @@ foreach ($requiredEnvVars as $envVar) {
     }
 }
 
-$resource = ResourceInfoFactory::emptyResource()->merge(ResourceInfo::create(Attributes::create([
+$resource = ResourceInfoFactory::defaultResource()->merge(ResourceInfo::create(Attributes::create([
     'service.name' => 'Vanilla PHP',
     'appsignal.config.name' => getenv('APPSIGNAL_APP_NAME'),
     'appsignal.config.environment' => getenv('APPSIGNAL_APP_ENV'),
