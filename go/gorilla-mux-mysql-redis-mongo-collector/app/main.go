@@ -13,26 +13,35 @@ import (
 	"bytes"
 
 	"github.com/XSAM/otelsql"
-	"github.com/go-redis/redis/extra/redisotel/v9"
-	"github.com/go-redis/redis/v9"
+	"github.com/redis/go-redis/extra/redisotel/v9"
+	"github.com/redis/go-redis/v9"
 	_ "github.com/go-sql-driver/mysql"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-
 	"github.com/gorilla/mux"
-	"go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/mongo/otelmongo"
 
-	"go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
+	// From our installer
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
-	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/log/global"
 	"go.opentelemetry.io/otel/propagation"
-	"go.opentelemetry.io/otel/sdk/resource"
-	"go.opentelemetry.io/otel/trace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+	sdkresource "go.opentelemetry.io/otel/sdk/resource"
+
+	// Additional instrumentation
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
+	"go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/mongo/otelmongo"
+
+	// For custom metrics
+	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 )
 
@@ -293,50 +302,117 @@ func newConsoleExporter() (sdktrace.SpanExporter, error) {
 	)
 }
 
-func initTracer() func(context.Context) error {
-	client := otlptracehttp.NewClient(
-		otlptracehttp.WithInsecure(),
-		otlptracehttp.WithEndpoint("appsignal-collector:8099"),
-	)
-	exporter, err := otlptrace.New(context.Background(), client)
-	if err != nil {
-		log.Fatal("creating OTLP trace exporter: %w")
-	}
+func initOpenTelemetry() func() {
+	// Replace these values with your AppSignal application name, environment
+	// and push API key. These are used by the resource attributes configuration below.
+	name := os.Getenv("APPSIGNAL_APP_NAME")
+	push_api_key := os.Getenv("APPSIGNAL_PUSH_API_KEY")
+	environment := os.Getenv("APPSIGNAL_APP_ENV")
 
-	consoleExporter, err := newConsoleExporter()
-	if err != nil {
-		log.Fatal("creating OTLP console exporter: %w")
-	}
+	// Set the name of the service that is being monitored. A common choice is the
+	// name of the framework used. This is used to group traces and metrics in AppSignal.
+	service_name := "gorilla-mux"
+
+	// Replace endpoint with the address of your AppSignal collector
+	// if it's running on another host.
+	endpoint := "appsignal-collector:8099"
 
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
 	}
 
-	resource := resource.NewSchemaless(
-		attribute.String("appsignal.config.name", os.Getenv("APPSIGNAL_APP_NAME")),
-		attribute.String("appsignal.config.environment", os.Getenv("APPSIGNAL_APP_ENV")),
-		attribute.String("appsignal.config.push_api_key", os.Getenv("APPSIGNAL_PUSH_API_KEY")),
-		attribute.String("appsignal.config.revision", "test-setups"),
-		attribute.String("appsignal.config.language_integration", "golang"),
-		attribute.String("appsignal.config.app_path", os.Getenv("PWD")),
-		attribute.String("service.name", "gorilla-mux"),
-		attribute.String("host.name", hostname),
-		attribute.StringSlice("appsignal.config.filter_function_parameters", []string{"password", "token"}),
-		attribute.StringSlice("appsignal.config.filter_request_query_parameters", []string{"password", "token"}),
-		attribute.StringSlice("appsignal.config.filter_request_payload", []string{"password", "token"}),
-		attribute.StringSlice("appsignal.config.filter_request_session_data", []string{"password", "token"}),
-		// attribute.Bool("appsignal.config.send_function_parameters", false),
+	resource, err := sdkresource.Merge(
+		sdkresource.Default(),
+		sdkresource.NewSchemaless(
+			attribute.String("appsignal.config.name", name),
+			attribute.String("appsignal.config.environment", environment),
+			attribute.String("appsignal.config.push_api_key", push_api_key),
+			attribute.String("appsignal.config.revision", "test-setups"),
+			attribute.String("appsignal.config.language_integration", "golang"),
+			attribute.String("appsignal.config.app_path", os.Getenv("PWD")),
+			attribute.String("service.name", service_name),
+			attribute.String("host.name", hostname),
+			attribute.StringSlice("appsignal.config.filter_function_parameters", []string{"password", "token"}),
+			attribute.StringSlice("appsignal.config.filter_request_query_parameters", []string{"password", "token"}),
+			attribute.StringSlice("appsignal.config.filter_request_payload", []string{"password", "token"}),
+			attribute.StringSlice("appsignal.config.filter_request_session_data", []string{"password", "token"}),
+			// attribute.Bool("appsignal.config.send_function_parameters", false),
+		),
 	)
+	if err != nil {
+		log.Fatalf("creating resource: %v", err)
+	}
+
+	// Tracing
+	traceClient := otlptracehttp.NewClient(
+		otlptracehttp.WithInsecure(),
+		otlptracehttp.WithEndpoint(endpoint),
+	)
+	traceExporter, err := otlptrace.New(context.Background(), traceClient)
+	if err != nil {
+		log.Fatalf("creating OTLP trace exporter: %v", err)
+	}
+
+	consoleExporter, err := newConsoleExporter()
+	if err != nil {
+		log.Fatalf("creating OTLP console exporter: %v", err)
+	}
 
 	tracerProvider := sdktrace.NewTracerProvider(
-		sdktrace.WithBatcher(exporter),
+		sdktrace.WithBatcher(traceExporter),
 		sdktrace.WithBatcher(consoleExporter),
 		sdktrace.WithResource(resource),
 	)
 	otel.SetTracerProvider(tracerProvider)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
-	return exporter.Shutdown
+
+	// Metrics
+	metricExporter, err := otlpmetrichttp.New(
+		context.Background(),
+		otlpmetrichttp.WithInsecure(),
+		otlpmetrichttp.WithEndpoint(endpoint),
+	)
+	if err != nil {
+		log.Fatalf("creating OTLP metric exporter: %v", err)
+	}
+
+	meterProvider := sdkmetric.NewMeterProvider(
+		sdkmetric.WithReader(sdkmetric.NewPeriodicReader(metricExporter)),
+		sdkmetric.WithResource(resource),
+	)
+	otel.SetMeterProvider(meterProvider)
+
+	// Logs
+	logExporter, err := otlploghttp.New(
+		context.Background(),
+		otlploghttp.WithInsecure(),
+		otlploghttp.WithEndpoint(endpoint),
+	)
+	if err != nil {
+		log.Fatalf("creating OTLP log exporter: %v", err)
+	}
+
+	loggerProvider := sdklog.NewLoggerProvider(
+		sdklog.WithResource(resource),
+		sdklog.WithProcessor(
+			sdklog.NewBatchProcessor(logExporter),
+		),
+	)
+	global.SetLoggerProvider(loggerProvider)
+
+	return func() {
+		ctx := context.Background()
+		if err := tracerProvider.Shutdown(ctx); err != nil {
+			log.Println("Error shutting down tracer provider:", err)
+		}
+		if err := meterProvider.Shutdown(ctx); err != nil {
+			log.Println("Error shutting down meter provider:", err)
+		}
+		if err := loggerProvider.Shutdown(ctx); err != nil {
+			log.Println("Error shutting down logger provider:", err)
+		}
+	}
 }
 
 func recordParameters(next http.Handler) http.Handler {
@@ -401,8 +477,8 @@ func recordParameters(next http.Handler) http.Handler {
 
 func main() {
 	// Init OpenTelemetry
-	cleanup := initTracer()
-	defer cleanup(context.Background())
+	cleanup := initOpenTelemetry()
+	defer cleanup()
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.Use(otelmux.Middleware("opentelemetry-go-gorillamux"))
