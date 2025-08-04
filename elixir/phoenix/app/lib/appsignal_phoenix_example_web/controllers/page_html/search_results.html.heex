@@ -1,0 +1,11 @@
+<div class="search-results">
+  <h1>Search Results</h1>
+  <div class="products">
+    <%= for pdp <- @pdps do %>
+      <div class="product">
+        <h3><%= pdp.name %></h3>
+        <p>Price: $<%= pdp.price %></p>
+      </div>
+    <% end %>
+  </div>
+</div>
