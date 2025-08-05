@@ -4,7 +4,7 @@ set -eu
 
 cd /app
 echo "Installing dependencies"
-go install main.go
+go mod tidy
 
 echo "Starting app"
 /commands/processmon processmon.toml

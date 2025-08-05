@@ -23,7 +23,7 @@ use OpenTelemetry\SDK\Trace\TracerProvider;
 use OpenTelemetry\SemConv\ResourceAttributes;
 use OpenTelemetry\Contrib\Otlp\OtlpHttpTransportFactory;
 
-$resource = ResourceInfoFactory::emptyResource()->merge(ResourceInfo::create(Attributes::create([
+$resource = ResourceInfoFactory::defaultResource()->merge(ResourceInfo::create(Attributes::create([
   'service.name' => "Laravel",
   'appsignal.config.name' => $_ENV['APPSIGNAL_APP_NAME'],
   'appsignal.config.environment' => $_ENV['APPSIGNAL_APP_ENV'],

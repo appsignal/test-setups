@@ -46,7 +46,7 @@ $collector = "http://appsignal-collector:8099";
 
 $revision = 'test-setups';
 
-$resource = ResourceInfoFactory::emptyResource()->merge(ResourceInfo::create(Attributes::create([
+$resource = ResourceInfoFactory::defaultResource()->merge(ResourceInfo::create(Attributes::create([
   'service.name' => $serviceName,
   'appsignal.config.name' => $name,
   'appsignal.config.environment' => $environment,
