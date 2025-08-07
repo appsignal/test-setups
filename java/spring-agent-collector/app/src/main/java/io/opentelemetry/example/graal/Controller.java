@@ -27,6 +27,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.logging.Level;
+
+import io.opentelemetry.api.metrics.DoubleGauge;
+import io.opentelemetry.api.metrics.DoubleHistogram;
+import io.opentelemetry.api.metrics.LongCounter;
+import io.opentelemetry.api.metrics.Meter;
+
 @RestController
 public class Controller {
 
@@ -100,43 +107,75 @@ public class Controller {
   public String logs() throws InterruptedException {
     setSpanAttributes();
 
-    for (int i = 0; i < 10; i++) {
-      // Set ThreadContext key-value:
-      ThreadContext.put("something", "threadcontext");
-      Logger logger = LogManager.getLogger("my-logger");
-      // StructuredDataMessage:
-      StructuredDataMessage structuredMessage = new StructuredDataMessage(
-          "LoginAudit", // ID
-          String.format("This is a structured data message #%s", i), // Message
-          "auth" // Type (used as structured data category)
-      );
-      structuredMessage.put("user", "alice");
-      structuredMessage.put("status", "success");
-      structuredMessage.put("kind", "StructuredDataMessage");
-      logger.info(structuredMessage);
-      // MapMessage:
-      MapMessage mapMessage = new MapMessage()
-          .with("user", "alice")
-          .with("action", "login")
-          .with("number", String.format("%s", i))
-          .with("kind", "MapMessage");
-      logger.info(mapMessage);
-      // ObjectMessage:
-      Map<String, String> map = new HashMap<>();
-      map.put("user", "alice");
-      map.put("action", "login");
-      map.put("number", String.format("%s", i));
-      map.put("kind", "ObjectMessage");
-      ObjectMessage objectMessage = new ObjectMessage(map);
-      logger.info(objectMessage);
-      // Just a string:
-      logger.info(String.format("This is a string log message #%s", i));
-      ThreadContext.clearAll();
+    // Log4J examples
+    // Set ThreadContext key-value:
+    ThreadContext.put("threadcontext", "hi");
+    Logger logger = LogManager.getLogger("my-logger");
 
-      Thread.sleep(10);
-    }
+    // StructuredDataMessage:
+    StructuredDataMessage structuredMessage = new StructuredDataMessage(
+        "LoginAudit", // ID
+        "This is a structured data message", // Message
+        "auth" // Type (used as structured data category)
+    );
+    structuredMessage.put("user", "alice");
+    structuredMessage.put("status", "success");
+    structuredMessage.put("kind", "StructuredDataMessage");
+    logger.info(structuredMessage);
+
+    // Just a string:
+    logger.info("This is a string log message - log4j");
+    ThreadContext.clearAll();
+
+    // java.util.logging examples
+    java.util.logging.Logger julLogger = java.util.logging.Logger.getLogger(Controller.class.getName());
+
+    // Log different severity levels
+    julLogger.info("Application started - java.util.logging");
+    julLogger.log(Level.WARNING, "This is a warning message - java.util.logging");
+    julLogger.severe("This is an error message - java.util.logging");
 
     return "Check the logs!";
+  }
+
+  @GetMapping("/metrics")
+  public String metrics() throws InterruptedException {
+    setSpanAttributes();
+
+    // Get the meter from the global meter provider
+    Meter meter = GlobalOpenTelemetry.getMeter("my-app");
+    
+    // Counter metric
+    LongCounter myCounter = meter
+      .counterBuilder("my_counter")
+      .setDescription("My counter")
+      .setUnit("1")
+      .build();
+    myCounter.add(
+      (long) (Math.random() * 25 + 3),
+      Attributes.of(AttributeKey.stringKey("my_tag"), "tag_value")
+    );
+
+    // Gauge metric (OpenTelemetry Java uses ObservableGauge for async gauges)
+    // Get the meter from the global meter provider
+    DoubleGauge gauge = meter.gaugeBuilder("my_gauge").build();
+
+    // Record gauge values
+    gauge.set(100);
+    gauge.set(10);
+
+    // Histogram metric
+    DoubleHistogram myHistogram = meter
+      .histogramBuilder("my_histogram")
+      .setDescription("My Histogram")
+      .setUnit("1")
+      .build();
+    myHistogram.record(
+      Math.random() * 16 + 10,
+      Attributes.of(AttributeKey.stringKey("my_tag"), "tag_value")
+    );
+
+    return "Metrics were sent!";
   }
 
   @GetMapping("/elasticsearch")
@@ -187,6 +226,7 @@ public class Controller {
            "<li><a href=\"/slow\">/slow</a></li>" +
            "<li><a href=\"/error\">/error</a></li>" +
            "<li><a href=\"/logs\">/logs</a></li>" +
+           "<li><a href=\"/metrics\">/metrics</a></li>" +
            "<li><a href=\"/elasticsearch\">/elasticsearch</a></li>" +
            "<li><a href=\"/elasticsearch?name=John\">/elasticsearch?name=John</a></li>" +
            "</ul>" +
