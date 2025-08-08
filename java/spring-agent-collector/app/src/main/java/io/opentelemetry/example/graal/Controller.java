@@ -93,7 +93,22 @@ public class Controller {
   @GetMapping("/error")
   public String error() {
     setSpanAttributes();
-    throw new RuntimeException("Whoops!");
+    throw new RuntimeException("Random error!");
+  }
+
+  @GetMapping("/error_with_cause")
+  public String error_with_cause() {
+    setSpanAttributes();
+    try {
+      root_cause();
+    } catch (Exception e) {
+      throw new RuntimeException("Random error with error cause!", e);
+    }
+    return "This should never be reached!";
+  }
+
+  private void root_cause() {
+    throw new RuntimeException("This is the root cause!");
   }
 
   @GetMapping("/logs")
@@ -186,6 +201,7 @@ public class Controller {
            "<ul>" +
            "<li><a href=\"/slow\">/slow</a></li>" +
            "<li><a href=\"/error\">/error</a></li>" +
+           "<li><a href=\"/error_with_cause\">/error_with_cause</a></li>" +
            "<li><a href=\"/logs\">/logs</a></li>" +
            "<li><a href=\"/elasticsearch\">/elasticsearch</a></li>" +
            "<li><a href=\"/elasticsearch?name=John\">/elasticsearch?name=John</a></li>" +
