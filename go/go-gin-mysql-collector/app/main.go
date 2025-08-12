@@ -396,7 +396,7 @@ func main() {
 	r.GET("/metrics", func(c *gin.Context) {
 		time.Sleep(200 * time.Millisecond)
 
-		var meter = otel.Meter("example.io/package/name")
+		var meter = otel.Meter("my-app")
 		ctx := c.Request.Context()
 
 		// Counter metric
@@ -410,13 +410,13 @@ func main() {
 		}
 		myCounter.Add(
 			ctx,
-			int64(rand.Intn(25) + 3), // Value between 1 and 3
+			int64(rand.Intn(25) + 3),
 			metric.WithAttributes(attribute.String("my_tag", "tag_value")),
 		)
 
 		// Gauge
 		myGauge, err := meter.Int64Gauge(
-			"my_guage",
+			"my_gauge",
 			metric.WithDescription("My gauge"),
 			metric.WithUnit("1"),
 		)
@@ -425,7 +425,7 @@ func main() {
 		}
 		myGauge.Record(
 			ctx,
-			int64(rand.Intn(25) + 10), // Value between 1 and 25
+			int64(rand.Intn(25) + 10),
 			metric.WithAttributes(attribute.String("my_tag", "tag_value")),
 		)
 
@@ -437,7 +437,7 @@ func main() {
 		)
 		myHistogram.Record(
 			ctx,
-			float64(rand.Intn(16) + 10), // Value between 10 and 25
+			float64(rand.Intn(16) + 10),
 			metric.WithAttributes(attribute.String("my_tag", "tag_value")),
 		)
 
