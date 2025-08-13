@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+echo "Installing app dependencies"
+npm install
+
+echo "Building the app"
+npm run build
+
+echo "Starting test app server"
+npm run server
