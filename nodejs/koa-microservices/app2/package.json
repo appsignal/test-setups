@@ -1,0 +1,26 @@
+{
+  "name": "koa-mysql-example",
+  "private": true,
+  "version": "1.0.0",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc --version; tsc -p tsconfig.json",
+    "server": "node --require ./src/appsignal.cjs dist/app.js"
+  },
+  "dependencies": {
+    "@appsignal/nodejs": "^3.6.0",
+    "@koa/router": "10.1.1",
+    "@types/node-fetch": "^2.6.7",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "4.3.0",
+    "node-fetch": "^2.6.7",
+    "tslib": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/koa": "2.13.5",
+    "@types/koa__router": "8.0.11",
+    "@types/koa-bodyparser": "4.3.7",
+    "@types/node": "18.6.3",
+    "typescript": "4.7.4"
+  }
+}

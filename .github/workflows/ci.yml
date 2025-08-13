@@ -190,6 +190,7 @@ jobs:
           - nodejs/express-yoga
           - nodejs/koa-mongo
           - nodejs/koa-mysql
+          - nodejs/koa-microservices
           - nodejs/fastify
           - nodejs/restify
           - nodejs/nestjs
