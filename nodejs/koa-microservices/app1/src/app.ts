@@ -25,7 +25,7 @@ router.get("/slow", async (ctx: any) => {
 })
 
 router.get("/remote/app2", async (ctx: any) => {
-  setTag("app_id", "app1");
+  setTag("original_app_id", "app1");
   try {
     const response = await fetch("http://app2:4002/incoming/app2")
     const data = await response.text()
@@ -37,7 +37,7 @@ router.get("/remote/app2", async (ctx: any) => {
 })
 
 router.get("/incoming/app1", async (ctx: any) => {
-  setTag("app_id", "app1");
+  setTag("remote_app_id", "app1");
 
   ctx.body = "Request received by app1!"
 })
