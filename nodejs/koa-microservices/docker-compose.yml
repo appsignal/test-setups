@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  app1:
+    build: .
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=nodejs/koa-microservice1
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app1:/app
+      - ../integration:/integration
+  app2:
+    build: .
+    depends_on:
+      - app1
+    ports:
+      - "4002:4002"
+    environment:
+      - PORT=4002
+      - APPSIGNAL_APP_NAME=nodejs/koa-microservice2
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app2:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app1
+      - app2
+    environment:
+      - APP_URL=http://app1:4001
+      - APP_NAME=nodejs/koa-microservices
