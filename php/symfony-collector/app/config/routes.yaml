@@ -15,3 +15,11 @@ slow:
 error:
     path: /error
     controller: App\Controller\HomeController::error
+
+logs:
+    path: /logs
+    controller: App\Controller\HomeController::logs
+
+metrics:
+    path: /metrics
+    controller: App\Controller\HomeController::metrics
