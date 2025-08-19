@@ -16,6 +16,8 @@ services:
       - ../integration:/integration
   app2:
     build: .
+    depends_on:
+      - app1
     ports:
       - "4002:4002"
     environment:

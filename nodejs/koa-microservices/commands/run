@@ -2,13 +2,27 @@
 
 set -eu
 
-echo "Install, link and build integration"
-(
-  cd /integration
-  npm install
-  npm run build
-  npm link
-)
+# Only prepare the integration for one app, and not both
+if [ "$APPSIGNAL_APP_NAME" = "nodejs/koa-microservice1" ]; then
+  rm -f /integration/.ready
+  echo "Install, link and build integration"
+  (
+    cd /integration
+    npm install
+    npm run build
+    npm link
+  )
+  touch /integration/.ready
+fi
+
+# Wait for integration to be ready when running app 2
+if [ "$APPSIGNAL_APP_NAME" = "nodejs/koa-microservice2" ]; then
+  echo "Waiting for integration to be ready..."
+  while [ ! -f /integration/.ready ]; do
+    sleep 1
+  done
+  echo "Integration is ready, proceeding with app setup"
+fi
 
 cd /app
 
