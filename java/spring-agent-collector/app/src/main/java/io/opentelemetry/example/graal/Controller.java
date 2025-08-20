@@ -20,10 +20,12 @@ import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
+import io.opentelemetry.context.Context;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -217,6 +219,143 @@ public class Controller {
     }
   }
 
+  @GetMapping("/checkout")
+  public String checkout() throws InterruptedException {
+    Random random = new Random();
+    Tracer tracer = GlobalOpenTelemetry.getTracer("my-app");
+    
+    // Generate dynamic values
+    int customerId = 1000 + random.nextInt(9000);
+    double totalAmount = 25.99 + (random.nextDouble() * 300);
+    String[] currencies = {"USD", "EUR", "GBP", "CAD"};
+    String currency = currencies[random.nextInt(currencies.length)];
+    int itemsCount = 1 + random.nextInt(8);
+    String orderId = "order_" + (100000 + random.nextInt(900000));
+    
+    // Main checkout span
+    Span checkoutSpan = tracer.spanBuilder("checkout.process").startSpan();
+    try (Scope checkoutScope = checkoutSpan.makeCurrent()) {
+      checkoutSpan.setAttribute("checkout.customer_id", "customer_" + customerId);
+      checkoutSpan.setAttribute("checkout.total_amount", Math.round(totalAmount * 100.0) / 100.0);
+      checkoutSpan.setAttribute("checkout.currency", currency);
+      
+      // Cart validation span
+      Span cartValidationSpan = tracer.spanBuilder("checkout.validate_cart").startSpan();
+      try (Scope cartScope = cartValidationSpan.makeCurrent()) {
+        Thread.sleep(30 + random.nextInt(40));
+        cartValidationSpan.setAttribute("cart.items_count", itemsCount);
+        String[] validationStatuses = {"valid", "valid", "valid", "warning"};
+        cartValidationSpan.setAttribute("cart.validation_status", validationStatuses[random.nextInt(validationStatuses.length)]);
+      } finally {
+        cartValidationSpan.end();
+      }
+      
+      // Inventory check span
+      Span inventorySpan = tracer.spanBuilder("checkout.check_inventory").startSpan();
+      try (Scope inventoryScope = inventorySpan.makeCurrent()) {
+        Thread.sleep(50 + random.nextInt(100));
+        String[] checkTypes = {"real_time", "cached", "batch"};
+        inventorySpan.setAttribute("inventory.check_type", checkTypes[random.nextInt(checkTypes.length)]);
+        inventorySpan.setAttribute("inventory.all_available", random.nextBoolean() || random.nextBoolean());
+      } finally {
+        inventorySpan.end();
+      }
+      
+      // Payment processing span
+      Span paymentSpan = tracer.spanBuilder("checkout.process_payment").startSpan();
+      try (Scope paymentScope = paymentSpan.makeCurrent()) {
+        String[] paymentMethods = {"credit_card", "debit_card", "paypal", "apple_pay", "google_pay"};
+        String[] processors = {"stripe", "paypal", "square", "braintree"};
+        paymentSpan.setAttribute("payment.method", paymentMethods[random.nextInt(paymentMethods.length)]);
+        paymentSpan.setAttribute("payment.processor", processors[random.nextInt(processors.length)]);
+        
+        // Payment validation sub-span
+        Span paymentValidationSpan = tracer.spanBuilder("payment.validate_card").startSpan();
+        try (Scope paymentValidationScope = paymentValidationSpan.makeCurrent()) {
+          Thread.sleep(40 + random.nextInt(70));
+          String[] cardTypes = {"visa", "mastercard", "amex", "discover"};
+          String[] validationResults = {"approved", "approved", "approved", "declined", "requires_auth"};
+          paymentValidationSpan.setAttribute("payment.card_type", cardTypes[random.nextInt(cardTypes.length)]);
+          paymentValidationSpan.setAttribute("payment.validation_result", validationResults[random.nextInt(validationResults.length)]);
+        } finally {
+          paymentValidationSpan.end();
+        }
+        
+        // Charge processing sub-span
+        Span chargeSpan = tracer.spanBuilder("payment.charge").startSpan();
+        try (Scope chargeScope = chargeSpan.makeCurrent()) {
+          Thread.sleep(100 + random.nextInt(200));
+          String transactionId = "txn_" + Long.toHexString(System.currentTimeMillis()) + Integer.toHexString(random.nextInt(65536));
+          chargeSpan.setAttribute("payment.transaction_id", transactionId);
+          chargeSpan.setAttribute("payment.amount_charged", Math.round(totalAmount * 100.0) / 100.0);
+          String[] paymentStatuses = {"succeeded", "succeeded", "succeeded", "failed", "pending"};
+          chargeSpan.setAttribute("payment.status", paymentStatuses[random.nextInt(paymentStatuses.length)]);
+        } finally {
+          chargeSpan.end();
+        }
+      } finally {
+        paymentSpan.end();
+      }
+      
+      // Order creation span
+      Span orderSpan = tracer.spanBuilder("checkout.create_order").startSpan();
+      try (Scope orderScope = orderSpan.makeCurrent()) {
+        Thread.sleep(60 + random.nextInt(40));
+        orderSpan.setAttribute("order.id", orderId);
+        String[] orderStatuses = {"confirmed", "confirmed", "pending", "processing"};
+        orderSpan.setAttribute("order.status", orderStatuses[random.nextInt(orderStatuses.length)]);
+        
+        String[] skus = {"SHOE123", "SHIRT456", "PANTS789", "JACKET012", "HAT345", "BELT678"};
+        StringBuilder items = new StringBuilder("[");
+        for (int i = 0; i < itemsCount && i < 3; i++) {
+          if (i > 0) items.append(",");
+          String sku = skus[random.nextInt(skus.length)];
+          int qty = 1 + random.nextInt(3);
+          items.append("{\"sku\":\"").append(sku).append("\",\"qty\":").append(qty).append("}");
+        }
+        items.append("]");
+        orderSpan.setAttribute("order.items", items.toString());
+      } finally {
+        orderSpan.end();
+      }
+      
+      // Shipping calculation span
+      Span shippingSpan = tracer.spanBuilder("checkout.calculate_shipping").startSpan();
+      try (Scope shippingScope = shippingSpan.makeCurrent()) {
+        Thread.sleep(40 + random.nextInt(50));
+        String[] shippingMethods = {"standard", "express", "overnight", "economy"};
+        String[] carriers = {"FedEx", "UPS", "USPS", "DHL", "Amazon"};
+        shippingSpan.setAttribute("shipping.method", shippingMethods[random.nextInt(shippingMethods.length)]);
+        shippingSpan.setAttribute("shipping.cost", Math.round((5.99 + random.nextDouble() * 20) * 100.0) / 100.0);
+        shippingSpan.setAttribute("shipping.estimated_days", 1 + random.nextInt(7));
+        shippingSpan.setAttribute("shipping.carrier", carriers[random.nextInt(carriers.length)]);
+      } finally {
+        shippingSpan.end();
+      }
+      
+      // Email notification span
+      Span emailSpan = tracer.spanBuilder("checkout.send_confirmation_email").startSpan();
+      try (Scope emailScope = emailSpan.makeCurrent()) {
+        Thread.sleep(60 + random.nextInt(60));
+        String[] emailTemplates = {"order_confirmation", "order_receipt", "purchase_summary"};
+        String[] emailStatuses = {"sent", "sent", "sent", "failed", "queued"};
+        String[] domains = {"example.com", "gmail.com", "yahoo.com", "hotmail.com", "company.com"};
+        emailSpan.setAttribute("email.template", emailTemplates[random.nextInt(emailTemplates.length)]);
+        emailSpan.setAttribute("email.recipient", "customer" + customerId + "@" + domains[random.nextInt(domains.length)]);
+        emailSpan.setAttribute("email.status", emailStatuses[random.nextInt(emailStatuses.length)]);
+      } finally {
+        emailSpan.end();
+      }
+      
+      String[] checkoutStatuses = {"completed", "completed", "completed", "failed", "pending"};
+      checkoutSpan.setAttribute("checkout.status", checkoutStatuses[random.nextInt(checkoutStatuses.length)]);
+    } finally {
+      checkoutSpan.end();
+    }
+
+    return "Checkout completed successfully! Order #" + orderId + " has been processed.";
+  }
+
   @GetMapping("/")
   public String root() throws InterruptedException {
     setSpanAttributes();
@@ -245,6 +384,7 @@ public class Controller {
            "<li><a href=\"/metrics\">/metrics</a></li>" +
            "<li><a href=\"/elasticsearch\">/elasticsearch</a></li>" +
            "<li><a href=\"/elasticsearch?name=John\">/elasticsearch?name=John</a></li>" +
+           "<li><a href=\"/checkout\">/checkout</a></li>" +
            "</ul>" +
            "</body>" +
            "</html>";
