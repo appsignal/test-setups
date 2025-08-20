@@ -20,10 +20,12 @@ import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
+import io.opentelemetry.context.Context;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -219,6 +221,7 @@ public class Controller {
 
   @GetMapping("/")
   public String root() throws InterruptedException {
+    Random random = new Random();
     setSpanAttributes();
 
     // Get OpenTelemetry tracer
@@ -231,7 +234,32 @@ public class Controller {
       span.setAttribute("custom-attribute", "my custom attribute value");
     } finally {
       // Close the span
-        span.end();
+      span.end();
+    }
+
+    // Example nested spans
+    Tracer processTracer = GlobalOpenTelemetry.getTracer("processing");
+    Span processSpan = processTracer.spanBuilder("do something process").startSpan();
+    try (Scope _processScope = processSpan.makeCurrent()) {
+      processSpan.setAttribute("task_id", "random_123");
+      
+      Span validationSpan = processTracer.spanBuilder("validate data").startSpan();
+      try (Scope _validationScope = validationSpan.makeCurrent()) {
+        Thread.sleep(10 + random.nextInt(20));
+        validationSpan.setAttribute("validation result", "success");
+
+        Span storeSpan = processTracer.spanBuilder("store data").startSpan();
+        try (Scope chargeScope = storeSpan.makeCurrent()) {
+          Thread.sleep(20 + random.nextInt(20));
+          storeSpan.setAttribute("record_id", "random_123");
+        } finally {
+          storeSpan.end();
+        }
+      } finally {
+        validationSpan.end();
+      }
+    } finally {
+      processSpan.end();
     }
 
     return "<html>" +
