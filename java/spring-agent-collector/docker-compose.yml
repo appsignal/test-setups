@@ -5,8 +5,9 @@ services:
     volumes:
       - ./app:/app
     environment:
-      APPSIGNAL_APP_NAME: java/spring-agent-collector
-      APPSIGNAL_APP_ENV: development
+      # APPSIGNAL_APP_NAME: java/spring-agent-collector
+      APPSIGNAL_APP_NAME: Stroopwafel BV
+      APPSIGNAL_APP_ENV: production
       SERVER_PORT: "4001"
     env_file:
       - ../../appsignal.env
