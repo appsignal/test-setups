@@ -1,4 +1,11 @@
 services:
+  appsignal-collector:
+    image: appsignal/collector:latest
+    environment:
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
   app:
     build: .
     ports:
