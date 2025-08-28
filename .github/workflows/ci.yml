@@ -198,6 +198,7 @@ jobs:
           - nodejs/nextjs-13-app
           - nodejs/nextjs-14-app
           - nodejs/nextjs-14-pages
+          - nodejs/nextjs-15-app-collector
           - nodejs/nestjs-prisma
           - nodejs/express-redis-alpine
           - nodejs/remix
