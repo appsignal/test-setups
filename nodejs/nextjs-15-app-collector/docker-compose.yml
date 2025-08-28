@@ -1,0 +1,31 @@
+services:
+  appsignal-collector:
+    image: appsignal/collector:latest
+    environment:
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+  app:
+    build: .
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=nodejs/nextjs-15-app-collector
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_URL=http://app:4001
+      - APP_NAME=nodejs/nextjs-15-app
