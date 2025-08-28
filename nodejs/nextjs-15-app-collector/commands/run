@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+echo "Installing app dependencies"
+npm install
+
+echo "Starting the app in NODE_ENV='$NODE_ENV' (default: development)"
+if [ "$NODE_ENV" == "production" ]; then
+  npm run build
+  npm run start
+else
+  npm run dev
+fi
