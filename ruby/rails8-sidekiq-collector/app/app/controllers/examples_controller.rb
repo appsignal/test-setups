@@ -48,7 +48,7 @@ class ExamplesController < ApplicationController
     CauseCauser.new.error
   rescue => e
     puts e.backtrace
-    render :html => "foo"
+    raise
   end
 
   def custom_error
