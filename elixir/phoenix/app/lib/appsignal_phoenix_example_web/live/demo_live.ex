@@ -2,10 +2,30 @@ defmodule AppsignalPhoenixExampleWeb.DemoLive do
   use AppsignalPhoenixExampleWeb, :live_view
 
   def mount(_params, _session, socket) do
+    # Tag the LiveView mount
+    Appsignal.Span.set_sample_data(
+      Appsignal.Tracer.root_span,
+      "tags",
+      %{
+        page: "demo_live",
+        feature: "interactive_demo"
+      }
+    )
+
     {:ok, assign(socket, :brightness, 50)}
   end
 
   def handle_params(unsigned_params, uri, socket) do
+    # Tag route parameters
+    Appsignal.Span.set_sample_data(
+      Appsignal.Tracer.root_span,
+      "tags",
+      %{
+        page: "demo_live",
+        action: "page_load"
+      }
+    )
+
     IO.puts("handle_params event")
     IO.inspect([unsigned_params, uri, socket])
     {:noreply, socket}
@@ -33,14 +53,38 @@ defmodule AppsignalPhoenixExampleWeb.DemoLive do
     """
   end
 
-  def handle_event("down", _, socket) do
+      def handle_event("down", _, socket) do
     brightness = socket.assigns.brightness - 10
+
+    # Tag user interaction
+    Appsignal.Span.set_sample_data(
+      Appsignal.Tracer.root_span,
+      "tags",
+      %{
+        page: "demo_live",
+        action: "button_click",
+        button: "down"
+      }
+    )
+
     socket = assign(socket, :brightness, brightness)
     {:noreply, socket}
   end
 
   def handle_event("up", _, socket) do
     brightness = socket.assigns.brightness + 10
+
+    # Tag user interaction
+    Appsignal.Span.set_sample_data(
+      Appsignal.Tracer.root_span,
+      "tags",
+      %{
+        page: "demo_live",
+        action: "button_click",
+        button: "up"
+      }
+    )
+
     socket = assign(socket, :brightness, brightness)
     {:noreply, socket}
   end
