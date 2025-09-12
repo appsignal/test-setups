@@ -12,8 +12,6 @@ def main():
     os.environ["OTEL_SERVICE_NAME"] = "django-app"
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'appsignal_python_opentelemetry.settings')
 
-    appsignal.start()
-
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

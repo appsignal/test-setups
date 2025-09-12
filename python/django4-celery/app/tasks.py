@@ -13,7 +13,7 @@ from celery.signals import worker_process_init
 @worker_process_init.connect(weak=False)
 def init_celery_tracing(*args, **kwargs):
     os.environ["OTEL_SERVICE_NAME"] = "celery-app"
-    appsignal.start()
+    # appsignal.start()
 
 
 app = Celery('tasks', broker='redis://redis')

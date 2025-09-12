@@ -13,4 +13,8 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'appsignal_python_opentelemetry.settings')
 
+import appsignal
+appsignal.start()
+print("WSGI: AppSignal started")
+
 application = get_wsgi_application()

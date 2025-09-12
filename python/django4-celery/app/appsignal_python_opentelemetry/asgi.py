@@ -13,4 +13,8 @@ from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'appsignal_python_opentelemetry.settings')
 
+import appsignal
+appsignal.start()
+print("ASGI: AppSignal started")
+
 application = get_asgi_application()

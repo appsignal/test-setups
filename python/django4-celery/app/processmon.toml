@@ -1,21 +1,28 @@
 [[paths_to_watch]]
-path = "/app"
+path = "/usr/bin"
 
 [processes.django]
-command = "python3"
+# command = "python3"
+# args = [
+#   "manage.py",
+#   "runserver",
+#   "0.0.0.0:4001"
+# ]
+# working_dir = "/app"
+command = "gunicorn"
 args = [
-  "manage.py",
-  "runserver",
-  "0.0.0.0:4001"
+  "--access-logfile", "-",
+  "--capture-output",
+  "appsignal_python_opentelemetry.wsgi"
 ]
 working_dir = "/app"
 
-[processes.celery]
-command = "celery"
-args = [
-  "--app=tasks",
-  "worker",
-  "--loglevel=INFO",
-  "--queues=high-priority,low-priority"
-]
-working_dir = "/app"
+# [processes.celery]
+# command = "celery"
+# args = [
+#   "--app=tasks",
+#   "worker",
+#   "--loglevel=INFO",
+#   "--queues=high-priority,low-priority"
+# ]
+# working_dir = "/app"

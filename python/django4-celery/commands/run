@@ -8,7 +8,7 @@ cd /integration
 
 pip3 install hatch
 hatch clean
-hatch run build:me
+_APPSIGNAL_BUILD_COLLECTOR_PATH=--keep-collector _APPSIGNAL_BUILD_COLLECTOR_ENABLED=1 _APPSIGNAL_BUILD_AGENT_ENABLED=0 hatch run build:me
 
 cd /app
 
