@@ -2,6 +2,7 @@
 
 use OpenTelemetry\API\Trace\Span;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     $params = [
@@ -40,9 +41,56 @@ Route::get('/slow', function () {
     return view('slow');
 });
 
-Route::get('/error', function () {
-  throw new Exception('Uh oh!');
+Route::get('/error', function (Request $request) {
+    if ($request->input('debug') == "true") {
+        try {
+            throwException();
+        } catch (Exception $e) {
+            return response()->view('backtrace', [
+                'note' => "",
+                'error' => $e->getMessage(),
+                'backtrace' => $e->getTraceAsString()
+            ], 500);
+        }
+    } else {
+        throwException();
+    }
 });
+
+Route::get('/error_cause', function (Request $request) {
+    if ($request->input('debug') == "true") {
+        try {
+            throwWrappedException();
+        } catch (Exception $e) {
+            return response()->view('backtrace', [
+                'note' => "",
+                'error' => $e->getMessage(),
+                'backtrace' => $e->getTraceAsString()
+            ], 500);
+        }
+    } else {
+        throwWrappedException();
+    }
+});
+
+class WrappedException extends \Exception {
+     function __construct(string $message, $code, \Throwable $exception) {
+             parent::__construct($message, $code, $exception);
+     }
+}
+
+function throwWrappedException() {
+    try {
+        throwException();
+    } catch(\Exception $e) {
+        // chaining exception
+        throw new WrappedException("I am a wrapped error", 0, $e);
+    }
+}
+
+function throwException() {
+    throw new \Exception('Uh oh!');
+}
 
 Route::get('/extension', function () {
     return extension_loaded("opentelemetry") ? "yes" : "no";

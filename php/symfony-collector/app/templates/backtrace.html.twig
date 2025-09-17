@@ -8,12 +8,10 @@
 <body>
     <h1>PHP Backtrace Test</h1>
 
-    <p><strong>Error:</strong> {{ $error }}</p>
-
-    <p>{{ $note }}</p>
+    <p><strong>Error:</strong> {{ error }}</p>
 
     <h2>PHP Backtrace (via $e->getTraceAsString())</h2>
-    <pre>{{ $backtrace }}</pre>
+    <pre>{{ backtrace }}</pre>
 
     <a href="/">← Back to Home</a>
 </body>

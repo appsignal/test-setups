@@ -18,6 +18,7 @@ class BacktraceController extends Controller
             $span->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
 
             return response()->view('backtrace', [
+                'note' => "<strong>Note:</strong> This error was intentionally thrown and caught to demonstrate PHP backtrace functionality. The error flows through multiple methods (A → B → C → D → E → F → throwError) to create an extensive call stack. The error has been reported to AppSignal via OpenTelemetry.",
                 'error' => $e->getMessage(),
                 'backtrace' => $e->getTraceAsString()
             ], 500);

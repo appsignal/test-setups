@@ -16,6 +16,10 @@ error:
     path: /error
     controller: App\Controller\HomeController::error
 
+error_cause:
+    path: /error_cause
+    controller: App\Controller\HomeController::error_cause
+
 logs:
     path: /logs
     controller: App\Controller\HomeController::logs

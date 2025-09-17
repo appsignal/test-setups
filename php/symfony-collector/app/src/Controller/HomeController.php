@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use OpenTelemetry\API\Trace\Span;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenTelemetry\API\Globals;
 use OpenTelemetry\API\Logs\LogRecord;
@@ -26,9 +27,36 @@ class HomeController extends AbstractController
         return $this->render('home/slow.html.twig');
     }
 
-    public function error(): Response
+    public function error(Request $request): Response
     {
-        throw new \Exception('Uh oh!');
+        if ($request->query->get('debug') == "true") {
+            try {
+                throwException();
+            } catch (\Exception $e) {
+                return $this->render('backtrace.html.twig', [
+                    'error' => $e->getMessage(),
+                    'backtrace' => $e->getTraceAsString()
+                ], new Response('', 500));
+            }
+        } else {
+            throwException();
+        }
+    }
+
+    public function error_cause(Request $request): Response
+    {
+        if ($request->query->get('debug') == "true") {
+            try {
+                throwWrappedException();
+            } catch (\Exception $e) {
+                return $this->render('backtrace.html.twig', [
+                    'error' => $e->getMessage(),
+                    'backtrace' => $e->getTraceAsString()
+                ], new Response('', 500));
+            }
+        } else {
+            throwWrappedException();
+        }
     }
 
     public function logs(): Response
@@ -69,7 +97,7 @@ class HomeController extends AbstractController
         $loggerProvider = Globals::loggerProvider();
         $handler = new OpenTelemetryHandler($loggerProvider, 'info', true);
         $logger = new Logger('app', [$handler]);
-        
+
         $logger->info('Log message with context - Monolog with OpenTelemetry handler', ['user_id' => 123]);
         $logger->warning('Something might be wrong - Monolog with OpenTelemetry handler');
         $logger->error('An error occurred - Monolog with OpenTelemetry handler', ['error_code' => 500]);
@@ -88,7 +116,7 @@ class HomeController extends AbstractController
         $counter->add(1);
         $counter->add(1);
 
-        // Gauge metric  
+        // Gauge metric
         $gauge = $meter->createGauge('my_gauge');
         $gauge->record(100);
         $gauge->record(10);
@@ -108,4 +136,23 @@ class HomeController extends AbstractController
 
         return new Response('Metrics were sent!');
     }
+}
+
+class WrappedException extends \Exception {
+     function __construct(string $message, $code, \Throwable $exception) {
+             parent::__construct($message, $code, $exception);
+     }
+}
+
+function throwWrappedException() {
+    try {
+        throwException();
+    } catch(\Exception $e) {
+        // chaining exception
+        throw new WrappedException("I am a wrapped error", 0, $e);
+    }
+}
+
+function throwException() {
+    throw new \Exception('Uh oh!');
 }
