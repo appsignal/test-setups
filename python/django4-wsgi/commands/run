@@ -6,7 +6,7 @@ pip3 install --upgrade pip
 
 cd /integration
 
-pip3 install hatch
+pip3 install hatch "click<8.3.0"
 hatch clean
 hatch run build:me
 
