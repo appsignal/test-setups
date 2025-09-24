@@ -108,7 +108,7 @@ namespace :app do
     FileUtils.mkdir_p "#{@app}/commands"
 
     # Copy command scripts
-    %w(console diagnose demo run).each do |command|
+    %w(console diagnose prepare run).each do |command|
       FileUtils.cp "support/templates/skeleton/commands/#{command}", "#{@app}/commands/#{command}"
     end
 
