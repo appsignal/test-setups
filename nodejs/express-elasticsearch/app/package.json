@@ -1,0 +1,31 @@
+{
+  "name": "express-elasticsearch-example",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --version; tsc -p tsconfig.json",
+    "server": "node --require ./src/appsignal.cjs dist/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@appsignal/nodejs": "^3.7.1",
+    "@elastic/elasticsearch": "^9.1.1",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.64.1",
+    "@opentelemetry/instrumentation-winston": "^0.50.0",
+    "@opentelemetry/winston-transport": "^0.16.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "tslib": "^2.8.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.9",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.18.6",
+    "typescript": "^5.9.2"
+  }
+}
