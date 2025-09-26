@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 echo "Install, link and build integration"
 (
 cd /integration
@@ -20,4 +22,5 @@ echo "Building app"
 npm run build
 
 echo "Starting test app server"
+# tail -f /dev/null
 /commands/processmon processmon.toml
