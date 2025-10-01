@@ -21,6 +21,7 @@ defmodule TestAppWeb.Router do
     get "/slow", PageController, :slow
     get "/error", PageController, :error
     get "/slow_job", PageController, :slow_job
+    get "/timeout_job", PageController, :timeout_job
     get "/error_job", PageController, :error_job
     get "/user_job", PageController, :user_job
   end

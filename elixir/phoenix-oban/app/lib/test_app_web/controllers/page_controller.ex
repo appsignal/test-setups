@@ -25,6 +25,15 @@ defmodule TestAppWeb.PageController do
     |> redirect(to: "/")
   end
 
+  def timeout_job(conn, _params) do
+    TestApp.TimeoutWorker.new(%{a: "b"})
+    |> Oban.insert()
+
+    conn
+    |> put_flash(:info, "Queued timeout job")
+    |> redirect(to: "/")
+  end
+
   def error_job(conn, _params) do
     TestApp.ErrorWorker.new(%{a: "b"})
     |> Oban.insert()
