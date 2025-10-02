@@ -6,14 +6,14 @@ set -eu
   cd /integration
   script/setup
   mono bootstrap
-  mono build --package=@appsignal/types,@appsignal/core,@appsignal/javascript
+  mono build --package=@appsignal/javascript
 )
 
 cd /app
 
 echo "Install dependencies"
 npm install
-npm link @appsignal/types @appsignal/core @appsignal/javascript
+npm link @appsignal/javascript
 
 echo "Starting app"
 npm run server

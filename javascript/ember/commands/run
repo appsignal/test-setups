@@ -7,14 +7,14 @@ set -eu
   script/setup
   mono bootstrap
   mono clean
-  mono build --package=@appsignal/types,@appsignal/core,@appsignal/javascript,@appsignal/ember
+  mono build --package=@appsignal/javascript,@appsignal/ember
 )
 
 cd /app
 
 echo "Install dependencies"
 npm install
-npm link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/ember
+npm link @appsignal/javascript @appsignal/ember
 
 echo "Starting app"
 npm run start
