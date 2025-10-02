@@ -11,6 +11,13 @@ services:
     image: "redis:6.2.7"
     ports:
       - "6379:6379"
+  appsignal-collector:
+    image: appsignal/collector:latest
+    environment:
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
   app:
     build: .
     image: python/django5-celery
@@ -25,8 +32,9 @@ services:
       - ../../appsignal_key.env
     environment:
       - PORT=4001
-      - APPSIGNAL_APP_NAME=python/django5-celery
+      - APPSIGNAL_APP_NAME=python/django5-celery-integration-collector
       - APPSIGNAL_APP_ENV=dev
+      - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099
     volumes:
       - ./app:/app
       - ../integration:/integration
