@@ -6,14 +6,14 @@ set -eu
   cd /integration
   script/setup
   mono bootstrap
-  mono build --package=@appsignal/types,@appsignal/core,@appsignal/javascript,@appsignal/angular,@appsignal/webpack
+  mono build --package=@appsignal/javascript,@appsignal/angular,@appsignal/webpack
 )
 
 cd /app
 
 echo "Install dependencies"
 npm install
-npm link @appsignal/types @appsignal/core @appsignal/javascript @appsignal/angular @appsignal/webpack
+npm link @appsignal/javascript @appsignal/angular @appsignal/webpack
 
 echo "Host running"
 echo "To test the app, run the following command:"
