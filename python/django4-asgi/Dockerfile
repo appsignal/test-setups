@@ -1,4 +1,4 @@
-FROM python:3.11-buster
+FROM python:3.11-bullseye
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2023-02-08
