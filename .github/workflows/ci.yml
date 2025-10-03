@@ -19,6 +19,7 @@ concurrency:
 env:
   CACHE_VERSION: v1
   RUNNING_IN_CI: true
+  JOB_TIMEOUT_MINUTES: &timeout 10
 
 jobs:
   build-processmon:
@@ -43,6 +44,7 @@ jobs:
     name: Run tests for Elixir test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
+    timeout-minutes: *timeout
     strategy:
       fail-fast: false
       matrix:
@@ -76,6 +78,7 @@ jobs:
     name: Run tests for Java test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
+    timeout-minutes: *timeout
     strategy:
       fail-fast: false
       matrix:
@@ -104,6 +107,7 @@ jobs:
     name: Run tests for Go test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
+    timeout-minutes: *timeout
     strategy:
       fail-fast: false
       matrix:
@@ -136,6 +140,7 @@ jobs:
     name: Run tests for JavaScript test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
+    timeout-minutes: *timeout
     strategy:
       fail-fast: false
       matrix:
@@ -177,6 +182,7 @@ jobs:
     name: Run tests for Node.js test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
+    timeout-minutes: *timeout
     strategy:
       fail-fast: false
       matrix:
@@ -224,6 +230,7 @@ jobs:
     name: Run tests for Ruby test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
+    timeout-minutes: *timeout
     strategy:
       fail-fast: false
       matrix:
@@ -279,6 +286,7 @@ jobs:
     name: Run tests for Python test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
+    timeout-minutes: *timeout
     strategy:
       fail-fast: false
       matrix:
@@ -311,6 +319,7 @@ jobs:
     name: Run tests for PHP test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
+    timeout-minutes: *timeout
     strategy:
       fail-fast: false
       matrix:
