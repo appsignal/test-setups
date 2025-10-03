@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  elastic:
+    container_name: elastic1
+    hostname: elastic1
+    image: elasticsearch:9.1.4
+    expose:
+      - 9200:9200
+    mem_limit: 1g
+    env_file:
+      - elastic.env
+  app:
+    build: .
+    depends_on:
+      - elastic
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - APPSIGNAL_APP_NAME=nodejs/express-elasticsearch
+      - ELASTIC_URL=http://elastic1:9200
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    working_dir: /
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=nodejs/express-elasticsearch
+      - APP_URL=http://app:4001
