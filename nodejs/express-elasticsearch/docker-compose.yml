@@ -18,7 +18,7 @@ services:
       - "4001:4001"
     environment:
       - PORT=4001
-      - APPSIGNAL_APP_NAME=nodejs-express-elasticsearch
+      - APPSIGNAL_APP_NAME=nodejs/express-elasticsearch
       - ELASTIC_URL=http://elastic1:9200
     env_file:
       - ../../appsignal.env
