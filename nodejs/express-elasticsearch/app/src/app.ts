@@ -242,7 +242,7 @@ function getHtmlLinks(docs: Array<SearchHit<Product>>): string {
 		<p>POST, PUT and DELETE requests will return json responses in the same tab. Refresh "/" page to see updates.</p>
 		<p>Try these routes:</p>
 		<ul>
-			<li><a href="/cluster-info" target="_blank">Cluster info</a></span>
+			<li><a href="/cluster-info">Cluster info</a></span>
 			<li><h2>Indices</h2>
 				<ul>
 					<li><form method="POST" action="/index"><button>Create "${PRODUCT_INDEX}" index</button></form></li>
