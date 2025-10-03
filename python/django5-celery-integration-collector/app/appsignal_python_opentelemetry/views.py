@@ -201,6 +201,21 @@ def metrics(request):
         f"Gauge: {gauge_value}, Histogram: {histogram_value}\n"
     )
 
+def logs(request):
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger("my app")
+
+    logger.info("This is an info log")
+    logger.warning("This is a warning log")
+    logger.error("This is an error log")
+    try:
+        raise Exception("This is a test exception")
+    except Exception as e:
+        logger.exception("An exception occurred: %s", e)
+
+    return HttpResponse("I emitted some logs to AppSignal!")
+
 
 class MyException(Exception):
     pass
