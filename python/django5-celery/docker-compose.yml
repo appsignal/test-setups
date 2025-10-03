@@ -29,6 +29,7 @@ services:
       - APPSIGNAL_APP_ENV=dev
     volumes:
       - ./app:/app
+      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests
