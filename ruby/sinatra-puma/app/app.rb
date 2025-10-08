@@ -4,6 +4,9 @@ require "sinatra"
 Appsignal.load(:sinatra)
 Appsignal.start
 
+logger = Appsignal::Logger.new("sinatra")
+use Rack::CommonLogger, logger
+
 get "/" do
   time =
     Appsignal.instrument "fetch.time" do
