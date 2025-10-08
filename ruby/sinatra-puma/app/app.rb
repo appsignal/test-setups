@@ -5,6 +5,7 @@ Appsignal.load(:sinatra)
 Appsignal.start
 
 logger = Appsignal::Logger.new("sinatra")
+logger.broadcast_to(STDOUT)
 use Rack::CommonLogger, logger
 
 get "/" do
