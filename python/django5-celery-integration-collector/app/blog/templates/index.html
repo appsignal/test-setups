@@ -1,0 +1,9 @@
+<h1>My blog</h1>
+
+<a href="/blog/create">/blog/create: Create and show a new blog post</a>
+
+<p>Value from Redis: {{ redis_value }}</p>
+
+{% for post in posts %}
+  <h2><a href="/blog/post/?id={{ post.id }}">{{ post.title }}</a></h2>
+{% endfor %}
