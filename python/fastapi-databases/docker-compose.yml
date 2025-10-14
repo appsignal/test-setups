@@ -24,6 +24,7 @@ services:
     environment:
       - PORT=4001
       - APPSIGNAL_APP_NAME=python/fastapi-databases
+      - APPSIGNAL_LOG_LEVEL=trace
     volumes:
       - ./app:/app
       - ../integration:/integration
