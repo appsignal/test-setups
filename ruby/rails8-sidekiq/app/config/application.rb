@@ -27,5 +27,9 @@ module ExampleApp
     # config.eager_load_paths << Rails.root.join("extras")
     #
     config.hosts << "app" << "localhost"
+
+    appsignal_logger = Appsignal::Logger.new("rails")
+    appsignal_logger.broadcast_to(config.logger)
+    config.logger = ActiveSupport::TaggedLogging.new(appsignal_logger)
   end
 end

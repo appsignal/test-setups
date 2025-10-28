@@ -5,10 +5,6 @@ Rails.application.config.log_tags = {
   referer: ->(request) { request.headers["Referer"] }
 }
 
-appsignal_logger = Appsignal::Logger.new("rails")
-appsignal_logger.broadcast_to(Rails.logger)
-Rails.logger = ActiveSupport::TaggedLogging.new(appsignal_logger)
-
 # Semantic logger example
 # Disable the Rails.logger config above this when you enable the config below
 # log_filter = ->(log) { log.payload&.[](:path) != "/up".freeze }
