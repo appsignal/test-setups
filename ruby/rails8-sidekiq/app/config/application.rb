@@ -29,7 +29,7 @@ module ExampleApp
     config.hosts << "app" << "localhost"
 
     appsignal_logger = Appsignal::Logger.new("rails")
-    appsignal_logger.broadcast_to(config.logger)
+    appsignal_logger.broadcast_to(Rails.logger || Logger.new("log/development.log"))
     config.logger = ActiveSupport::TaggedLogging.new(appsignal_logger)
   end
 end
