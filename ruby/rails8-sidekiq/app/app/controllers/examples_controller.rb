@@ -4,6 +4,8 @@ class ExamplesController < ApplicationController
   owner :examples
 
   def index
+    Rails.event.notify("A custom event from ExamplesController#index", { random: rand(10) })
+
     Rails.logger.info(
       "Test log message",
       abc: "def",
