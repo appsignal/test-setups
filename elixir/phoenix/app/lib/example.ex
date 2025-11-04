@@ -1,6 +1,6 @@
-defmodule AppsignalPhoenixExample do
+defmodule Example do
   @moduledoc """
-  AppsignalPhoenixExample keeps the contexts that define your domain
+  Example keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

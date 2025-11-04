@@ -1,5 +1,5 @@
-defmodule AppsignalPhoenixExampleWeb.DemoLive do
-  use AppsignalPhoenixExampleWeb, :live_view
+defmodule ExampleWeb.DemoLive do
+  use ExampleWeb, :live_view
 
   def mount(_params, _session, socket) do
     {:ok, assign(socket, :brightness, 50)}
@@ -29,17 +29,21 @@ defmodule AppsignalPhoenixExampleWeb.DemoLive do
       Up
     </button>
 
-    <.live_component module={AppsignalPhoenixExampleWeb.LiveComponent} id="component" />
+    <hr />
+
+    <.live_component module={ExampleWeb.LiveComponent} id="component" />
     """
   end
 
   def handle_event("down", _, socket) do
+    IO.puts("LiveView handle_event down")
     brightness = socket.assigns.brightness - 10
     socket = assign(socket, :brightness, brightness)
     {:noreply, socket}
   end
 
   def handle_event("up", _, socket) do
+    IO.puts("LiveView handle_event up")
     brightness = socket.assigns.brightness + 10
     socket = assign(socket, :brightness, brightness)
     {:noreply, socket}

@@ -1,11 +1,11 @@
-defmodule AppsignalPhoenixExampleWeb.Router do
-  use AppsignalPhoenixExampleWeb, :router
+defmodule ExampleWeb.Router do
+  use ExampleWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, html: {AppsignalPhoenixExampleWeb.Layouts, :root}
+    plug :put_root_layout, html: {ExampleWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -14,7 +14,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", AppsignalPhoenixExampleWeb do
+  scope "/", ExampleWeb do
     pipe_through :browser
 
     get "/", PageController, :home
@@ -24,19 +24,19 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     live "/live", DemoLive
   end
 
-  forward("/api", Absinthe.Plug, schema: AppsignalPhoenixExampleWeb.Schema)
+  forward("/api", Absinthe.Plug, schema: ExampleWeb.Schema)
 
   if Mix.env() == :dev do
-    forward("/graphiql", Absinthe.Plug.GraphiQL, schema: AppsignalPhoenixExampleWeb.Schema)
+    forward("/graphiql", Absinthe.Plug.GraphiQL, schema: ExampleWeb.Schema)
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", AppsignalPhoenixExampleWeb do
+  # scope "/api", ExampleWeb do
   #   pipe_through :api
   # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
-  if Application.compile_env(:appsignal_phoenix_example, :dev_routes) do
+  if Application.compile_env(:example, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
     # it behind authentication and allow only admins to access it.
     # If your application does not have an admins-only section yet,
@@ -47,7 +47,7 @@ defmodule AppsignalPhoenixExampleWeb.Router do
     scope "/dev" do
       pipe_through :browser
 
-      live_dashboard "/dashboard", metrics: AppsignalPhoenixExampleWeb.Telemetry
+      live_dashboard "/dashboard", metrics: ExampleWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end

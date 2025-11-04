@@ -1,4 +1,4 @@
-defmodule AppsignalPhoenixExampleWeb.CoreComponents do
+defmodule ExampleWeb.CoreComponents do
   @moduledoc """
   Provides core UI components.
 
@@ -17,7 +17,7 @@ defmodule AppsignalPhoenixExampleWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import AppsignalPhoenixExampleWeb.Gettext
+  import ExampleWeb.Gettext
 
   @doc """
   Renders a modal.
@@ -661,9 +661,9 @@ defmodule AppsignalPhoenixExampleWeb.CoreComponents do
     # with our gettext backend as first argument. Translations are
     # available in the errors.po file (as we use the "errors" domain).
     if count = opts[:count] do
-      Gettext.dngettext(AppsignalPhoenixExampleWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(ExampleWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(AppsignalPhoenixExampleWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(ExampleWeb.Gettext, "errors", msg, opts)
     end
   end
 

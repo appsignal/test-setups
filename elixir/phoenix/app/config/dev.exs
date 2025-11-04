@@ -1,11 +1,11 @@
 import Config
 
 # Configure your database
-config :appsignal_phoenix_example, AppsignalPhoenixExample.Repo,
+config :example, Example.Repo,
   username: System.get_env("POSTGRES_USER", "postgres"),
   password: System.get_env("POSTGRES_PASSWORD", "postgres"),
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
-  database: System.get_env("POSTGRES_DB", "appsignal_phoenix_example_dev"),
+  database: System.get_env("POSTGRES_DB", "example_dev"),
   port: System.get_env("POSTGRES_PORT", "5432"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
@@ -18,7 +18,7 @@ config :appsignal_phoenix_example, AppsignalPhoenixExample.Repo,
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
 port = String.to_integer(System.get_env("PORT") || "4000")
-config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
+config :example, ExampleWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {0, 0, 0, 0}, port: port],
@@ -28,8 +28,8 @@ config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
   secret_key_base: "WwOZdtFSngz7DrtXHkco0fXMI0Nz73db7QJWaTEBaILtqszOeUJpYeORa2J1IAaV",
   watchers: [
     esbuild:
-      {Esbuild, :install_and_run, [:appsignal_phoenix_example, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:appsignal_phoenix_example, ~w(--watch)]}
+      {Esbuild, :install_and_run, [:example, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:example, ~w(--watch)]}
   ]
 
 # ## SSL Support
@@ -56,17 +56,17 @@ config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
+config :example, ExampleWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/appsignal_phoenix_example_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/example_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :appsignal_phoenix_example, dev_routes: true
+config :example, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

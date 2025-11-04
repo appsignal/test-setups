@@ -1,5 +1,5 @@
-defmodule AppsignalPhoenixExampleWeb.PageController do
-  use AppsignalPhoenixExampleWeb, :controller
+defmodule ExampleWeb.PageController do
+  use ExampleWeb, :controller
   use Appsignal.Instrumentation.Decorators
 
   def home(conn, _params) do
