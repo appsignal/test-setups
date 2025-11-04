@@ -1,4 +1,4 @@
-# AppsignalPhoenixExample
+# Example
 
 To start your Phoenix server:
 

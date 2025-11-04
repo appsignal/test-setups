@@ -7,22 +7,22 @@
 # General application configuration
 import Config
 
-config :appsignal_phoenix_example,
-  ecto_repos: [AppsignalPhoenixExample.Repo],
+config :example,
+  ecto_repos: [Example.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
+config :example, ExampleWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
     formats: [
-      html: AppsignalPhoenixExampleWeb.ErrorHTML,
-      json: AppsignalPhoenixExampleWeb.ErrorJSON
+      html: ExampleWeb.ErrorHTML,
+      json: ExampleWeb.ErrorJSON
     ],
     layout: false
   ],
-  pubsub_server: AppsignalPhoenixExample.PubSub,
+  pubsub_server: Example.PubSub,
   live_view: [signing_salt: "AkIIs7hC"]
 
 # Configures the mailer
@@ -32,12 +32,12 @@ config :appsignal_phoenix_example, AppsignalPhoenixExampleWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :appsignal_phoenix_example, AppsignalPhoenixExample.Mailer, adapter: Swoosh.Adapters.Local
+config :example, Example.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
-  appsignal_phoenix_example: [
+  example: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
@@ -47,7 +47,7 @@ config :esbuild,
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "3.4.0",
-  appsignal_phoenix_example: [
+  example: [
     args: ~w(
       --config=tailwind.config.js
       --input=css/app.css

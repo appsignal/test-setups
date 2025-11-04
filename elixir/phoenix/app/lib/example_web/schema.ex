@@ -1,4 +1,4 @@
-defmodule AppsignalPhoenixExampleWeb.Schema do
+defmodule ExampleWeb.Schema do
   use Absinthe.Schema
 
   @desc "An item"

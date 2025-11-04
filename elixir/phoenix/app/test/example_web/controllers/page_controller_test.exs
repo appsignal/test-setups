@@ -1,5 +1,5 @@
-defmodule AppsignalPhoenixExampleWeb.PageControllerTest do
-  use AppsignalPhoenixExampleWeb.ConnCase
+defmodule ExampleWeb.PageControllerTest do
+  use ExampleWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")

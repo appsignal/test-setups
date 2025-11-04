@@ -1,9 +1,9 @@
-defmodule AppsignalPhoenixExample.MixProject do
+defmodule Example.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :appsignal_phoenix_example,
+      app: :example,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule AppsignalPhoenixExample.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {AppsignalPhoenixExample.Application, []},
+      mod: {Example.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -84,10 +84,10 @@ defmodule AppsignalPhoenixExample.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind appsignal_phoenix_example", "esbuild appsignal_phoenix_example"],
+      "assets.build": ["tailwind example", "esbuild example"],
       "assets.deploy": [
-        "tailwind appsignal_phoenix_example --minify",
-        "esbuild appsignal_phoenix_example --minify",
+        "tailwind example --minify",
+        "esbuild example --minify",
         "phx.digest"
       ]
     ]

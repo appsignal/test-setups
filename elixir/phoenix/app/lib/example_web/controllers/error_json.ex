@@ -1,4 +1,4 @@
-defmodule AppsignalPhoenixExampleWeb.ErrorJSON do
+defmodule ExampleWeb.ErrorJSON do
   @moduledoc """
   This module is invoked by your endpoint in case of errors on JSON requests.
 

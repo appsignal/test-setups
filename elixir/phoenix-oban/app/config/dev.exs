@@ -4,7 +4,7 @@ import Config
 config :test_app, TestApp.Repo,
   username: System.get_env("POSTGRES_USER", "postgres"),
   password: System.get_env("POSTGRES_PASSWORD", "postgres"),
-  database: System.get_env("POSTGRES_DB", "appsignal_phoenix_example_dev"),
+  database: System.get_env("POSTGRES_DB", "test_app_dev"),
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
   port: System.get_env("POSTGRES_PORT", "5432"),
   stacktrace: true,
