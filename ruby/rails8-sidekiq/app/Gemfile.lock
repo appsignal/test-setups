@@ -1,7 +1,7 @@
 PATH
   remote: /integration
   specs:
-    appsignal (4.6.0)
+    appsignal (4.7.5)
       logger
       rack (>= 2.0.0)
 
