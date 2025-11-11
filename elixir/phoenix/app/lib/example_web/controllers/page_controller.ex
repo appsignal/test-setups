@@ -3,6 +3,18 @@ defmodule ExampleWeb.PageController do
   use Appsignal.Instrumentation.Decorators
 
   def home(conn, _params) do
+  Appsignal.Logger.info(
+      "invoice_helper",
+      "Generated invoice PLAINTEXT"
+  )
+  Appsignal.Logger.info(
+      "invoice_helper",
+      "Generated invoice invoice_id=A145 for customer LOGFMT customer_id=123"
+  )
+  Appsignal.Logger.info(
+      "invoice_helper",
+      ~s({"message": "Generated invoice for customer JSON", "invoice_id": "A145", "customer_id": "123"})
+  )
     render(conn, :home)
   end
 

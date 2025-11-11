@@ -27,6 +27,7 @@ services:
       - PORT=4001
       - APPSIGNAL_APP_NAME=python/django5-celery
       - APPSIGNAL_APP_ENV=dev
+      - APPSIGNAL_LOG_LEVEL=trace
     volumes:
       - ./app:/app
       - ../integration:/integration
