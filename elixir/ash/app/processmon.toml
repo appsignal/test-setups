@@ -1,0 +1,16 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  "assets/node_modules",
+  "_build",
+  "priv"
+]
+
+[[paths_to_watch]]
+path = "/integration"
+ignore = ["appsignal-elixir/_build", "appsignal-elixir/priv"]
+
+[processes.app]
+command = "elixir"
+args = ["--sname", "server", "--cookie", "server", "-S", "mix", "phx.server"]
+working_dir = "/app"
