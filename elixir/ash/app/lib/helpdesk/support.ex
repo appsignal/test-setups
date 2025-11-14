@@ -3,5 +3,6 @@ defmodule Helpdesk.Support do
     otp_app: :app
 
   resources do
+    resource(Helpdesk.Support.Ticket)
   end
 end
