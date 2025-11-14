@@ -8,6 +8,13 @@ defmodule AppWeb.Router do
     plug :put_root_layout, html: {AppWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+
+    live "/tickets", TicketLive.Index, :index
+    live "/tickets/new", TicketLive.Form, :new
+    live "/tickets/:id/edit", TicketLive.Form, :edit
+    
+    live "/tickets/:id", TicketLive.Show, :show
+    live "/tickets/:id/show/edit", TicketLive.Show, :edit
   end
 
   pipeline :api do

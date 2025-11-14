@@ -9,6 +9,9 @@ defmodule Helpdesk.Support.Ticket do
 
     # and a create action, which we'll customize later
     create :create
+    update :update do
+      primary? true
+    end
   end
 
   # Attributes are the simple pieces of data that exist on your resource
