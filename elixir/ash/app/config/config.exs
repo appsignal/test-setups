@@ -9,7 +9,8 @@ import Config
 
 config :app,
   ecto_repos: [App.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime],
+  ash_domains: [Helpdesk.Support]
 
 # Configures the endpoint
 config :app, AppWeb.Endpoint,
