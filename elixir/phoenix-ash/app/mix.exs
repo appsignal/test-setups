@@ -27,6 +27,10 @@ defmodule AshExample.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
+  defp integration_path do
+    System.get_env("INTEGRATION_PATH", "../../integration")
+  end
+
   # Specifies your project dependencies.
   #
   # Type `mix help deps` for examples and options.
@@ -54,7 +58,11 @@ defmodule AshExample.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:ash, "~> 3.0"},
-      {:ash_phoenix, "~> 2.0"}
+      {:ash_phoenix, "~> 2.0"},
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
+      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true},
+      {:appsignal_phoenix,
+       path: "#{integration_path()}/appsignal-elixir-phoenix", override: true}
     ]
   end
 
