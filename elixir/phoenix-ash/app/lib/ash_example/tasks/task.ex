@@ -3,8 +3,18 @@ defmodule AshExample.Tasks.Task do
     domain: AshExample.Tasks,
     data_layer: Ash.DataLayer.Ets
 
+  multitenancy do
+    strategy :attribute
+    attribute :tenant_id
+  end
+
   attributes do
     uuid_primary_key :id
+
+    attribute :tenant_id, :string do
+      allow_nil? false
+      public? true
+    end
 
     attribute :title, :string do
       allow_nil? false

@@ -2,8 +2,11 @@ defmodule AshExampleWeb.TaskLive do
   use AshExampleWeb, :live_view
   alias AshExample.Tasks.Task
 
+  # For testing tenant metadata - in production this could come from session/auth
+  @test_tenant "tenant_123"
+
   def mount(_params, _session, socket) do
-    tasks = Task.read!()
+    tasks = Task.read!(tenant: @test_tenant)
 
     {:ok,
      socket
@@ -12,9 +15,9 @@ defmodule AshExampleWeb.TaskLive do
   end
 
   def handle_event("create_task", %{"title" => title, "description" => description}, socket) do
-    case Task.create(%{title: title, description: description}) do
+    case Task.create(%{title: title, description: description}, tenant: @test_tenant) do
       {:ok, _task} ->
-        tasks = Task.read!()
+        tasks = Task.read!(tenant: @test_tenant)
 
         {:noreply,
          socket
@@ -30,9 +33,9 @@ defmodule AshExampleWeb.TaskLive do
   def handle_event("complete_task", %{"id" => id}, socket) do
     task = Enum.find(socket.assigns.tasks, fn t -> t.id == id end)
 
-    case Task.complete(task) do
+    case Task.complete(task, tenant: @test_tenant) do
       {:ok, _task} ->
-        tasks = Task.read!()
+        tasks = Task.read!(tenant: @test_tenant)
         {:noreply, assign(socket, :tasks, tasks)}
 
       {:error, _changeset} ->
@@ -43,9 +46,9 @@ defmodule AshExampleWeb.TaskLive do
   def handle_event("delete_task", %{"id" => id}, socket) do
     task = Enum.find(socket.assigns.tasks, fn t -> t.id == id end)
 
-    case Task.destroy(task) do
+    case Task.destroy(task, tenant: @test_tenant) do
       :ok ->
-        tasks = Task.read!()
+        tasks = Task.read!(tenant: @test_tenant)
         {:noreply, assign(socket, :tasks, tasks)}
 
       {:error, _changeset} ->
