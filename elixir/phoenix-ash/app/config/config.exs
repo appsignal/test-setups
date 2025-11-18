@@ -12,7 +12,8 @@ config :ash_example,
   ash_domains: [AshExample.Tasks]
 
 # Configure Ash tracer for AppSignal
-config :ash, :tracer, [AshAppsignal]
+# Using both AshAppsignal (for basic tracing) and custom tracer (for metadata)
+config :ash, :tracer, [AshAppsignal, AshExample.AppsignalTracer]
 
 config :ash_appsignal,
   trace_types: [
