@@ -28,7 +28,7 @@ defmodule AshExample.AppsignalTracer do
         |> add_user_id(metadata)
         |> add_resource_info(metadata)
 
-      # Logger.debug("AppSignal metadata: #{inspect(tags)}")
+      Logger.debug("AppSignal metadata: #{inspect(tags)}")
 
       # Only set tags if we have meaningful data
       unless Enum.empty?(tags) do
