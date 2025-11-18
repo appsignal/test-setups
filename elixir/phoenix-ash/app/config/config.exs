@@ -11,6 +11,15 @@ config :ash_example,
   generators: [timestamp_type: :utc_datetime],
   ash_domains: [AshExample.Tasks]
 
+# Configure Ash tracer for AppSignal
+config :ash, :tracer, [AshAppsignal]
+
+config :ash_appsignal,
+  trace_types: [
+    :custom,
+    :action
+  ]
+
 # Configures the endpoint
 config :ash_example, AshExampleWeb.Endpoint,
   url: [host: "localhost"],
