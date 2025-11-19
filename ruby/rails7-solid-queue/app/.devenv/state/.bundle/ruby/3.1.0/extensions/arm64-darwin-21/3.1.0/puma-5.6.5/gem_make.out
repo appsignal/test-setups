@@ -1,0 +1,24 @@
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/puma-5.6.5/ext/puma_http11
+/nix/store/371nrncarg8z5rmbxzcxy9pqyrma3byh-ruby-3.1.4/bin/ruby extconf.rb
+checking for BIO_read() in -lcrypto... no
+checking for BIO_read() in -llibeay32... no
+** Puma will be compiled without SSL support
+creating Makefile
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/puma-5.6.5/ext/puma_http11
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-ywwx5o sitelibdir\=./.gem.20240329-82225-ywwx5o clean
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/puma-5.6.5/ext/puma_http11
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-ywwx5o sitelibdir\=./.gem.20240329-82225-ywwx5o
+compiling http11_parser.c
+compiling mini_ssl.c
+compiling puma_http11.c
+linking shared-object puma/puma_http11.bundle
+ld: warning: directory not found for option '-L/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-clang-wrapper-16.0.6/resource-root/lib'
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/puma-5.6.5/ext/puma_http11
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-ywwx5o sitelibdir\=./.gem.20240329-82225-ywwx5o install
+install -c -p -m 755 puma_http11.bundle ./.gem.20240329-82225-ywwx5o/puma
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/puma-5.6.5/ext/puma_http11
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-ywwx5o sitelibdir\=./.gem.20240329-82225-ywwx5o clean

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/jeff/appsignal/test-setups/elixir/phoenix/app/config/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

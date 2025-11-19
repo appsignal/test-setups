@@ -1,0 +1,25 @@
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/date-3.3.3/ext/date
+/nix/store/371nrncarg8z5rmbxzcxy9pqyrma3byh-ruby-3.1.4/bin/ruby extconf.rb
+checking for rb_category_warn()... yes
+checking for timezone in time.h with  -Werror... yes
+checking for altzone in time.h with  -Werror... no
+creating Makefile
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/date-3.3.3/ext/date
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-e50mj9 sitelibdir\=./.gem.20240329-82225-e50mj9 clean
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/date-3.3.3/ext/date
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-e50mj9 sitelibdir\=./.gem.20240329-82225-e50mj9
+compiling date_core.c
+compiling date_parse.c
+compiling date_strftime.c
+compiling date_strptime.c
+linking shared-object date_core.bundle
+ld: warning: directory not found for option '-L/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-clang-wrapper-16.0.6/resource-root/lib'
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/date-3.3.3/ext/date
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-e50mj9 sitelibdir\=./.gem.20240329-82225-e50mj9 install
+install -c -p -m 755 date_core.bundle ./.gem.20240329-82225-e50mj9
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/date-3.3.3/ext/date
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-e50mj9 sitelibdir\=./.gem.20240329-82225-e50mj9 clean

@@ -1,0 +1,19 @@
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.16.0/ext/bootsnap
+/nix/store/371nrncarg8z5rmbxzcxy9pqyrma3byh-ruby-3.1.4/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.16.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-8pi05r sitelibdir\=./.gem.20240329-82225-8pi05r clean
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.16.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-8pi05r sitelibdir\=./.gem.20240329-82225-8pi05r
+compiling bootsnap.c
+linking shared-object bootsnap/bootsnap.bundle
+ld: warning: directory not found for option '-L/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-clang-wrapper-16.0.6/resource-root/lib'
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.16.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-8pi05r sitelibdir\=./.gem.20240329-82225-8pi05r install
+install -c -p -m 755 bootsnap.bundle ./.gem.20240329-82225-8pi05r/bootsnap
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.16.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-8pi05r sitelibdir\=./.gem.20240329-82225-8pi05r clean

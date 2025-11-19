@@ -1,0 +1,11 @@
+{application,opentelemetry_process_propagator,
+             [{optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger,opentelemetry_api]},
+              {description,"Tools for OpenTelemetry context propagation across process boundaries"},
+              {modules,['Elixir.OpentelemetryProcessPropagator',
+                        'Elixir.OpentelemetryProcessPropagator.Task',
+                        'Elixir.OpentelemetryProcessPropagator.Task.Supervisor',
+                        'Elixir.OpentelemetryProcessPropagator.Task.Wrapper',
+                        opentelemetry_process_propagator]},
+              {registered,[]},
+              {vsn,"0.3.0"}]}.

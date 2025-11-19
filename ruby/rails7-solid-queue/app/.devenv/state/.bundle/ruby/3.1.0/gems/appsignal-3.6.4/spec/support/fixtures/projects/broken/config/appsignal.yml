@@ -1,0 +1,1 @@
+<%= ENV.fetch("I AM A KEY THAT DOES NOT EXIST") %>

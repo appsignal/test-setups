@@ -1,0 +1,10 @@
+#+begin_quote
+In Ruby, where our logger implements broadcast functionality and builds on top of the logger built-in gem, we probably would only need to document it (~.broadcast_to(Logger.new(STDOUT))~)
+#+end_quote
+
+In
+In the Ruby integration, we recommend the following, which automatically 
+
+appsignal_logger = Appsignal::Logger.new("rails")
+appsignal_logger.broadcast_to(Rails.logger)
+Rails.logger = ActiveSupport::TaggedLogging.new(appsignal_logger)

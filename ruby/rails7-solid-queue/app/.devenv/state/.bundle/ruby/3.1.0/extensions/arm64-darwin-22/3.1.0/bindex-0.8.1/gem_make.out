@@ -1,0 +1,17 @@
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bindex-0.8.1/ext/skiptrace
+/nix/store/b5by7lryrd95yh7kwz7flz4zg3irfk5g-ruby-3.1.4/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20240328-59752-r3nilp sitelibdir\=./.gem.20240328-59752-r3nilp clean
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20240328-59752-r3nilp sitelibdir\=./.gem.20240328-59752-r3nilp
+compiling cruby.c
+gcc: error: unrecognized command-line option ‘-fdeclspec’
+gcc: error: unrecognized command-line option ‘-Wdivision-by-zero’; did you mean ‘-Wdiv-by-zero’?
+gcc: error: unrecognized command-line option ‘-Wshorten-64-to-32’
+gcc: error: unrecognized command-line option ‘-Wextra-tokens’; did you mean ‘-Wextra-semi’?
+make: *** [Makefile:247: cruby.o] Error 1
+
+make failed, exit code 2

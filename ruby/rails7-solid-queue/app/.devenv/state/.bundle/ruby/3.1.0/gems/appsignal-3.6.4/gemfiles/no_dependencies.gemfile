@@ -1,0 +1,8 @@
+source 'https://rubygems.org'
+
+ruby_version = Gem::Version.new(RUBY_VERSION)
+if ruby_version < Gem::Version.new("2.3.0")
+  gem 'rack', '~> 1.6'
+end
+
+gemspec :path => '../'

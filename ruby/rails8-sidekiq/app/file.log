@@ -1,0 +1,25 @@
+# Logfile created on 2025-10-29 15:10:20 +0000 by logger.rb/v1.7.0
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>] Started GET "/" for 192.168.97.1 at 2025-10-29 15:10:25 +0000
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>] Cannot render console from 192.168.97.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>]   [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='ExampleApp'*/[0m
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>] Processing by ExamplesController#index as */*
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>] Test log message
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>]   Rendering layout layouts/application.html.erb
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>]   Rendering examples/index.html.erb within layouts/application
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>]   Rendered examples/index.html.erb within layouts/application (Duration: 0.8ms | GC: 0.0ms)
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>]   Rendered layout layouts/application.html.erb (Duration: 7.4ms | GC: 0.0ms)
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff7ec420b0 /app/config/initializers/logging.rb:5 (lambda)>] Completed 200 OK in 40ms (Views: 9.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>] Started GET "/" for 192.168.97.1 at 2025-10-29 15:10:28 +0000
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>] Cannot render console from 192.168.97.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>]   [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='ExampleApp'*/[0m
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>] Processing by ExamplesController#index as */*
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>] Test log message
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>]   Rendering layout layouts/application.html.erb
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>]   Rendering examples/index.html.erb within layouts/application
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>]   Rendered examples/index.html.erb within layouts/application (Duration: 0.9ms | GC: 0.0ms)
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>]   Rendered layout layouts/application.html.erb (Duration: 7.8ms | GC: 0.0ms)
+[request_id] [request_id] [ip] [remote_ip] [referer] [#<Proc:0x0000ffff918692a0 /app/config/initializers/logging.rb:5 (lambda)>] Completed 200 OK in 43ms (Views: 9.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+

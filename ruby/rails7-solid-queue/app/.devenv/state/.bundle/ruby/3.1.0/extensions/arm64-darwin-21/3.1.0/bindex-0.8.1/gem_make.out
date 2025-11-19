@@ -1,0 +1,19 @@
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bindex-0.8.1/ext/skiptrace
+/nix/store/371nrncarg8z5rmbxzcxy9pqyrma3byh-ruby-3.1.4/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-cy6d7s sitelibdir\=./.gem.20240329-82225-cy6d7s clean
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-cy6d7s sitelibdir\=./.gem.20240329-82225-cy6d7s
+compiling cruby.c
+linking shared-object skiptrace/internal/cruby.bundle
+ld: warning: directory not found for option '-L/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-clang-wrapper-16.0.6/resource-root/lib'
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-cy6d7s sitelibdir\=./.gem.20240329-82225-cy6d7s install
+install -c -p -m 755 cruby.bundle ./.gem.20240329-82225-cy6d7s/skiptrace/internal
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-cy6d7s sitelibdir\=./.gem.20240329-82225-cy6d7s clean

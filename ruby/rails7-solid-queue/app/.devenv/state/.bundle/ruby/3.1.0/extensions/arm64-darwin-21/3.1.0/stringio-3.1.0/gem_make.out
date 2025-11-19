@@ -1,0 +1,17 @@
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/stringio-3.1.0/ext/stringio
+/nix/store/371nrncarg8z5rmbxzcxy9pqyrma3byh-ruby-3.1.4/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/stringio-3.1.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20240329-83896-ixg6kc sitelibdir\=./.gem.20240329-83896-ixg6kc clean
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/stringio-3.1.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20240329-83896-ixg6kc sitelibdir\=./.gem.20240329-83896-ixg6kc
+compiling stringio.c
+gcc: error: unrecognized command-line option ‘-fdeclspec’
+gcc: error: unrecognized command-line option ‘-Wdivision-by-zero’; did you mean ‘-Wdiv-by-zero’?
+gcc: error: unrecognized command-line option ‘-Wshorten-64-to-32’
+gcc: error: unrecognized command-line option ‘-Wextra-tokens’; did you mean ‘-Wextra-semi’?
+make: *** [Makefile:247: stringio.o] Error 1
+
+make failed, exit code 2

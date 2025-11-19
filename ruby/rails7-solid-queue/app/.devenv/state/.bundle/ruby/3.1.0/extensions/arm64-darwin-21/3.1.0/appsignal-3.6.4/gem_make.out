@@ -1,0 +1,18 @@
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/appsignal-3.6.4/ext
+/nix/store/371nrncarg8z5rmbxzcxy9pqyrma3byh-ruby-3.1.4/bin/ruby extconf.rb
+checking for appsignal_start() in -lappsignal... 
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/appsignal-3.6.4/ext
+make DESTDIR\= sitearchdir\=./.gem.20240329-83654-4qjc sitelibdir\=./.gem.20240329-83654-4qjc clean
+make: Nothing to be done for 'clean'.
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/appsignal-3.6.4/ext
+make DESTDIR\= sitearchdir\=./.gem.20240329-83654-4qjc sitelibdir\=./.gem.20240329-83654-4qjc
+make: Nothing to be done for 'default'.
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/appsignal-3.6.4/ext
+make DESTDIR\= sitearchdir\=./.gem.20240329-83654-4qjc sitelibdir\=./.gem.20240329-83654-4qjc install
+make: Nothing to be done for 'install'.
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/appsignal-3.6.4/ext
+make DESTDIR\= sitearchdir\=./.gem.20240329-83654-4qjc sitelibdir\=./.gem.20240329-83654-4qjc clean
+make: Nothing to be done for 'clean'.

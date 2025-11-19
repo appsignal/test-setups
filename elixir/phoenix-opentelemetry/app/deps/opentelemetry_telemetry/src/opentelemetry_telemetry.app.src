@@ -1,0 +1,17 @@
+{application, opentelemetry_telemetry,
+ [{description, "Telemetry to OpenTelemetry Bridge"},
+  {vsn, "1.1.2"},
+  {registered, []},
+  {applications,
+   [kernel,
+    stdlib,
+    opentelemetry,
+    opentelemetry_api,
+    telemetry
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {licenses, ["Apache-2.0"]},
+  {links, [{"GitHub", "https://github.com/open-telemetry/opentelemetry-erlang-contrib/tree/main/utilities/opentelemetry_telemetry"}]}
+ ]}.

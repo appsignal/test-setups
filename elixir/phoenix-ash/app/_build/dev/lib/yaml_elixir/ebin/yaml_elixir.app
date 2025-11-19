@@ -1,0 +1,13 @@
+{application,yaml_elixir,
+             [{optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,yamerl]},
+              {description,"YAML parser for Elixir based on native Erlang implementation.\n"},
+              {modules,['Elixir.YamlElixir',
+                        'Elixir.YamlElixir.FileNotFoundError',
+                        'Elixir.YamlElixir.Mapper',
+                        'Elixir.YamlElixir.Node.KeywordList',
+                        'Elixir.YamlElixir.ParsingError',
+                        'Elixir.YamlElixir.Records',
+                        'Elixir.YamlElixir.Sigil']},
+              {registered,[]},
+              {vsn,"2.12.0"}]}.

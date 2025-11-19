@@ -1,0 +1,125 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  TargetRubyVersion: 3.0
+  NewCops: enable
+  Include:
+    - "**/*.rb"
+    - "**/*.cap"
+    - "**/Gemfile"
+    - "**/Rakefile"
+    - "appsignal.gemspec"
+  Exclude:
+    - "pkg/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "benchmark.rake"
+    - "spec/integration/diagnose/**/*"
+  DisplayCopNames: true
+  UseCache: true
+  CacheRootDirectory: ./tmp
+
+Style/RescueStandardError:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/HashSyntax:
+  EnforcedStyle: hash_rockets
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/MissingRespondToMissing:
+  Exclude:
+    - "lib/appsignal/extension.rb"
+    - "lib/appsignal/transaction.rb"
+
+Style/TrailingUnderscoreVariable:
+  Enabled: false
+
+Style/Lambda:
+  EnforcedStyle: lambda
+
+Style/WordArray:
+  Enabled: false
+
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - "spec/**/*.rb"
+
+Lint/EmptyClass:
+  Exclude:
+    - "spec/**/*.rb"
+
+Layout/HashAlignment:
+  EnforcedLastArgumentHashStyle: ignore_implicit
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/LineContinuationLeadingSpace:
+  Enabled: false
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/LineEndStringConcatenationIndentation:
+  EnforcedStyle: indented
+
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Lint/EmptyFile:
+  Exclude:
+    - "spec/**/*.rb"
+
+Naming/FileName:
+  Exclude:
+    - "ext/Rakefile"
+
+Naming/RescuedExceptionsVariableName:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - "Rakefile"
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  Exclude:
+    - "spec/**/*.rb"
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Style/RedundantConstantBase:
+  Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 100

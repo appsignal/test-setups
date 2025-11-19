@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+export PC_TUI_ENABLED=1
+exec /nix/store/y6kbyjg9gr8a6f7frlgvga9992bq8i53-devenv-up 

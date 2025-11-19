@@ -1,22 +1,26 @@
 class Appsignal::EventSubscriber
+  def initialize
+    @logger = Appsignal::Logger.new("rails_events")
+  end
+
   def emit(event)
-    name = "#{event[:name].split(".").reverse.join(".")}_event"
+    name = event[:name]
+    payload = event[:payload] || {}
 
-    case event[:name]
-    when "action_controller.request_started", "action_view.render_start", "action_view.render_start"
-      start(name, event)
-    when "action_view.render_template", "action_view.render_layout", "action_controller.request_completed"
-      stop(name, event)
+    # Extract relevant data from payload and sanitize for logging
+    log_attributes = {
+      event_name: name,
+      event_time: event[:time]&.iso8601
+    }
+
+    # Add payload data as attributes
+    payload.each do |key, value|
+      # Convert to string for complex objects to avoid serialization issues
+      log_attributes[key] = value.is_a?(String) || value.is_a?(Numeric) ? value : value.to_s
     end
-  end
 
-  def start(name, event)
-    Appsignal::Transaction.current.start_event()
-  end
-
-  def stop(name, event)
-    title, body, body_format = Appsignal::EventFormatter.format(name, event[:payload])
-    Appsignal::Transaction.current.finish_event(name, title, body, body_format)
+    # Log the event
+    @logger.info("Rails event: #{name}", log_attributes)
   end
 end
 

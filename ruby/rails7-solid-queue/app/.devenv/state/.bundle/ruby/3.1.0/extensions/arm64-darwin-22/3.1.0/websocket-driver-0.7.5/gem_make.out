@@ -1,0 +1,17 @@
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+/nix/store/b5by7lryrd95yh7kwz7flz4zg3irfk5g-ruby-3.1.4/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20240328-59752-zb9brh sitelibdir\=./.gem.20240328-59752-zb9brh clean
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20240328-59752-zb9brh sitelibdir\=./.gem.20240328-59752-zb9brh
+compiling websocket_mask.c
+gcc: error: unrecognized command-line option ‘-fdeclspec’
+gcc: error: unrecognized command-line option ‘-Wdivision-by-zero’; did you mean ‘-Wdiv-by-zero’?
+gcc: error: unrecognized command-line option ‘-Wshorten-64-to-32’
+gcc: error: unrecognized command-line option ‘-Wextra-tokens’; did you mean ‘-Wextra-semi’?
+make: *** [Makefile:247: websocket_mask.o] Error 1
+
+make failed, exit code 2

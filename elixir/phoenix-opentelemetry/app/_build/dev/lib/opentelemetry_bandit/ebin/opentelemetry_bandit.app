@@ -1,0 +1,10 @@
+{application,opentelemetry_bandit,
+             [{optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger,nimble_options,
+                             opentelemetry_api,
+                             opentelemetry_semantic_conventions,otel_http,
+                             plug,telemetry]},
+              {description,"Telemetry handler that creates Opentelemetry spans from Bandit events.\n"},
+              {modules,['Elixir.OpentelemetryBandit']},
+              {registered,[]},
+              {vsn,"0.2.0"}]}.

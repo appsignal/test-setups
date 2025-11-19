@@ -1,0 +1,34 @@
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/msgpack-1.7.0/ext/msgpack
+/nix/store/371nrncarg8z5rmbxzcxy9pqyrma3byh-ruby-3.1.4/bin/ruby extconf.rb
+checking for ruby/st.h... yes
+checking for st.h... no
+checking for rb_enc_interned_str() in ruby.h... yes
+checking for rb_hash_new_capa() in ruby.h... no
+creating Makefile
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/msgpack-1.7.0/ext/msgpack
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-zcrj57 sitelibdir\=./.gem.20240329-82225-zcrj57 clean
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/msgpack-1.7.0/ext/msgpack
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-zcrj57 sitelibdir\=./.gem.20240329-82225-zcrj57
+compiling buffer.c
+compiling buffer_class.c
+compiling extension_value_class.c
+compiling factory_class.c
+compiling packer.c
+compiling packer_class.c
+compiling packer_ext_registry.c
+compiling rbinit.c
+compiling rmem.c
+compiling unpacker.c
+compiling unpacker_class.c
+compiling unpacker_ext_registry.c
+linking shared-object msgpack/msgpack.bundle
+ld: warning: directory not found for option '-L/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-clang-wrapper-16.0.6/resource-root/lib'
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/msgpack-1.7.0/ext/msgpack
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-zcrj57 sitelibdir\=./.gem.20240329-82225-zcrj57 install
+install -c -p -m 755 msgpack.bundle ./.gem.20240329-82225-zcrj57/msgpack
+
+current directory: /Users/jeff/Library/Mobile Documents/com~apple~CloudDocs/work/appsignal/test-setups/ruby/rails7-solid-queue/app/.devenv/state/.bundle/ruby/3.1.0/gems/msgpack-1.7.0/ext/msgpack
+make DESTDIR\= sitearchdir\=./.gem.20240329-82225-zcrj57 sitelibdir\=./.gem.20240329-82225-zcrj57 clean

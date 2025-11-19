@@ -1,0 +1,18 @@
+Hey all, quick question about logging to STDOUT in Ruby apps.
+On https://github.com/appsignal/integration-guide/issues/173, @noemi mentions the following:
+
+#+begin_quote
+In Ruby, where our logger implements broadcast functionality and builds on top of the logger built-in gem, we probably would only need to document it (~.broadcast_to(Logger.new(STDOUT))~)
+#+end_quote
+
+We currently recommend the following in [[https://docs.appsignal.com/logging/integrations/ruby.html][the docs]]:
+
+#+begin_src ruby
+  # config/initializers/logging.rb
+  appsignal_logger = Appsignal::Logger.new("rails")
+  appsignal_logger.broadcast_to(Rails.logger)
+  Rails.logger = ActiveSupport::TaggedLogging.new(appsignal_logger)
+#+end_src
+
+Running this in the Rails test app already prints log lines to STDOUT, as well as report them to AppSignal.
+Am I correct that this already works for Rails apps, and that the above comment is about non-Rails apps only?
