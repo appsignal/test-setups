@@ -13,6 +13,7 @@ cp .env.example .env
   echo "APPSIGNAL_APP_NAME=${APPSIGNAL_APP_NAME}"
   echo "APPSIGNAL_APP_ENV=${APPSIGNAL_APP_ENV}"
   echo "APPSIGNAL_PUSH_API_KEY=${APPSIGNAL_PUSH_API_KEY}"
+  echo "APPSIGNAL_COLLECTOR_URL=${APPSIGNAL_COLLECTOR_URL}"
 } >> .env
 
 # It is necessary to unexport these environment variables.
@@ -22,8 +23,10 @@ cp .env.example .env
 export -n APPSIGNAL_APP_NAME
 export -n APPSIGNAL_APP_ENV
 export -n APPSIGNAL_PUSH_API_KEY
+export -n APPSIGNAL_COLLECTOR_URL
 
 # Install dependencies
+composer require appsignal/symfony:@dev
 composer install --no-dev --optimize-autoloader
 
 # Ensure cache and log directories exist with proper permissions

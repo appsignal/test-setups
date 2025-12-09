@@ -9,11 +9,13 @@ services:
     environment:
       APPSIGNAL_APP_NAME: php/symfony-collector
       APPSIGNAL_APP_ENV: development
+      APPSIGNAL_COLLECTOR_URL: http://appsignal-collector:8099
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
       - './app:/var/www/html'
+      - './package:/var/www/package'
       - './commands:/commands'
   appsignal-collector:
     image: appsignal/collector:latest
