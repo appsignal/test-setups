@@ -85,10 +85,12 @@ config :opentelemetry,
     {"host.name", hostname}
   ]
 
-# Configure the OpenTelemetry HTTP exporter
+# Configure the OpenTelemetry HTTP exporter for traces and logs
 config :opentelemetry_exporter,
   otlp_protocol: :http_protobuf,
-  otlp_endpoint: "http://appsignal-collector:8099"
+  otlp_endpoint: "http://appsignal-collector:8099",
+  otlp_logs_protocol: :http_protobuf,
+  otlp_logs_endpoint: "http://appsignal-collector:8099/v1/logs"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -1,9 +1,11 @@
 defmodule ElixirPhoenixOpentelemetryWeb.PageController do
   use ElixirPhoenixOpentelemetryWeb, :controller
 
+  require Logger
   require OpenTelemetry.Tracer
 
   def index(conn, _params) do
+    Logger.info("Handling index request with OpenTelemetry trace context")
     {:ok, request_parameters} =
       JSON.encode(%{
         password: "super secret",
@@ -44,15 +46,19 @@ defmodule ElixirPhoenixOpentelemetryWeb.PageController do
       {:"appsignal.function.parameters", function_parameters}
     ])
 
+    Logger.debug("Attributes set on span, rendering response")
     render(conn, "index.html")
   end
 
   def slow(conn, _params) do
+    Logger.info("Starting slow request")
     :timer.sleep(3000)
+    Logger.info("Slow request completed after 3 seconds")
     render(conn, "slow.html")
   end
 
   def error(_conn, _params) do
+    Logger.error("About to raise an error - trace context should be preserved")
     raise "This is a Phoenix error!"
   end
 end

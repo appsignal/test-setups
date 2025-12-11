@@ -64,6 +64,13 @@ defmodule ElixirPhoenixOpentelemetry.MixProject do
       {:opentelemetry_phoenix, "~> 2.0"},
       {:opentelemetry_bandit, "~> 0.3"},
       {:opentelemetry_ecto, "~> 1.2"},
+      {:opentelemetry_api_experimental,
+       github: "open-telemetry/opentelemetry-erlang",
+       subdir: "apps/opentelemetry_api_experimental",
+       override: true},
+      {:opentelemetry_experimental,
+       github: "open-telemetry/opentelemetry-erlang",
+       subdir: "apps/opentelemetry_experimental"},
       {:json, "~> 1.4"}
     ]
   end
