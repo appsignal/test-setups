@@ -21,7 +21,7 @@ defmodule ElixirPhoenixOpentelemetry.Application do
     ]
 
     OpentelemetryBandit.setup()
-    OpentelemetryPhoenix.setup(adapter: :bandit)
+    OpentelemetryPhoenix.setup(adapter: :bandit, liveview: true)
     OpentelemetryEcto.setup([:elixir_phoenix_opentelemetry, :repo])
 
     # See https://hexdocs.pm/elixir/Supervisor.html
