@@ -20,6 +20,8 @@ defmodule ElixirPhoenixOpentelemetryWeb.Router do
     get("/", PageController, :index)
     get("/slow", PageController, :slow)
     get("/error", PageController, :error)
+
+    resources("/products", ProductController)
   end
 
   # Other scopes may use custom stacks.

@@ -1,0 +1,15 @@
+<.header>
+  Edit Product <%= @product.id %>
+</.header>
+
+<.simple_form :let={f} for={@changeset} action={~p"/products/#{@product}"} method="put">
+  <.input field={f[:name]} type="text" label="Name" required />
+  <.input field={f[:description]} type="textarea" label="Description" />
+  <.input field={f[:price]} type="number" label="Price" step="0.01" />
+  <.input field={f[:quantity]} type="number" label="Quantity" />
+  <:actions>
+    <.button>Save Product</.button>
+  </:actions>
+</.simple_form>
+
+<.back navigate={~p"/products"}>Back to products</.back>

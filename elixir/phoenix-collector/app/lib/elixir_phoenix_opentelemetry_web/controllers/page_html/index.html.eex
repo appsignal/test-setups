@@ -1,6 +1,7 @@
 <h1>Phoenix OpenTelemetry test app</h1>
 
 <ul>
+  <li><a href="/products">Products</a></li>
   <li><a href="/slow">/slow</a> - Test slow request</li>
   <li><a href="/error">/error</a> - Test error request</li>
 </ul>

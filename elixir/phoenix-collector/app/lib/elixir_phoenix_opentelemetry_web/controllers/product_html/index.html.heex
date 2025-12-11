@@ -1,0 +1,26 @@
+<.header>
+  Products
+  <:actions>
+    <.link href={~p"/products/new"}>
+      <.button>New Product</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="products" rows={@products}>
+  <:col :let={product} label="Name"><%= product.name %></:col>
+  <:col :let={product} label="Description"><%= product.description %></:col>
+  <:col :let={product} label="Price"><%= product.price %></:col>
+  <:col :let={product} label="Quantity"><%= product.quantity %></:col>
+  <:action :let={product}>
+    <.link href={~p"/products/#{product}"}>Show</.link>
+  </:action>
+  <:action :let={product}>
+    <.link href={~p"/products/#{product}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={product}>
+    <.link href={~p"/products/#{product}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>

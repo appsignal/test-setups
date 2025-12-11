@@ -1,0 +1,17 @@
+<.header>
+  Product <%= @product.id %>
+  <:actions>
+    <.link href={~p"/products/#{@product}/edit"}>
+      <.button>Edit</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @product.name %></:item>
+  <:item title="Description"><%= @product.description %></:item>
+  <:item title="Price"><%= @product.price %></:item>
+  <:item title="Quantity"><%= @product.quantity %></:item>
+</.list>
+
+<.back navigate={~p"/products"}>Back to products</.back>
