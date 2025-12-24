@@ -8,7 +8,7 @@ gem 'mongoid', '~> 7.3.3'
 gem "appsignal", :path => "/integration"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'rails', '~> 6.1.4.4'
+gem 'rails', '6.1.7.10'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
 # Use SCSS for stylesheets
