@@ -1,0 +1,27 @@
+{
+  "name": "koa-3-mysql",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Koa v3 test app",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc --version; tsc -p tsconfig.json",
+    "server": "node --require ./src/appsignal.cjs dist/app.js"
+  },
+  "dependencies": {
+    "@appsignal/nodejs": "^3.7.3",
+    "@koa/router": "^15.1.1",
+    "koa": "^3.1.1",
+    "koa-bodyparser": "^4.4.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.16.0",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^3.0.1",
+    "@types/koa-bodyparser": "^4.3.13",
+    "@types/mysql": "^2.15.27",
+    "@types/node": "^25.0.3",
+    "typescript": "^5.9.3"
+  }
+}
