@@ -249,6 +249,7 @@ jobs:
           - ruby/rails7-delayed-job
           - ruby/rails7-sequel
           - ruby/rails7-sidekiq
+          - ruby/rails8-delayed-job
           - ruby/rails8-sidekiq
           - ruby/rails8-sidekiq-collector
           - ruby/sinatra-redis
