@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:20
 
 # Update this if the docker image changes
 ENV REFRESHED_AT=2025-02-06
