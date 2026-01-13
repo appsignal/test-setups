@@ -187,27 +187,28 @@ jobs:
       fail-fast: false
       matrix:
         app:
+          - nodejs/express-apollo
           - nodejs/express-bullmq
+          - nodejs/express-mongoose
           - nodejs/express-postgres
           - nodejs/express-postgres-collector
           - nodejs/express-redis
-          - nodejs/express-mongoose
-          - nodejs/express-apollo
+          - nodejs/express-redis-alpine
           - nodejs/express-yoga
-          - nodejs/koa-mongo
-          - nodejs/koa-mysql
-          - nodejs/koa-microservices
           - nodejs/fastify
-          - nodejs/restify
+          - nodejs/koa-2-microservices
+          - nodejs/koa-2-mongo
+          - nodejs/koa-2-mysql
+          - nodejs/koa-3-mysql
           - nodejs/nestjs
           - nodejs/nestjs-10
+          - nodejs/nestjs-prisma
           - nodejs/nextjs-13-app
           - nodejs/nextjs-14-app
           - nodejs/nextjs-14-pages
           - nodejs/nextjs-15-app-collector
-          - nodejs/nestjs-prisma
-          - nodejs/express-redis-alpine
           - nodejs/remix
+          - nodejs/restify
     steps:
       - name: Checkout
         uses: actions/checkout@v4
