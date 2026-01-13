@@ -50,6 +50,7 @@ app.get("/", (_req: any, res: any) => {
   res.write("<li><a href='/error'>/error</a></li>")
   res.write("<li><a href='/pg-query'>/pg-query</a></li>")
   res.write("<li><a href='/metrics'>/metrics</a></li>")
+  res.write("<li><a href='/n-plus-one'>/n-plus-one</a></li>")
   res.write("</ul>")
   res.end()
 })
@@ -83,21 +84,34 @@ function randomRangeValue(start: number, end: number) {
   return Math.floor(Math.random() * (end - start)) + start
 }
 
+app.get("/n-plus-one", async (_req, res) => {
+  const ids = [1, 2, 3, 4, 5]
+
+  // N queries: one query per ID (the "N" in N+1)
+  const results = []
+  for (const id of ids) {
+    const detailResult = await pgPool.query("SELECT $1 * 2 AS doubled", [id])
+    results.push({ id, doubled: detailResult.rows[0].doubled })
+  }
+
+  res.send(`N+1 query! Results: ${JSON.stringify(results)}`)
+})
+
 app.get("/metrics", (_req, res) => {
   // Counter
   const myCounter = meter.createCounter("my_counter")
   const countValue = randomRangeValue(1, 3)
-  myCounter.add(countValue, {"my_tag": "tag_value"})
+  myCounter.add(countValue, { "my_tag": "tag_value" })
 
   // Gauge
   const myGauge = meter.createGauge("my_gauge")
   const gaugeValue = randomRangeValue(1, 25)
-  myGauge.record(gaugeValue, {"my_tag": "tag_value"})
+  myGauge.record(gaugeValue, { "my_tag": "tag_value" })
 
   // Histogram
   const histogram = meter.createHistogram("my_histogram")
   const histogramValue = randomRangeValue(10, 25)
-  histogram.record(histogramValue, {"my_tag": "tag_value"})
+  histogram.record(histogramValue, { "my_tag": "tag_value" })
 
   res.send("I sent some test metrics!")
 })
