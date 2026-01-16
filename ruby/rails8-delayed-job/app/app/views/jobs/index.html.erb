@@ -3,21 +3,37 @@
 <p>Click on any of the links below to queue a job for that job.</p>
 
 <ul>
-  <li><%= link_to "ActiveJobErrorJob", queue_jobs_path(:job => "ActiveJobErrorJob", :future => "false") %></li>
-  <li><%= link_to "ActiveJobPerformanceJob", queue_jobs_path(:job => "ActiveJobPerformanceJob", :future => "false") %></li>
-  <li><%= link_to "ErrorJob", queue_jobs_path(:job => "ErrorJob", :future => "false") %></li>
-  <li><%= link_to "PerformanceJob", queue_jobs_path(:job => "PerformanceJob", :future => "false") %></li>
+  <li>
+    <%= link_to "ActiveJobErrorJob", queue_jobs_path(:job => "ActiveJobErrorJob", :future => "false") %>
+  </li>
+  <li>
+    <%= link_to "ActiveJobPerformanceJob", queue_jobs_path(:job => "ActiveJobPerformanceJob", :future => "false") %>
+  </li>
+  <li>
+    <%= link_to "ErrorJob", queue_jobs_path(:job => "ErrorJob", :future => "false") %>
+  </li>
+  <li>
+    <%= link_to "PerformanceJob", queue_jobs_path(:job => "PerformanceJob", :future => "false") %>
+  </li>
 </ul>
 
 <h1>Schedule Delayed Job jobs in the future</h1>
 
 <p>Click on any of the links below to queue a job for that job.</p>
 
-<p>The job will be queued 5 minutes into the future.</p>
+<p>The job will be queued 15 seconds into the future.</p>
 
 <ul>
-  <li><%= link_to "ActiveJobErrorJob", queue_jobs_path(:job => "ActiveJobErrorJob", :future => "true") %></li>
-  <li><%= link_to "ActiveJobPerformanceJob", queue_jobs_path(:job => "ActiveJobPerformanceJob", :future => "true") %></li>
-  <li><%= link_to "ErrorJob", queue_jobs_path(:job => "ErrorJob", :future => "true") %></li>
-  <li><%= link_to "PerformanceJob", queue_jobs_path(:job => "PerformanceJob", :future => "true") %></li>
+  <li>
+    <%= link_to "ActiveJobErrorJob", queue_jobs_path(:job => "ActiveJobErrorJob", :future => "true") %>
+  </li>
+  <li>
+    <%= link_to "ActiveJobPerformanceJob", queue_jobs_path(:job => "ActiveJobPerformanceJob", :future => "true") %>
+  </li>
+  <li>
+    <%= link_to "ErrorJob", queue_jobs_path(:job => "ErrorJob", :future => "true") %>
+  </li>
+  <li>
+    <%= link_to "PerformanceJob", queue_jobs_path(:job => "PerformanceJob", :future => "true") %>
+  </li>
 </ul>
