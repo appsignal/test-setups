@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  DELAY_DURATION = 5.minutes
+  DELAY_DURATION = 15.seconds
 
   def index
     render :index
