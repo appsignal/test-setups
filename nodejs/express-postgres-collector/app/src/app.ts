@@ -97,6 +97,31 @@ app.get("/n-plus-one", async (_req, res) => {
   res.send(`N+1 query! Results: ${JSON.stringify(results)}`)
 })
 
+app.get("/n-plus-one-nested", async (_req, res) => {
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+  
+  for (const i of [1, 2, 3, 4, 5]) {
+    await delay(50)
+    tracer.startActiveSpan("parent_span", (span: Span) => {
+      await delay(50)
+      span.setAttribute("i", i)
+      
+      for (const j of [1, 2, 3]) {
+        await delay(50)
+        tracer.startActiveSpan("child_span", (span: Span) => {
+          await delay(50)
+          span.setAttribute("i", i)
+          span.setAttribute("j", j)
+
+          span.end()
+        }
+      }
+      
+      span.end()
+    }
+  }
+})
+
 app.get("/metrics", (_req, res) => {
   // Counter
   const myCounter = meter.createCounter("my_counter")
