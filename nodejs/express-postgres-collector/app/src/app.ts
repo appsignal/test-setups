@@ -97,29 +97,47 @@ app.get("/n-plus-one", async (_req, res) => {
   res.send(`N+1 query! Results: ${JSON.stringify(results)}`)
 })
 
+app.get("/npo/:count", async (req, res) => {
+  let i = 0;
+  while (i < (parseInt(req.params.count) ?? 100)) {
+    await delay(1);
+    tracer.startActiveSpan("npo_span", async (span: Span) => {
+      await delay(1);
+      span.setAttribute("foo", "bar");
+      span.end();
+    })
+    i++;
+  }
+  res.send("done");
+});
+
+function delay(ms: number): Promise<any> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 app.get("/n-plus-one-nested", async (_req, res) => {
-  const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-  
+
   for (const i of [1, 2, 3, 4, 5]) {
     await delay(50)
-    tracer.startActiveSpan("parent_span", (span: Span) => {
+    tracer.startActiveSpan("parent_span", async (span: Span) => {
       await delay(50)
       span.setAttribute("i", i)
-      
+
       for (const j of [1, 2, 3]) {
         await delay(50)
-        tracer.startActiveSpan("child_span", (span: Span) => {
+        tracer.startActiveSpan("child_span", async (span: Span) => {
           await delay(50)
           span.setAttribute("i", i)
           span.setAttribute("j", j)
 
           span.end()
-        }
+        })
       }
-      
+
       span.end()
-    }
+    })
   }
+  res.send("done")
 })
 
 app.get("/metrics", (_req, res) => {
