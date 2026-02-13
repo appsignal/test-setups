@@ -21,7 +21,7 @@ const resource = resourceFromAttributes({
   "appsignal.config.environment": process.env.NODE_ENV || "development",
   "appsignal.config.push_api_key": process.env.APPSIGNAL_PUSH_API_KEY,
   "appsignal.config.revision": "test-setups",
-  "appsignal.config.language_integration": "node.js",
+  "appsignal.config.language_integration": "nodejs",
   "appsignal.config.app_path": process.cwd(),
   "appsignal.config.filter_request_parameters": [
     "password",
