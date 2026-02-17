@@ -648,10 +648,33 @@ There's a Vagrantfile with a FreeBSD VM included.
 It requires a couple of steps to get running:
 
 ```
-vagrant up freebsd
-vagrant ssh freebsd
+brew install --cask utm
+vagrant plugin install vagrant_utm
+vagrant destroy freebsd
+vagrant up freebsd --provider=utm
+```
+
+Then in UTM, log in with `vagrant`, password `vagrant`, and run these commands.
+
+```
 cd /app
 ./run_in_vm.sh
 ```
 
 Then, visit http://localhost:4001
+
+### Syncing volumes
+
+The FreeBSD VM uses rsync for syncing volumes. After making changes to files on your host machine, sync them to the VM:
+
+```
+vagrant rsync freebsd
+```
+
+To automatically sync changes as you make them:
+
+```
+vagrant rsync-auto freebsd
+```
+
+This will watch for file changes and sync them automatically to the VM.

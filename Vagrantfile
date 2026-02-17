@@ -2,6 +2,7 @@
 Vagrant.configure("2") do |config|
   config.vm.define "freebsd" do |freebsd|
     freebsd.vm.box = "bento/freebsd-14"
+    freebsd.vm.box_architecture = "amd64"
     freebsd.vm.guest = :freebsd
     freebsd.vm.network "private_network", type: "dhcp"
     freebsd.vm.synced_folder "./elixir/phoenix/app", "/app", type: "rsync",
@@ -18,7 +19,6 @@ Vagrant.configure("2") do |config|
       u.cpus = 2
       u.memory = 2048
       u.icon = "freebsd"
-      #u.directory_share_mode = "webDAV"
       u.check_guest_additions = false
     end
     freebsd.ssh.shell = "sh"
