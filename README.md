@@ -641,3 +641,17 @@ To bundle the latest version:
 ```
 rake global:install_processmon
 ```
+
+## FreeBSD setup
+
+There's a Vagrantfile with a FreeBSD VM included.
+It requires a couple of steps to get running:
+
+```
+vagrant up freebsd
+vagrant ssh freebsd
+cd /app
+./run_in_vm.sh
+```
+
+Then, visit http://localhost:4001
