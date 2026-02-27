@@ -5,7 +5,7 @@ defmodule Example.MixProject do
     [
       app: :example,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.15.8",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -27,10 +27,6 @@ defmodule Example.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
-  defp integration_path do
-    System.get_env("INTEGRATION_PATH", "../../integration")
-  end
-
   # Specifies your project dependencies.
   #
   # Type `mix help deps` for examples and options.
@@ -42,7 +38,7 @@ defmodule Example.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 1.0.0"},
+      {:phoenix_live_view, "~> 0.20"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
@@ -62,10 +58,9 @@ defmodule Example.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
-      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
-      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true},
-      {:appsignal_phoenix,
-       path: "#{integration_path()}/appsignal-elixir-phoenix", override: true},
+      {:appsignal, "~> 2.14.1"},
+      {:appsignal_plug, "~> 2.0.15"},
+      {:appsignal_phoenix, "~> 2.3.9"},
       {:absinthe_plug, "~> 1.5"},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
     ]

@@ -6,10 +6,6 @@ ignore = [
   "priv"
 ]
 
-[[paths_to_watch]]
-path = "/integration"
-ignore = ["appsignal-elixir/_build", "appsignal-elixir/priv"]
-
 [processes.app]
 command = "elixir"
 args = ["--sname", "server", "--cookie", "server", "-S", "mix", "phx.server"]

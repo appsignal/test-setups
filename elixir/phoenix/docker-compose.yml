@@ -17,14 +17,12 @@ services:
     environment:
       - PORT=4001
       - APPSIGNAL_APP_NAME=elixir-phoenix
-      - INTEGRATION_PATH=/integration
     env_file:
       - postgres.env
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
       - ./app:/app
-      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests
