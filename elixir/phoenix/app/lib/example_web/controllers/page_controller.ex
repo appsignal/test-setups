@@ -31,4 +31,15 @@ defmodule ExampleWeb.PageController do
   def decorated(conn, _params) do
     render(conn, :home)
   end
+
+  def httpoison(conn, _params) do
+    case HTTPoison.get("https://api.github.com") do
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+        text(conn, "GitHub API Response: #{String.slice(body, 0, 200)}...")
+      {:ok, %HTTPoison.Response{status_code: status_code}} ->
+        text(conn, "GitHub API returned status: #{status_code}")
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        text(conn, "Error calling GitHub API: #{inspect(reason)}")
+    end
+  end
 end

@@ -19,7 +19,7 @@ defmodule Example.MixProject do
   def application do
     [
       mod: {Example.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :httpoison]
     ]
   end
 
@@ -68,6 +68,7 @@ defmodule Example.MixProject do
        path: "#{integration_path()}/appsignal-elixir-phoenix", override: true},
       {:absinthe_plug, "~> 1.5"},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
+      {:httpoison, "~> 2.2.1"}
     ]
   end
 
