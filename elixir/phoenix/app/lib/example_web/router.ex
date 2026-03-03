@@ -21,6 +21,7 @@ defmodule ExampleWeb.Router do
     get "/slow", PageController, :slow
     get "/error", PageController, :error
     get "/decorated", PageController, :decorated
+    get "/httpoison", PageController, :httpoison
     live "/live", DemoLive
   end
 
