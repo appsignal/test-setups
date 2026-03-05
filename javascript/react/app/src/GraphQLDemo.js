@@ -20,6 +20,7 @@ const INVALID_QUERY = `
 
 function GraphQLDemo() {
   const [useInvalidQuery, setUseInvalidQuery] = React.useState(false);
+  const [autoTrigger, setAutoTrigger] = React.useState(false);
 
   // Use custom hook that automatically reports errors to AppSignal
   const [result] = useAppsignalQuery({
@@ -27,6 +28,17 @@ function GraphQLDemo() {
   });
 
   const { data, fetching, error } = result;
+
+  // Auto-trigger errors periodically
+  React.useEffect(() => {
+    if (autoTrigger) {
+      const interval = setInterval(() => {
+        setUseInvalidQuery(true);
+        setTimeout(() => setUseInvalidQuery(false), 2000);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [autoTrigger]);
 
   const triggerGraphQLError = () => {
     setUseInvalidQuery(true);
@@ -59,18 +71,25 @@ function GraphQLDemo() {
       <div style={{ marginTop: '20px' }}>
         <button
           onClick={triggerGraphQLError}
-          disabled={useInvalidQuery}
+          disabled={useInvalidQuery || autoTrigger}
           style={{ marginRight: '10px' }}
         >
           Trigger GraphQL Error
         </button>
-        <button onClick={resetQuery} disabled={!useInvalidQuery}>
+        <button onClick={resetQuery} disabled={!useInvalidQuery || autoTrigger} style={{ marginRight: '10px' }}>
           Reset Query
+        </button>
+        <button
+          onClick={() => setAutoTrigger(!autoTrigger)}
+          style={{ backgroundColor: autoTrigger ? '#ff4444' : '#44ff44', color: 'black' }}
+        >
+          {autoTrigger ? 'Stop Auto-Trigger' : 'Start Auto-Trigger'}
         </button>
       </div>
 
       <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
         Current query: {useInvalidQuery ? 'INVALID (will error)' : 'VALID (will succeed)'}
+        {autoTrigger && ' | Auto-trigger: ENABLED (every 5s)'}
       </p>
     </div>
   );

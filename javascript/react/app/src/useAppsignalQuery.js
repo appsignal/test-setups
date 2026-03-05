@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useQuery } from 'urql';
+import { useQuery, useClient } from 'urql';
 import appsignal from './Appsignal';
 
 /**
@@ -11,7 +11,8 @@ import appsignal from './Appsignal';
  */
 export function useAppsignalQuery(options) {
   const [result] = useQuery(options);
-  const { error } = result;
+  const client = useClient();
+  const { error, operation } = result;
 
   useEffect(() => {
     if (error) {
@@ -32,9 +33,25 @@ export function useAppsignalQuery(options) {
         reportError.networkError = error.networkError;
       }
 
-      appsignal.sendError(reportError);
+      // Send error to AppSignal with metadata
+      appsignal.sendError(reportError, (span) => {
+        // Add endpoint URL as a tag
+        if (client?.url) {
+          span.setTags({ endpoint: client.url });
+        }
+
+        // Add GraphQL query body as a param (equivalent to "body" in backend integrations)
+        if (operation?.query) {
+          const queryBody = operation.query.loc?.source?.body || options.query;
+          if (queryBody) {
+            span.setParams({ query: queryBody });
+          }
+        } else if (options.query) {
+          span.setParams({ query: options.query });
+        }
+      });
     }
-  }, [error]);
+  }, [error, client, operation, options.query]);
 
   return [result];
 }
