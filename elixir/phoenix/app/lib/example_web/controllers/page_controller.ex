@@ -33,7 +33,7 @@ defmodule ExampleWeb.PageController do
   end
 
   def httpoison(conn, _params) do
-    case HTTPoison.get("https://api.github.com") do
+    case Appsignal.HTTPoison.get("https://api.github.com") do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         text(conn, "GitHub API Response: #{String.slice(body, 0, 200)}...")
       {:ok, %HTTPoison.Response{status_code: status_code}} ->
@@ -41,5 +41,41 @@ defmodule ExampleWeb.PageController do
       {:error, %HTTPoison.Error{reason: reason}} ->
         text(conn, "Error calling GitHub API: #{inspect(reason)}")
     end
+  end
+
+  def httpoison_client(conn, _params) do
+    text(conn, [
+      ExampleWeb.CoolHTTPoisonClient.perform_good_request(),
+      ExampleWeb.CoolHTTPoisonClient.perform_bad_request(),
+      ExampleWeb.CoolHTTPoisonClient.perform_error_request()
+    ] |> Enum.join("\n\n"))
+  end
+end
+
+defmodule ExampleWeb.CoolHTTPoisonClient do
+  use Appsignal.HTTPoison.Base
+
+  def perform_good_request do
+    get("https://api.github.com") |> handle_response()
+  end
+
+  def perform_bad_request do
+    get("https://api.github.com/does_not_exist") |> handle_response()
+  end
+
+  def perform_error_request do
+    get("http://example.invalid") |> handle_response()
+  end
+
+  def handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
+    "200 OK Body: #{String.slice(body, 0, 200)}..."
+  end
+
+  def handle_response({:ok, %HTTPoison.Response{status_code: status_code}}) do
+    "Status: #{status_code}"
+  end
+
+  def handle_response({:error, %HTTPoison.Error{reason: reason}}) do
+    "Error: #{inspect(reason)}"
   end
 end
