@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppsignalQuery } from './useAppsignalQuery';
+import { useQuery } from 'urql';
 
 // GraphQL query that will succeed
 const VALID_QUERY = `
@@ -22,8 +22,8 @@ function GraphQLDemo() {
   const [useInvalidQuery, setUseInvalidQuery] = React.useState(false);
   const [autoTrigger, setAutoTrigger] = React.useState(false);
 
-  // Use custom hook that automatically reports errors to AppSignal
-  const [result] = useAppsignalQuery({
+  // Errors are automatically reported to AppSignal via the appsignalExchange
+  const [result] = useQuery({
     query: useInvalidQuery ? INVALID_QUERY : VALID_QUERY,
   });
 
