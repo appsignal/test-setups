@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       match "/excon_options" => "requests#excon_options", :via => :options
       get :perform_excon_trace
       match "/excon_trace" => "requests#excon_trace", :via => :trace
+      get :perform_http_rb_get
     end
   end
 

@@ -41,6 +41,11 @@ class RequestsController < ApplicationController
     handle_response Excon.trace("http://localhost:4001/requests/excon_trace")
   end
 
+  def perform_http_rb_get
+    HTTP.get("https://example.com")
+    redirect_to requests_path, :notice => %(Request "#{params[:action]}" made)
+  end
+
   def handle_response(response)
     unless response.status == 200
       raise "Request failed with status #{response.status}"
