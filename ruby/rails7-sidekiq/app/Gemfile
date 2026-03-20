@@ -11,6 +11,7 @@ gem "sinatra-contrib", require: false
 gem "sidekiq", "~> 7.1.6"
 gem "appsignal", :path => "/integration"
 gem "excon"
+gem "http"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
