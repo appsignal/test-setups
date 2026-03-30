@@ -16,7 +16,14 @@ app.get("/", (_req: any, res: any) => {
   appsignalLogger.info("category=blog This is about the blog LOGFMT");
   appsignalLogger.info('{"category": "blog", "message": "This is about the blog JSON"}');
 
-  res.send("GET query received!")
+  res.send(`
+    <h1>Express Postgres test app</h1>
+    <ul>
+      <li><a href="/slow">GET /slow</a></li>
+      <li><a href="/error">GET /error</a></li>
+      <li><a href="/pg-query">GET /pg-query</a></li>
+    </ul>
+  `)
 })
 
 app.get("/error", (req, res) => {

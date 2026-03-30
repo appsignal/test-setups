@@ -82,8 +82,15 @@ func (c *MainController) Get() {
 	_, span := tracer.Start(context.Background(), "home-handler")
 	defer span.End()
 	c.Ctx.Output.SetStatus(200)
-	c.Data["json"] = map[string]string{"message": "Welcome to the home page"}
-	c.ServeJSON()
+	c.Ctx.Output.Header("Content-Type", "text/html")
+	c.Ctx.Output.Body([]byte(`
+		<h1>Beego Mod OTel test app</h1>
+		<ul>
+			<li><a href="/hello">GET /hello</a></li>
+			<li><a href="/slow">GET /slow</a></li>
+			<li><a href="/error">GET /error</a></li>
+		</ul>
+	`))
 }
 
 func (c *MainController) Hello() {

@@ -7,7 +7,13 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return this.appService.getHello()
+    return (
+      '<h1>NestJS test app</h1>' +
+      '<ul>' +
+      '<li><a href="/slow">GET /slow</a></li>' +
+      '<li><a href="/error">GET /error</a></li>' +
+      '</ul>'
+    )
   }
 
   @Get("/error")

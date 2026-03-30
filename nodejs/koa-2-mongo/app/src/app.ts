@@ -11,7 +11,15 @@ connect()
     const Posts = PostCollection(client)
 
     router.get("/", async (ctx: Context) => {
-      ctx.body = JSON.stringify(await Posts.find().toArray())
+      const posts = await Posts.find().toArray()
+      ctx.body = `
+        <h1>Koa Mongo test app</h1>
+        <ul>
+          <li><a href="/slow">GET /slow</a></li>
+          <li><a href="/error">GET /error</a></li>
+        </ul>
+        <p>Posts: ${JSON.stringify(posts)}</p>
+      `
     })
 
     router.get("/error", (_ctx: Context) => {
