@@ -250,6 +250,14 @@ namespace :app do
     end
   end
 
+  namespace :head do
+    desc "Head appsignal.log (first 20 lines)"
+    task :appsignal do
+      @app = get_app
+      run_command "cd #{@app} && docker compose exec app head -n 20 /tmp/appsignal.log"
+    end
+  end
+
   namespace :less do
     desc "Less +F appsignal.log"
     task :appsignal do
