@@ -5,8 +5,8 @@ services:
     image: postgres
     env_file:
       - postgres.env
-    ports:
-      - 5432
+    # ports:
+    #   - 5432
   appsignal-collector:
     image: appsignal/collector:latest
     environment:
