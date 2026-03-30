@@ -1,5 +1,8 @@
 version: '3.8'
 
+include:
+  - path: ../../support/bot/docker-compose.yml
+
 services:
   appsignal:
     image: appsignal/agent:latest
@@ -29,4 +32,3 @@ services:
     environment:
       - APP_NAME=go/beego
       - APP_URL=http://app:4001
-

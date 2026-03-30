@@ -1,4 +1,7 @@
 version: '3.8'
+include:
+  - path: ../../support/bot/docker-compose.yml
+
 services:
   app:
     build: .
@@ -44,6 +47,5 @@ services:
     environment:
       - APP_NAME=java/spring-agent-collector
       - APP_URL=http://app:4001
-
 volumes:
   elasticsearch_data:

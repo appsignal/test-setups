@@ -1,3 +1,6 @@
+include:
+  - path: ../../support/bot/docker-compose.yml
+
 services:
   appsignal-collector:
     image: appsignal/collector:latest

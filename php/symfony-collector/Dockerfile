@@ -22,6 +22,7 @@ WORKDIR /var/www/html
 COPY commands /commands
 RUN chmod +x /commands/run
 
-EXPOSE 80
+RUN sed -i 's/Listen 80/Listen 4001/' /etc/apache2/ports.conf
+EXPOSE 4001
 
 CMD ["/commands/run"]

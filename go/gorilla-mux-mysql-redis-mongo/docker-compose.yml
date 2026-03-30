@@ -1,5 +1,8 @@
 version: '3.8'
 
+include:
+  - path: ../../support/bot/docker-compose.yml
+
 services:
   appsignal:
     image: appsignal/agent:latest
@@ -41,4 +44,3 @@ services:
     environment:
       - APP_NAME=go/gorilla-mux-mysql-redis-mongo
       - APP_URL=http://app:4001
-
