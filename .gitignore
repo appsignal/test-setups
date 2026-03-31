@@ -4,6 +4,8 @@
 nodejs/opentelemetry-instrumentation-bullmq
 .DS_Store
 appsignal_key.env
+.appsignal_environment
+appsignal_key_*.env
 .env
 yarn-error.log
 node_modules
