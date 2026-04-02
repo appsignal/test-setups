@@ -1,5 +1,8 @@
 version: "3.8"
 
+include:
+  - path: ../../support/bot/docker-compose.yml
+
 services:
   app:
     build: .

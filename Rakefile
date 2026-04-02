@@ -175,6 +175,17 @@ namespace :app do
     run_command "cd #{@app} && docker compose --profile tests up --abort-on-container-exit --exit-code-from tests"
   end
 
+  desc "Start a test app with the bot generating activity"
+  task :bot do
+    build_app
+
+    puts "Building the bot container..."
+    run_command "cd #{@app} && docker compose build bot"
+
+    puts "Starting compose with the bot..."
+    run_command "cd #{@app} && docker compose --profile bot up --abort-on-container-exit"
+  end
+
   desc "Attach to app and get bash"
   task :bash do
     @app = get_app
@@ -237,7 +248,7 @@ namespace :app do
   task :down do
     @app = get_app
     puts "Bringing compose down..."
-    run_command "cd #{@app} && docker compose --profile tests down --rmi=local"
+    run_command "cd #{@app} && docker compose --profile tests --profile bot down --rmi=local"
     run_command "docker image rm -f #{@app}:latest"
   end
 
@@ -245,8 +256,15 @@ namespace :app do
     desc "Tail appsignal.log"
     task :appsignal do
       @app = get_app
-      run_command "cd #{@app} && docker compose exec app touch /tmp/appsignal.log"
-      run_command "cd #{@app} && docker compose exec app tail -f /tmp/appsignal.log"
+      run_command "cd #{@app} && docker compose exec app sh -c 'touch /tmp/appsignal.log && tail -f /tmp/appsignal.log'"
+    end
+  end
+
+  namespace :head do
+    desc "Head appsignal.log (first 20 lines)"
+    task :appsignal do
+      @app = get_app
+      run_command "cd #{@app} && docker compose exec app sh -c 'touch /tmp/appsignal.log && tail -f -n +1 /tmp/appsignal.log | head -n 20'"
     end
   end
 
@@ -299,6 +317,11 @@ namespace :global do
         dir.end_with?("integration")
       end.sort
     end.flatten
+
+    @bot_apps = @apps.select do |app|
+      compose = "#{app}/docker-compose.yml"
+      File.exist?(compose) && File.read(compose).include?("  bot:")
+    end
 
     File.write "README.md", render_erb("support/templates/README.md.erb")
   end

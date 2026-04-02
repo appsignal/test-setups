@@ -25,6 +25,7 @@ To start a test setup:
 ```
 rake app=elixir/alpine-release app:up
 rake app=elixir/phoenix app:up
+rake app=elixir/phoenix-ash app:up
 rake app=elixir/phoenix-collector app:up
 rake app=elixir/phoenix-oban app:up
 rake app=elixir/plug app:up
@@ -121,11 +122,97 @@ This will boot a test environment with AppSignal enabled listening on
 [localhost](http://localhost:4001). The agent log and lock files are
 accessible in the `working_directory`.
 
+To start a test setup with the bot generating activity (loads the index
+page and follows a random link every 5 seconds):
+
+```
+rake app=elixir/alpine-release app:bot
+rake app=elixir/phoenix app:bot
+rake app=elixir/phoenix-ash app:bot
+rake app=elixir/phoenix-collector app:bot
+rake app=elixir/phoenix-oban app:bot
+rake app=elixir/plug app:bot
+rake app=elixir/plug-ecto app:bot
+rake app=elixir/plug-oban app:bot
+rake app=go/beego app:bot
+rake app=go/beego-mod-otel app:bot
+rake app=go/go-gin-mysql app:bot
+rake app=go/go-gin-mysql-collector app:bot
+rake app=go/gorilla-mux-mysql-redis-mongo app:bot
+rake app=go/gorilla-mux-mysql-redis-mongo-collector app:bot
+rake app=java/spring-agent-collector app:bot
+rake app=java/spring-native-collector app:bot
+rake app=nodejs/express-apollo app:bot
+rake app=nodejs/express-bullmq app:bot
+rake app=nodejs/express-elasticsearch app:bot
+rake app=nodejs/express-mongoose app:bot
+rake app=nodejs/express-postgres app:bot
+rake app=nodejs/express-postgres-collector app:bot
+rake app=nodejs/express-rabbitmq app:bot
+rake app=nodejs/express-redis app:bot
+rake app=nodejs/express-redis-alpine app:bot
+rake app=nodejs/express-yoga app:bot
+rake app=nodejs/fastify app:bot
+rake app=nodejs/koa-microservices app:bot
+rake app=nodejs/koa-mongo app:bot
+rake app=nodejs/koa-mysql app:bot
+rake app=nodejs/nestjs app:bot
+rake app=nodejs/nestjs-10 app:bot
+rake app=nodejs/nestjs-prisma app:bot
+rake app=nodejs/nextjs-13-app app:bot
+rake app=nodejs/nextjs-14-app app:bot
+rake app=nodejs/nextjs-14-pages app:bot
+rake app=nodejs/nextjs-15-app-collector app:bot
+rake app=nodejs/remix app:bot
+rake app=nodejs/restify app:bot
+rake app=php/laravel-collector app:bot
+rake app=php/symfony-collector app:bot
+rake app=php/vanilla-collector app:bot
+rake app=python/django4-asgi app:bot
+rake app=python/django4-celery app:bot
+rake app=python/django4-wsgi app:bot
+rake app=python/django5-celery app:bot
+rake app=python/django5-celery-collector app:bot
+rake app=python/django5-celery-integration-collector app:bot
+rake app=python/fastapi app:bot
+rake app=python/fastapi-databases app:bot
+rake app=python/flask app:bot
+rake app=python/flask-pika app:bot
+rake app=python/flask-sqlalchemy app:bot
+rake app=python/starlette app:bot
+rake app=ruby/grape app:bot
+rake app=ruby/hanami2-postgres app:bot
+rake app=ruby/jruby-rails6 app:bot
+rake app=ruby/linux-arm app:bot
+rake app=ruby/padrino app:bot
+rake app=ruby/rack app:bot
+rake app=ruby/rails6-mongo app:bot
+rake app=ruby/rails6-mysql app:bot
+rake app=ruby/rails6-shakapacker app:bot
+rake app=ruby/rails6-shoryuken app:bot
+rake app=ruby/rails7-delayed-job app:bot
+rake app=ruby/rails7-goodjob app:bot
+rake app=ruby/rails7-postgres app:bot
+rake app=ruby/rails7-sequel app:bot
+rake app=ruby/rails7-sidekiq app:bot
+rake app=ruby/rails7-solid-cache app:bot
+rake app=ruby/rails7-solid-queue app:bot
+rake app=ruby/rails8-sidekiq app:bot
+rake app=ruby/rails8-sidekiq-collector app:bot
+rake app=ruby/sinatra-alpine app:bot
+rake app=ruby/sinatra-gvltools app:bot
+rake app=ruby/sinatra-puma app:bot
+rake app=ruby/sinatra-redis app:bot
+rake app=ruby/webmachine1 app:bot
+rake app=ruby/webmachine2 app:bot
+```
+
 To restart the app container after making changes to an integration:
 
 ```
 rake app=elixir/alpine-release app:restart
 rake app=elixir/phoenix app:restart
+rake app=elixir/phoenix-ash app:restart
 rake app=elixir/phoenix-collector app:restart
 rake app=elixir/phoenix-oban app:restart
 rake app=elixir/plug app:restart
@@ -223,6 +310,7 @@ To run bash:
 ```
 rake app=elixir/alpine-release app:bash
 rake app=elixir/phoenix app:bash
+rake app=elixir/phoenix-ash app:bash
 rake app=elixir/phoenix-collector app:bash
 rake app=elixir/phoenix-oban app:bash
 rake app=elixir/plug app:bash
@@ -320,6 +408,7 @@ To run the console (if implemented in the test app):
 ```
 rake app=elixir/alpine-release app:console
 rake app=elixir/phoenix app:console
+rake app=elixir/phoenix-ash app:console
 rake app=elixir/phoenix-collector app:console
 rake app=elixir/phoenix-oban app:console
 rake app=elixir/plug app:console
@@ -417,6 +506,7 @@ To send in a diagnose (if implemented in the test app);
 ```
 rake app=elixir/alpine-release app:diagnose
 rake app=elixir/phoenix app:diagnose
+rake app=elixir/phoenix-ash app:diagnose
 rake app=elixir/phoenix-collector app:diagnose
 rake app=elixir/phoenix-oban app:diagnose
 rake app=elixir/plug app:diagnose
@@ -514,6 +604,7 @@ Tail the appsignal log:
 ```
 rake app=elixir/alpine-release app:tail:appsignal
 rake app=elixir/phoenix app:tail:appsignal
+rake app=elixir/phoenix-ash app:tail:appsignal
 rake app=elixir/phoenix-collector app:tail:appsignal
 rake app=elixir/phoenix-oban app:tail:appsignal
 rake app=elixir/plug app:tail:appsignal

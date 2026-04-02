@@ -1,0 +1,10 @@
+services:
+  bot:
+    build: .
+    image: bot
+    profiles:
+      - bot
+    depends_on:
+      - app
+    environment:
+      - APP_URL=http://app:4001

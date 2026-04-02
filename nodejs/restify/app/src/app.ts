@@ -8,7 +8,16 @@ function respond(req: any, res: any, next: any) {
 const server = restify.createServer({ handleUncaughtExceptions: true })
 server.use(restify.plugins.queryParser())
 server.get("/", function (req: any, res: any, next: any) {
-  res.send("home")
+  res.header("Content-Type", "text/html")
+  res.sendRaw(`
+    <h1>Restify test app</h1>
+    <ul>
+      <li><a href="/slow">GET /slow</a></li>
+      <li><a href="/error">GET /error</a></li>
+      <li><a href="/hello/world">GET /hello/:name</a></li>
+      <li><a href="/goodbye/world">GET /goodbye/:name</a></li>
+    </ul>
+  `)
   return next()
 })
 server.get("/hello/:name", respond)

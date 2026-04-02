@@ -12,7 +12,14 @@ const port = process.env.PORT
 app.use(bodyParser())
 
 router.get("/", async (ctx: any) => {
-  ctx.body = "GET query received!"
+  ctx.body = `
+    <h1>Koa Microservices test app</h1>
+    <ul>
+      <li><a href="/slow">GET /slow</a></li>
+      <li><a href="/error">GET /error</a></li>
+      <li><a href="/remote/app2">GET /remote/app2</a></li>
+    </ul>
+  `
 })
 
 router.get("/error", async (_ctx: any) => {

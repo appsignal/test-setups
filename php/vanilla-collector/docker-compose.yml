@@ -1,3 +1,6 @@
+include:
+  - path: ../../support/bot/docker-compose.yml
+
 services:
     app:
         build:
@@ -6,7 +9,7 @@ services:
         extra_hosts:
             - "host.docker.internal:host-gateway"
         ports:
-            - "4001:80"
+            - "4001:4001"
         environment:
             APPSIGNAL_APP_NAME: php/vanilla-collector
             APPSIGNAL_APP_ENV: development
@@ -32,4 +35,4 @@ services:
             - app
         environment:
             - APP_NAME=php/vanilla-collector
-            - APP_URL=http://app:80
+            - APP_URL=http://app:4001

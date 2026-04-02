@@ -6,7 +6,16 @@ defmodule PlugExample do
   plug :dispatch
 
   get "/" do
-    send_resp(conn, 200, "Hello world")
+    send_resp(conn, 200, """
+    <h1>Plug test app</h1>
+    <ul>
+      <li><a href="/slow">GET /slow</a></li>
+      <li><a href="/error">GET /error</a></li>
+      <li><a href="/cron">GET /cron</a></li>
+      <li><a href="/heartbeat">GET /heartbeat</a></li>
+      <li><a href="/custom_instrumentation">GET /custom_instrumentation</a></li>
+    </ul>
+    """)
   end
 
   get "/slow" do

@@ -47,7 +47,20 @@ app.get("/", (_req: any, res: any) => {
   logger.alert("Custom alert log");
   logger.emerg("Custom emerg(ency) log");
   logger.crit("Custom crit(ical) log");
-  res.send("200 OK")
+  res.send(`
+    <h1>Express Redis test app</h1>
+    <ul>
+      <li><a href="/slow">GET /slow</a></li>
+      <li><a href="/error">GET /error</a></li>
+      <li><a href="/redis">GET /redis</a></li>
+      <li><a href="/ioredis">GET /ioredis</a></li>
+      <li><a href="/custom">GET /custom</a></li>
+      <li><a href="/route-param/1">GET /route-param/:id</a></li>
+      <li><a href="/cron">GET /cron</a></li>
+      <li><a href="/heartbeat">GET /heartbeat</a></li>
+      <li><a href="/fetch">GET /fetch</a></li>
+    </ul>
+  `)
 })
 
 app.get("/error", (_req: any, _res: any) => {

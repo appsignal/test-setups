@@ -12,7 +12,14 @@ app.use(express.urlencoded({ extended: true }))
 
 app.get("/", async (_req: any, res: any) => {
   const allPosts = await Post.find()
-  res.send(`LISTING POSTS ${JSON.stringify(allPosts)}`)
+  res.send(`
+    <h1>Express Mongoose test app</h1>
+    <ul>
+      <li><a href="/slow">GET /slow</a></li>
+      <li><a href="/error">GET /error</a></li>
+    </ul>
+    <p>Posts: ${JSON.stringify(allPosts)}</p>
+  `)
 })
 
 app.get("/error", (req, res) => {

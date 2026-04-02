@@ -41,7 +41,13 @@ const fastify = Fastify({
 })
 
 fastify.get("/", function (_request, reply) {
-  reply.send({ hello: "world" })
+  reply.type("text/html").send(`
+    <h1>Fastify test app</h1>
+    <ul>
+      <li><a href="/slow">GET /slow</a></li>
+      <li><a href="/error">GET /error</a></li>
+    </ul>
+  `)
 })
 
 fastify.get("/error", function (_request, reply) {
