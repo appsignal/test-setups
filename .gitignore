@@ -11,3 +11,4 @@ node_modules
 tags
 **/commands/processmon
 support/processmon/processmon
+.vagrant
