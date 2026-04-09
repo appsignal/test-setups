@@ -1,0 +1,70 @@
+services:
+    app:
+        entrypoint: '/commands/run'
+        build:
+            context: './docker'
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '1000'
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '4001:4001'
+            - '5173:5173'
+        environment:
+            # These environment variables are used by /commands/run
+            # to wait for the database to be ready.
+            DB_HOST: mysql
+            DB_PASSWORD: password
+            DB_USERNAME: laravel
+            # All other environment variables for the Laravel
+            # application are set in the `.env` file, either hardcoded,
+            # or by setting then in `/commands/run` from the ones
+            # defined here and in `env_file`:
+            APPSIGNAL_APP_NAME: php/laravel
+            APPSIGNAL_APP_ENV: development
+            APPSIGNAL_COLLECTOR_ENDPOINT: 'http://appsignal-collector:8099'
+        env_file:
+            - ../../appsignal.env
+            - ../../appsignal_key.env
+        volumes:
+            - './app:/var/www/html'
+            - './commands:/commands'
+        depends_on:
+            - mysql
+    mysql:
+        image: 'mysql/mysql-server:8.0'
+        environment:
+            MYSQL_ROOT_PASSWORD: 'password'
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_DATABASE: 'laravel'
+            MYSQL_USER: 'laravel'
+            MYSQL_PASSWORD: 'password'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        volumes:
+            - './docker/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        healthcheck:
+            test:
+                - CMD
+                - mysqladmin
+                - ping
+                - '-ppassword'
+            retries: 3
+            timeout: 5s
+    appsignal-collector:
+        image: appsignal/collector:latest
+        environment:
+            - APPSIGNAL_LOG_LEVEL=trace
+        env_file:
+            - ../../appsignal.env
+            - ../../appsignal_key.env
+    tests:
+      build: ../../support/server-tests
+      image: server-tests
+      profiles:
+        - tests
+      depends_on:
+        - app
+      environment:
+        - APP_NAME=php/laravel
+        - APP_URL=http://app:4001
