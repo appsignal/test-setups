@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Symfony app{% endblock %}
+
+{% block body %}
+  <h1>{{ message }}</h1>
+  <p>This is a simple Symfony application with AppSignal OpenTelemetry integration.</p>
+
+  <div class="links">
+    <h2>Errors:</h2>
+    <ul>
+      <li><a href="/error">/error</a></li>
+      <li><a href="/error-wrapped">/error-wrapped</a></li>
+      <li><a href="/error-handled">/error-handled</a></li>
+    </ul>
+
+    <h2>Instrumentation:</h2>
+    <ul>
+      <li><a href="/instrument">/instrument</a></li>
+      <li><a href="/instrument-nested">/instrument-nested</a></li>
+      <li><a href="/set-action">/set-action</a></li>
+      <li><a href="/custom-data">/custom-data</a></li>
+      <li><a href="/tags">/tags</a></li>
+    </ul>
+
+    <h2>Metrics:</h2>
+    <ul>
+      <li><a href="/set-gauge">/set-gauge</a></li>
+      <li><a href="/add-distribution-value">/add-distribution-value</a></li>
+      <li><a href="/counter">/counter</a></li>
+    </ul>
+
+    <h2>Logs:</h2>
+    <ul>
+      <li><a href="/log">/log</a></li>
+      <li><a href="/log-with-attributes">/log-with-attributes</a></li>
+    </ul>
+
+    <h2>Other features:</h2>
+    <ul>
+      <li><a href="/slow">/slow</a></li>
+      <li><a href="/io">/io</a></li>
+      <li><a href="/extension">/extension</a></li>
+      <li><a href="/backtrace">/backtrace</a></li>
+    </ul>
+  </div>
+{% endblock %}
