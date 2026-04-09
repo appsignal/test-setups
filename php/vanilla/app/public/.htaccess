@@ -1,0 +1,6 @@
+RewriteEngine On
+
+# Set up client-side routing in case the test app will need it in the future
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ /index.php [L,QSA]
