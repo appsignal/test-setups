@@ -3,14 +3,14 @@ import { useQuery } from 'urql';
 
 // GraphQL query that will succeed
 const VALID_QUERY = `
-  query {
+  query customValidOperation {
     __typename
   }
 `;
 
 // GraphQL query that will fail
 const INVALID_QUERY = `
-  query {
+  query customInvalidOperation {
     nonExistentField {
       id
       name
