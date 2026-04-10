@@ -15,6 +15,7 @@ services:
       - ../../appsignal_key.env
     volumes:
       - ./app:/app
+      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests

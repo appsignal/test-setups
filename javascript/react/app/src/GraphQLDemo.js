@@ -22,7 +22,7 @@ function GraphQLDemo() {
   const [useInvalidQuery, setUseInvalidQuery] = React.useState(false);
   const [autoTrigger, setAutoTrigger] = React.useState(false);
 
-  // Errors are automatically reported to AppSignal via the appsignalExchange
+  // Errors are automatically reported via createAppsignalExchange
   const [result] = useQuery({
     query: useInvalidQuery ? INVALID_QUERY : VALID_QUERY,
   });
