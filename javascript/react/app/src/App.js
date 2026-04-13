@@ -3,6 +3,9 @@ import './App.css';
 import appsignal from "./Appsignal";
 import { ErrorBoundary } from "@appsignal/react";
 import { useState } from "react";
+import { Provider as UrqlProvider } from 'urql';
+import { client } from './graphqlClient';
+import GraphQLDemo from './GraphQLDemo';
 
 const FallbackComponent = () => (
   <div>Uh oh! There was an error :(</div>
@@ -10,13 +13,15 @@ const FallbackComponent = () => (
 
 function AppWrapper() {
   return (
-    <ErrorBoundary
-      instance={appsignal}
-      tags={{ tag: "value" }}
-      fallback={(error) => <FallbackComponent />}
-    >
-      <App />
-    </ErrorBoundary>
+    <UrqlProvider value={client}>
+      <ErrorBoundary
+        instance={appsignal}
+        tags={{ tag: "value" }}
+        fallback={(error) => <FallbackComponent />}
+      >
+        <App />
+      </ErrorBoundary>
+    </UrqlProvider>
   );
 }
 
@@ -39,6 +44,7 @@ function App() {
         <p>
           Welcome to the React test app!
         </p>
+        <GraphQLDemo />
         <p><button onClick={triggerError}>Trigger error</button></p>
         <p>
           Edit <code>src/App.js</code> and save to reload.
