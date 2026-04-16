@@ -1,0 +1,36 @@
+services:
+  app:
+    entrypoint: '/commands/run'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '4001:80'
+    environment:
+      APPSIGNAL_APP_NAME: php/symfony
+      APPSIGNAL_APP_ENV: development
+      APPSIGNAL_COLLECTOR_ENDPOINT: 'http://appsignal-collector:8099'
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - './app:/var/www/html'
+      - ../integration:/var/www/integration
+      - './commands:/commands'
+  appsignal-collector:
+    image: appsignal/collector:latest
+    environment:
+      - APPSIGNAL_LOG_LEVEL=trace
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=php/symfony
+      - APP_URL=http://app:80

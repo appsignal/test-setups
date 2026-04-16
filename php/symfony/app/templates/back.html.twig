@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Symfony app{% endblock %}
+
+{% block body %}
+  <h1>{{ message }}</h1>
+
+  {% if json is defined %}
+    <pre>{{ json|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+  {% endif %}
+
+  <a href="/">← Back to Home</a>
+{% endblock %}
