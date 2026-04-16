@@ -62,6 +62,7 @@ echo "APPSIGNAL_COLLECTOR_ENDPOINT=${APPSIGNAL_COLLECTOR_ENDPOINT}" >> .env
 export -n APPSIGNAL_APP_NAME
 export -n APPSIGNAL_APP_ENV
 export -n APPSIGNAL_PUSH_API_KEY
+export -n APPSIGNAL_COLLECTOR_ENDPOINT
 
 echo "Installing dependencies..."
 composer install

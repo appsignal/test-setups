@@ -276,6 +276,8 @@ namespace :integrations do
     clone_from_git("javascript/integration", "appsignal-javascript")
     # Clone Python
     clone_from_git("python/integration", "appsignal-python")
+    # Clone PHP
+    clone_from_git("php/integration", "appsignal-php")
   end
 
   desc "Remove integrations"
@@ -285,6 +287,7 @@ namespace :integrations do
     run_command("rm -rf nodejs/integration")
     run_command("rm -rf javascript/integration")
     run_command("rm -rf python/integration")
+    run_command("rm -rf php/integration")
   end
 end
 

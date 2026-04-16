@@ -4,7 +4,7 @@
     "description": "Vanilla PHP application with OpenTelemetry and AppSignal",
     "require": {
         "php": "^8.4",
-        "appsignal/appsignal-php": ">=0.2.1 <1.0.0",
+        "appsignal/appsignal-php": "*@dev",
         "nyholm/psr7": "^1.8",
         "symfony/http-client": "^7.3"
     },
@@ -13,6 +13,15 @@
             "App\\": "src/"
         }
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../integration",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",

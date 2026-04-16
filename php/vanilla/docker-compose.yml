@@ -16,6 +16,7 @@ services:
             - ../../appsignal_key.env
         volumes:
             - "./app:/var/www/html"
+            - ../integration:/var/www/integration
             - "./commands:/commands"
     appsignal-collector:
         image: appsignal/collector:latest

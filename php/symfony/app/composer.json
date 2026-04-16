@@ -7,7 +7,7 @@
         "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "appsignal/appsignal-php": ">=0.2.1 <1.0.0",
+        "appsignal/appsignal-php": "*@dev",
         "open-telemetry/opentelemetry-auto-symfony": "^1.0",
         "php-http/guzzle7-adapter": "^1.1",
         "symfony/console": "7.3.*",
@@ -39,6 +39,15 @@
             "App\\Tests\\": "tests/"
         }
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../integration",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "replace": {
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",

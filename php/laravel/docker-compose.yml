@@ -28,8 +28,9 @@ services:
             - ../../appsignal.env
             - ../../appsignal_key.env
         volumes:
-            - './app:/var/www/html'
-            - './commands:/commands'
+            - ./app:/var/www/html
+            - ./commands:/commands
+            - ../integration:/var/www/integration
         depends_on:
             - mysql
     mysql:
