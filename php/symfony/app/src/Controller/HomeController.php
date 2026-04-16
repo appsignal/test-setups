@@ -130,7 +130,7 @@ class HomeController extends AbstractController
                 'int-attribute' => 1234,
                 'bool-attribute' => true,
             ],
-            function () {}
+            closure: fn() => null,
         );
 
         return $this->render('back.html.twig', ['message' => 'Added a span to this trace.']);
@@ -139,7 +139,7 @@ class HomeController extends AbstractController
     #[Route('/instrument-nested', name: 'instrument_nested')]
     public function instrumentNested(): Response
     {
-        Appsignal::instrument('parent', ['msg' => 'from parent span'], function () {
+        Appsignal::instrument('parent', ['msg' => 'from parent span'], closure: function () {
             $span = Appsignal::instrument('child', ['msg' => 'from child span']);
             $span->end();
         });

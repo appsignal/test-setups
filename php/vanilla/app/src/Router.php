@@ -50,12 +50,12 @@ class Router
                         'int-attribute' => 1234,
                         'bool-attribute' => true,
                     ],
-                    function () {}
+                    closure: fn() => null,
                 );
                 View::render('Added a span to this trace.');
             })(),
             '/instrument-nested' => (function () {
-                Appsignal::instrument('parent', ['msg' => 'from parent span'], function () {
+                Appsignal::instrument('parent', ['msg' => 'from parent span'], closure: function () {
                     $span = Appsignal::instrument('child', ['msg' => 'from child span']);
                     $span->end();
                 });
