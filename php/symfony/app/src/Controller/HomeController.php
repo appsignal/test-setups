@@ -217,12 +217,12 @@ class HomeController extends AbstractController
     #[Route('/add-distribution-value', name: 'add_distribution_value')]
     public function addDistributionValue(): Response
     {
-        Appsignal::addDistributionValue('memory_usage', 50);
-        Appsignal::addDistributionValue('memory_usage', 70);
+        Appsignal::addDistributionValue('my_distribution', 50);
+        Appsignal::addDistributionValue('my_distribution', 70);
 
-        Appsignal::addDistributionValue('with_attributes', 10, ['region' => 'eu']);
-        Appsignal::addDistributionValue('with_attributes', 20, ['region' => 'eu']);
-        Appsignal::addDistributionValue('with_attributes', 30, ['region' => 'eu']);
+        Appsignal::addDistributionValue('my_distribution_with_attributes', 10, ['region' => 'eu']);
+        Appsignal::addDistributionValue('my_distribution_with_attributes', 20, ['region' => 'eu']);
+        Appsignal::addDistributionValue('my_distribution_with_attributes', 30, ['region' => 'eu']);
 
         return $this->render('back.html.twig', ['message' => 'Added values to a distribution with and without attributes.']);
     }

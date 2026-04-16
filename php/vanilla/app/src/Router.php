@@ -5,9 +5,7 @@ namespace App;
 use Appsignal\Appsignal;
 use Appsignal\Integrations\Monolog\Handler;
 use Monolog\Logger;
-use OpenTelemetry\API\Globals;
 use OpenTelemetry\API\Trace\SpanKind;
-use OpenTelemetry\API\Trace\StatusCode;
 
 /**
  * Basic router that creates Laravel and Symfony-like root spans
@@ -94,12 +92,12 @@ class Router
                 Appsignal::setGauge('my_gauge_with_attributes', 13, ['region' => 'eu']);
                 View::render('Set a gauge with and without attributes.');
             })(),
-            '/add-distribution-values' => (function () {
-                Appsignal::addDistributionValue('memory_usage', 50);
-                Appsignal::addDistributionValue('memory_usage', 70);
-                Appsignal::addDistributionValue('with_attributes', 10, ['region' => 'eu']);
-                Appsignal::addDistributionValue('with_attributes', 20, ['region' => 'eu']);
-                Appsignal::addDistributionValue('with_attributes', 30, ['region' => 'eu']);
+            '/add-distribution-value' => (function () {
+                Appsignal::addDistributionValue('my_distribution', 50);
+                Appsignal::addDistributionValue('my_distribution', 70);
+                Appsignal::addDistributionValue('my_distribution_with_attributes', 10, ['region' => 'eu']);
+                Appsignal::addDistributionValue('my_distribution_with_attributes', 20, ['region' => 'eu']);
+                Appsignal::addDistributionValue('my_distribution_with_attributes', 30, ['region' => 'eu']);
                 View::render('Added values to a distribution with and without attributes.');
             })(),
             '/counter' => (function () {

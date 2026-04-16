@@ -174,12 +174,12 @@ Route::get('/set-gauge', function () {
 });
 
 Route::get('/add-distribution-value', function () {
-    Appsignal::addDistributionValue('memory_usage', 50);
-    Appsignal::addDistributionValue('memory_usage', 70);
+    Appsignal::addDistributionValue('my_distribution', 50);
+    Appsignal::addDistributionValue('my_distribution', 70);
 
-    Appsignal::addDistributionValue('with_attributes', 10, ['region' => 'eu']);
-    Appsignal::addDistributionValue('with_attributes', 20, ['region' => 'eu']);
-    Appsignal::addDistributionValue('with_attributes', 30, ['region' => 'eu']);
+    Appsignal::addDistributionValue('my_distribution_with_attributes', 10, ['region' => 'eu']);
+    Appsignal::addDistributionValue('my_distribution_with_attributes', 20, ['region' => 'eu']);
+    Appsignal::addDistributionValue('my_distribution_with_attributes', 30, ['region' => 'eu']);
 
     return view('back', ['message' => 'Added values to a distribution with and without attributes.']);
 });
