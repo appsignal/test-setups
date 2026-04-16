@@ -16,25 +16,16 @@ class Router
 {
     public static function handle(string $method, string $uri): void
     {
-        $tracer = Globals::tracerProvider()->getTracer('app');
-        $span = $tracer->spanBuilder("$method $uri")
-            ->setSpanKind(SpanKind::KIND_SERVER)
-            ->setAttribute('http.request.method', $method)
-            ->setAttribute('http.route', $uri)
-            ->startSpan();
-        $scope = $span->activate();
+        $span = Appsignal::instrument("$method $uri", spanKind: SpanKind::KIND_SERVER, attributes: ['http.request.method' => $method, 'http.route' => $uri]);
 
         try {
             static::route($uri);
             $span->setAttribute('http.response.status_code', 200);
         } catch (\Throwable $e) {
             Appsignal::setError($e);
-            $span->recordException($e);
-            $span->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
             $span->setAttribute('http.response.status_code', 500);
             View::renderError($e);
         } finally {
-            $scope->detach();
             $span->end();
         }
     }
