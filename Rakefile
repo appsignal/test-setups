@@ -91,6 +91,29 @@ def render_erb(file)
   ERB.new(File.read(file)).result
 end
 
+namespace :env do
+  desc "Send data to local devenv"
+  task :local do
+    FileUtils.cp "./appsignal_key_local.env", "./appsignal_key.env"
+    File.write ".appsignal_environment", "local"
+  end
+  task :dev => :local
+  task :development => :local
+
+  desc "Send data to staging"
+  task :prod do
+    FileUtils.cp "./appsignal_key_prod.env", "./appsignal_key.env"
+    File.write ".appsignal_environment", "production"
+  end
+  task :production => :prod
+
+  desc "Send data to production"
+  task :staging do
+    FileUtils.cp "./appsignal_key_staging.env", "./appsignal_key.env"
+    File.write ".appsignal_environment", "staging"
+  end
+end
+
 namespace :app do
   desc "Open the browser pointing to the app"
   task :open do
@@ -137,6 +160,13 @@ namespace :app do
 
     @app = get_app
     puts "Starting #{@app}"
+
+    if File.exist?(".appsignal_environment")
+      env = File.read(".appsignal_environment").strip.upcase
+      puts "=" * 50
+      puts "ENVIRONMENT: #{env}"
+      puts "=" * 50
+    end
 
     puts "Copying processmon"
     FileUtils.rm_f "#{@app}/commands/processmon"
