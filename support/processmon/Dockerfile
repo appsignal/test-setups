@@ -6,4 +6,4 @@ RUN apk add musl-dev
 ENV VERSION=0.4.1
 ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 
-RUN cargo install processmon --version=$VERSION
+RUN cargo install --locked processmon --version=$VERSION
