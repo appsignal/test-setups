@@ -1,37 +1,27 @@
-version: "3.8"
-
 include:
   - path: ../../support/bot/docker-compose.yml
 
 services:
-  postgres:
-    image: postgres
-    env_file:
-      - postgres.env
   appsignal-collector:
     image: appsignal/collector:latest
     environment:
-      - APPSIGNAL_LOG_LEVEL=debug
+      - APPSIGNAL_LOG_LEVEL=trace
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env
   app:
     build: .
-    image: nodejs/express-postgres-collector
-    depends_on:
-      - postgres
     ports:
       - "4001:4001"
     environment:
       - PORT=4001
-      - APPSIGNAL_APP_NAME=nodejs/express-postgres-collector
+      - APPSIGNAL_APP_NAME=nodejs/nextjs-15-app-opentelemetry
     env_file:
-      - postgres.env
       - ../../appsignal.env
       - ../../appsignal_key.env
-    working_dir: /
     volumes:
       - ./app:/app
+      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests
@@ -41,4 +31,4 @@ services:
       - app
     environment:
       - APP_URL=http://app:4001
-      - APP_NAME=nodejs/express-postgres-collector
+      - APP_NAME=nodejs/nextjs-15-app

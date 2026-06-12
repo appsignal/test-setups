@@ -24,7 +24,7 @@ services:
             # application are set in the `.env` file, either hardcoded,
             # or by setting then in `/commands/run` from the ones
             # defined here and in `env_file`:
-            APPSIGNAL_APP_NAME: php/laravel-collector
+            APPSIGNAL_APP_NAME: php/laravel-opentelemetry
             APPSIGNAL_APP_ENV: development
         env_file:
             - ../../appsignal.env
@@ -68,5 +68,5 @@ services:
       depends_on:
         - app
       environment:
-        - APP_NAME=php/laravel-collector
+        - APP_NAME=php/laravel-opentelemetry
         - APP_URL=http://app:4001

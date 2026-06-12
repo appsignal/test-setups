@@ -12,11 +12,11 @@ services:
     build:
       context: .
       dockerfile: ../Dockerfile
-    image: javascript/react-vite-collector
+    image: javascript/react-vite-opentelemetry
     ports:
       - "4001:4001"
     environment:
-      - APPSIGNAL_APP_NAME=javascript/react-vite-collector
+      - APPSIGNAL_APP_NAME=javascript/react-vite-opentelemetry
       - APPSIGNAL_APP_ENV=development
     env_file:
       - ../../appsignal.env
@@ -35,5 +35,5 @@ services:
     depends_on:
       - app
     environment:
-      - APP_NAME=javascript/react-vite-collector
+      - APP_NAME=javascript/react-vite-opentelemetry
       - APP_URL=http://app:4001

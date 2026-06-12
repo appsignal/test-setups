@@ -11,7 +11,7 @@ services:
         ports:
             - "4001:4001"
         environment:
-            APPSIGNAL_APP_NAME: php/vanilla-collector
+            APPSIGNAL_APP_NAME: php/vanilla-opentelemetry
             APPSIGNAL_APP_ENV: development
         env_file:
             - ../../appsignal.env
@@ -34,5 +34,5 @@ services:
         depends_on:
             - app
         environment:
-            - APP_NAME=php/vanilla-collector
+            - APP_NAME=php/vanilla-opentelemetry
             - APP_URL=http://app:4001

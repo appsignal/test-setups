@@ -1,23 +1,24 @@
+version: '3.8'
 include:
   - path: ../../support/bot/docker-compose.yml
 
 services:
   app:
-    entrypoint: '/commands/run'
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - '4001:4001'
+    build: .
+    volumes:
+      - ./app:/app
     environment:
-      APPSIGNAL_APP_NAME: php/symfony-collector
+      OTEL_LOGS_EXPORTER: "none"
+      APPSIGNAL_APP_NAME: java/spring-native-opentelemetry
       APPSIGNAL_APP_ENV: development
+      SERVER_PORT: "4001"
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env
-    volumes:
-      - './app:/var/www/html'
-      - './commands:/commands'
+    ports:
+      - "4001:4001"
+    depends_on:
+      - appsignal-collector
   appsignal-collector:
     image: appsignal/collector:latest
     environment:
@@ -26,12 +27,12 @@ services:
       - ../../appsignal.env
       - ../../appsignal_key.env
   tests:
-    build: ../../support/server-tests
     image: server-tests
+    build: ../../support/server-tests
     profiles:
       - tests
     depends_on:
       - app
     environment:
-      - APP_NAME=php/symfony-collector
+      - APP_NAME=java/spring-native-opentelemetry
       - APP_URL=http://app:4001
