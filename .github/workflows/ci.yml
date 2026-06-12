@@ -51,7 +51,7 @@ jobs:
         app:
           - elixir/alpine-release
           - elixir/phoenix
-          - elixir/phoenix-collector
+          - elixir/phoenix-opentelemetry
           - elixir/phoenix-oban
           - elixir/plug
           - elixir/plug-ecto
@@ -83,8 +83,8 @@ jobs:
       fail-fast: false
       matrix:
         app:
-          - java/spring-native-collector
-          - java/spring-agent-collector
+          - java/spring-native-opentelemetry
+          - java/spring-agent-opentelemetry
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -115,9 +115,9 @@ jobs:
           - go/beego
           - go/beego-mod-otel
           - go/go-gin-mysql
-          - go/go-gin-mysql-collector
+          - go/go-gin-mysql-opentelemetry
           - go/gorilla-mux-mysql-redis-mongo
-          - go/gorilla-mux-mysql-redis-mongo-collector
+          - go/gorilla-mux-mysql-redis-mongo-opentelemetry
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -146,7 +146,7 @@ jobs:
       matrix:
         app:
           - javascript/react
-          - javascript/react-vite-collector
+          - javascript/react-vite-opentelemetry
           - javascript/ember
           - javascript/vanilla
           - javascript/vue-3
@@ -191,7 +191,7 @@ jobs:
           - nodejs/express-bullmq
           - nodejs/express-mongoose
           - nodejs/express-postgres
-          - nodejs/express-postgres-collector
+          - nodejs/express-postgres-opentelemetry
           - nodejs/express-redis
           - nodejs/express-redis-alpine
           - nodejs/express-yoga
@@ -206,7 +206,7 @@ jobs:
           - nodejs/nextjs-13-app
           - nodejs/nextjs-14-app
           - nodejs/nextjs-14-pages
-          - nodejs/nextjs-15-app-collector
+          - nodejs/nextjs-15-app-opentelemetry
           - nodejs/remix
           - nodejs/restify
     steps:
@@ -252,7 +252,7 @@ jobs:
           - ruby/rails7-sidekiq
           - ruby/rails8-delayed-job
           - ruby/rails8-sidekiq
-          - ruby/rails8-sidekiq-collector
+          - ruby/rails8-sidekiq-opentelemetry
           - ruby/sinatra-redis
           - ruby/sinatra-alpine
           - ruby/sinatra-puma
@@ -294,7 +294,7 @@ jobs:
       matrix:
         app:
           - python/django5-celery
-          - python/django5-celery-collector
+          - python/django5-celery-opentelemetry
           - python/django4-celery
           - python/flask
           - python/fastapi
@@ -326,9 +326,9 @@ jobs:
       fail-fast: false
       matrix:
         app:
-          - php/symfony-collector
-          - php/laravel-collector
-          - php/vanilla-collector
+          - php/symfony-opentelemetry
+          - php/laravel-opentelemetry
+          - php/vanilla-opentelemetry
     steps:
       - name: Checkout
         uses: actions/checkout@v4
