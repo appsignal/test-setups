@@ -218,6 +218,11 @@ local AppSignal collector over OpenTelemetry. Pass `mode=collector` to any
 command (it defaults to `mode=agent`). The setups that support collector mode:
 
 ```
+rake app=python/django5-celery mode=collector app:up
+rake app=ruby/grape mode=collector app:up
+rake app=ruby/rack mode=collector app:up
+rake app=ruby/rails7-postgres mode=collector app:up
+rake app=ruby/rails8-sidekiq mode=collector app:up
 ```
 
 To restart the app container after making changes to an integration:
