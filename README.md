@@ -218,9 +218,23 @@ command (it defaults to `mode=agent`). The setups that support collector mode:
 ```
 rake app=python/django5-celery mode=collector app:up
 rake app=ruby/grape mode=collector app:up
+rake app=ruby/hanami2-postgres mode=collector app:up
 rake app=ruby/rack mode=collector app:up
+rake app=ruby/rails6-mysql mode=collector app:up
+rake app=ruby/rails6-shakapacker mode=collector app:up
+rake app=ruby/rails6-shoryuken mode=collector app:up
+rake app=ruby/rails7-delayed-job mode=collector app:up
+rake app=ruby/rails7-goodjob mode=collector app:up
 rake app=ruby/rails7-postgres mode=collector app:up
+rake app=ruby/rails7-sequel mode=collector app:up
+rake app=ruby/rails7-solid-cache mode=collector app:up
+rake app=ruby/rails7-solid-queue mode=collector app:up
+rake app=ruby/rails8-delayed-job mode=collector app:up
 rake app=ruby/rails8-sidekiq mode=collector app:up
+rake app=ruby/sinatra-alpine mode=collector app:up
+rake app=ruby/sinatra-gvltools mode=collector app:up
+rake app=ruby/webmachine1 mode=collector app:up
+rake app=ruby/webmachine2 mode=collector app:up
 ```
 
 To restart the app container after making changes to an integration:
