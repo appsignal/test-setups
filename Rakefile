@@ -11,6 +11,52 @@ def get_app
   end.delete_suffix("/")
 end
 
+# A test setup supports collector mode when it ships a
+# `docker-compose.collector.yml` next to its `docker-compose.yml`. Agent mode
+# is always supported.
+def supported_modes(app)
+  modes = [:agent]
+  modes << :collector if File.exist?("#{app}/docker-compose.collector.yml")
+  modes
+end
+
+# Resolve the mode for an app from the `mode=` parameter:
+# - no mode given: use agent (the default when both are supported).
+# - mode given but unknown: error.
+# - mode given but not supported by the app: error.
+# The chosen mode is printed so it's clear at the start of the output.
+def get_mode(app)
+  supported = supported_modes(app)
+  requested = ENV['mode']
+
+  mode =
+    if requested.nil? || requested.empty?
+      supported.include?(:agent) ? :agent : supported.first
+    else
+      sym = requested.to_sym
+      unless [:agent, :collector].include?(sym)
+        raise "Unknown mode '#{requested}'. Use mode=agent or mode=collector."
+      end
+      unless supported.include?(sym)
+        raise "App #{app} does not support #{requested} mode."
+      end
+      sym
+    end
+
+  puts "==> Mode: #{mode}"
+  mode
+end
+
+# The compose file that defines an app in the given mode. Each per-mode file
+# includes the app's `docker-compose.shared.yml`, so loading one is enough.
+def compose_file_arg(mode)
+  if mode == :collector
+    "-f docker-compose.collector.yml"
+  else
+    "-f docker-compose.yml"
+  end
+end
+
 def clone_from_git(path, repo, branch: nil)
   if File.exist?(path)
     puts "#{path} already present"
@@ -136,6 +182,7 @@ namespace :app do
     end
 
     @app = get_app
+    @mode = get_mode(@app)
     puts "Starting #{@app}"
 
     puts "Copying processmon"
@@ -150,7 +197,7 @@ namespace :app do
     if build_args
       options = "--build-arg=#{build_args}"
     end
-    run_command "cd #{@app} && docker compose build #{options}"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@mode)} build #{options}"
 
     puts "Cleaning processmon"
     FileUtils.rm_f "#{@app}/commands/processmon"
@@ -161,7 +208,7 @@ namespace :app do
     build_app
 
     puts "Starting compose..."
-    run_command "cd #{@app} && docker compose up --abort-on-container-exit"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@mode)} up --abort-on-container-exit"
   end
 
   desc "Start a test app and run the tests on it"
@@ -169,10 +216,10 @@ namespace :app do
     build_app
 
     puts "Building the tests container..."
-    run_command "cd #{@app} && docker compose build --build-arg TESTING=true tests"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@mode)} build --build-arg TESTING=true tests"
 
     puts "Starting compose with the tests..."
-    run_command "cd #{@app} && docker compose --profile tests up --abort-on-container-exit --exit-code-from tests"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@mode)} --profile tests up --abort-on-container-exit --exit-code-from tests"
   end
 
   desc "Start a test app with the bot generating activity"
@@ -180,10 +227,10 @@ namespace :app do
     build_app
 
     puts "Building the bot container..."
-    run_command "cd #{@app} && docker compose build bot"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@mode)} build bot"
 
     puts "Starting compose with the bot..."
-    run_command "cd #{@app} && docker compose --profile bot up --abort-on-container-exit"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@mode)} --profile bot up --abort-on-container-exit"
   end
 
   desc "Attach to app and get bash"
@@ -240,15 +287,20 @@ namespace :app do
   desc "Restart the app container, needed when making changes in the integration"
   task :restart do
     @app = get_app
+    @mode = get_mode(@app)
     puts "Restarting #{@app}"
-    run_command "cd #{@app} && docker compose restart app"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@mode)} restart app"
   end
 
   desc "Bring compose down and remove cached app docker image"
   task :down do
     @app = get_app
+    # Use the collector compose file when present: it includes the shared file,
+    # so it knows about every service (incl. the collector) and tears them all
+    # down. Falls back to the regular file for agent-only setups.
+    down_mode = supported_modes(@app).include?(:collector) ? :collector : :agent
     puts "Bringing compose down..."
-    run_command "cd #{@app} && docker compose --profile tests --profile bot down --rmi=local"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(down_mode)} --profile tests --profile bot down --rmi=local"
     run_command "docker image rm -f #{@app}:latest"
   end
 
@@ -321,9 +373,18 @@ namespace :global do
       end.sort
     end.flatten
 
+    # The bot service is pulled in via the bot compose include, which may live
+    # in the app's `docker-compose.yml` or in its `docker-compose.shared.yml`.
     @bot_apps = @apps.select do |app|
-      compose = "#{app}/docker-compose.yml"
-      File.exist?(compose) && File.read(compose).include?("  bot:")
+      %w(docker-compose.yml docker-compose.shared.yml).any? do |file|
+        path = "#{app}/#{file}"
+        File.exist?(path) && File.read(path).include?("support/bot/docker-compose.yml")
+      end
+    end
+
+    # Apps that ship a collector compose file can be run in collector mode.
+    @collector_apps = @apps.select do |app|
+      supported_modes(app).include?(:collector)
     end
 
     File.write "README.md", render_erb("support/templates/README.md.erb")
