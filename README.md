@@ -216,7 +216,16 @@ local AppSignal collector over OpenTelemetry. Pass `mode=collector` to any
 command (it defaults to `mode=agent`). The setups that support collector mode:
 
 ```
+rake app=python/django4-asgi mode=collector app:up
+rake app=python/django4-celery mode=collector app:up
+rake app=python/django4-wsgi mode=collector app:up
 rake app=python/django5-celery mode=collector app:up
+rake app=python/fastapi mode=collector app:up
+rake app=python/fastapi-databases mode=collector app:up
+rake app=python/flask mode=collector app:up
+rake app=python/flask-pika mode=collector app:up
+rake app=python/flask-sqlalchemy mode=collector app:up
+rake app=python/starlette mode=collector app:up
 rake app=ruby/grape mode=collector app:up
 rake app=ruby/hanami2-postgres mode=collector app:up
 rake app=ruby/rack mode=collector app:up
