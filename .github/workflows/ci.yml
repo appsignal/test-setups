@@ -66,6 +66,13 @@ jobs:
           path: support/processmon/processmon
           key: ${{ env.CACHE_VERSION }}-processmon
 
+      - name: Update Docker Compose
+        run: |
+          mkdir -p ~/.docker/cli-plugins
+          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
+
       - name: Setup environment
         run: |
           echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
@@ -94,6 +101,13 @@ jobs:
         with:
           path: support/processmon/processmon
           key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Update Docker Compose
+        run: |
+          mkdir -p ~/.docker/cli-plugins
+          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
 
       - name: Setup environment
         run: |
@@ -128,6 +142,13 @@ jobs:
           path: support/processmon/processmon
           key: ${{ env.CACHE_VERSION }}-processmon
 
+      - name: Update Docker Compose
+        run: |
+          mkdir -p ~/.docker/cli-plugins
+          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
+
       - name: Setup environment
         run: |
           echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
@@ -159,6 +180,13 @@ jobs:
         with:
           path: support/processmon/processmon
           key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Update Docker Compose
+        run: |
+          mkdir -p ~/.docker/cli-plugins
+          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
 
       - name: Setup environment
         run: |
@@ -219,6 +247,13 @@ jobs:
           path: support/processmon/processmon
           key: ${{ env.CACHE_VERSION }}-processmon
 
+      - name: Update Docker Compose
+        run: |
+          mkdir -p ~/.docker/cli-plugins
+          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
+
       - name: Setup environment
         run: |
           echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
@@ -268,6 +303,13 @@ jobs:
           path: support/processmon/processmon
           key: ${{ env.CACHE_VERSION }}-processmon
 
+      - name: Update Docker Compose
+        run: |
+          mkdir -p ~/.docker/cli-plugins
+          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
+
       - name: Setup environment
         run: |
           echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
@@ -308,6 +350,13 @@ jobs:
         with:
           path: support/processmon/processmon
           key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Update Docker Compose
+        run: |
+          mkdir -p ~/.docker/cli-plugins
+          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
 
       - name: Setup environment
         run: |
