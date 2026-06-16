@@ -210,10 +210,15 @@ rake app=ruby/webmachine1 app:bot
 rake app=ruby/webmachine2 app:bot
 ```
 
-Most test setups run their integration in "agent mode". Some also support
-"collector mode", in which the integration sends data to AppSignal through a
-local AppSignal collector over OpenTelemetry. Pass `mode=collector` to any
-command (it defaults to `mode=agent`). The setups that support collector mode:
+Each test setup can be run in one or more "modes", selected with the `mode=`
+parameter. A mode is defined by a `docker-compose.<mode>.yml` file in the setup
+directory. When no `mode=` is given, the setup runs in its default mode (its
+plain `docker-compose.yml`), or in `agent` mode when it has no default.
+
+Most setups run their integration in "agent mode". Some also support "collector
+mode", in which the integration sends data to AppSignal through a local
+AppSignal collector over OpenTelemetry. Pass `mode=collector` to any command.
+The setups that support collector mode:
 
 ```
 rake app=python/django4-asgi mode=collector app:up
