@@ -33,5 +33,6 @@ urlpatterns = [
     path('make_request/', views.make_request, name='make_request'),
     path('custom_instrumentation/', views.custom_instrumentation, name='custom_instrumentation'),
     path('metrics/', views.metrics, name='metrics'),
+    path('logs/', views.logs, name='logs'),
     path('blog/', include("blog.urls"))
 ]

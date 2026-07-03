@@ -11,6 +11,82 @@ def get_app
   end.delete_suffix("/")
 end
 
+# A mode is just a `docker-compose.<mode>.yml` file in the app directory. The
+# `shared` file is reserved (it holds the common services every mode includes)
+# and is never a selectable mode. Returns a `{ mode_name => filename }` map.
+def mode_files(app)
+  Dir["#{app}/docker-compose.*.yml"].each_with_object({}) do |path, files|
+    mode = File.basename(path).sub(/\Adocker-compose\./, "").sub(/\.yml\z/, "")
+    next if mode == "shared"
+    files[mode] = File.basename(path)
+  end
+end
+
+# A plain `docker-compose.yml` provides the `default` mode (so does an explicit
+# `docker-compose.default.yml`).
+def has_plain_default?(app)
+  File.exist?("#{app}/docker-compose.yml")
+end
+
+# The modes an app can run in, for listing and validation.
+def available_modes(app)
+  modes = mode_files(app).keys
+  modes << "default" if has_plain_default?(app) && !modes.include?("default")
+  modes
+end
+
+# The compose file that defines an app in the given mode. Each per-mode file
+# includes the app's `docker-compose.shared.yml`, so loading one is enough.
+def compose_file_for(app, mode)
+  files = mode_files(app)
+  return files[mode] if files.key?(mode)
+  return "docker-compose.yml" if mode == "default" && has_plain_default?(app)
+  raise "App #{app} has no compose file for '#{mode}' mode."
+end
+
+def compose_file_arg(app, mode)
+  "-f #{compose_file_for(app, mode)}"
+end
+
+# Resolve the mode for an app from the `mode=` parameter:
+# - no mode given: the `default` mode if present, else `agent`, else error.
+# - `mode=shared`: error (reserved, not selectable).
+# - mode given but not available for the app: error, listing what is available.
+# - the `default` mode is ambiguous when both `docker-compose.yml` and
+#   `docker-compose.default.yml` exist: error.
+# The chosen mode is printed so it's clear at the start of the output.
+def get_mode(app)
+  files = mode_files(app)
+  available = available_modes(app)
+  default_conflict = has_plain_default?(app) && files.key?("default")
+  requested = ENV["mode"]
+  requested = nil if requested && requested.strip.empty?
+
+  mode =
+    if requested.nil?
+      if available.include?("default")
+        "default"
+      elsif available.include?("agent")
+        "agent"
+      else
+        raise "No mode specified for #{app} and it has no default or agent mode. Available modes: #{available.sort.join(", ")}."
+      end
+    elsif requested == "shared"
+      raise "'shared' is not a selectable mode; it holds the services shared by every mode."
+    elsif !available.include?(requested)
+      raise "App #{app} does not support '#{requested}' mode. Available modes: #{available.sort.join(", ")}."
+    else
+      requested
+    end
+
+  if mode == "default" && default_conflict
+    raise "App #{app} has both docker-compose.yml and docker-compose.default.yml, which both define the 'default' mode. Remove one."
+  end
+
+  puts "==> Mode: #{mode}"
+  mode
+end
+
 def clone_from_git(path, repo, branch: nil)
   if File.exist?(path)
     puts "#{path} already present"
@@ -136,6 +212,7 @@ namespace :app do
     end
 
     @app = get_app
+    @mode = get_mode(@app)
     puts "Starting #{@app}"
 
     puts "Copying processmon"
@@ -150,7 +227,7 @@ namespace :app do
     if build_args
       options = "--build-arg=#{build_args}"
     end
-    run_command "cd #{@app} && docker compose build #{options}"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} build #{options}"
 
     puts "Cleaning processmon"
     FileUtils.rm_f "#{@app}/commands/processmon"
@@ -161,7 +238,7 @@ namespace :app do
     build_app
 
     puts "Starting compose..."
-    run_command "cd #{@app} && docker compose up --abort-on-container-exit"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} up --abort-on-container-exit"
   end
 
   desc "Start a test app and run the tests on it"
@@ -169,10 +246,10 @@ namespace :app do
     build_app
 
     puts "Building the tests container..."
-    run_command "cd #{@app} && docker compose build --build-arg TESTING=true tests"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} build --build-arg TESTING=true tests"
 
     puts "Starting compose with the tests..."
-    run_command "cd #{@app} && docker compose --profile tests up --abort-on-container-exit --exit-code-from tests"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} --profile tests up --abort-on-container-exit --exit-code-from tests"
   end
 
   desc "Start a test app with the bot generating activity"
@@ -180,15 +257,16 @@ namespace :app do
     build_app
 
     puts "Building the bot container..."
-    run_command "cd #{@app} && docker compose build bot"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} build bot"
 
     puts "Starting compose with the bot..."
-    run_command "cd #{@app} && docker compose --profile bot up --abort-on-container-exit"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} --profile bot up --abort-on-container-exit"
   end
 
   desc "Attach to app and get bash"
   task :bash do
     @app = get_app
+    @mode = get_mode(@app)
     puts "Starting bash in #{@app}"
     workdir =
       if @app.start_with?("php/")
@@ -196,20 +274,21 @@ namespace :app do
       else
         "/app"
       end
-    run_command "cd #{@app} && docker compose exec --workdir #{workdir} app /bin/bash"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} exec --workdir #{workdir} app /bin/bash"
   rescue FailedCommand
     puts "Failed to open '#{workdir}' working directory. Does it exist?"
     puts
     puts "Starting bash in #{@app} in root '/' fallback directory"
-    run_command "cd #{@app} && docker compose exec --workdir / app /bin/bash"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} exec --workdir / app /bin/bash"
   end
 
   desc "Attach to app and get a console"
   task :console do
     @app = get_app
+    @mode = get_mode(@app)
     if File.exist?("#{@app}/commands/console")
       puts "Starting console in #{@app}"
-      run_command "cd #{@app} && docker compose exec app /commands/console"
+      run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} exec app /commands/console"
     else
       puts "Starting a console in #{@app} is not supported"
     end
@@ -218,9 +297,10 @@ namespace :app do
   desc "Attach to app and run diagnose"
   task :diagnose do
     @app = get_app
+    @mode = get_mode(@app)
     if File.exist?("#{@app}/commands/diagnose")
       puts "Runing diagnose in #{@app}"
-      run_command "cd #{@app} && docker compose exec app /commands/diagnose"
+      run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} exec app /commands/diagnose"
     else
       puts "Running diagnose in #{@app} is not supported"
     end
@@ -229,9 +309,10 @@ namespace :app do
   desc "Attach to app and run demo"
   task :demo do
     @app = get_app
+    @mode = get_mode(@app)
     if File.exist?("#{@app}/commands/demo")
       puts "Runing demo in #{@app}"
-      run_command "cd #{@app} && docker compose exec app /commands/demo"
+      run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} exec app /commands/demo"
     else
       puts "Running demo in #{@app} is not supported"
     end
@@ -240,15 +321,26 @@ namespace :app do
   desc "Restart the app container, needed when making changes in the integration"
   task :restart do
     @app = get_app
+    @mode = get_mode(@app)
     puts "Restarting #{@app}"
-    run_command "cd #{@app} && docker compose restart app"
+    run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} restart app"
   end
 
   desc "Bring compose down and remove cached app docker image"
   task :down do
     @app = get_app
+    # Tear everything down with the most complete compose file. The collector
+    # file includes the shared file plus the collector service, so it knows
+    # about every container; fall back to the default/agent file otherwise.
+    files = mode_files(@app)
+    down_file =
+      files["collector"] ||
+      (has_plain_default?(@app) ? "docker-compose.yml" : nil) ||
+      files["default"] ||
+      files["agent"] ||
+      files.values.first
     puts "Bringing compose down..."
-    run_command "cd #{@app} && docker compose --profile tests --profile bot down --rmi=local"
+    run_command "cd #{@app} && docker compose -f #{down_file} --profile tests --profile bot down --rmi=local"
     run_command "docker image rm -f #{@app}:latest"
   end
 
@@ -256,7 +348,8 @@ namespace :app do
     desc "Tail appsignal.log"
     task :appsignal do
       @app = get_app
-      run_command "cd #{@app} && docker compose exec app sh -c 'touch /tmp/appsignal.log && tail -f /tmp/appsignal.log'"
+      @mode = get_mode(@app)
+      run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} exec app sh -c 'touch /tmp/appsignal.log && tail -f /tmp/appsignal.log'"
     end
   end
 
@@ -264,7 +357,8 @@ namespace :app do
     desc "Head appsignal.log (first 20 lines)"
     task :appsignal do
       @app = get_app
-      run_command "cd #{@app} && docker compose exec app sh -c 'touch /tmp/appsignal.log && tail -f -n +1 /tmp/appsignal.log | head -n 20'"
+      @mode = get_mode(@app)
+      run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} exec app sh -c 'touch /tmp/appsignal.log && tail -f -n +1 /tmp/appsignal.log | head -n 20'"
     end
   end
 
@@ -272,8 +366,9 @@ namespace :app do
     desc "Less +F appsignal.log"
     task :appsignal do
       @app = get_app
-      run_command "cd #{@app} && docker compose exec app touch /tmp/appsignal.log"
-      run_command "cd #{@app} && docker compose exec app less +F /tmp/appsignal.log"
+      @mode = get_mode(@app)
+      run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} exec app touch /tmp/appsignal.log"
+      run_command "cd #{@app} && docker compose #{compose_file_arg(@app, @mode)} exec app less +F /tmp/appsignal.log"
     end
   end
 end
@@ -321,9 +416,18 @@ namespace :global do
       end.sort
     end.flatten
 
+    # The bot service is pulled in via the bot compose include, which may live
+    # in the app's mode files or in its `docker-compose.shared.yml`.
     @bot_apps = @apps.select do |app|
-      compose = "#{app}/docker-compose.yml"
-      File.exist?(compose) && File.read(compose).include?("  bot:")
+      %w(docker-compose.yml docker-compose.agent.yml docker-compose.shared.yml).any? do |file|
+        path = "#{app}/#{file}"
+        File.exist?(path) && File.read(path).include?("support/bot/docker-compose.yml")
+      end
+    end
+
+    # Apps that ship a collector compose file can be run in collector mode.
+    @collector_apps = @apps.select do |app|
+      mode_files(app).key?("collector")
     end
 
     File.write "README.md", render_erb("support/templates/README.md.erb")

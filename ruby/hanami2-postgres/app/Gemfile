@@ -17,6 +17,16 @@ gem "rake"
 gem "pg"
 gem "appsignal", :path => "/integration"
 
+# OpenTelemetry gems for AppSignal collector mode. Loaded only when
+# APPSIGNAL_COLLECTOR_ENDPOINT is set; keep versions in sync with appsignal's
+# lib/appsignal/opentelemetry/dependencies.rb.
+gem "opentelemetry-sdk", ">= 1.8.0"
+gem "opentelemetry-metrics-sdk", ">= 0.7.1"
+gem "opentelemetry-logs-sdk", ">= 0.2.0"
+gem "opentelemetry-exporter-otlp", ">= 0.30.0"
+gem "opentelemetry-exporter-otlp-metrics", ">= 0.4.0"
+gem "opentelemetry-exporter-otlp-logs", ">= 0.2.0"
+
 group :development do
   gem "hanami-webconsole", "~> 2.2"
 end

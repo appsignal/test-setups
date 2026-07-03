@@ -37,6 +37,20 @@ page and follows a random link every 5 seconds):
 <% @bot_apps.each do |app | %>rake app=<%= app %> app:bot
 <% end %>```
 
+Each test setup can be run in one or more "modes", selected with the `mode=`
+parameter. A mode is defined by a `docker-compose.<mode>.yml` file in the setup
+directory. When no `mode=` is given, the setup runs in its default mode (its
+plain `docker-compose.yml`), or in `agent` mode when it has no default.
+
+Most setups run their integration in "agent mode". Some also support "collector
+mode", in which the integration sends data to AppSignal through a local
+AppSignal collector over OpenTelemetry. Pass `mode=collector` to any command.
+The setups that support collector mode:
+
+```
+<% @collector_apps.each do |app | %>rake app=<%= app %> mode=collector app:up
+<% end %>```
+
 To restart the app container after making changes to an integration:
 
 ```

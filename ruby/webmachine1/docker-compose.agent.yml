@@ -1,0 +1,7 @@
+include:
+  - path: docker-compose.shared.yml
+
+services:
+  app:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/webmachine1
