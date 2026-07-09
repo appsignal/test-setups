@@ -11,6 +11,7 @@ args = [
   "exec",
   "shoryuken",
   "-q=default",
+  "-q=native",
   "-R"
 ]
 working_dir = "/app"

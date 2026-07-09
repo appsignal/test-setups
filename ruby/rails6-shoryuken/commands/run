@@ -22,5 +22,6 @@ bin/rails db:migrate
 
 echo "Create sqs queues in mock server"
 bundle exec shoryuken sqs create default
+bundle exec shoryuken sqs create native
 
 /commands/processmon processmon.toml
