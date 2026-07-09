@@ -7,3 +7,7 @@ services:
     environment:
       - APPSIGNAL_APP_NAME=ruby/rails8-que-collector
       - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099
+  downstream:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/rails8-que-downstream-collector
+      - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099

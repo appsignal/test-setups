@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :workers do
     collection do
       get :queue
+      get :cross_service
     end
   end
 

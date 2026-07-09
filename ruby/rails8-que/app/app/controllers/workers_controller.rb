@@ -38,6 +38,14 @@ class WorkersController < ApplicationController
     redirect_to({ :action => :index }, :notice => "Worker queued")
   end
 
+  # Enqueue a native Que job onto the `downstream` queue, which only the
+  # separately instrumented downstream service drains. In collector mode this
+  # shows job trace propagation across two services.
+  def cross_service
+    DownstreamJob.enqueue("Cross-service test", :job_options => { :queue => "downstream" })
+    redirect_to({ :action => :index }, :notice => "Cross-service job queued")
+  end
+
   private
 
   def handle_que(worker, args)
