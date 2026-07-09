@@ -1,0 +1,34 @@
+version: '3.8'
+
+include:
+  - path: ../../support/bot/docker-compose.yml
+
+services:
+  redis:
+    image: "redis:7.4.2"
+  app:
+    build: .
+    image: ruby/rails8-resque
+    depends_on:
+      - redis
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+    env_file:
+      - redis.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=ruby/rails8-resque
+      - APP_URL=http://app:4001

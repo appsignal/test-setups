@@ -1,0 +1,12 @@
+<h1>Queue jobs now</h1>
+
+<p>Click on any of the links below to enqueue that job from within this web
+request. Native Resque jobs record an <code>enqueue.resque</code> event; Active
+Job jobs (and mailers) record an <code>enqueue.active_job</code> event.</p>
+
+<ul>
+  <% @worker_tests.each do |(_, worker, test)| %>
+    <% name = "#{worker}#{" - #{test}" unless test == :default}" %>
+    <li><%= link_to name, queue_workers_path(:worker => worker, :test => test) %></li>
+  <% end %>
+</ul>
