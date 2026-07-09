@@ -286,6 +286,8 @@ jobs:
           - ruby/rails7-sequel
           - ruby/rails7-sidekiq
           - ruby/rails8-delayed-job
+          - ruby/rails8-que
+          - ruby/rails8-resque
           - ruby/rails8-sidekiq
           - ruby/rails8-sidekiq-opentelemetry
           - ruby/sinatra-redis

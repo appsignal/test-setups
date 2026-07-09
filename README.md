@@ -108,6 +108,8 @@ rake app=ruby/rails7-sidekiq app:up
 rake app=ruby/rails7-solid-cache app:up
 rake app=ruby/rails7-solid-queue app:up
 rake app=ruby/rails8-delayed-job app:up
+rake app=ruby/rails8-que app:up
+rake app=ruby/rails8-resque app:up
 rake app=ruby/rails8-sidekiq app:up
 rake app=ruby/rails8-sidekiq-opentelemetry app:up
 rake app=ruby/shoryuken app:up
@@ -200,6 +202,8 @@ rake app=ruby/rails7-sequel app:bot
 rake app=ruby/rails7-sidekiq app:bot
 rake app=ruby/rails7-solid-cache app:bot
 rake app=ruby/rails7-solid-queue app:bot
+rake app=ruby/rails8-que app:bot
+rake app=ruby/rails8-resque app:bot
 rake app=ruby/rails8-sidekiq app:bot
 rake app=ruby/rails8-sidekiq-opentelemetry app:bot
 rake app=ruby/sinatra-alpine app:bot
@@ -244,6 +248,8 @@ rake app=ruby/rails7-sequel mode=collector app:up
 rake app=ruby/rails7-solid-cache mode=collector app:up
 rake app=ruby/rails7-solid-queue mode=collector app:up
 rake app=ruby/rails8-delayed-job mode=collector app:up
+rake app=ruby/rails8-que mode=collector app:up
+rake app=ruby/rails8-resque mode=collector app:up
 rake app=ruby/rails8-sidekiq mode=collector app:up
 rake app=ruby/sinatra-alpine mode=collector app:up
 rake app=ruby/sinatra-gvltools mode=collector app:up
@@ -339,6 +345,8 @@ rake app=ruby/rails7-sidekiq app:restart
 rake app=ruby/rails7-solid-cache app:restart
 rake app=ruby/rails7-solid-queue app:restart
 rake app=ruby/rails8-delayed-job app:restart
+rake app=ruby/rails8-que app:restart
+rake app=ruby/rails8-resque app:restart
 rake app=ruby/rails8-sidekiq app:restart
 rake app=ruby/rails8-sidekiq-opentelemetry app:restart
 rake app=ruby/shoryuken app:restart
@@ -441,6 +449,8 @@ rake app=ruby/rails7-sidekiq app:bash
 rake app=ruby/rails7-solid-cache app:bash
 rake app=ruby/rails7-solid-queue app:bash
 rake app=ruby/rails8-delayed-job app:bash
+rake app=ruby/rails8-que app:bash
+rake app=ruby/rails8-resque app:bash
 rake app=ruby/rails8-sidekiq app:bash
 rake app=ruby/rails8-sidekiq-opentelemetry app:bash
 rake app=ruby/shoryuken app:bash
@@ -543,6 +553,8 @@ rake app=ruby/rails7-sidekiq app:console
 rake app=ruby/rails7-solid-cache app:console
 rake app=ruby/rails7-solid-queue app:console
 rake app=ruby/rails8-delayed-job app:console
+rake app=ruby/rails8-que app:console
+rake app=ruby/rails8-resque app:console
 rake app=ruby/rails8-sidekiq app:console
 rake app=ruby/rails8-sidekiq-opentelemetry app:console
 rake app=ruby/shoryuken app:console
@@ -645,6 +657,8 @@ rake app=ruby/rails7-sidekiq app:diagnose
 rake app=ruby/rails7-solid-cache app:diagnose
 rake app=ruby/rails7-solid-queue app:diagnose
 rake app=ruby/rails8-delayed-job app:diagnose
+rake app=ruby/rails8-que app:diagnose
+rake app=ruby/rails8-resque app:diagnose
 rake app=ruby/rails8-sidekiq app:diagnose
 rake app=ruby/rails8-sidekiq-opentelemetry app:diagnose
 rake app=ruby/shoryuken app:diagnose
@@ -747,6 +761,8 @@ rake app=ruby/rails7-sidekiq app:tail:appsignal
 rake app=ruby/rails7-solid-cache app:tail:appsignal
 rake app=ruby/rails7-solid-queue app:tail:appsignal
 rake app=ruby/rails8-delayed-job app:tail:appsignal
+rake app=ruby/rails8-que app:tail:appsignal
+rake app=ruby/rails8-resque app:tail:appsignal
 rake app=ruby/rails8-sidekiq app:tail:appsignal
 rake app=ruby/rails8-sidekiq-opentelemetry app:tail:appsignal
 rake app=ruby/shoryuken app:tail:appsignal
