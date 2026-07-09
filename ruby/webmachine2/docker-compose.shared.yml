@@ -11,6 +11,25 @@ services:
       - "4001:4001"
     environment:
       - PORT=4001
+      # The call_downstream resource makes an HTTP request to this second,
+      # separately-instrumented webmachine app so the trace spans both.
+      - DOWNSTREAM_URL=http://downstream:4002
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  # A second instance of the same image on port 4002, running as a distinct
+  # AppSignal app. It receives the HTTP request `app` makes and extracts the
+  # trace context (Webmachine's own, non-Rack extraction path), continuing the
+  # trace across both apps.
+  downstream:
+    build: .
+    image: ruby/webmachine
+    command: /commands/run-downstream
+    environment:
+      - PORT=4002
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env

@@ -1,4 +1,5 @@
 require "webmachine"
+require "net/http"
 require "appsignal"
 
 Appsignal.start
@@ -27,6 +28,21 @@ class MyErrorResource < Webmachine::Resource
   end
 end
 
+# Makes an HTTP request to a second, separately-instrumented webmachine app (the
+# `downstream` service). AppSignal's Net::HTTP integration injects the current
+# W3C trace context onto the request in collector mode, and the downstream app's
+# Webmachine integration extracts it -- so the trace spans both apps. This
+# exercises Webmachine's trace-context extraction, the one server path that is
+# not shared with the Rack integrations. Falls back to calling itself when
+# DOWNSTREAM_URL is unset.
+class CallDownstreamResource < Webmachine::Resource
+  def to_html
+    url = ENV.fetch("DOWNSTREAM_URL", "http://localhost:4001")
+    Net::HTTP.get(URI("#{url}/"))
+    "<html><body>Called downstream app</body></html>"
+  end
+end
+
 class MyRootResource < Webmachine::Resource
   def to_html
     time = Time.now.utc
@@ -38,6 +54,7 @@ class MyRootResource < Webmachine::Resource
           <ul>
             <li><a href="/slow#{params}">Slow request</a></li>
             <li><a href="/error#{params}">Error request</a></li>
+            <li><a href="/call_downstream#{params}">Call downstream app (cross-service trace)</a></li>
           </ul>
         </body>
       </html>
@@ -48,5 +65,6 @@ end
 Webmachine.application.routes do
   add ["slow"], MyPerformanceResource
   add ["error"], MyErrorResource
+  add ["call_downstream"], CallDownstreamResource
   add [], MyRootResource
 end
