@@ -1,0 +1,34 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  "tmp",
+  "log",
+  "node_modules",
+  "public/packs"
+]
+
+[[paths_to_watch]]
+path = "/integration"
+
+# Only the downstream service drains this queue, so jobs enqueued by `app` are
+# performed here, under the downstream app name.
+[processes.sidekiq]
+command = "bundle"
+args = [
+  "exec",
+  "sidekiq",
+  "--queue=downstream"
+]
+working_dir = "/app"
+
+# A distinct pidfile so this Rails server doesn't collide with the `app`
+# service's server, which shares the same mounted /app directory.
+[processes.rails]
+command = "bin/rails"
+args = [
+  "server",
+  "--binding=0.0.0.0",
+  "--port=4002",
+  "--pid=/app/tmp/pids/downstream.pid"
+]
+working_dir = "/app"

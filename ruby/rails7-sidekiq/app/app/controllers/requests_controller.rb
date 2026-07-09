@@ -1,13 +1,21 @@
 class RequestsController < ApplicationController
   skip_forgery_protection
 
+  # The HTTP client actions call a second, separately-instrumented app (the
+  # `downstream` service) so the injected `traceparent` is extracted there and
+  # the trace spans both apps. Falls back to calling this app itself when
+  # DOWNSTREAM_URL is unset, so the setup still works as a single service.
+  def self.downstream_url(path)
+    "#{ENV.fetch("DOWNSTREAM_URL", "http://localhost:4001")}#{path}"
+  end
+
   def perform_excon_get
-    handle_response Excon.get("http://localhost:4001/requests/excon_get?query=param")
+    handle_response Excon.get(self.class.downstream_url("/requests/excon_get?query=param"))
   end
 
   def perform_excon_post
     handle_response Excon.post(
-      "http://localhost:4001/requests/excon_post",
+      self.class.downstream_url("/requests/excon_post"),
       :body => URI.encode_www_form(:language => "ruby", :class => "fog"),
       :headers => { "Content-Type" => "application/x-www-form-urlencoded" }
     )
@@ -15,7 +23,7 @@ class RequestsController < ApplicationController
 
   def perform_excon_put
     handle_response Excon.put(
-      "http://localhost:4001/requests/excon_put",
+      self.class.downstream_url("/requests/excon_put"),
       :body => URI.encode_www_form(:language => "ruby", :class => "fog"),
       :headers => { "Content-Type" => "application/x-www-form-urlencoded" }
     )
@@ -23,26 +31,28 @@ class RequestsController < ApplicationController
 
   def perform_excon_delete
     handle_response Excon.delete(
-      "http://localhost:4001/requests/excon_delete",
+      self.class.downstream_url("/requests/excon_delete"),
       :body => URI.encode_www_form(:language => "ruby", :class => "fog"),
       :headers => { "Content-Type" => "application/x-www-form-urlencoded" }
     )
   end
 
   def perform_excon_head
-    handle_response Excon.head("http://localhost:4001/requests/excon_get")
+    handle_response Excon.head(self.class.downstream_url("/requests/excon_get"))
   end
 
   def perform_excon_options
-    handle_response Excon.options("http://localhost:4001/requests/excon_options")
+    handle_response Excon.options(self.class.downstream_url("/requests/excon_options"))
   end
 
   def perform_excon_trace
-    handle_response Excon.trace("http://localhost:4001/requests/excon_trace")
+    handle_response Excon.trace(self.class.downstream_url("/requests/excon_trace"))
   end
 
+  # Hits the downstream app so the request span continues into it. (Previously
+  # this called example.com, which is uninstrumented, so nothing continued.)
   def perform_http_rb_get
-    HTTP.get("https://example.com")
+    HTTP.get(self.class.downstream_url("/requests/http_rb_target"))
     redirect_to requests_path, :notice => %(Request "#{params[:action]}" made)
   end
 
@@ -51,14 +61,14 @@ class RequestsController < ApplicationController
   # These actions exercise that path so it records a `request.http_rb` event.
   def perform_http_rb_headers
     HTTP.headers("X-Custom-Header" => "AppSignal")
-      .get("http://localhost:4001/requests/http_rb_target")
+      .get(self.class.downstream_url("/requests/http_rb_target"))
     redirect_to requests_path, :notice => %(Request "#{params[:action]}" made)
   end
 
   # A followed redirect should stay a single `request.http_rb` event spanning
   # every hop, not one event per hop.
   def perform_http_rb_follow
-    HTTP.follow.get("http://localhost:4001/requests/http_rb_redirect")
+    HTTP.follow.get(self.class.downstream_url("/requests/http_rb_redirect"))
     redirect_to requests_path, :notice => %(Request "#{params[:action]}" made)
   end
 
@@ -75,12 +85,12 @@ class RequestsController < ApplicationController
   # suppressing the downstream Net::HTTP event: the request should be recorded
   # once, as a `request.faraday` event.
   def perform_faraday_get
-    handle_response Faraday.get("http://localhost:4001/requests/faraday_get?query=param")
+    handle_response Faraday.get(self.class.downstream_url("/requests/faraday_get?query=param"))
   end
 
   def perform_faraday_post
     handle_response Faraday.post(
-      "http://localhost:4001/requests/faraday_post",
+      self.class.downstream_url("/requests/faraday_post"),
       URI.encode_www_form(:language => "ruby", :library => "faraday"),
       "Content-Type" => "application/x-www-form-urlencoded"
     )

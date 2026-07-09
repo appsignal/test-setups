@@ -73,4 +73,9 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Permit the `downstream` service hostname so the HTTP client actions can reach
+  # the second app by its compose service name (Rails host authorization blocks
+  # unknown hosts otherwise).
+  config.hosts << "downstream"
 end
