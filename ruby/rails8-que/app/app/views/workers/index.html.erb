@@ -1,0 +1,13 @@
+<h1>Queue jobs now</h1>
+
+<p>Click on any of the links below to enqueue that job from within this web
+request. Native Que jobs record an <code>enqueue.que</code> event (or a single
+<code>bulk_enqueue.que</code> event for a bulk enqueue); Active Job jobs (and
+mailers) record an <code>enqueue.active_job</code> event.</p>
+
+<ul>
+  <% @worker_tests.each do |(type, worker, test)| %>
+    <% label = "#{type}: #{worker}#{" - #{test}" unless test == :default}" %>
+    <li><%= link_to label, queue_workers_path(:type => type, :worker => worker, :test => test) %></li>
+  <% end %>
+</ul>
