@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y ruby less
 # Update npm
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH=/home/node/.npm-global/bin:$PATH
-RUN mkdir -p $NPM_CONFIG_PREFIX/lib && npm install -g npm@latest
+# npm@12 dropped Node 20; pin to npm@11, the last line that supports it.
+RUN mkdir -p $NPM_CONFIG_PREFIX/lib && npm install -g npm@11
 
 # Configure mono
 ENV PATH=/root/mono/bin:$PATH

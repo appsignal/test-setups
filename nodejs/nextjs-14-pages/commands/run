@@ -2,8 +2,9 @@
 
 set -eu
 
+# npm@12 dropped Node 20; pin to npm@11, the last line that supports it.
 echo "Installing compatible NPM version"
-npm install -g npm@latest
+npm install -g npm@11
 
 # The following block is commented because of an issue with
 # Next.js' internal use of Webpack and `npm link`-ed projects.
