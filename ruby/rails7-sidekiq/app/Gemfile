@@ -12,6 +12,7 @@ gem "sidekiq", "~> 7.1.6"
 gem "appsignal", :path => "/integration"
 gem "excon"
 gem "http"
+gem "faraday"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"

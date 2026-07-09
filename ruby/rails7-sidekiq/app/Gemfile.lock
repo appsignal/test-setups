@@ -1,8 +1,9 @@
 PATH
   remote: /integration
   specs:
-    appsignal (4.0.0)
-      rack
+    appsignal (4.8.6)
+      logger
+      rack (>= 2.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -105,11 +106,30 @@ GEM
     debug (1.8.0)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
+    domain_name (0.6.20240107)
     drb (2.2.1)
     erubi (1.12.0)
     excon (0.110.0)
+    faraday (2.14.3)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-net_http (3.4.4)
+      net-http (~> 0.5)
+    ffi (1.17.4)
+    ffi-compiler (1.4.2)
+      ffi (>= 1.15.5)
+      rake
     globalid (1.2.1)
       activesupport (>= 6.1)
+    http (5.3.1)
+      addressable (~> 2.8)
+      http-cookie (~> 1.0)
+      http-form_data (~> 2.2)
+      llhttp-ffi (~> 0.5.0)
+    http-cookie (1.1.6)
+      domain_name (~> 0.5)
+    http-form_data (2.3.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.2.1)
@@ -122,6 +142,11 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    json (2.20.0)
+    llhttp-ffi (0.5.1)
+      ffi-compiler (~> 1.0)
+      rake (~> 13.0)
+    logger (1.7.0)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -139,6 +164,8 @@ GEM
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     mutex_m (0.2.0)
+    net-http (0.9.1)
+      uri (>= 0.11.1)
     net-imap (0.4.11)
       date
       net-protocol
@@ -250,6 +277,7 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    uri (1.1.1)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -277,6 +305,8 @@ DEPENDENCIES
   capybara
   debug
   excon
+  faraday
+  http
   importmap-rails
   jbuilder
   pg (~> 1.1)
