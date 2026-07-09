@@ -1,7 +1,7 @@
-FROM elixir:1.14.1
+FROM elixir:1.16.2
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2022-12-22
+ENV REFRESHED_AT=2026-07-09
 
 RUN apt-get update && apt-get install -y less
 
