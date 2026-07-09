@@ -23,6 +23,23 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
+  # A second instance of the same image, running as a distinct AppSignal app. It
+  # drains the `downstream` SQS queue that `app` enqueues to, so the job's trace
+  # links back to the enqueuing app (job trace propagation across services).
+  downstream:
+    build: .
+    platform: "linux/amd64"
+    image: ruby/rails6-shoryuken
+    command: /commands/run-downstream
+    depends_on:
+      - motoserver
+    env_file:
+      - shoryuken.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests

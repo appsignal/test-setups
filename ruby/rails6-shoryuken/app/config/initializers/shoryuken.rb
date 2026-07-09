@@ -23,4 +23,5 @@ end
 # route the "native" queue to NativeWorker.
 Rails.application.config.to_prepare do
   NativeWorker
+  DownstreamWorker
 end
