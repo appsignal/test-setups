@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+# The `app` service owns installing gems and running migrations into the shared
+# /app and /integration volumes. Wait for that instead of installing
+# concurrently, which would race on the shared vendor/bundle directory.
+echo "Waiting for the app service to install gems into the shared volume..."
+until bundle check >/dev/null 2>&1; do
+  echo "Gems not ready yet, retrying..."
+  sleep 2
+done
+
+# Drain only the `downstream` queue (overrides the resque:setup default), so
+# this worker performs the jobs `app` enqueues there, under the downstream app.
+export QUEUE=downstream
+
+echo "Starting downstream Resque worker"
+/commands/processmon processmon.downstream.toml
