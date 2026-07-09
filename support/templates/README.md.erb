@@ -13,11 +13,32 @@ Next, checkout the integrations locally:
 rake integrations:clone
 ```
 
-Generate an environment file using a valid push api key you
-can get on [AppSignal](https://appsignal.com):
+Pick the environment to send data to. The `local` and `staging` environments
+work out of the box:
 
 ```
-rake global:set_push_api_key key=<key>
+rake env:local
+rake env:staging
+```
+
+Switching writes an `appsignal_key.<name>.env` file (seeded from a committed
+`appsignal_key.<name>.env.example` default when there is one) and copies it into
+`appsignal_key.env`, the file every test setup reads, tagging it with an
+`# ENV: <name>` marker. The active environment's contents are printed on boot,
+so you can always see which one is in use.
+
+Pass a push api key (you can get one on [AppSignal](https://appsignal.com)) to
+set it for that environment while switching; it's remembered on later switches:
+
+```
+rake env:prod key=<key>
+```
+
+`env:local`, `env:staging` and `env:prod` are shortcuts for the general form,
+which works for any environment name:
+
+```
+rake env=<name> key=<key> env:switch
 ```
 
 To start a test setup:
