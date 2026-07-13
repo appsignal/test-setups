@@ -28,7 +28,6 @@ services:
   # drains the `downstream` Que queue that `app` enqueues to, so the job's trace
   # links back to the enqueuing app (job trace propagation across services).
   downstream:
-    build: .
     image: ruby/rails8-que
     command: /commands/run-downstream
     depends_on:
@@ -40,6 +39,24 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
+  # Runs only the background worker (see run-worker / processmon.worker.toml).
+  # Image-only (no build:) so `docker compose build` does not collide with the
+  # app service exporting the same image tag on Docker's containerd store.
+  worker:
+    image: ruby/rails8-que
+    command: /commands/run-worker
+    depends_on:
+      - postgres
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  # A second instance of the same image, running as a distinct AppSignal app. It
+  # drains the `downstream` Que queue that `app` enqueues to, so the job's trace
+  # links back to the enqueuing app (job trace propagation across services).
   tests:
     build: ../../support/server-tests
     image: server-tests

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+# The `app` service owns installing gems and running migrations into the shared
+# /app and /integration volumes. Wait for that to finish (bundle check is
+# read-only, so it's safe to poll) instead of installing concurrently, which
+# would race on the shared vendor/bundle directory.
+echo "Waiting for the app service to install gems into the shared volume..."
+until bundle check >/dev/null 2>&1; do
+  echo "Gems not ready yet, retrying..."
+  sleep 2
+done
+
+echo "Starting worker processes"
+/commands/processmon processmon.worker.toml

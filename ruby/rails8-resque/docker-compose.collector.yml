@@ -13,3 +13,8 @@ services:
       - APPSIGNAL_APP_NAME=ruby/rails8-resque-collector
       - APPSIGNAL_SERVICE_NAME=downstream
       - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099
+  worker:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/rails8-resque-collector
+      - APPSIGNAL_SERVICE_NAME=worker
+      - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099

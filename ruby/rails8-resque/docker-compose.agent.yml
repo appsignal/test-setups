@@ -8,3 +8,6 @@ services:
   downstream:
     environment:
       - APPSIGNAL_APP_NAME=ruby/rails8-resque-downstream
+  worker:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/rails8-resque-worker

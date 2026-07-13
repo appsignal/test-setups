@@ -23,6 +23,20 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
+  # Runs only the background worker (see run-worker / processmon.worker.toml).
+  # Image-only (no build:) so `docker compose build` does not collide with the
+  # app service exporting the same image tag on Docker's containerd store.
+  worker:
+    image: ruby/rails7-delayed-job
+    command: /commands/run-worker
+    depends_on:
+      - postgres
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests

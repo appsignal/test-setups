@@ -10,13 +10,6 @@ ignore = [
 [[paths_to_watch]]
 path = "/integration"
 
-[processes.solid_queue]
-command = "bin/rake"
-args = [
-  "solid_queue:start"
-]
-working_dir = "/app"
-
 [processes.rails]
 command = "bin/rails"
 args = [

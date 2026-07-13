@@ -8,3 +8,6 @@ services:
   downstream:
     environment:
       - APPSIGNAL_APP_NAME=ruby/rails8-que-downstream
+  worker:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/rails8-que-worker

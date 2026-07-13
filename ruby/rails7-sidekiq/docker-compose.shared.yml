@@ -37,7 +37,6 @@ services:
   # extraction) and drains the `downstream` Sidekiq queue that `app` enqueues to
   # (job trace propagation). Not published externally; `app` reaches it by name.
   downstream:
-    build: .
     image: ruby/rails7-sidekiq
     command: /commands/run-downstream
     depends_on:
@@ -53,6 +52,32 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
+  # Runs only the background worker (see run-worker / processmon.worker.toml).
+  # Image-only (no build:) so `docker compose build` does not collide with the
+  # app service exporting the same image tag on Docker's containerd store.
+  worker:
+    image: ruby/rails7-sidekiq
+    command: /commands/run-worker
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      # The HTTP client actions call this second, separately-instrumented app so
+      # the trace propagates across services. Falls back to calling itself when
+      # unset (single-service runs).
+      - DOWNSTREAM_URL=http://downstream:4002
+    env_file:
+      - postgres.env
+      - redis.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  # A second instance of the same Rails image, running as a distinct AppSignal
+  # app. It receives the HTTP requests the `app` service makes (trace context
+  # extraction) and drains the `downstream` Sidekiq queue that `app` enqueues to
+  # (job trace propagation). Not published externally; `app` reaches it by name.
   tests:
     build: ../../support/server-tests
     image: server-tests

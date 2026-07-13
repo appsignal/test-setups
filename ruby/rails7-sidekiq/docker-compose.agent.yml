@@ -8,3 +8,6 @@ services:
   downstream:
     environment:
       - APPSIGNAL_APP_NAME=ruby/rails7-sidekiq-downstream
+  worker:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/rails7-sidekiq-worker
