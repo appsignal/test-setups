@@ -6,8 +6,10 @@ services:
   app:
     environment:
       - APPSIGNAL_APP_NAME=ruby/rails7-sidekiq-collector
+      - APPSIGNAL_SERVICE_NAME=app
       - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099
   downstream:
     environment:
       - APPSIGNAL_APP_NAME=ruby/rails7-sidekiq-downstream-collector
+      - APPSIGNAL_SERVICE_NAME=downstream
       - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099

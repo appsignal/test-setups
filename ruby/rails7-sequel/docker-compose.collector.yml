@@ -6,4 +6,5 @@ services:
   app:
     environment:
       - APPSIGNAL_APP_NAME=ruby-rails7-sequel-collector
+      - APPSIGNAL_SERVICE_NAME=app
       - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099
