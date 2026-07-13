@@ -4,11 +4,74 @@ require 'fileutils'
 LANGUAGES = %w(elixir go java javascript nodejs php python ruby standalone vector)
 PROCESSMON_PATH = "support/processmon/processmon"
 
+# The active environment file every test setup reads. It's written by
+# `env:switch` from a per-environment `appsignal_key.<name>.env` file, with an
+# `# ENV: <name>` marker line prepended so the active environment is visible in
+# the file itself (it's also printed on boot).
+ACTIVE_KEY_FILE = "appsignal_key.env"
+
 def get_app
   ENV['app'].tap do |app|
     raise "Specify which app you want to run using app=path" if app.nil?
     raise "#{app} not found" unless File.exist?(app)
   end.delete_suffix("/")
+end
+
+# The environment name from the `env=` parameter, e.g. `prod` for
+# `appsignal_key.prod.env`.
+def get_env
+  ENV['env'].tap do |name|
+    raise "Specify which environment you want using env=<name>" if name.nil? || name.strip.empty?
+  end.strip
+end
+
+# The per-environment key file that `env=<name>` selects.
+def env_key_file(name)
+  "appsignal_key.#{name}.env"
+end
+
+# A committed default for an environment, copied into the per-environment file
+# the first time you switch to it. `local` and `staging` ship one; other
+# environments start from whatever key you pass.
+def default_env_file(name)
+  "#{env_key_file(name)}.example"
+end
+
+# Set the push api key in a key file, replacing an existing
+# `APPSIGNAL_PUSH_API_KEY` line if present and leaving the rest of the file
+# (endpoints and so on) untouched. Creates the file if it doesn't exist.
+def set_push_api_key(file, key)
+  var = "APPSIGNAL_PUSH_API_KEY"
+  lines = File.exist?(file) ? File.readlines(file, :chomp => true) : []
+  replaced = false
+  lines.map! do |line|
+    next line unless line.start_with?("#{var}=")
+    replaced = true
+    "#{var}=#{key}"
+  end
+  lines << "#{var}=#{key}" unless replaced
+  File.write file, lines.join("\n") + "\n"
+end
+
+# Make `name` the active environment: seed its key file from the committed
+# default if needed, set the key when one is given, then copy it into
+# `appsignal_key.env` with an `# ENV: <name>` marker.
+def switch_env(name, key = nil)
+  source = env_key_file(name)
+
+  if !File.exist?(source) && File.exist?(default_env_file(name))
+    puts "Creating #{source} from #{default_env_file(name)}"
+    FileUtils.cp default_env_file(name), source
+  end
+
+  set_push_api_key(source, key) if key
+
+  unless File.exist?(source)
+    raise "No #{source} found. Provide a key to create it, e.g. rake env=#{name} key=<key> env:switch"
+  end
+
+  File.write ACTIVE_KEY_FILE, "# ENV: #{name}\n#{File.read(source)}"
+  puts "Switched active environment to '#{name}'."
 end
 
 # A mode is just a `docker-compose.<mode>.yml` file in the app directory. The
@@ -167,6 +230,28 @@ def render_erb(file)
   ERB.new(File.read(file)).result
 end
 
+namespace :env do
+  desc "Switch the active environment, e.g. rake env=prod env:switch (pass key=<key> to also set its key)"
+  task :switch do
+    switch_env(get_env, ENV['key'])
+  end
+
+  desc "Switch to the local environment (pass key=<key> to also set its key)"
+  task :local do
+    switch_env("local", ENV['key'])
+  end
+
+  desc "Switch to the staging environment (pass key=<key> to also set its key)"
+  task :staging do
+    switch_env("staging", ENV['key'])
+  end
+
+  desc "Switch to the production environment (pass key=<key> to also set its key)"
+  task :prod do
+    switch_env("prod", ENV['key'])
+  end
+end
+
 namespace :app do
   desc "Open the browser pointing to the app"
   task :open do
@@ -203,8 +288,8 @@ namespace :app do
   end
 
   def build_app
-    unless File.exist?("appsignal_key.env")
-      raise "No push api key set yet, run rake global:set_push_api_key key=<key>"
+    unless File.exist?(ACTIVE_KEY_FILE)
+      raise "No active environment set yet, run e.g. rake env:local or rake env=<name> key=<key> env:switch"
     end
     unless File.exist?(PROCESSMON_PATH)
       puts "Processmon not present. Building processmon..."
@@ -214,6 +299,10 @@ namespace :app do
     @app = get_app
     @mode = get_mode(@app)
     puts "Starting #{@app}"
+
+    puts "=" * 50
+    puts File.read(ACTIVE_KEY_FILE)
+    puts "=" * 50
 
     puts "Copying processmon"
     FileUtils.rm_f "#{@app}/commands/processmon"
@@ -431,13 +520,6 @@ namespace :global do
     end
 
     File.write "README.md", render_erb("support/templates/README.md.erb")
-  end
-
-  desc "Set the push api key to use"
-  task :set_push_api_key do
-    @key = ENV['key'] or raise "No key provided"
-    puts "Setting push api key in appsignal_key.env"
-    File.write "appsignal_key.env", render_erb("support/templates/appsignal_key.env.erb")
   end
 
   desc "Install bundled processmon"
