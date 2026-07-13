@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 import time
@@ -84,7 +85,7 @@ def error_queue_inline(request):
 
 
 def make_request(request):
-    requests.get('https://www.appsignal.com/')
+    requests.get(os.environ.get("DOWNSTREAM_URL", "https://www.appsignal.com/"))
     return HttpResponse("I did a request to appsignal.com!")
 
 

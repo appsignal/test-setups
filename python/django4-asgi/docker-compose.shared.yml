@@ -28,6 +28,22 @@ services:
       - ../../appsignal_key.env
     environment:
       - PORT=4001
+      - DOWNSTREAM_URL=http://downstream:4002/
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  # Second instance of the same image (image-only; only `app` builds). Receives
+  # the HTTP request the `app` service makes, so the trace continues into it.
+  downstream:
+    image: python/django4-asgi
+    command: /commands/run-downstream
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
     volumes:
       - ./app:/app
       - ../integration:/integration

@@ -1,0 +1,15 @@
+[[paths_to_watch]]
+path = "/app"
+
+# The downstream service is a second instance of the same Django app on a
+# different port. It receives the HTTP request the `app` service makes, so the
+# trace continues into it. In collector mode it reports under the `downstream`
+# service name; in agent mode under a separate `-downstream` app.
+[processes.django]
+command = "python3"
+args = [
+  "manage.py",
+  "runserver",
+  "0.0.0.0:4002"
+]
+working_dir = "/app"
