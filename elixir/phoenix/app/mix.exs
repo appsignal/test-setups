@@ -68,7 +68,7 @@ defmodule Example.MixProject do
        path: "#{integration_path()}/appsignal-elixir-phoenix", override: true},
       {:absinthe_plug, "~> 1.5"},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
-      {:httpoison, "~> 2.2.1"}
+      {:httpoison, "~> 3.0"}
     ]
   end
 
