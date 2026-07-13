@@ -16,4 +16,9 @@ class TestsController < ApplicationController
     ErrorJob.perform_later("ActiveJob ErrorJob queued")
     render :html => "ActiveJob ErrorJob queued, refresh to queue a new one!"
   end
+
+  def shoryuken_native_job
+    NativeWorker.perform_async(:body => "Native Shoryuken job queued")
+    render :html => "Native Shoryuken job queued, refresh to queue a new one!"
+  end
 end

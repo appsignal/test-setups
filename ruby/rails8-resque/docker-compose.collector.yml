@@ -1,0 +1,9 @@
+include:
+  - path: docker-compose.shared.yml
+  - path: ../../support/collector/docker-compose.yml
+
+services:
+  app:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/rails8-resque-collector
+      - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099

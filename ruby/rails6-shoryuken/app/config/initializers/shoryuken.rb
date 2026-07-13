@@ -17,3 +17,10 @@ Shoryuken.configure_server do |config|
     verify_checksums: false # Disable for mock server
   )
 end
+
+# Load the native worker on boot so it registers for its queue. In development
+# classes load lazily, so without this the Shoryuken server wouldn't know to
+# route the "native" queue to NativeWorker.
+Rails.application.config.to_prepare do
+  NativeWorker
+end

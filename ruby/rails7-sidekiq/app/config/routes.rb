@@ -49,6 +49,14 @@ Rails.application.routes.draw do
       get :perform_excon_trace
       match "/excon_trace" => "requests#excon_trace", :via => :trace
       get :perform_http_rb_get
+      get :perform_http_rb_headers
+      get :perform_http_rb_follow
+      get :http_rb_target
+      get :http_rb_redirect
+      get :perform_faraday_get
+      get :faraday_get
+      get :perform_faraday_post
+      post :faraday_post
     end
   end
 
