@@ -18,6 +18,16 @@ until bundle check >/dev/null 2>&1; do
   sleep 2
 done
 
+# Also wait for the app to finish migrating. A DB-backed queue worker (e.g. Que)
+# polls a table created by a migration; if it starts first it crashes, and
+# processmon does not restart a crashed process. The app only serves HTTP after
+# it migrates, so a reachable app means the schema is ready.
+echo "Waiting for the app service to finish migrating..."
+until curl -s -o /dev/null "http://app:4001/up" 2>/dev/null; do
+  echo "App not ready yet, retrying..."
+  sleep 2
+done
+
 # Make sure the queue exists before this worker starts polling it (the `app`
 # service also creates it; SQS CreateQueue is idempotent).
 echo "Ensuring the downstream SQS queue exists"
