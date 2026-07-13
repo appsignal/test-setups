@@ -47,6 +47,20 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
+  # Runs only the background worker (image-only; only `app` builds).
+  worker:
+    image: python/django4-wsgi
+    command: /commands/run-worker
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests

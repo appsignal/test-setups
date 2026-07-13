@@ -22,6 +22,18 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
+  # Runs only the background worker (image-only; only `app` builds).
+  worker:
+    image: python/flask
+    command: /commands/run-worker
+    depends_on:
+      - rabbitmq
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests

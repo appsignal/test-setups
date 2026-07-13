@@ -8,3 +8,6 @@ services:
   downstream:
     environment:
       - APPSIGNAL_APP_NAME=python/django4-asgi-downstream
+  worker:
+    environment:
+      - APPSIGNAL_APP_NAME=python/django4-asgi-worker
