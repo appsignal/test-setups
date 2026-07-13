@@ -10,6 +10,6 @@ services:
       - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099
   downstream:
     environment:
-      - APPSIGNAL_APP_NAME=rails6-shoryuken-downstream-collector
+      - APPSIGNAL_APP_NAME=rails6-shoryuken-collector
       - APPSIGNAL_SERVICE_NAME=downstream
       - APPSIGNAL_COLLECTOR_ENDPOINT=http://appsignal-collector:8099
