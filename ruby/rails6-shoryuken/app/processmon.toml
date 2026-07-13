@@ -12,6 +12,7 @@ args = [
   "shoryuken",
   "-q=default",
   "-q=native",
+  "-q=batched",
   "-R"
 ]
 working_dir = "/app"

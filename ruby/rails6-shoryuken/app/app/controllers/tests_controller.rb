@@ -21,4 +21,14 @@ class TestsController < ApplicationController
     NativeWorker.perform_async(:body => "Native Shoryuken job queued")
     render :html => "Native Shoryuken job queued, refresh to queue a new one!"
   end
+
+  def shoryuken_batched_job
+    # Enqueue several messages so Shoryuken is likely to deliver them to the
+    # worker as a single batch, which is the case the batch instrumentation
+    # handles.
+    5.times do |i|
+      BatchedWorker.perform_async(:body => "Batched Shoryuken job #{i} queued")
+    end
+    render :html => "Batched Shoryuken jobs queued, refresh to queue new ones!"
+  end
 end
