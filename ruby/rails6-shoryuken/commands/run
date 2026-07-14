@@ -24,5 +24,8 @@ echo "Create sqs queues in mock server"
 bundle exec shoryuken sqs create default
 bundle exec shoryuken sqs create native
 bundle exec shoryuken sqs create batched
+# Owned by the downstream service, but create it here too so the queue exists
+# when this app enqueues to it, regardless of the downstream service's timing.
+bundle exec shoryuken sqs create downstream
 
 /commands/processmon processmon.toml

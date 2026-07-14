@@ -1,0 +1,90 @@
+version: '3.8'
+
+include:
+  - path: ../../support/bot/docker-compose.yml
+
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - postgres.env
+  redis:
+    image: "redis:6.2.7"
+  app:
+    build: .
+    image: ruby/rails7-sidekiq
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      # The HTTP client actions call this second, separately-instrumented app so
+      # the trace propagates across services. Falls back to calling itself when
+      # unset (single-service runs).
+      - DOWNSTREAM_URL=http://downstream:4002
+    env_file:
+      - postgres.env
+      - redis.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  # A second instance of the same Rails image, running as a distinct AppSignal
+  # app. It receives the HTTP requests the `app` service makes (trace context
+  # extraction) and drains the `downstream` Sidekiq queue that `app` enqueues to
+  # (job trace propagation). Not published externally; `app` reaches it by name.
+  downstream:
+    image: ruby/rails7-sidekiq
+    command: /commands/run-downstream
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - PORT=4002
+    env_file:
+      - postgres.env
+      - redis.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  # Runs only the background worker (see run-worker / processmon.worker.toml).
+  # Image-only (no build:) so `docker compose build` does not collide with the
+  # app service exporting the same image tag on Docker's containerd store.
+  worker:
+    image: ruby/rails7-sidekiq
+    command: /commands/run-worker
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      # The HTTP client actions call this second, separately-instrumented app so
+      # the trace propagates across services. Falls back to calling itself when
+      # unset (single-service runs).
+      - DOWNSTREAM_URL=http://downstream:4002
+    env_file:
+      - postgres.env
+      - redis.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  # A second instance of the same Rails image, running as a distinct AppSignal
+  # app. It receives the HTTP requests the `app` service makes (trace context
+  # extraction) and drains the `downstream` Sidekiq queue that `app` enqueues to
+  # (job trace propagation). Not published externally; `app` reaches it by name.
+  tests:
+    build: ../../support/server-tests
+    image: server-tests
+    profiles:
+      - tests
+    depends_on:
+      - app
+    environment:
+      - APP_NAME=ruby/rails7-sidekiq
+      - APP_URL=http://app:4001

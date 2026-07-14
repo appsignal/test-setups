@@ -1,0 +1,23 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  "tmp",
+  "log",
+  "node_modules",
+  "public/packs"
+]
+
+[[paths_to_watch]]
+path = "/integration"
+
+# Only the downstream service runs this worker, draining the `downstream` queue
+# (set via QUEUE in run-downstream), so jobs enqueued by `app` are performed here
+# under the downstream app name. No web server -- this service only runs jobs.
+[processes.resque]
+command = "bundle"
+args = [
+  "exec",
+  "rake",
+  "resque:work"
+]
+working_dir = "/app"

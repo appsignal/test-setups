@@ -1,0 +1,20 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = ["tmp", "log", "public/packs", "node_modules/.cache"]
+
+[[paths_to_watch]]
+path = "/integration"
+
+# Only the downstream service runs this worker, draining just the `downstream`
+# queue, so jobs enqueued by `app` are performed here under the downstream app
+# name. (`app`'s worker uses the default/native queues, so it never picks these
+# up.) No web server -- this service only runs jobs.
+[processes.shoryuken]
+command = "bundle"
+args = [
+  "exec",
+  "shoryuken",
+  "-q=downstream",
+  "-R"
+]
+working_dir = "/app"

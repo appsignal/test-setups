@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+# The `app` service builds the appsignal dist into the shared /integration
+# volume and runs migrations, then serves HTTP. Wait for it to be reachable:
+# that means the dist is built (so we install from it without racing the app's
+# `hatch build`) and the schema is migrated (so we never migrate from here).
+echo "Waiting for the app service to be ready..."
+until python3 -c "import socket; socket.create_connection(('app', 4001), 2).close()" >/dev/null 2>&1; do
+  echo "App not ready yet, retrying..."
+  sleep 2
+done
+
+echo "Installing dependencies"
+pip3 install -r requirements.txt
+pip3 install /integration/dist/* --force-reinstall
+
+echo "Starting downstream processes"
+/commands/processmon processmon.downstream.toml

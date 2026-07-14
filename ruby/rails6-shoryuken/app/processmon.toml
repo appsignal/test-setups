@@ -5,18 +5,6 @@ ignore = ["tmp", "log", "public/packs", "node_modules/.cache"]
 [[paths_to_watch]]
 path = "/integration"
 
-[processes.shoryuken]
-command = "bundle"
-args = [
-  "exec",
-  "shoryuken",
-  "-q=default",
-  "-q=native",
-  "-q=batched",
-  "-R"
-]
-working_dir = "/app"
-
 [processes.rails]
 command = "bin/rails"
 args = [

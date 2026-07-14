@@ -5,3 +5,9 @@ services:
   app:
     environment:
       - APPSIGNAL_APP_NAME=python/django4-wsgi
+  downstream:
+    environment:
+      - APPSIGNAL_APP_NAME=python/django4-wsgi-downstream
+  worker:
+    environment:
+      - APPSIGNAL_APP_NAME=python/django4-wsgi-worker

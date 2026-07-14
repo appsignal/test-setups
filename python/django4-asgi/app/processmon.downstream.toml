@@ -1,0 +1,14 @@
+[[paths_to_watch]]
+path = "/app"
+
+# Downstream web server on :4002 (no celery here; that is the worker split).
+[processes.django]
+command = "python3"
+args = [
+  "-m",
+  "uvicorn",
+  "appsignal_python_opentelemetry.asgi:application",
+  "--host",
+  "0.0.0.0"
+]
+working_dir = "/app"

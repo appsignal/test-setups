@@ -11,13 +11,6 @@ ignore = [
 [[paths_to_watch]]
 path = "/integration"
 
-[processes.sidekiq]
-command = "bin/rake"
-args = [
-  "jobs:work"
-]
-working_dir = "/app"
-
 [processes.rails]
 command = "bin/rails"
 args = [

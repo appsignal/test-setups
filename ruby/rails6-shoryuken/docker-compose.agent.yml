@@ -5,3 +5,9 @@ services:
   app:
     environment:
       - APPSIGNAL_APP_NAME=rails6-shoryuken
+  downstream:
+    environment:
+      - APPSIGNAL_APP_NAME=rails6-shoryuken-downstream
+  worker:
+    environment:
+      - APPSIGNAL_APP_NAME=rails6-shoryuken-worker

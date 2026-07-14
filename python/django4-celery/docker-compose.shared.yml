@@ -28,6 +28,41 @@ services:
       - ../../appsignal_key.env
     environment:
       - PORT=4001
+      # The make_request view calls this second, separately-instrumented app so
+      # the trace propagates across services. Falls back to an external URL when
+      # unset (single-service runs).
+      - DOWNSTREAM_URL=http://downstream:4002/
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  # A second instance of the same image, running as a distinct AppSignal app
+  # (agent mode) or service (collector mode). It receives the HTTP request the
+  # `app` service makes, so the trace continues into it. Image-only: only `app`
+  # builds, so `docker compose build` does not collide on the shared image tag.
+  downstream:
+    image: python/django4-celery
+    command: /commands/run-downstream
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+  # Runs only the background worker (image-only; only `app` builds).
+  worker:
+    image: python/django4-celery
+    command: /commands/run-worker
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - postgres.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
     volumes:
       - ./app:/app
       - ../integration:/integration

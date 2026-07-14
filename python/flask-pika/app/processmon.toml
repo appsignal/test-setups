@@ -9,10 +9,3 @@ args = [
   "--port=4001"
 ]
 working_dir = "/app"
-
-[processes.consumer]
-command = "python"
-args = [
-  "pika_consumer.py"
-]
-working_dir = "/app"

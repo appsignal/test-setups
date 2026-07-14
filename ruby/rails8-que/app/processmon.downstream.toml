@@ -1,0 +1,26 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  "tmp",
+  "log",
+  "node_modules",
+  "public/packs"
+]
+
+[[paths_to_watch]]
+path = "/integration"
+
+# Only the downstream service runs this worker, draining just the `downstream`
+# queue, so jobs enqueued by `app` are performed here under the downstream app
+# name. (`app`'s worker uses the default queue, so it never picks these up.)
+# No web server -- this service only runs jobs.
+[processes.que]
+command = "bundle"
+args = [
+  "exec",
+  "que",
+  "--queue-name",
+  "downstream",
+  "./config/environment.rb"
+]
+working_dir = "/app"

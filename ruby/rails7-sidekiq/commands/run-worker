@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+# The `app` service owns installing gems and running migrations into the shared
+# /app and /integration volumes. Wait for both before starting the worker.
+#
+# Gems: `bundle check` is read-only, so polling it is safe.
+echo "Waiting for the app service to install gems into the shared volume..."
+until bundle check >/dev/null 2>&1; do
+  echo "Gems not ready yet, retrying..."
+  sleep 2
+done
+
+# Migrations: a DB-backed queue (que, solid_queue, delayed_job, good_job) polls
+# a table created by a migration. If the worker starts before the app migrates,
+# the process crashes and processmon does not restart it. The app only serves
+# HTTP after it has migrated, so a reachable app means migrations are done.
+echo "Waiting for the app service to finish migrating..."
+until curl -s -o /dev/null "http://app:4001/up" 2>/dev/null; do
+  echo "App not ready yet, retrying..."
+  sleep 2
+done
+
+echo "Starting worker processes"
+/commands/processmon processmon.worker.toml

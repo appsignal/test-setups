@@ -1,0 +1,12 @@
+[[paths_to_watch]]
+path = "/app"
+
+# The worker service runs only the background worker. Work enqueued by the web
+# `app` service is performed here, so it reports under the worker's own app name
+# (agent mode) or `worker` service name (collector mode).
+[processes.consumer]
+command = "python"
+args = [
+  "pika_consumer.py"
+]
+working_dir = "/app"

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+# Point bundler at the shared vendor/bundle the `app` service installs into.
+# (This app configures the path at runtime rather than via a BUNDLE_PATH env, so
+# each container must set it for itself.)
+bundle config set path vendor/bundle
+
+# The `app` service owns installing gems and running migrations into the shared
+# /app and /integration volumes. Wait for that instead of installing
+# concurrently, which would race on the shared vendor/bundle directory.
+echo "Waiting for the app service to install gems into the shared volume..."
+until bundle check >/dev/null 2>&1; do
+  echo "Gems not ready yet, retrying..."
+  sleep 2
+done
+
+# Also wait for the app to finish migrating. A DB-backed queue worker (e.g. Que)
+# polls a table created by a migration; if it starts first it crashes, and
+# processmon does not restart a crashed process. The app only serves HTTP after
+# it migrates, so a reachable app means the schema is ready.
+echo "Waiting for the app service to finish migrating..."
+until curl -s -o /dev/null "http://app:4001/up" 2>/dev/null; do
+  echo "App not ready yet, retrying..."
+  sleep 2
+done
+
+# Make sure the queue exists before this worker starts polling it (the `app`
+# service also creates it; SQS CreateQueue is idempotent).
+echo "Ensuring the downstream SQS queue exists"
+bundle exec shoryuken sqs create downstream || true
+
+echo "Starting downstream Shoryuken worker"
+/commands/processmon processmon.downstream.toml

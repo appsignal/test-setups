@@ -1,0 +1,13 @@
+include:
+  - path: docker-compose.shared.yml
+
+services:
+  app:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/rails7-sidekiq
+  downstream:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/rails7-sidekiq-downstream
+  worker:
+    environment:
+      - APPSIGNAL_APP_NAME=ruby/rails7-sidekiq-worker

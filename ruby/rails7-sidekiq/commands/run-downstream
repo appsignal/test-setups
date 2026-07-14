@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+# The `app` service owns installing gems and running migrations into the shared
+# /app and /integration volumes. Wait for that to finish (bundle check is
+# read-only, so it's safe to poll) instead of installing concurrently, which
+# would race on the shared vendor/bundle directory.
+echo "Waiting for the app service to install gems into the shared volume..."
+until bundle check >/dev/null 2>&1; do
+  echo "Gems not ready yet, retrying..."
+  sleep 2
+done
+
+# Also wait for the app to finish migrating. A DB-backed queue worker (e.g. Que)
+# polls a table created by a migration; if it starts first it crashes, and
+# processmon does not restart a crashed process. The app only serves HTTP after
+# it migrates, so a reachable app means the schema is ready.
+echo "Waiting for the app service to finish migrating..."
+until curl -s -o /dev/null "http://app:4001/up" 2>/dev/null; do
+  echo "App not ready yet, retrying..."
+  sleep 2
+done
+
+echo "Starting downstream processes"
+/commands/processmon processmon.downstream.toml

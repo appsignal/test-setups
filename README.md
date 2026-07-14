@@ -265,6 +265,7 @@ rake app=ruby/rails7-delayed-job mode=collector app:up
 rake app=ruby/rails7-goodjob mode=collector app:up
 rake app=ruby/rails7-postgres mode=collector app:up
 rake app=ruby/rails7-sequel mode=collector app:up
+rake app=ruby/rails7-sidekiq mode=collector app:up
 rake app=ruby/rails7-solid-cache mode=collector app:up
 rake app=ruby/rails7-solid-queue mode=collector app:up
 rake app=ruby/rails8-delayed-job mode=collector app:up

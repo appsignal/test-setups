@@ -10,15 +10,6 @@ ignore = [
 [[paths_to_watch]]
 path = "/integration"
 
-[processes.que]
-command = "bundle"
-args = [
-  "exec",
-  "que",
-  "./config/environment.rb"
-]
-working_dir = "/app"
-
 [processes.rails]
 command = "bin/rails"
 args = [

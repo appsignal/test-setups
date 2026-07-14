@@ -1,0 +1,24 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  "tmp",
+  "log",
+  "node_modules",
+  "public/packs"
+]
+
+[[paths_to_watch]]
+path = "/integration"
+
+# The worker service runs only the background job processor. Jobs enqueued by
+# the web `app` service are performed here, so the job's trace runs under the
+# worker's own app name (agent mode) or `worker` service name (collector mode),
+# linked back to the enqueue span in `app`.
+[processes.sidekiq]
+command = "bundle"
+args = [
+  "exec",
+  "sidekiq",
+  "--queue=default"
+]
+working_dir = "/app"

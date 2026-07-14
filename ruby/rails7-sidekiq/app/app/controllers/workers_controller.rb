@@ -54,6 +54,14 @@ class WorkersController < ApplicationController
     redirect_to({ :action => :index }, :notice => "Worker queued")
   end
 
+  # Enqueue a job onto the `downstream` queue, which only the separately
+  # instrumented `downstream` service drains. In collector mode this shows job
+  # trace propagation across two services.
+  def cross_service
+    DownstreamWorker.perform_async("Cross-service test")
+    redirect_to({ :action => :index }, :notice => "Cross-service worker queued")
+  end
+
   def handle_sidekiq(worker, args:, test:, future:)
     if future
       worker.perform_in(DELAY_DURATION.from_now, *args)

@@ -28,6 +28,28 @@ services:
     volumes:
       - ./app:/app
       - ../integration:/integration
+  # A second container of the same image that runs only the background worker,
+  # draining the queue the web `app` service enqueues to. Splitting the worker
+  # into its own service attributes job traces to a separate app (agent mode)
+  # or service (collector mode) from the web requests.
+  # No `build:` here on purpose. The `app` service builds this shared image;
+  # if a second service also built the same tag, `docker compose build` fails
+  # on Docker's containerd image store ("image already exists"). `rake app:up`
+  # builds `app` first, so the image exists before `worker` starts.
+  worker:
+    image: ruby/rails8-sidekiq
+    command: /commands/run-worker
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - postgres.env
+      - redis.env
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
   tests:
     build: ../../support/server-tests
     image: server-tests

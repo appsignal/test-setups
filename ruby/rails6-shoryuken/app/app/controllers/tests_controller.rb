@@ -31,4 +31,12 @@ class TestsController < ApplicationController
     end
     render :html => "Batched Shoryuken jobs queued, refresh to queue new ones!"
   end
+
+  # Enqueue a native Shoryuken job onto the `downstream` queue, which only the
+  # separately instrumented downstream service drains. In collector mode this
+  # shows job trace propagation across two services.
+  def cross_service_job
+    DownstreamWorker.perform_async(:body => "Cross-service job queued")
+    render :html => "Cross-service Shoryuken job queued, refresh to queue a new one!"
+  end
 end

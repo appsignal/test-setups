@@ -11,13 +11,3 @@ args = [
   "0.0.0.0"
 ]
 working_dir = "/app"
-
-[processes.celery]
-command = "celery"
-args = [
-  "--app=tasks",
-  "worker",
-  "--loglevel=INFO",
-  "--queues=high-priority,low-priority"
-]
-working_dir = "/app"

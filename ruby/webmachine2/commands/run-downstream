@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -eu
+
+cd /app
+
+# Point bundler at the shared vendor/bundle the `app` service installs into, so
+# this container can find the gems (each container configures bundler itself).
+bundle config set --local path vendor/bundle
+
+# The `app` service installs the gems and builds the extension into the shared
+# volumes. Wait for that instead of installing concurrently, which would race on
+# vendor/bundle.
+echo "Waiting for the app service to install gems into the shared volume..."
+until bundle check >/dev/null 2>&1; do
+  echo "Gems not ready yet, retrying..."
+  sleep 2
+done
+
+# Also wait for the app to finish migrating. A DB-backed queue worker (e.g. Que)
+# polls a table created by a migration; if it starts first it crashes, and
+# processmon does not restart a crashed process. The app only serves HTTP after
+# it migrates, so a reachable app means the schema is ready.
+echo "Waiting for the app service to finish migrating..."
+until curl -s -o /dev/null "http://app:4001/up" 2>/dev/null; do
+  echo "App not ready yet, retrying..."
+  sleep 2
+done
+
+# Runs the same webmachine app, which binds to PORT (4002 here) via config.ru.
+echo "Starting downstream webmachine app"
+/commands/processmon processmon.toml

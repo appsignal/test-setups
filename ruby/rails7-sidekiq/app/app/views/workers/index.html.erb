@@ -21,6 +21,16 @@
   <% end %>
 </ul>
 
+<h1>Queue a cross-service Sidekiq worker</h1>
+
+<p>Enqueues a job onto the <code>downstream</code> queue, performed by the
+separately-instrumented downstream service. In collector mode the job's trace
+links back to the enqueue span across both apps.</p>
+
+<ul>
+  <li><%= link_to "DownstreamWorker (cross-service)", cross_service_workers_path %></li>
+</ul>
+
 <h1>Sidekiq monitoring page</h1>
 
 <ul>

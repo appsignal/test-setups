@@ -10,15 +10,6 @@ ignore = [
 [[paths_to_watch]]
 path = "/integration"
 
-[processes.sidekiq]
-command = "bundle"
-args = [
-  "exec",
-  "sidekiq",
-  "--queue=default"
-]
-working_dir = "/app"
-
 [processes.rails]
 command = "bin/rails"
 args = [

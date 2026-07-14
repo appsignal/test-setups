@@ -5,3 +5,9 @@ services:
   app:
     environment:
       - APPSIGNAL_APP_NAME=python/django4-celery
+  downstream:
+    environment:
+      - APPSIGNAL_APP_NAME=python/django4-celery-downstream
+  worker:
+    environment:
+      - APPSIGNAL_APP_NAME=python/django4-celery-worker
