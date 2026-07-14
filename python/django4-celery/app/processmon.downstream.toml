@@ -1,5 +1,6 @@
 [[paths_to_watch]]
 path = "/app"
+ignore = ["__pycache__"]
 
 # The downstream service is a second instance of the same Django app on a
 # different port. It receives the HTTP request the `app` service makes, so the

@@ -1,6 +1,6 @@
 [[paths_to_watch]]
 path = "/app"
-ignore = ["tmp", "log", "public/packs", "node_modules/.cache"]
+ignore = ["db", "tmp", "log", "public/packs", "node_modules/.cache"]
 
 [[paths_to_watch]]
 path = "/integration"
