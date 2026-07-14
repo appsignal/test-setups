@@ -35,7 +35,9 @@ class ExamplesController < ApplicationController
     raise "uh oh"
   rescue StandardError => error
     Appsignal.send_error(error) do
-      Appsignal.apply_request(request)
+      Appsignal.set_action("#{self.class.name}##{action_name}")
+      Appsignal.add_params(request.params)
+      Appsignal.add_headers(request.env)
     end
 
     raise
