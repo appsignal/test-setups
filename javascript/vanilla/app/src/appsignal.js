@@ -5,7 +5,7 @@ import { plugin as windowEvents } from "@appsignal/plugin-window-events"
 import { plugin as pathDecorator } from "@appsignal/plugin-path-decorator"
 
 const appsignal = new Appsignal({
-  key: APPSIGNAL_FRONTEND_KEY
+  key: APPSIGNAL_FRONTEND_API_KEY
 });
 
 appsignal.use(networkBreadcrumbs());

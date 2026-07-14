@@ -12,7 +12,7 @@ services:
       - APPSIGNAL_APP_NAME=javascript-typescript-angular
       - PORT=4001
     env_file:
-      - app.env
+      - appsignal_key.env
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:

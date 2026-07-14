@@ -12,7 +12,7 @@ esbuild.build({
   outfile: "dist/app.js",
   define: {
     // Include AppSignal app front-end key in build assets
-    "APPSIGNAL_FRONTEND_KEY": JSON.stringify(process.env.APPSIGNAL_FRONTEND_KEY)
+    "APPSIGNAL_FRONTEND_API_KEY": JSON.stringify(process.env.APPSIGNAL_FRONTEND_API_KEY)
   }
 }).then(() => {
   // Copy the static files from the src directory to the dist directory
