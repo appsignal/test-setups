@@ -4,6 +4,11 @@ set -eu
 
 cd /app
 
+# Point bundler at the shared vendor/bundle the `app` service installs into.
+# (This app configures the path at runtime rather than via a BUNDLE_PATH env, so
+# each container must set it for itself.)
+bundle config set path vendor/bundle
+
 # The `app` service owns installing gems and running migrations into the shared
 # /app and /integration volumes. Wait for both before starting the worker.
 #
