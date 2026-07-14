@@ -15,6 +15,9 @@
   <li>
     <%= link_to "PerformanceJob", queue_jobs_path(:job => "PerformanceJob", :future => "false") %>
   </li>
+  <li>
+    <%= link_to "AppsignalNameJob", queue_jobs_path(:job => "AppsignalNameJob", :future => "false") %>
+  </li>
 </ul>
 
 <h1>Schedule Delayed Job jobs in the future</h1>
@@ -35,5 +38,8 @@
   </li>
   <li>
     <%= link_to "PerformanceJob", queue_jobs_path(:job => "PerformanceJob", :future => "true") %>
+  </li>
+  <li>
+    <%= link_to "AppsignalNameJob", queue_jobs_path(:job => "AppsignalNameJob", :future => "true") %>
   </li>
 </ul>
