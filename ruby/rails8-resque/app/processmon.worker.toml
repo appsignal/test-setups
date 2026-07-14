@@ -1,6 +1,7 @@
 [[paths_to_watch]]
 path = "/app"
 ignore = [
+  "storage",
   "tmp",
   "log",
   "node_modules",
