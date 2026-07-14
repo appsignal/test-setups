@@ -12,5 +12,5 @@ This setup tests the core front-end integration, as well as the framework-indepe
 - Create a front-end app on [AppSignal.com](https://appsignal.com/redirect-to/organization?to=sites/new).
 - Create an `appsignal_key.env` file in this directory.
     - You can use the `appsignal_key.env.example` file as a template.
-- Paste in your API key in the `APPSIGNAL_FRONTEND_KEY` environment variable.
+- Paste in your API key in the `APPSIGNAL_FRONTEND_API_KEY` environment variable.
 - Start the app.

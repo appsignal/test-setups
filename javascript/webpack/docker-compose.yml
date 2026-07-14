@@ -12,7 +12,7 @@ services:
       - PORT=4001
       - APPSIGNAL_APP_NAME=javascript-webpack
     env_file:
-      - app.env
+      - appsignal_key.env
       - ../../appsignal.env
       - ../../appsignal_key.env
     volumes:
