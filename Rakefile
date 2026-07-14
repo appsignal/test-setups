@@ -298,6 +298,18 @@ namespace :app do
 
     @app = get_app
     @mode = get_mode(@app)
+
+    # Front-end (browser) setups need a separate front-end API key. When the
+    # setup ships an `appsignal_key.env.example` but its `appsignal_key.env` has
+    # not been created, fail early with a clear message instead of letting docker
+    # abort with a cryptic "env file not found" (or a later runtime error).
+    example_key = "#{@app}/appsignal_key.env.example"
+    actual_key = "#{@app}/appsignal_key.env"
+    if File.exist?(example_key) && !File.exist?(actual_key)
+      raise "#{@app} needs a front-end API key. Copy #{example_key} to #{actual_key} " \
+        "and set APPSIGNAL_FRONTEND_API_KEY (see #{@app}/README.md)."
+    end
+
     puts "Starting #{@app}"
 
     puts "=" * 50
@@ -517,6 +529,22 @@ namespace :global do
     # Apps that ship a collector compose file can be run in collector mode.
     @collector_apps = @apps.select do |app|
       mode_files(app).key?("collector")
+    end
+
+    # Apps with a browser integration need a separate front-end API key in
+    # addition to the push key. Detect them by a reference to an
+    # `APPSIGNAL_FRONTEND*` variable in the setup's own files (compose, run
+    # scripts, or committed key/env templates); node_modules is deliberately not
+    # scanned.
+    @frontend_key_apps = @apps.select do |app|
+      Dir.glob([
+        "#{app}/*.env*",
+        "#{app}/docker-compose*.yml",
+        "#{app}/commands/*",
+        "#{app}/app/*.env*"
+      ]).any? do |path|
+        File.file?(path) && File.read(path).include?("APPSIGNAL_FRONTEND")
+      end
     end
 
     File.write "README.md", render_erb("support/templates/README.md.erb")

@@ -21,6 +21,8 @@ services:
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env
+      # App-local front-end API key (APPSIGNAL_FRONTEND_API_KEY); see README.
+      - appsignal_key.env
     volumes:
       - ./app:/app
   cors:

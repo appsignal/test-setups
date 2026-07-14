@@ -9,6 +9,9 @@ services:
     environment:
       - APPSIGNAL_APP_NAME=javascript/vue-3
       - NODE_ENV=test
+    env_file:
+      # App-local front-end API key (APPSIGNAL_FRONTEND_API_KEY); see README.
+      - appsignal_key.env
     volumes:
       - ./app:/app
       - ../integration:/integration

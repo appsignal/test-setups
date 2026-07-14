@@ -16,5 +16,11 @@ echo "Install dependencies"
 npm install
 npm link @appsignal/javascript @appsignal/react @appsignal/urql
 
+# Create React App (react-scripts) only exposes REACT_APP_-prefixed variables to
+# the bundle, so re-export the canonical front-end key under that prefix. The app
+# code keeps reading the default REACT_APP_ variable; nothing in the CRA config
+# changes.
+export REACT_APP_APPSIGNAL_FRONTEND_KEY="${APPSIGNAL_FRONTEND_API_KEY:-}"
+
 echo "Starting app"
 npm start

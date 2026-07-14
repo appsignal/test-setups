@@ -15,5 +15,10 @@ echo "Install dependencies"
 npm install
 npm link @appsignal/vue @appsignal/javascript
 
+# Vite only exposes VITE_-prefixed variables to the bundle, so re-export the
+# canonical front-end key under that prefix. The app keeps reading the default
+# import.meta.env.VITE_ variable; the Vite config is untouched.
+export VITE_APPSIGNAL_FRONTEND_API_KEY="${APPSIGNAL_FRONTEND_API_KEY:-}"
+
 echo "Run server"
 npm run dev

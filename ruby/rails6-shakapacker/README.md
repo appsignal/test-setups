@@ -2,10 +2,19 @@
 
 ## Preparation
 
-Add the front-end API key of the app you want to report the errors to in the
-`ruby/rails6-shakapacker/appsignal_key.env` file.
+This setup has a browser (`@appsignal/javascript`) integration, so it needs a
+separate **front-end API key** in addition to the repo-root push key. The
+front-end key is found under the app's settings in AppSignal, and is not the
+same as the backend push API key.
+
+Copy the example file and fill in the key:
+
+```
+cp appsignal_key.env.example appsignal_key.env
+```
 
 ```env
+# appsignal_key.env
 APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000
 ```
 

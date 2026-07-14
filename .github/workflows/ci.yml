@@ -193,15 +193,17 @@ jobs:
           echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
           rake integrations:clone
 
-      - name: Setup .env config
+      - name: Setup front-end key config
         run: |
+          # Front-end setups ship an app-local appsignal_key.env.example; copy it
+          # to the appsignal_key.env the setup reads (via docker-compose env_file).
+          if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+            cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+          fi
+          # Legacy: setups that still template an app-dir .env directly.
           if [ -f "${{ matrix.app }}/app/.example.env" ]; then
             cp "${{ matrix.app }}/app/.example.env" "${{ matrix.app }}/app/.env"
           fi
-
-      - name: Setup vanilla config
-        if: matrix.app == 'javascript/vanilla'
-        run: cp javascript/vanilla/appsignal_key.env{.example,}
 
       - name: Run tests
         run: rake app=${{ matrix.app }} app:test
