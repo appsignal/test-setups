@@ -44,7 +44,17 @@ rake env=<name> key=<key> env:switch
 To start a test setup:
 
 ```
-<% @apps.each do |app | %>rake app=<%= app %> app:up
+<% (@apps - @frontend_key_apps).each do |app | %>rake app=<%= app %> app:up
+<% end %>```
+
+Some setups have a browser integration and need a separate **front-end API key**
+(distinct from the push key) before they will report correctly. Set it in the
+setup's own `appsignal_key.env` (copy its `appsignal_key.env.example`), as
+described in the setup's README, then start it as usual:
+
+```
+<% @frontend_key_apps.each do |app | %># set the front-end key first (see <%= app %>/README.md)
+rake app=<%= app %> app:up
 <% end %>```
 
 This will boot a test environment with AppSignal enabled listening on
@@ -55,7 +65,7 @@ To start a test setup with the bot generating activity (loads the index
 page and follows a random link every 5 seconds):
 
 ```
-<% @bot_apps.each do |app | %>rake app=<%= app %> app:bot
+<% (@bot_apps - @frontend_key_apps).each do |app | %>rake app=<%= app %> app:bot
 <% end %>```
 
 Each test setup can be run in one or more "modes", selected with the `mode=`

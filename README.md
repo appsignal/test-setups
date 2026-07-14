@@ -63,12 +63,6 @@ rake app=java/spring-agent-opentelemetry app:up
 rake app=java/spring-native-opentelemetry app:up
 rake app=javascript/Dockerfile app:up
 rake app=javascript/ember app:up
-rake app=javascript/react app:up
-rake app=javascript/react-vite-opentelemetry app:up
-rake app=javascript/typescript-angular app:up
-rake app=javascript/vanilla app:up
-rake app=javascript/vue-3 app:up
-rake app=javascript/webpack app:up
 rake app=nodejs/express-apollo app:up
 rake app=nodejs/express-bullmq app:up
 rake app=nodejs/express-elasticsearch app:up
@@ -119,7 +113,6 @@ rake app=ruby/padrino app:up
 rake app=ruby/rack app:up
 rake app=ruby/rails6-mongo app:up
 rake app=ruby/rails6-mysql app:up
-rake app=ruby/rails6-shakapacker app:up
 rake app=ruby/rails6-shoryuken app:up
 rake app=ruby/rails7-delayed-job app:up
 rake app=ruby/rails7-goodjob app:up
@@ -142,6 +135,28 @@ rake app=ruby/webmachine1 app:up
 rake app=ruby/webmachine2 app:up
 rake app=standalone/nginx app:up
 rake app=vector/mongodb app:up
+```
+
+Some setups have a browser integration and need a separate **front-end API key**
+(distinct from the push key) before they will report correctly. Set it in the
+setup's own `appsignal_key.env` (copy its `appsignal_key.env.example`), as
+described in the setup's README, then start it as usual:
+
+```
+# set the front-end key first (see javascript/react/README.md)
+rake app=javascript/react app:up
+# set the front-end key first (see javascript/react-vite-opentelemetry/README.md)
+rake app=javascript/react-vite-opentelemetry app:up
+# set the front-end key first (see javascript/typescript-angular/README.md)
+rake app=javascript/typescript-angular app:up
+# set the front-end key first (see javascript/vanilla/README.md)
+rake app=javascript/vanilla app:up
+# set the front-end key first (see javascript/vue-3/README.md)
+rake app=javascript/vue-3 app:up
+# set the front-end key first (see javascript/webpack/README.md)
+rake app=javascript/webpack app:up
+# set the front-end key first (see ruby/rails6-shakapacker/README.md)
+rake app=ruby/rails6-shakapacker app:up
 ```
 
 This will boot a test environment with AppSignal enabled listening on
@@ -213,7 +228,6 @@ rake app=ruby/padrino app:bot
 rake app=ruby/rack app:bot
 rake app=ruby/rails6-mongo app:bot
 rake app=ruby/rails6-mysql app:bot
-rake app=ruby/rails6-shakapacker app:bot
 rake app=ruby/rails6-shoryuken app:bot
 rake app=ruby/rails7-delayed-job app:bot
 rake app=ruby/rails7-goodjob app:bot

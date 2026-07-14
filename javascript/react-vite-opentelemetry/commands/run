@@ -3,16 +3,11 @@ set -eu
 
 cd /app
 
-# Check that the `.env` file is present and contains
-# the VITE_APPSIGNAL_FRONTEND_PUSH_API_KEY environment
-# variable.
-if [ ! -f .env ]; then
-  echo ".env file not found in app folder!"
-  exit 1
-fi
-
-if ! grep -q "VITE_APPSIGNAL_FRONTEND_PUSH_API_KEY=" .env; then
-  echo "VITE_APPSIGNAL_FRONTEND_PUSH_API_KEY not found in .env file in app folder!"
+# The front-end API key comes from the setup's app-local appsignal_key.env
+# (APPSIGNAL_FRONTEND_API_KEY), loaded via docker-compose env_file. Fail with a
+# clear message if it is unset, rather than building a bundle with no key.
+if [ -z "${APPSIGNAL_FRONTEND_API_KEY:-}" ]; then
+  echo "APPSIGNAL_FRONTEND_API_KEY not set. Copy appsignal_key.env.example to appsignal_key.env and set it (see README)."
   exit 1
 fi
 
@@ -21,6 +16,10 @@ echo "Install dependencies"
 # package expects React 16, but we're using React 19.
 npm install --force
 
+# Vite only exposes VITE_-prefixed variables to the bundle, so re-export the
+# canonical front-end key under the VITE_ name the app reads. The app source and
+# Vite config are untouched.
+export VITE_APPSIGNAL_FRONTEND_PUSH_API_KEY="$APPSIGNAL_FRONTEND_API_KEY"
 export VITE_APPSIGNAL_APP_NAME="$APPSIGNAL_APP_NAME"
 export VITE_APPSIGNAL_APP_ENV="$APPSIGNAL_APP_ENV"
 export VITE_PWD="$PWD"
