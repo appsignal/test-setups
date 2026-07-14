@@ -1,5 +1,6 @@
 [[paths_to_watch]]
 path = "/app"
+ignore = ["__pycache__"]
 
 # Downstream web server on :4002 (no celery here; that is the worker split).
 [processes.django]
