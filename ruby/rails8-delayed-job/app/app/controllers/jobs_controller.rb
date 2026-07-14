@@ -34,6 +34,12 @@ class JobsController < ApplicationController
       else
         PerformanceJob.new.deliver_async("Performance test")
       end
+    when "AppsignalNameJob"
+      if future
+        AppsignalNameJob.new.delay(:run_at => DELAY_DURATION.from_now).deliver_async("appsignal_name test")
+      else
+        AppsignalNameJob.new.deliver_async("appsignal_name test")
+      end
     end
 
     redirect_to({ :action => :index }, :notice => "Job queued")
