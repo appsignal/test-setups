@@ -9,6 +9,7 @@ gem "sinatra"
 gem "sinatra-contrib", require: false
 
 gem "sidekiq", "~> 7.1.6"
+gem "sidekiq-delay_extensions"
 gem "appsignal", :path => "/integration"
 gem "excon"
 gem "http"

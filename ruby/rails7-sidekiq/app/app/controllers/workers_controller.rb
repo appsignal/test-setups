@@ -62,6 +62,21 @@ class WorkersController < ApplicationController
     redirect_to({ :action => :index }, :notice => "Cross-service worker queued")
   end
 
+  def delay
+    # Enqueue a job in the legacy Sidekiq delayed extension wire format
+    # (`Sidekiq::Extensions::DelayedClass` with a YAML-marshalled
+    # `[target, method, args]`). That's the format the AppSignal integration
+    # recognizes and resolves into a `Target.method` action name. Modern
+    # Sidekiq's `.delay` uses the `Sidekiq::DelayExtensions` namespace, which
+    # the integration does not match, so the job is pushed by hand here.
+    Sidekiq::Client.push(
+      "class" => "Sidekiq::Extensions::DelayedClass",
+      "queue" => "default",
+      "args" => [YAML.dump([GoalTestDelayedTarget, :run, ["delayed wrapper test"]])]
+    )
+    redirect_to({ :action => :index }, :notice => "Delayed wrapper job queued")
+  end
+
   def handle_sidekiq(worker, args:, test:, future:)
     if future
       worker.perform_in(DELAY_DURATION.from_now, *args)

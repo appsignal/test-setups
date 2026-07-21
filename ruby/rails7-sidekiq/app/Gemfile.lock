@@ -301,6 +301,8 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.14.0)
+    sidekiq-delay_extensions (7.1.0)
+      sidekiq (>= 7.0)
     sinatra (4.0.0)
       mustermann (~> 3.0)
       rack (>= 3.0.0, < 4)
@@ -376,6 +378,7 @@ DEPENDENCIES
   redis (~> 4.0)
   selenium-webdriver
   sidekiq (~> 7.1.6)
+  sidekiq-delay_extensions
   sinatra
   sinatra-contrib
   sprockets-rails
