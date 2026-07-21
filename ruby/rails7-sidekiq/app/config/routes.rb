@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     collection do
       get :queue
       get :cross_service
+      get :delay
     end
   end
   mount Sidekiq::Web => "/sidekiq"

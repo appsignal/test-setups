@@ -31,6 +31,17 @@ links back to the enqueue span across both apps.</p>
   <li><%= link_to "DownstreamWorker (cross-service)", cross_service_workers_path %></li>
 </ul>
 
+<h1>Queue a delayed wrapper job</h1>
+
+<p>Enqueues a job in the legacy Sidekiq delayed extension wire format. The
+AppSignal integration resolves its action name from the wrapped target and
+method, so the performed transaction is named <code>GoalTestDelayedTarget.run</code>
+rather than the internal wrapper class.</p>
+
+<ul>
+  <li><%= link_to "GoalTestDelayedTarget (delayed wrapper)", delay_workers_path %></li>
+</ul>
+
 <h1>Sidekiq monitoring page</h1>
 
 <ul>
