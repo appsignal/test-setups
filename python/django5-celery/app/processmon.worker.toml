@@ -1,6 +1,5 @@
 [[paths_to_watch]]
 path = "/app"
-ignore = ["__pycache__"]
 
 # The worker service runs only the background worker. Work enqueued by the web
 # `app` service is performed here, so it reports under the worker's own app name
