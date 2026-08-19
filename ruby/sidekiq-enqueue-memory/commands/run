@@ -1,0 +1,22 @@
+#!/bin/bash
+set -eu
+
+echo "Install appsignal"
+(
+  cd /integration
+  rake extension:install
+)
+
+cd /app
+
+echo "Install dependencies"
+bundle config set path vendor/bundle
+bundle install
+
+echo "AppSignal gem version under test:"
+bundle exec ruby -e 'require "appsignal/version"; puts Appsignal::VERSION'
+
+echo "Enqueue instrumentation: ${APPSIGNAL_ENABLE_JOB_ENQUEUE_INSTRUMENTATION:-unset (defaults to true)}"
+
+echo "Starting app"
+/commands/processmon processmon.toml

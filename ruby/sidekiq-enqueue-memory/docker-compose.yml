@@ -1,0 +1,33 @@
+include:
+  - path: ../../support/bot/docker-compose.yml
+
+services:
+  app:
+    build: .
+    image: ruby/sidekiq-enqueue-memory
+    ports:
+      - "4001:4001"
+    environment:
+      - APPSIGNAL_APP_NAME=ruby-sidekiq-enqueue-memory
+      # Set explicitly because the Sidekiq process has no loader to infer it
+      # from. Appsignal::Config.determine_env falls back through
+      # APPSIGNAL_APP_ENV, RAILS_ENV and RACK_ENV, and the worker has none of
+      # them, so without this it resolves to nil, activate_if_environment never
+      # matches, and the process being measured runs with AppSignal switched
+      # off. Every reading would be flat for the wrong reason.
+      - APPSIGNAL_APP_ENV=development
+      - PORT=4001
+      - REDIS_URL=redis://redis:6379
+      # The variable under test. Set to "false" to switch off the enqueue
+      # instrumentation that version 4.9.0 of the gem introduced.
+      - APPSIGNAL_ENABLE_JOB_ENQUEUE_INSTRUMENTATION=${APPSIGNAL_ENABLE_JOB_ENQUEUE_INSTRUMENTATION:-true}
+    env_file:
+      - ../../appsignal.env
+      - ../../appsignal_key.env
+    volumes:
+      - ./app:/app
+      - ../integration:/integration
+    depends_on:
+      - redis
+  redis:
+    image: "redis:7.4.2"

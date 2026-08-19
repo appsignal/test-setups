@@ -1,0 +1,37 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  "vendor",
+  "tmp",
+  "log"
+]
+
+[[paths_to_watch]]
+path = "/integration"
+
+[processes.app]
+command = "bundle"
+args = [
+  "exec",
+  "rackup",
+  "--host=0.0.0.0",
+  "--port=4001"
+]
+working_dir = "/app"
+
+# Only the "fanout" queue is listed. The jobs that FanOutJob pushes go to
+# "sink", which stays unprocessed on purpose so the enqueued work backs up
+# rather than running and muddying the memory reading.
+[processes.sidekiq]
+command = "bundle"
+args = [
+  "exec",
+  "sidekiq",
+  "-r",
+  "./worker.rb",
+  "-q",
+  "fanout",
+  "-c",
+  "5"
+]
+working_dir = "/app"

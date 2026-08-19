@@ -1,0 +1,5 @@
+# The appsignal gem is a path gem resolved from ../integration, so the lock
+# pins whichever version that checkout happens to be on. The experiment in the
+# README switches between v4.9.0 and v4.8.6, and a committed lock from the
+# other version has to be deleted before bundler will re-resolve.
+Gemfile.lock

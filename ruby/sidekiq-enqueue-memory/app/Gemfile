@@ -1,0 +1,11 @@
+source "https://rubygems.org"
+
+gem "sinatra"
+gem "rackup"
+gem "puma"
+
+# Sidekiq 7 is the first version with capsules, which is what the customer's
+# process command uses.
+gem "sidekiq", "~> 7.3"
+
+gem "appsignal", :path => "/integration"
