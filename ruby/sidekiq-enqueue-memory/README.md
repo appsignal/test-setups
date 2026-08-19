@@ -121,9 +121,15 @@ Sidekiq job, on Ruby 3.3.12 and Sidekiq 7.3.10.
 
 | Gem | Enqueue events | Growth | Bytes per enqueue | Elapsed |
 | --- | --- | --- | --- | --- |
+| 4.10.0 | recorded | 45.2MB | 237 | 5.2s |
 | 4.9.0 | recorded | 45.4MB | 238 | 5.2s |
 | 4.9.0 | suppressed | 5.9MB | 31 | 1.3s |
 | 4.8.6 | not available | 6.3MB | 33 | 1.0s |
+
+4.10.0, the latest release at the time of writing, behaves identically to
+4.9.0. No release after the feature landed changes this, and no commit after
+v4.9.0 touches the Sidekiq integration, the hook or `transaction.rb`. Upgrading
+is not a fix; the config option is.
 
 The enqueue events account for 39.5 of the 45.4 megabytes, and cost roughly
 seven times as much memory per enqueue as the enqueue itself. Version 4.8.6 and
