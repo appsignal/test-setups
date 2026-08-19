@@ -30,9 +30,22 @@ checking rather than assuming. That is the number this app exists to produce.
 rake app=ruby/sidekiq-enqueue-memory app:down app:up
 ```
 
-Then open http://localhost:4001 and start a run. The web page only queues the
-job; the measurements are printed by the Sidekiq process, so watch the container
-output.
+Wait for `[worker] AppSignal <version> active in development`, which also prints
+whether enqueue instrumentation is on. Then trigger a run:
+
+```bash
+curl "http://localhost:4001/fanout?count=200000&batch_size=5000&mode=push_bulk"
+```
+
+Or open http://localhost:4001 and use the links. Either way the web page only
+queues the job. The measurements come from the Sidekiq process.
+
+The agent logs at trace level in these setups, so the output is noisy. To see
+only the numbers, from this directory in another terminal:
+
+```bash
+docker compose logs -f app | grep fanout
+```
 
 Each checkpoint reports resident memory, growth since the job started, bytes per
 enqueue and the growth rate:
@@ -43,6 +56,9 @@ enqueue and the growth rate:
 
 `bytes_per_enqueue` is the figure that settles the question. `rate` is the one to
 compare against the customer's 8.5 megabytes per second.
+
+Note that this pushes to a real app in your AppSignal organization, named
+`ruby-sidekiq-enqueue-memory`, using the shared key in `appsignal_key.env`.
 
 ## The experiment
 
@@ -72,16 +88,27 @@ appsignal-ruby, so the version under test is whatever that checkout has at.
 Version 4.9.0 is the one the customer ran and 4.8.6 is the release before the
 feature existed:
 
+Delete `app/Gemfile.lock` when switching, or bundler keeps resolving the path
+gem to the version the lock already names:
+
 ```bash
 git -C ../integration checkout v4.9.0
+rm -f app/Gemfile.lock
 rake app=ruby/sidekiq-enqueue-memory app:down app:up
 
 git -C ../integration checkout v4.8.6
+rm -f app/Gemfile.lock
 rake app=ruby/sidekiq-enqueue-memory app:down app:up
 ```
 
 `commands/run` prints the version it resolved on boot, so check that line rather
 than trusting the checkout.
+
+Put the checkout back when you are done, since other setups share it:
+
+```bash
+git -C ../integration checkout main
+```
 
 Version 4.9.0 also added automatic Faraday instrumentation. This app makes no
 outbound requests, so that feature cannot influence these numbers, which is why
