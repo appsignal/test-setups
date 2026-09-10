@@ -1,8 +1,16 @@
 FROM ruby:3.1.2
 
 # Update this if the Docker image changes
-ENV REFRESHED_AT=2022-11-07
+ENV REFRESHED_AT=2026-09-10
 ENV NODE_MAJOR=18
+
+# Debian bullseye has moved to the archive, and its release files are past
+# their expiry date. There is no image for this Ruby version on a newer
+# Debian, so install from the archive and accept the expired release files.
+RUN sed -i -e '/-security/d' \
+      -e 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' \
+      /etc/apt/sources.list && \
+  echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
 
 RUN apt-get update && \
   apt-get install -y ca-certificates curl gnupg less && \
