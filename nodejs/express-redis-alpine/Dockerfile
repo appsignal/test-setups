@@ -1,7 +1,7 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2022-01-25
+ENV REFRESHED_AT=2026-09-10
 
 # Install mono and setup script dependencies
 RUN apk add --no-cache ruby bash git curl
