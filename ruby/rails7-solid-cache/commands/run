@@ -15,7 +15,6 @@ cd /app
 echo "Install dependencies"
 bundle config set --local path 'vendor/bundle'
 bundle install
-npm install --prefix=vendor/npm
 
 echo "Clean tmp"
 rm -rf tmp
