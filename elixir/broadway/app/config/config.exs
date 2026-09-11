@@ -7,3 +7,9 @@ config :broadway_example,
   tick_interval: String.to_integer(System.get_env("TICK_INTERVAL", "2000")),
   # How many events the producer enqueues on every tick.
   events_per_tick: String.to_integer(System.get_env("EVENTS_PER_TICK", "5"))
+
+import_config "appsignal.exs"
+
+if config_env() == :test do
+  import_config "test.exs"
+end

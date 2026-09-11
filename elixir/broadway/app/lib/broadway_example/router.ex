@@ -8,6 +8,7 @@ defmodule BroadwayExample.Router do
   """
 
   use Plug.Router
+  use Appsignal.Plug
 
   alias BroadwayExample.{Event, Producer, Stats}
 

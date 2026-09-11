@@ -12,6 +12,7 @@ services:
     environment:
       - PORT=4001
       - APPSIGNAL_APP_NAME=elixir-broadway
+      - INTEGRATION_PATH=/integration
     env_file:
       - ../../appsignal.env
       - ../../appsignal_key.env

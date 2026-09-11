@@ -1,6 +1,9 @@
 [[paths_to_watch]]
 path = "/app"
 ignore = [
+  # The Expert language server keeps rebuilding AppSignal's NIF in here,
+  # which would otherwise restart the app every couple of seconds.
+  ".expert",
   "_build",
   "deps"
 ]

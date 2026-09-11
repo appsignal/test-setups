@@ -19,12 +19,18 @@ defmodule BroadwayExample.MixProject do
     ]
   end
 
+  defp integration_path do
+    System.get_env("INTEGRATION_PATH", "../../integration")
+  end
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:broadway, "~> 1.3.0"},
       {:plug_cowboy, "~> 2.7"},
-      {:jason, "~> 1.4"}
+      {:jason, "~> 1.4"},
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
+      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug"}
     ]
   end
 end
