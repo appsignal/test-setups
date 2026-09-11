@@ -1,5 +1,14 @@
 #!/bin/bash
+
 set -eu
 
+echo "Running mix local hex and rebar"
+mix local.hex --force
+mix local.rebar --force
+
 cd /app
+echo "Running mix deps.get"
+mix deps.get
+
+echo "Starting the Broadway pipeline and web interface"
 /commands/processmon processmon.toml

@@ -4,7 +4,7 @@ FROM elixir:1.20.4
 ENV REFRESHED_AT=2026-09-11
 
 # Add any required dependencies here
-RUN apt-get update && apt-get install -y less
+RUN apt-get update && apt-get install -y inotify-tools less
 
 # Copy commands into the container
 RUN mkdir /commands
