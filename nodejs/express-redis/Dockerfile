@@ -1,7 +1,7 @@
-FROM node:18
+FROM node:20
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2023-03-28
+ENV REFRESHED_AT=2026-09-10
 
 # Install dependencies
 RUN apt-get update && apt-get install -y redis ruby less

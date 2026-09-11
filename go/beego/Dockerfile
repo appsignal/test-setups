@@ -1,6 +1,6 @@
-FROM golang:1.18-bullseye
+FROM golang:1.19-bookworm
 
-ENV REFRESHED_AT=2023-02-23
+ENV REFRESHED_AT=2026-09-09
 
 RUN apt-get update && apt-get install -y less
 

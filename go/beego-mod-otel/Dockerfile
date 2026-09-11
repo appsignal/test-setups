@@ -1,6 +1,6 @@
-FROM golang:1.23-bullseye
+FROM golang:1.23
 
-ENV REFRESHED_AT=2024-11-13
+ENV REFRESHED_AT=2026-09-09
 
 RUN apt-get update && apt-get install -y less
 

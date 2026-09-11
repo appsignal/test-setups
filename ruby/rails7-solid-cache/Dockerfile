@@ -1,7 +1,7 @@
-FROM ruby:3.2.2-bullseye
+FROM ruby:3.2.2
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2021-02-04
+ENV REFRESHED_AT=2026-09-09
 
 RUN apt-get update -qq && \
     apt-get install -y nodejs npm postgresql-client

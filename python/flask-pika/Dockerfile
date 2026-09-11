@@ -1,7 +1,7 @@
-FROM python:3.11-bullseye
+FROM python:3.11
 
 # Update this if the docker image changes
-ENV REFRESHED_AT=2023-05-23
+ENV REFRESHED_AT=2026-09-09
 
 RUN apt-get update && apt-get install -y less
 
