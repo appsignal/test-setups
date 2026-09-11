@@ -45,6 +45,7 @@ To start a test setup:
 
 ```
 rake app=elixir/alpine-release app:up
+rake app=elixir/broadway app:up
 rake app=elixir/phoenix app:up
 rake app=elixir/phoenix-ash app:up
 rake app=elixir/phoenix-oban app:up
@@ -168,6 +169,7 @@ page and follows a random link every 5 seconds):
 
 ```
 rake app=elixir/alpine-release app:bot
+rake app=elixir/broadway app:bot
 rake app=elixir/phoenix app:bot
 rake app=elixir/phoenix-ash app:bot
 rake app=elixir/phoenix-oban app:bot
@@ -296,6 +298,7 @@ To restart the app container after making changes to an integration:
 
 ```
 rake app=elixir/alpine-release app:restart
+rake app=elixir/broadway app:restart
 rake app=elixir/phoenix app:restart
 rake app=elixir/phoenix-ash app:restart
 rake app=elixir/phoenix-oban app:restart
@@ -399,6 +402,7 @@ To run bash:
 
 ```
 rake app=elixir/alpine-release app:bash
+rake app=elixir/broadway app:bash
 rake app=elixir/phoenix app:bash
 rake app=elixir/phoenix-ash app:bash
 rake app=elixir/phoenix-oban app:bash
@@ -502,6 +506,7 @@ To run the console (if implemented in the test app):
 
 ```
 rake app=elixir/alpine-release app:console
+rake app=elixir/broadway app:console
 rake app=elixir/phoenix app:console
 rake app=elixir/phoenix-ash app:console
 rake app=elixir/phoenix-oban app:console
@@ -605,6 +610,7 @@ To send in a diagnose (if implemented in the test app);
 
 ```
 rake app=elixir/alpine-release app:diagnose
+rake app=elixir/broadway app:diagnose
 rake app=elixir/phoenix app:diagnose
 rake app=elixir/phoenix-ash app:diagnose
 rake app=elixir/phoenix-oban app:diagnose
@@ -708,6 +714,7 @@ Tail the appsignal log:
 
 ```
 rake app=elixir/alpine-release app:tail:appsignal
+rake app=elixir/broadway app:tail:appsignal
 rake app=elixir/phoenix app:tail:appsignal
 rake app=elixir/phoenix-ash app:tail:appsignal
 rake app=elixir/phoenix-oban app:tail:appsignal
