@@ -3,8 +3,8 @@ defmodule BroadwayExample.Router do
   A small web interface for the pipeline.
 
   Broadway has no HTTP surface of its own; this exists so the test setup has an
-  index page to serve, and so bursts of messages can be pushed into the pipeline
-  by hand instead of waiting for the producer's timer.
+  index page to serve, and because it is the only way messages enter the
+  pipeline: the producer generates nothing on its own.
   """
 
   use Plug.Router
@@ -91,9 +91,9 @@ defmodule BroadwayExample.Router do
       <h1>Broadway test app</h1>
 
       <p>
-        A producer emits payment events, two processors enrich them, and each one
-        is routed to either the <code>:default</code> batcher or the
-        <code>:suspicious</code> batcher.
+        Push payment events with the links below. Two processors enrich each one
+        and route it to either the <code>:default</code> batcher or the
+        <code>:suspicious</code> batcher. Nothing happens until you push.
       </p>
 
       <h2>Counters</h2>

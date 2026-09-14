@@ -31,11 +31,7 @@ defmodule BroadwayExample.Pipeline do
     Broadway.start_link(__MODULE__,
       name: __MODULE__,
       producer: [
-        # Broadway calls BroadwayExample.Producer.init/1 with these options.
-        module:
-          {BroadwayExample.Producer,
-           interval: Application.fetch_env!(:broadway_example, :tick_interval),
-           per_tick: Application.fetch_env!(:broadway_example, :events_per_tick)},
+        module: {BroadwayExample.Producer, []},
         # Our producer emits plain maps, not %Broadway.Message{} structs, so a
         # transformer wraps them. Producers for SQS, RabbitMQ and friends emit
         # messages themselves and need no transformer.

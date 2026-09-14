@@ -11,12 +11,6 @@ defmodule BroadwayExample.Producer do
   cannot satisfy right away has to be remembered, which is what `demand` in the
   state is for. Likewise, events that arrive when nobody is asking for them go
   into `queue` until demand shows up.
-
-  Events enter the queue from two places:
-
-    * the `:tick` timer, which keeps a steady trickle of traffic going, and
-    * `push/1`, which the web interface uses to inject a burst on demand.
-
   """
 
   use GenStage
@@ -25,7 +19,7 @@ defmodule BroadwayExample.Producer do
 
   require Logger
 
-  alias BroadwayExample.{Event, Stats}
+  alias BroadwayExample.Stats
 
   @doc """
   Pushes events into a running pipeline's producer.
@@ -42,18 +36,8 @@ defmodule BroadwayExample.Producer do
   end
 
   @impl GenStage
-  def init(opts) do
-    state = %{
-      queue: :queue.new(),
-      queue_size: 0,
-      demand: 0,
-      interval: Keyword.get(opts, :interval, 2_000),
-      per_tick: Keyword.get(opts, :per_tick, 5)
-    }
-
-    schedule_tick(state)
-
-    {:producer, state}
+  def init(_opts) do
+    {:producer, %{queue: :queue.new(), queue_size: 0, demand: 0}}
   end
 
   @impl GenStage
@@ -64,15 +48,6 @@ defmodule BroadwayExample.Producer do
   @impl GenStage
   def handle_cast({:push, events}, state) do
     state |> enqueue(events) |> dispatch()
-  end
-
-  @impl GenStage
-  def handle_info(:tick, state) do
-    schedule_tick(state)
-
-    state
-    |> enqueue(Event.random_batch(state.per_tick))
-    |> dispatch()
   end
 
   # Broadway drains the producer before shutting the pipeline down. Returning
@@ -116,12 +91,4 @@ defmodule BroadwayExample.Producer do
       {event, queue}
     end)
   end
-
-  # An interval of 0 turns the automatic trickle off, leaving only the events
-  # pushed from the web interface.
-  defp schedule_tick(%{interval: interval}) when interval > 0 do
-    Process.send_after(self(), :tick, interval)
-  end
-
-  defp schedule_tick(_state), do: :ok
 end

@@ -18,8 +18,7 @@ batch procs   batch procs handle_batch/4, once per batch
 ```
 
 - **Producer** — `BroadwayExample.Producer`, a hand-written GenStage producer,
-  so the app needs no message broker.  It emits fake payment events on a timer,
-  and also accepts events pushed from the web interface.
+  so the app needs no message broker.
 - **Processors** — two concurrent processes running `handle_message/3`.
   Each message is enriched, then tagged with a batcher (`:default`, or
   `:suspicious` for payments of 2000.00 or more) and a batch key (the currency).
@@ -54,11 +53,14 @@ the app has an index page and so bursts of messages can be pushed by hand:
 | `/error`           | Raises in the web request                          |
 
 
-## Configuration
+## Generating events
 
-Both are read from the environment in `config/config.exs`:
+The pipeline is idle until you push something into it.  Use the links on the
+index page, or hit the routes directly:
 
-- `TICK_INTERVAL` — milliseconds between the producer's automatic ticks
-  (default `2000`). Set to `0` to turn the trickle off and only push messages
-  from the web interface.
-- `EVENTS_PER_TICK` — events enqueued per tick (default `5`).
+```
+curl http://localhost:4001/push
+```
+
+`rake app=elixir/broadway app:bot` walks those links on a loop, which is the
+easiest way to keep a steady stream of traffic going.
