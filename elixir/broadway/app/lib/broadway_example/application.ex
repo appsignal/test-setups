@@ -28,9 +28,9 @@ defmodule BroadwayExample.Application do
 
   defp attach() do
     handlers = %{
-      [:broadway, :topology, :init] => &__MODULE__.log_init/4,
-      [:broadway, :processor, :message, :start] => &__MODULE__.log_it/4,
-      [:broadway, :processor, :message, :stop] => &__MODULE__.log_it/4,
+      [:broadway, :topology, :init] => &__MODULE__.broadway_topology_init/4,
+      [:broadway, :processor, :message, :start] => &__MODULE__.broadway_message_start/4,
+      [:broadway, :processor, :message, :stop] => &__MODULE__.broadway_message_stop/4,
       [:broadway, :processor, :message, :exception] => &__MODULE__.log_exception/4
     }
 
@@ -40,73 +40,55 @@ defmodule BroadwayExample.Application do
 
       case {detach, attach} do
         {:ok, :ok} ->
-          _ = Appsignal.IntegrationLogger.debug("Appsignal.Oban reattached to #{inspect(event)}")
+          _ =
+            Appsignal.IntegrationLogger.debug(
+              "Appsignal.Broadway reattached to #{inspect(event)}"
+            )
 
           :ok
 
         {{:error, :not_found}, :ok} ->
-          _ = Appsignal.IntegrationLogger.debug("Appsignal.Oban attached to #{inspect(event)}")
+          _ =
+            Appsignal.IntegrationLogger.debug("Appsignal.Broadway attached to #{inspect(event)}")
 
           :ok
 
         {_, {:error, _} = error} ->
-          Logger.warning("Appsignal.Oban not attached to #{inspect(event)}: #{inspect(error)}")
+          Logger.warning(
+            "Appsignal.Broadway not attached to #{inspect(event)}: #{inspect(error)}"
+          )
 
           error
       end
     end
   end
 
-  def log_init(event, measurements, metadata, config) do
-    # IO.inspect(event, label: "event")
-    # IO.inspect(measurements, label: "measurements")
-    # IO.inspect(metadata, label: "metadata")
-    # IO.inspect(config, label: "config")
-
-    do_log_init(measurements, metadata)
+  def broadway_message_start(_event, measurements, metadata, _config) do
+    do_broadway_message_start(measurements, metadata)
   end
 
-  defp do_log_init(
-         %{system_time: system_time},
-         %{supervisor_pid: supervisor_pid, config: config}
+  defp do_broadway_message_start(
+         _measurements,
+         %{
+           index: index,
+           message:
+             %Broadway.Message{
+               data: _event_data,
+               metadata: %{},
+               acknowledger: {BroadwayExample.Acknowledger, :payments, %{}},
+               batcher: _batcher,
+               batch_key: _batch_key,
+               batch_mode: _batch_mode,
+               status: _status
+             } = message,
+           name: name,
+           context: _context,
+           telemetry_span_context: telemetry_span_context,
+           producer: producer,
+           topology_name: topology_name,
+           processor_key: processor_key
+         }
        ) do
-    span = @tracer.create_span("broadway")
-
-    span
-    |> @span.set_attribute("appsignal:category", "topology_init.broadway")
-    |> @span.set_attribute("system_time", system_time)
-    |> @span.set_attribute("supervisor_pid", supervisor_pid)
-    |> @span.set_attribute("config", config)
-  end
-
-  def log_it(event, measurements, metadata, config) do
-    # IO.inspect(event, label: "event")
-    # IO.inspect(measurements, label: "measurements")
-    # IO.inspect(metadata, label: "metadata")
-    # IO.inspect(config, label: "config")
-
-    do_log_it(metadata)
-  end
-
-  defp do_log_it(%{
-         index: index,
-         message:
-           %Broadway.Message{
-             data: _event_data,
-             metadata: %{},
-             acknowledger: {BroadwayExample.Acknowledger, :payments, %{}},
-             batcher: _batcher,
-             batch_key: _batch_key,
-             batch_mode: _batch_mode,
-             status: _status
-           } = message,
-         name: name,
-         context: context,
-         telemetry_span_context: telemetry_span_context,
-         producer: producer,
-         topology_name: topology_name,
-         processor_key: processor_key
-       }) do
     span = @tracer.create_span("broadway")
 
     span
@@ -120,7 +102,63 @@ defmodule BroadwayExample.Application do
     |> @span.set_attribute("producer", producer)
   end
 
-  def log_exception(event, measurements, metadata, config) do
+  def broadway_message_stop(
+        _event,
+        _measurements,
+        %{
+          index: index,
+          message:
+            %Broadway.Message{
+              data: _event_data,
+              metadata: %{},
+              acknowledger: {BroadwayExample.Acknowledger, :payments, %{}},
+              batcher: _batcher,
+              batch_key: _batch_key,
+              batch_mode: _batch_mode,
+              status: _status
+            } = message,
+          name: name,
+          context: _context,
+          telemetry_span_context: telemetry_span_context,
+          producer: producer,
+          topology_name: topology_name,
+          processor_key: processor_key
+        },
+        _config
+      ) do
+    span = @tracer.current_span()
+
+    span
+    |> @span.set_attribute("appsignal:category", "processor_message.broadway")
+    |> @span.set_name(to_string(name))
+    |> @span.set_sample_data("message", to_string(inspect(message)))
+    |> @span.set_attribute("index", index)
+    |> @span.set_attribute("processor_key", processor_key)
+    |> @span.set_attribute("topology_name", topology_name)
+    |> @span.set_attribute("telemetry_span_context", telemetry_span_context)
+    |> @span.set_attribute("producer", producer)
+
+    @tracer.close_span(span)
+  end
+
+  def broadway_topology_init(
+        _event,
+        %{system_time: system_time},
+        %{supervisor_pid: supervisor_pid, config: config},
+        _config
+      ) do
+    span = @tracer.create_span("broadway")
+
+    span
+    |> @span.set_attribute("appsignal:category", "topology_init.broadway")
+    |> @span.set_attribute("system_time", system_time)
+    |> @span.set_attribute("supervisor_pid", supervisor_pid)
+    |> @span.set_attribute("config", config)
+
+    @tracer.close_span(span)
+  end
+
+  def log_exception(_event, _measurements, metadata, _config) do
     IO.puts("Log exception")
     # IO.inspect(event, label: "event")
     # IO.inspect(measurements, label: "measurements")
@@ -151,7 +189,7 @@ defmodule BroadwayExample.Application do
          },
          name: name,
          reason: reason,
-         context: :context_not_set,
+         context: _context,
          stacktrace: stacktrace,
          kind: kind,
          telemetry_span_context: telemetry_span_context,
