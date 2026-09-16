@@ -191,7 +191,7 @@ defmodule BroadwayExample.Application do
     span = @tracer.create_span("broadway", current_span)
 
     span
-    |> @span.set_attribute("appsignal:category", "processor_message.broadway")
+    |> @span.set_attribute("appsignal:category", "message.broadway")
     |> @span.set_name("#{inspect(topology_name)}#handle_message/3")
     |> @span.set_sample_data("message", to_string(inspect(message)))
     |> @span.set_attribute("index", index)
@@ -229,7 +229,6 @@ defmodule BroadwayExample.Application do
     span = @tracer.current_span()
 
     span
-    |> @span.set_attribute("appsignal:category", "processor_message.broadway")
     |> @span.set_sample_data("message", to_string(inspect(message)))
     |> @span.set_attribute("index", index)
     |> @span.set_attribute("processor_key", processor_key)
@@ -249,7 +248,7 @@ defmodule BroadwayExample.Application do
     span = @tracer.create_span("broadway")
 
     span
-    |> @span.set_attribute("appsignal:category", "topology_init.broadway")
+    |> @span.set_attribute("appsignal:category", "topology.broadway")
     |> @span.set_attribute("system_time", system_time)
     |> @span.set_attribute("supervisor_pid", supervisor_pid)
     |> @span.set_attribute("config", config)
@@ -306,7 +305,7 @@ defmodule BroadwayExample.Application do
     span = @tracer.create_span("broadway", current_span)
 
     span
-    |> @span.set_attribute("appsignal:category", "processor_message_exception.broadway")
+    |> @span.set_attribute("appsignal:category", "exception.broadway")
     |> @span.set_name("#{inspect(topology_name)}#handle_message/3")
     |> @span.set_name(to_string(name))
     |> @span.set_sample_data("message", to_string(inspect(message)))
