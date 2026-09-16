@@ -45,7 +45,7 @@ the app has an index page and so bursts of messages can be pushed by hand:
 | `/`                | Status page with the pipeline's counters           |
 | `/push`            | 1 payment                                          |
 | `/push/slow`       | 5 payments that take a while in `handle_message/3` |
-| `/push/failing`    | 3 payments that raise in `handle_message/3`        |
+| `/push/failing`    | 1 payment that raises in `handle_message/3`        |
 | `/push/burst`      | 500 payments at once                               |
 | `/topology`        | The running Broadway topology                      |
 | `/slow`            | A slow web request                                 |
