@@ -42,7 +42,7 @@ the app has an index page and so bursts of messages can be pushed by hand:
 | Route              | What it does                                       |
 |--------------------|----------------------------------------------------|
 | `/`                | Status page with the pipeline's counters           |
-| `/push`            | 50 random payments                                 |
+| `/push`            | 1 payment                                          |
 | `/push/slow`       | 5 payments that take a while in `handle_message/3` |
 | `/push/failing`    | 3 payments that raise in `handle_message/3`        |
 | `/push/burst`      | 500 payments at once                               |

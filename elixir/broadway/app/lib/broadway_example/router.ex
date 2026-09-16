@@ -20,9 +20,9 @@ defmodule BroadwayExample.Router do
   end
 
   get "/push" do
-    push_payments(50)
+    push_payments(1)
 
-    redirect(conn, "Pushed 50 payments")
+    redirect(conn, "Pushed 1 payment")
   end
 
   get "/push/slow" do
@@ -102,7 +102,7 @@ defmodule BroadwayExample.Router do
 
       <h2>Push messages</h2>
       <ul>
-        <li><a href="/push">GET /push</a> &mdash; 50 random payments</li>
+        <li><a href="/push">GET /push</a> &mdash; 1 payment</li>
         <li><a href="/push/slow">GET /push/slow</a> &mdash; 5 payments that take a while to process</li>
         <li><a href="/push/failing">GET /push/failing</a> &mdash; 3 payments that raise in the processor</li>
         <li><a href="/push/burst">GET /push/burst</a> &mdash; 500 payments at once</li>
