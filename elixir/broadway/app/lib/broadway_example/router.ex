@@ -31,12 +31,6 @@ defmodule BroadwayExample.Router do
     redirect(conn, "Pushed 5 slow payments")
   end
 
-  get "/push/suspicious" do
-    push_payments(6, %{amount_cents: Enum.random(200_000..900_000)})
-
-    redirect(conn, "Pushed 6 suspicious payments")
-  end
-
   get "/push/failing" do
     push_payments(3, %{fail: true})
 
@@ -92,16 +86,15 @@ defmodule BroadwayExample.Router do
 
       <p>
         Push payment events with the links below. Two processors enrich each one
-        and route it to either the <code>:default</code> batcher or the
-        <code>:suspicious</code> batcher. Nothing happens until you push.
+        and hand it to the <code>:default</code> batcher, which settles them in
+        batches. Nothing happens until you push.
       </p>
 
       <h2>Counters</h2>
       <ul>
         <li>Produced: #{stats[:produced]}</li>
         <li>Processed: #{stats[:processed]}</li>
-        <li>Batched (default): #{stats[:batched_default]}</li>
-        <li>Batched (suspicious): #{stats[:batched_suspicious]}</li>
+        <li>Batched: #{stats[:batched]}</li>
         <li>Acked: #{stats[:acked]}</li>
         <li>Failed: #{stats[:failed]}</li>
         <li>Waiting in the producer: #{stats[:queue_size]}</li>
@@ -111,7 +104,6 @@ defmodule BroadwayExample.Router do
       <ul>
         <li><a href="/push">GET /push</a> &mdash; 50 random payments</li>
         <li><a href="/push/slow">GET /push/slow</a> &mdash; 5 payments that take a while to process</li>
-        <li><a href="/push/suspicious">GET /push/suspicious</a> &mdash; 6 payments for the suspicious batcher</li>
         <li><a href="/push/failing">GET /push/failing</a> &mdash; 3 payments that raise in the processor</li>
         <li><a href="/push/burst">GET /push/burst</a> &mdash; 500 payments at once</li>
       </ul>

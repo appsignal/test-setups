@@ -6,14 +6,11 @@ defmodule BroadwayExample.Pipeline do
 
       producer (1)
          |
-      processors (2)          handle_message/3, once per message
-         |        \\
-      :default   :suspicious  batchers, grouping messages into batches
-         |            |
-      batch procs   batch procs  handle_batch/4, once per batch
-
-  `handle_message/3` decides which batcher a message goes to, which is how one
-  stream of events fans out into two different downstream paths.
+      processors (2)   handle_message/3, once per message
+         |
+      :default         batcher, grouping messages into batches
+         |
+      batch procs      handle_batch/4, once per batch
   """
 
   use Broadway
@@ -22,10 +19,6 @@ defmodule BroadwayExample.Pipeline do
 
   alias Broadway.Message
   alias BroadwayExample.{Acknowledger, Failure, Stats}
-
-  # Payments at or above this amount go down the :suspicious path instead of
-  # the :default one.
-  @suspicious_threshold_cents 200_000
 
   def start_link(_opts) do
     Broadway.start_link(__MODULE__,
@@ -45,10 +38,7 @@ defmodule BroadwayExample.Pipeline do
       batchers: [
         # Flush as soon as 10 messages pile up, or after 2 seconds, whichever
         # comes first.
-        default: [concurrency: 1, batch_size: 10, batch_timeout: 2_000],
-        # Suspicious payments are rarer, so this batcher settles for smaller
-        # batches and waits longer before giving up on filling one.
-        suspicious: [concurrency: 1, batch_size: 3, batch_timeout: 5_000]
+        default: [concurrency: 1, batch_size: 10, batch_timeout: 2_000]
       ]
     )
   end
@@ -79,7 +69,7 @@ defmodule BroadwayExample.Pipeline do
 
     message
     |> Message.put_data(enriched)
-    |> Message.put_batcher(batcher_for(enriched))
+    |> Message.put_batcher(:default)
     # The batch key splits a batcher's messages into separate batches. Grouping
     # by currency means handle_batch/4 never sees a mixed-currency batch.
     |> Message.put_batch_key(enriched.currency)
@@ -89,7 +79,7 @@ defmodule BroadwayExample.Pipeline do
   def handle_batch(:default, messages, batch_info, _context) do
     total = messages |> Enum.map(& &1.data.amount) |> Enum.sum()
 
-    Stats.record(:batched_default, length(messages))
+    Stats.record(:batched, length(messages))
 
     Logger.info(
       "Settling #{length(messages)} payment(s) worth #{format(total)} #{batch_info.batch_key}"
@@ -99,24 +89,6 @@ defmodule BroadwayExample.Pipeline do
     # per message is the whole point of a batcher: one round trip for ten
     # messages instead of ten round trips.
     Process.sleep(100)
-
-    messages
-  end
-
-  @impl Broadway
-  def handle_batch(:suspicious, messages, batch_info, _context) do
-    Stats.record(:batched_suspicious, length(messages))
-
-    Enum.each(messages, fn %{data: payment} ->
-      Logger.warning(
-        "Flagging payment #{payment.id} for review: #{format(payment.amount)} " <>
-          "#{payment.currency} from #{payment.customer}"
-      )
-    end)
-
-    Logger.info("Sent #{length(messages)} #{batch_info.batch_key} payment(s) to manual review")
-
-    Process.sleep(250)
 
     messages
   end
@@ -136,9 +108,4 @@ defmodule BroadwayExample.Pipeline do
   end
 
   defp format(amount), do: :erlang.float_to_binary(amount, decimals: 2)
-
-  defp batcher_for(%{amount_cents: cents}) when cents >= @suspicious_threshold_cents,
-    do: :suspicious
-
-  defp batcher_for(_payment), do: :default
 end

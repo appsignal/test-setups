@@ -5,17 +5,11 @@ defmodule BroadwayExample.PipelineTest do
   alias BroadwayExample.{Event, Pipeline}
 
   describe "handle_message/3" do
-    test "converts the amount and routes ordinary payments to the default batcher" do
+    test "converts the amount and routes the message to the default batcher" do
       message = Pipeline.handle_message(:default, message(%{amount_cents: 1_250}), nil)
 
       assert message.data.amount == 12.5
       assert message.batcher == :default
-    end
-
-    test "routes large payments to the suspicious batcher" do
-      message = Pipeline.handle_message(:default, message(%{amount_cents: 250_000}), nil)
-
-      assert message.batcher == :suspicious
     end
 
     test "batches per currency" do

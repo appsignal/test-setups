@@ -10,21 +10,20 @@ A [Broadway](https://elixir-broadway.org/) example app, running Broadway 1.3.0.
 ```
 producer (1)
    |
-processors (2)            handle_message/3, once per message
-   |          \
-:default    :suspicious   batchers, grouping messages into batches
-   |             |
-batch procs   batch procs handle_batch/4, once per batch
+processors (2)   handle_message/3, once per message
+   |
+:default         batcher, grouping messages into batches
+   |
+batch procs      handle_batch/4, once per batch
 ```
 
 - **Producer** — `BroadwayExample.Producer`, a hand-written GenStage producer,
   so the app needs no message broker.
 - **Processors** — two concurrent processes running `handle_message/3`.
-  Each message is enriched, then tagged with a batcher (`:default`, or
-  `:suspicious` for payments of 2000.00 or more) and a batch key (the currency).
-- **Batchers** — `:default` flushes every 10 messages or 2 seconds,
-  `:suspicious` every 3 messages or 5 seconds. `handle_batch/4` then handles the
-  whole batch in one go.
+  Each message is enriched, then tagged with the `:default` batcher and a batch
+  key (the currency).
+- **Batcher** — `:default` flushes every 10 messages or 2 seconds.
+  `handle_batch/4` then handles the whole batch in one go.
 - **Acknowledger** — `BroadwayExample.Acknowledger`.  Broadway calls it with the
   successful and failed messages of every batch.  With a real source this is
   where messages get deleted from the queue or requeued.
@@ -45,7 +44,6 @@ the app has an index page and so bursts of messages can be pushed by hand:
 | `/`                | Status page with the pipeline's counters           |
 | `/push`            | 50 random payments                                 |
 | `/push/slow`       | 5 payments that take a while in `handle_message/3` |
-| `/push/suspicious` | 6 payments routed to the `:suspicious` batcher     |
 | `/push/failing`    | 3 payments that raise in `handle_message/3`        |
 | `/push/burst`      | 500 payments at once                               |
 | `/topology`        | The running Broadway topology                      |

@@ -10,8 +10,7 @@ defmodule BroadwayExample.Stats do
   @counters [
     :produced,
     :processed,
-    :batched_default,
-    :batched_suspicious,
+    :batched,
     :acked,
     :failed
   ]
