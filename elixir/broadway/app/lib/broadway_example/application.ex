@@ -257,46 +257,53 @@ defmodule BroadwayExample.Application do
     |> @tracer.close_span()
   end
 
-  def log_exception(_event, _measurements, metadata, _config) do
+  def log_exception(event, measurements, metadata, config) do
     IO.puts("Log exception")
     # IO.inspect(event, label: "event")
     # IO.inspect(measurements, label: "measurements")
     # IO.inspect(metadata, label: "metadata")
     # IO.inspect(config, label: "config")
 
-    do_log_exception(metadata)
+    current_span = @tracer.current_span()
+    do_log_exception(metadata, current_span)
+
+    if current_span do
+      broadway_message_stop(event, measurements, metadata, config)
+    end
   end
 
-  defp do_log_exception(%{
-         index: index,
-         message: %Broadway.Message{
-           data:
-             %{
-               id: _id,
-               fail: _fail,
-               currency: _currency,
-               amount_cents: _amount_cents,
-               customer: _customer,
-               queued_at: _queued_at
-             } = message,
-           metadata: %{},
-           acknowledger: {BroadwayExample.Acknowledger, :payments, %{}},
-           batcher: :default,
-           batch_key: :default,
-           batch_mode: :bulk,
-           status: :ok
-         },
-         name: name,
-         reason: reason,
-         context: _context,
-         stacktrace: stacktrace,
-         kind: kind,
-         telemetry_span_context: telemetry_span_context,
-         producer: producer,
-         topology_name: topology_name,
-         processor_key: processor_key
-       }) do
-    span = @tracer.create_span("broadway")
+  defp do_log_exception(metadata, current_span) do
+    %{
+      index: index,
+      message: %Broadway.Message{
+        data:
+          %{
+            id: _id,
+            fail: _fail,
+            currency: _currency,
+            amount_cents: _amount_cents,
+            customer: _customer,
+            queued_at: _queued_at
+          } = message,
+        metadata: %{},
+        acknowledger: {BroadwayExample.Acknowledger, :payments, %{}},
+        batcher: :default,
+        batch_key: :default,
+        batch_mode: :bulk,
+        status: :ok
+      },
+      name: name,
+      reason: reason,
+      context: _context,
+      stacktrace: stacktrace,
+      kind: kind,
+      telemetry_span_context: telemetry_span_context,
+      producer: producer,
+      topology_name: topology_name,
+      processor_key: processor_key
+    } = metadata
+
+    span = @tracer.create_span("broadway", current_span)
 
     span
     |> @span.set_attribute("appsignal:category", "processor_message_exception.broadway")
