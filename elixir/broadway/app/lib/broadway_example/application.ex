@@ -81,7 +81,7 @@ defmodule BroadwayExample.Application do
     "broadway"
     |> @tracer.create_span()
     |> @span.set_attribute("appsignal:category", "processor.broadway")
-    |> @span.set_name(name)
+    |> @span.set_name(to_string(name))
     |> @span.set_attribute("index", index)
     |> @span.set_attribute("message_count", length(messages))
     |> @span.set_attribute("processor_key", to_string(processor_key))
@@ -126,7 +126,7 @@ defmodule BroadwayExample.Application do
     "broadway"
     |> @tracer.create_span(current_span)
     |> @span.set_attribute("appsignal:category", "batch_processor.broadway")
-    |> @span.set_name(name)
+    |> @span.set_name(to_string(name))
     |> @span.set_attribute("index", index)
     |> @span.set_attribute("message_count", length(messages))
     |> @span.set_attribute("topology_name", inspect(topology_name))
@@ -190,7 +190,7 @@ defmodule BroadwayExample.Application do
 
     span
     |> @span.set_attribute("appsignal:category", "message.broadway")
-    |> @span.set_name(name)
+    |> @span.set_name(to_string(name))
     |> @span.set_sample_data("message", to_string(inspect(message)))
     |> @span.set_attribute("index", index)
     |> @span.set_attribute("processor_key", processor_key)
@@ -215,7 +215,7 @@ defmodule BroadwayExample.Application do
               batch_mode: _batch_mode,
               status: _status
             } = message,
-          name: name,
+          name: _name,
           context: _context,
           telemetry_span_context: telemetry_span_context,
           producer: producer,
@@ -304,7 +304,7 @@ defmodule BroadwayExample.Application do
 
     span
     |> @span.set_attribute("appsignal:category", "exception.broadway")
-    |> @span.set_name(name)
+    |> @span.set_name(to_string(name))
     |> @span.set_sample_data("message", to_string(inspect(message)))
     |> @span.set_attribute("index", index)
     |> @span.set_attribute("processor_key", processor_key)
