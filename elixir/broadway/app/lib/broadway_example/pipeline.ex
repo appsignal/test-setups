@@ -70,8 +70,9 @@ defmodule BroadwayExample.Pipeline do
     message
     |> Message.put_data(enriched)
     |> Message.put_batcher(:default)
-    # The batch key splits a batcher's messages into separate batches. Grouping
-    # by currency means handle_batch/4 never sees a mixed-currency batch.
+    # The batch key splits one batcher's messages into separate batches. Every
+    # payment is in EUR, so there is only ever one key in practice; it is kept
+    # to show where that split would happen.
     |> Message.put_batch_key(enriched.currency)
   end
 

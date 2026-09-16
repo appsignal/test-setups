@@ -8,7 +8,7 @@ defmodule BroadwayExample.Event do
   """
 
   @customers ~w(acme globex initech umbrella hooli)
-  @currencies ~w(EUR USD GBP)
+  @currency "EUR"
 
   @doc """
   Builds a random payment event.
@@ -21,7 +21,7 @@ defmodule BroadwayExample.Event do
       %{
         id: System.unique_integer([:positive, :monotonic]),
         customer: Enum.random(@customers),
-        currency: Enum.random(@currencies),
+        currency: @currency,
         amount_cents: Enum.random(100..250_000),
         queued_at: System.monotonic_time(:millisecond)
       },

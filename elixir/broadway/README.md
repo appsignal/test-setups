@@ -21,7 +21,8 @@ batch procs      handle_batch/4, once per batch
   so the app needs no message broker.
 - **Processors** — two concurrent processes running `handle_message/3`.
   Each message is enriched, then tagged with the `:default` batcher and a batch
-  key (the currency).
+  key.  Every payment is in EUR, so the batch key is always the same; it is
+  there to show where a batcher would split its messages further.
 - **Batcher** — `:default` flushes every 10 messages or 2 seconds.
   `handle_batch/4` then handles the whole batch in one go.
 - **Acknowledger** — `BroadwayExample.Acknowledger`.  Broadway calls it with the

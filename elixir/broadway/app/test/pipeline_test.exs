@@ -12,10 +12,10 @@ defmodule BroadwayExample.PipelineTest do
       assert message.batcher == :default
     end
 
-    test "batches per currency" do
-      message = Pipeline.handle_message(:default, message(%{currency: "GBP"}), nil)
+    test "uses the currency as the batch key" do
+      message = Pipeline.handle_message(:default, message(%{}), nil)
 
-      assert message.batch_key == "GBP"
+      assert message.batch_key == "EUR"
     end
 
     test "raises for messages flagged to fail" do
