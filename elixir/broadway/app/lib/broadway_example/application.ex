@@ -30,12 +30,12 @@ defmodule BroadwayExample.Application do
     handlers = %{
       [:broadway, :topology, :init] => &__MODULE__.broadway_topology_init/4,
       [:broadway, :processor, :start] => &__MODULE__.broadway_processor_start/4,
-      [:broadway, :batch_processor, :start] => &__MODULE__.broadway_batch_processor_start/4,
+      [:broadway, :processor, :stop] => &__MODULE__.broadway_processor_stop/4,
       [:broadway, :processor, :message, :start] => &__MODULE__.broadway_message_start/4,
-      [:broadway, :processor, :message, :exception] => &__MODULE__.log_exception/4,
       [:broadway, :processor, :message, :stop] => &__MODULE__.broadway_message_stop/4,
-      [:broadway, :batch_processor, :stop] => &__MODULE__.broadway_batch_processor_stop/4,
-      [:broadway, :processor, :stop] => &__MODULE__.broadway_processor_stop/4
+      [:broadway, :processor, :message, :exception] => &__MODULE__.log_exception/4,
+      [:broadway, :batch_processor, :start] => &__MODULE__.broadway_batch_processor_start/4,
+      [:broadway, :batch_processor, :stop] => &__MODULE__.broadway_batch_processor_stop/4
     }
 
     for {event, fun} <- handlers do
