@@ -11,7 +11,7 @@ services:
       - "4001:4001"
     environment:
       - PORT=4001
-      - APPSIGNAL_APP_NAME=elixir-broadway-2
+      - APPSIGNAL_APP_NAME=elixir-broadway
       - INTEGRATION_PATH=/integration
     env_file:
       - ../../appsignal.env
