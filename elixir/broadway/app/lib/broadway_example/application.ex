@@ -78,8 +78,10 @@ defmodule BroadwayExample.Application do
       producer: producer
     } = metadata
 
+    current_span = @tracer.current_span()
+
     "broadway"
-    |> @tracer.create_span()
+    |> @tracer.create_span(current_span)
     |> @span.set_attribute("appsignal:category", "processor.broadway")
     |> @span.set_name(to_string(name))
     |> @span.set_attribute("index", index)
@@ -311,9 +313,7 @@ defmodule BroadwayExample.Application do
     |> @span.set_attribute("topology_name", topology_name)
     |> @span.set_attribute("telemetry_span_context", telemetry_span_context)
     |> @span.set_attribute("producer", producer)
-    |> @span.set_attribute("kind", kind)
-    |> @span.set_attribute("reason", to_string(inspect(reason)))
-    |> @span.set_attribute("stacktrace", to_string(inspect(stacktrace)))
+    |> @span.add_error(kind, to_string(inspect(reason)), to_string(inspect(stacktrace)))
     |> IO.inspect(label: "broadway_exception")
     |> @tracer.close_span()
   end
