@@ -20,9 +20,14 @@ defmodule BroadwayExample.Pipeline do
   alias Broadway.Message
   alias BroadwayExample.{Acknowledger, Failure, Stats}
 
-  def start_link(_opts) do
+  @doc """
+  The name the second copy of this pipeline is registered under.
+  """
+  def registered_name, do: {:via, Registry, {BroadwayExample.Registry, :registered_pipeline}}
+
+  def start_link(opts) do
     Broadway.start_link(__MODULE__,
-      name: __MODULE__,
+      name: Keyword.get(opts, :name, __MODULE__),
       producer: [
         module: {BroadwayExample.Producer, []},
         # Our producer emits plain maps, not %Broadway.Message{} structs, so a
@@ -43,6 +48,16 @@ defmodule BroadwayExample.Pipeline do
       ]
     )
   end
+
+  # Broadway names every process in a topology after the pipeline's name. It
+  # can only build those names itself from an atom, so a pipeline registered
+  # with a `{:via, module, term}` name has to name its own processes.
+  @impl Broadway
+  def process_name({:via, Registry, {registry, key}}, base_name) do
+    {:via, Registry, {registry, {key, base_name}}}
+  end
+
+  def process_name(name, base_name), do: :"#{name}.Broadway.#{base_name}"
 
   @doc """
   Turns an event emitted by the producer into a `Broadway.Message`.

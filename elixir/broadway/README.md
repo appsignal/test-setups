@@ -31,6 +31,13 @@ batch procs      handle_batch/4, once per batch
 
 The status page's counters are kept in `BroadwayExample.Stats`.
 
+The app starts the same pipeline a second time, registered under
+`{:via, Registry, {BroadwayExample.Registry, :registered_pipeline}}` rather
+than an atom.  Broadway accepts such names from 1.1.0 on, provided the pipeline
+names its own processes with `process_name/2`, so their process names are
+tuples too.  `/push/registered` sends a payment to that copy.  The counters are
+shared between the two.
+
 Before `handle_message/3` runs, `prepare_messages/2` looks up the customers of
 every message in a processor call at once.  Both callbacks wrap their work in
 `Appsignal.instrument`, so the app's own instrumentation runs inside them.
@@ -47,6 +54,7 @@ the app has an index page and so bursts of messages can be pushed by hand:
 | `/push`         | 1 payment                                   |
 | `/push/failing` | 1 payment that raises in `handle_message/3` |
 | `/push/failing_prepare` | 1 payment that raises in `prepare_messages/2` |
+| `/push/registered` | 1 payment to the pipeline registered under a `{:via, ...}` name |
 | `/push/burst`   | 500 payments at once                        |
 | `/topology`     | The running Broadway topology               |
 | `/error`        | Raises in the web request                   |
