@@ -79,7 +79,7 @@ defmodule BroadwayExample.Router do
       <h1>Broadway test app</h1>
 
       <p>
-        Push payment events with the links below. Two processors enrich each one
+        Push payment events with the links below. Four processors enrich each one
         and hand it to the <code>:default</code> batcher, which settles them in
         batches. Nothing happens until you push.
       </p>

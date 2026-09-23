@@ -10,7 +10,7 @@ A [Broadway](https://elixir-broadway.org/) example app, running Broadway 1.3.0.
 ```
 producer (1)
    |
-processors (2)   handle_message/3, once per message
+processors (4)   handle_message/3, once per message
    |
 :default         batcher, grouping messages into batches
    |
@@ -19,7 +19,7 @@ batch procs      handle_batch/4, once per batch
 
 - **Producer** — `BroadwayExample.Producer`, a hand-written GenStage producer,
   so the app needs no message broker.
-- **Processors** — two concurrent processes running `handle_message/3`.
+- **Processors** — four concurrent processes running `handle_message/3`.
   Each message is enriched, then tagged with the `:default` batcher and a batch
   key.  Every payment is in EUR, so the batch key is always the same; it is
   there to show where a batcher would split its messages further.

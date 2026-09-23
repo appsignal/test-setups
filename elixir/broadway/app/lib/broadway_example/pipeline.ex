@@ -6,7 +6,7 @@ defmodule BroadwayExample.Pipeline do
 
       producer (1)
          |
-      processors (2)   handle_message/3, once per message
+      processors (4)   handle_message/3, once per message
          |
       :default         batcher, grouping messages into batches
          |
@@ -32,8 +32,9 @@ defmodule BroadwayExample.Pipeline do
         concurrency: 1
       ],
       processors: [
-        # Two processor processes, each asking for at most 5 messages at a time.
-        default: [concurrency: 2, max_demand: 5]
+        # Four processor processes, each asking for at most 5 messages at a
+        # time.
+        default: [concurrency: 4, max_demand: 5]
       ],
       batchers: [
         # Flush as soon as 10 messages pile up, or after 2 seconds, whichever
