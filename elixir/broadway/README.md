@@ -31,8 +31,9 @@ batch procs      handle_batch/4, once per batch
 
 The status page's counters are kept in `BroadwayExample.Stats`.
 
-There is no monitoring in this app yet.  Adding an AppSignal integration for
-Broadway is a separate, later step.
+Before `handle_message/3` runs, `prepare_messages/2` looks up the customers of
+every message in a processor call at once.  Both callbacks wrap their work in
+`Appsignal.instrument`, so the app's own instrumentation runs inside them.
 
 
 ## The web interface
@@ -45,6 +46,7 @@ the app has an index page and so bursts of messages can be pushed by hand:
 | `/`             | Status page with the pipeline's counters    |
 | `/push`         | 1 payment                                   |
 | `/push/failing` | 1 payment that raises in `handle_message/3` |
+| `/push/failing_prepare` | 1 payment that raises in `prepare_messages/2` |
 | `/push/burst`   | 500 payments at once                        |
 | `/topology`     | The running Broadway topology               |
 | `/error`        | Raises in the web request                   |

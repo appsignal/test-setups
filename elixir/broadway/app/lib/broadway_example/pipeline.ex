@@ -50,6 +50,27 @@ defmodule BroadwayExample.Pipeline do
     %Message{data: event, acknowledger: Acknowledger.init()}
   end
 
+  # Called once per group of messages a processor receives, before
+  # handle_message/3 runs for each of them. The place for work that is cheaper
+  # to do for many messages at once, like a single lookup for all of them.
+  @impl Broadway
+  def prepare_messages(messages, _context) do
+    if Enum.any?(messages, & &1.data[:fail_prepare]) do
+      raise "Could not look up the customers of #{length(messages)} payment(s)"
+    end
+
+    customers =
+      Appsignal.instrument("Look up customers", "lookup.customers", fn ->
+        Process.sleep(5)
+
+        messages |> Enum.map(& &1.data.customer) |> Enum.uniq()
+      end)
+
+    Enum.map(messages, fn message ->
+      Message.update_data(message, &Map.put(&1, :known_customer, &1.customer in customers))
+    end)
+  end
+
   @impl Broadway
   def handle_message(:default, %Message{data: event} = message, _context) do
     Stats.record(:processed, 1)
@@ -58,7 +79,12 @@ defmodule BroadwayExample.Pipeline do
       raise BroadwayExample.ProcessingError, id: event.id
     end
 
-    enriched = Map.put(event, :amount, event.amount_cents / 100)
+    enriched =
+      Appsignal.instrument("Enrich payment", "enrich.payment", fn ->
+        Process.sleep(2)
+
+        Map.put(event, :amount, event.amount_cents / 100)
+      end)
 
     Logger.debug(
       "Processed payment #{enriched.id}: #{format(enriched.amount)} #{enriched.currency} " <>
