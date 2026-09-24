@@ -11,7 +11,14 @@ defmodule BroadwayExample.Application do
 
     children = [
       BroadwayExample.Stats,
+      {Registry, keys: :unique, name: BroadwayExample.Registry},
       BroadwayExample.Pipeline,
+      # The same pipeline a second time, under a `{:via, Registry, ...}` name
+      # rather than an atom.
+      Supervisor.child_spec(
+        {BroadwayExample.Pipeline, name: BroadwayExample.Pipeline.registered_name()},
+        id: :registered_pipeline
+      ),
       {Plug.Cowboy, scheme: :http, plug: BroadwayExample.Router, options: [port: port]}
     ]
 

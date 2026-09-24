@@ -10,7 +10,7 @@ defmodule BroadwayExample.Router do
   use Plug.Router
   use Appsignal.Plug
 
-  alias BroadwayExample.{Event, Producer, Stats}
+  alias BroadwayExample.{Event, Pipeline, Producer, Stats}
 
   plug(:match)
   plug(:dispatch)
@@ -29,6 +29,18 @@ defmodule BroadwayExample.Router do
     push_payments(1, %{fail: true})
 
     redirect(conn, "Pushed 1 failing payment")
+  end
+
+  get "/push/failing_prepare" do
+    push_payments(1, %{fail_prepare: true})
+
+    redirect(conn, "Pushed 1 payment that fails in prepare_messages/2")
+  end
+
+  get "/push/registered" do
+    1 |> Event.random_batch() |> Producer.push(Pipeline.registered_name())
+
+    redirect(conn, "Pushed 1 payment to the registered pipeline")
   end
 
   get "/push/burst" do
@@ -73,7 +85,7 @@ defmodule BroadwayExample.Router do
       <h1>Broadway test app</h1>
 
       <p>
-        Push payment events with the links below. Two processors enrich each one
+        Push payment events with the links below. Four processors enrich each one
         and hand it to the <code>:default</code> batcher, which settles them in
         batches. Nothing happens until you push.
       </p>
@@ -92,6 +104,8 @@ defmodule BroadwayExample.Router do
       <ul>
         <li><a href="/push">GET /push</a> &mdash; 1 payment</li>
         <li><a href="/push/failing">GET /push/failing</a> &mdash; 1 payment that raises in the processor</li>
+        <li><a href="/push/failing_prepare">GET /push/failing_prepare</a> &mdash; 1 payment that raises in <code>prepare_messages/2</code></li>
+        <li><a href="/push/registered">GET /push/registered</a> &mdash; 1 payment to the copy of the pipeline registered under a <code>{:via, Registry, ...}</code> name</li>
         <li><a href="/push/burst">GET /push/burst</a> &mdash; 500 payments at once</li>
       </ul>
 

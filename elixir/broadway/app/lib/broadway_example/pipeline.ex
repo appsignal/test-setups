@@ -6,7 +6,7 @@ defmodule BroadwayExample.Pipeline do
 
       producer (1)
          |
-      processors (2)   handle_message/3, once per message
+      processors (4)   handle_message/3, once per message
          |
       :default         batcher, grouping messages into batches
          |
@@ -20,9 +20,14 @@ defmodule BroadwayExample.Pipeline do
   alias Broadway.Message
   alias BroadwayExample.{Acknowledger, Failure, Stats}
 
-  def start_link(_opts) do
+  @doc """
+  The name the second copy of this pipeline is registered under.
+  """
+  def registered_name, do: {:via, Registry, {BroadwayExample.Registry, :registered_pipeline}}
+
+  def start_link(opts) do
     Broadway.start_link(__MODULE__,
-      name: __MODULE__,
+      name: Keyword.get(opts, :name, __MODULE__),
       producer: [
         module: {BroadwayExample.Producer, []},
         # Our producer emits plain maps, not %Broadway.Message{} structs, so a
@@ -32,8 +37,9 @@ defmodule BroadwayExample.Pipeline do
         concurrency: 1
       ],
       processors: [
-        # Two processor processes, each asking for at most 5 messages at a time.
-        default: [concurrency: 2, max_demand: 5]
+        # Four processor processes, each asking for at most 5 messages at a
+        # time.
+        default: [concurrency: 4, max_demand: 5]
       ],
       batchers: [
         # Flush as soon as 10 messages pile up, or after 2 seconds, whichever
@@ -43,11 +49,42 @@ defmodule BroadwayExample.Pipeline do
     )
   end
 
+  # Broadway names every process in a topology after the pipeline's name. It
+  # can only build those names itself from an atom, so a pipeline registered
+  # with a `{:via, module, term}` name has to name its own processes.
+  @impl Broadway
+  def process_name({:via, Registry, {registry, key}}, base_name) do
+    {:via, Registry, {registry, {key, base_name}}}
+  end
+
+  def process_name(name, base_name), do: :"#{name}.Broadway.#{base_name}"
+
   @doc """
   Turns an event emitted by the producer into a `Broadway.Message`.
   """
   def transform(event, _opts) do
     %Message{data: event, acknowledger: Acknowledger.init()}
+  end
+
+  # Called once per group of messages a processor receives, before
+  # handle_message/3 runs for each of them. The place for work that is cheaper
+  # to do for many messages at once, like a single lookup for all of them.
+  @impl Broadway
+  def prepare_messages(messages, _context) do
+    if Enum.any?(messages, & &1.data[:fail_prepare]) do
+      raise "Could not look up the customers of #{length(messages)} payment(s)"
+    end
+
+    customers =
+      Appsignal.instrument("Look up customers", "lookup.customers", fn ->
+        Process.sleep(5)
+
+        messages |> Enum.map(& &1.data.customer) |> Enum.uniq()
+      end)
+
+    Enum.map(messages, fn message ->
+      Message.update_data(message, &Map.put(&1, :known_customer, &1.customer in customers))
+    end)
   end
 
   @impl Broadway
@@ -58,7 +95,12 @@ defmodule BroadwayExample.Pipeline do
       raise BroadwayExample.ProcessingError, id: event.id
     end
 
-    enriched = Map.put(event, :amount, event.amount_cents / 100)
+    enriched =
+      Appsignal.instrument("Enrich payment", "enrich.payment", fn ->
+        Process.sleep(2)
+
+        Map.put(event, :amount, event.amount_cents / 100)
+      end)
 
     Logger.debug(
       "Processed payment #{enriched.id}: #{format(enriched.amount)} #{enriched.currency} " <>

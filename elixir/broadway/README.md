@@ -10,7 +10,7 @@ A [Broadway](https://elixir-broadway.org/) example app, running Broadway 1.3.0.
 ```
 producer (1)
    |
-processors (2)   handle_message/3, once per message
+processors (4)   handle_message/3, once per message
    |
 :default         batcher, grouping messages into batches
    |
@@ -19,7 +19,7 @@ batch procs      handle_batch/4, once per batch
 
 - **Producer** — `BroadwayExample.Producer`, a hand-written GenStage producer,
   so the app needs no message broker.
-- **Processors** — two concurrent processes running `handle_message/3`.
+- **Processors** — four concurrent processes running `handle_message/3`.
   Each message is enriched, then tagged with the `:default` batcher and a batch
   key.  Every payment is in EUR, so the batch key is always the same; it is
   there to show where a batcher would split its messages further.
@@ -31,8 +31,16 @@ batch procs      handle_batch/4, once per batch
 
 The status page's counters are kept in `BroadwayExample.Stats`.
 
-There is no monitoring in this app yet.  Adding an AppSignal integration for
-Broadway is a separate, later step.
+The app starts the same pipeline a second time, registered under
+`{:via, Registry, {BroadwayExample.Registry, :registered_pipeline}}` rather
+than an atom.  Broadway accepts such names from 1.1.0 on, provided the pipeline
+names its own processes with `process_name/2`, so their process names are
+tuples too.  `/push/registered` sends a payment to that copy.  The counters are
+shared between the two.
+
+Before `handle_message/3` runs, `prepare_messages/2` looks up the customers of
+every message in a processor call at once.  Both callbacks wrap their work in
+`Appsignal.instrument`, so the app's own instrumentation runs inside them.
 
 
 ## The web interface
@@ -45,6 +53,8 @@ the app has an index page and so bursts of messages can be pushed by hand:
 | `/`             | Status page with the pipeline's counters    |
 | `/push`         | 1 payment                                   |
 | `/push/failing` | 1 payment that raises in `handle_message/3` |
+| `/push/failing_prepare` | 1 payment that raises in `prepare_messages/2` |
+| `/push/registered` | 1 payment to the pipeline registered under a `{:via, ...}` name |
 | `/push/burst`   | 500 payments at once                        |
 | `/topology`     | The running Broadway topology               |
 | `/error`        | Raises in the web request                   |
