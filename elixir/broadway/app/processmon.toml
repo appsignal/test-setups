@@ -1,0 +1,14 @@
+[[paths_to_watch]]
+path = "/app"
+ignore = [
+  # The Expert language server keeps rebuilding AppSignal's NIF in here,
+  # which would otherwise restart the app every couple of seconds.
+  ".expert",
+  "_build",
+  "deps"
+]
+
+[processes.app]
+command = "elixir"
+args = ["--sname", "server", "--cookie", "server", "-S", "mix", "run", "--no-halt"]
+working_dir = "/app"
