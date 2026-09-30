@@ -216,6 +216,15 @@ def logs(request):
     except Exception as e:
         logger.exception("An exception occurred: %s", e)
 
+    # A log message that is not a string. The collector reads it as a
+    # structured log line, taking the message out of it and keeping the rest
+    # as attributes.
+    logger.warning({"message": "This is a structured log", "order_id": 1234})
+
+    # The same data through `extra`, which is the idiomatic way to attach
+    # attributes to a log line.
+    logger.warning("This is a log with extra", extra={"order_id": 5678})
+
     return HttpResponse("I emitted some logs to AppSignal!")
 
 
