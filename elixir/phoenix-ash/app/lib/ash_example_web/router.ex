@@ -18,6 +18,8 @@ defmodule AshExampleWeb.Router do
     pipe_through :browser
 
     live "/", TaskLive
+    get "/slow", PageController, :slow
+    get "/error", PageController, :error
   end
 
   # Other scopes may use custom stacks.
