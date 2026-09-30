@@ -364,26 +364,46 @@ jobs:
         include:
         - app: python/django4-asgi
           mode: agent
+        - app: python/django4-asgi
+          mode: collector
         - app: python/django4-celery
           mode: agent
+        - app: python/django4-celery
+          mode: collector
         - app: python/django4-wsgi
           mode: agent
+        - app: python/django4-wsgi
+          mode: collector
         - app: python/django5-celery
           mode: agent
+        - app: python/django5-celery
+          mode: collector
         - app: python/django5-celery-opentelemetry
           mode: default
         - app: python/fastapi
           mode: agent
+        - app: python/fastapi
+          mode: collector
         - app: python/fastapi-databases
           mode: agent
+        - app: python/fastapi-databases
+          mode: collector
         - app: python/flask
           mode: agent
+        - app: python/flask
+          mode: collector
         - app: python/flask-pika
           mode: agent
+        - app: python/flask-pika
+          mode: collector
         - app: python/flask-sqlalchemy
           mode: agent
+        - app: python/flask-sqlalchemy
+          mode: collector
         - app: python/starlette
           mode: agent
+        - app: python/starlette
+          mode: collector
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -420,58 +440,100 @@ jobs:
         include:
         - app: ruby/grape
           mode: agent
+        - app: ruby/grape
+          mode: collector
         - app: ruby/hanami2-postgres
           mode: agent
+        - app: ruby/hanami2-postgres
+          mode: collector
         - app: ruby/jruby-rails6
           mode: default
         - app: ruby/padrino
           mode: default
         - app: ruby/rack
           mode: agent
+        - app: ruby/rack
+          mode: collector
         - app: ruby/rails6-mongo
           mode: default
         - app: ruby/rails6-mysql
           mode: agent
+        - app: ruby/rails6-mysql
+          mode: collector
         - app: ruby/rails6-shakapacker
           mode: agent
+        - app: ruby/rails6-shakapacker
+          mode: collector
         - app: ruby/rails6-shoryuken
           mode: agent
+        - app: ruby/rails6-shoryuken
+          mode: collector
         - app: ruby/rails7-delayed-job
           mode: agent
+        - app: ruby/rails7-delayed-job
+          mode: collector
         - app: ruby/rails7-goodjob
           mode: agent
+        - app: ruby/rails7-goodjob
+          mode: collector
         - app: ruby/rails7-postgres
           mode: agent
+        - app: ruby/rails7-postgres
+          mode: collector
         - app: ruby/rails7-sequel
           mode: agent
+        - app: ruby/rails7-sequel
+          mode: collector
         - app: ruby/rails7-sidekiq
           mode: agent
+        - app: ruby/rails7-sidekiq
+          mode: collector
         - app: ruby/rails7-solid-cache
           mode: agent
+        - app: ruby/rails7-solid-cache
+          mode: collector
         - app: ruby/rails7-solid-queue
           mode: agent
+        - app: ruby/rails7-solid-queue
+          mode: collector
         - app: ruby/rails8-delayed-job
           mode: agent
+        - app: ruby/rails8-delayed-job
+          mode: collector
         - app: ruby/rails8-que
           mode: agent
+        - app: ruby/rails8-que
+          mode: collector
         - app: ruby/rails8-resque
           mode: agent
+        - app: ruby/rails8-resque
+          mode: collector
         - app: ruby/rails8-sidekiq
           mode: agent
+        - app: ruby/rails8-sidekiq
+          mode: collector
         - app: ruby/rails8-sidekiq-opentelemetry
           mode: default
         - app: ruby/sinatra-alpine
           mode: agent
+        - app: ruby/sinatra-alpine
+          mode: collector
         - app: ruby/sinatra-gvltools
           mode: agent
+        - app: ruby/sinatra-gvltools
+          mode: collector
         - app: ruby/sinatra-puma
           mode: default
         - app: ruby/sinatra-redis
           mode: default
         - app: ruby/webmachine1
           mode: agent
+        - app: ruby/webmachine1
+          mode: collector
         - app: ruby/webmachine2
           mode: agent
+        - app: ruby/webmachine2
+          mode: collector
     steps:
     - name: Checkout
       uses: actions/checkout@v4

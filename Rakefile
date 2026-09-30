@@ -176,13 +176,12 @@ def testable_mode?(app, mode)
   tests.is_a?(Hash) && Array(tests["profiles"]).include?("tests")
 end
 
-# The `[app, mode]` pair for each app whose mode without a `mode=` parameter is
-# testable, grouped by language.
+# Every testable `[app, mode]` pair, grouped by language.
 def ci_jobs
   LANGUAGES.each_with_object({}) do |language, jobs|
     entries = Dir["#{language}/*/"].map { |dir| dir.delete_suffix("/") }.sort
-      .reject { |app| app.end_with?("/integration") || available_modes(app).empty? }
-      .map { |app| [app, resolve_mode(app, nil)] }
+      .reject { |app| app.end_with?("/integration") }
+      .flat_map { |app| available_modes(app).sort.map { |mode| [app, resolve_mode(app, mode)] } }
       .select { |app, mode| testable_mode?(app, mode) }
     jobs[language] = entries unless entries.empty?
   end
