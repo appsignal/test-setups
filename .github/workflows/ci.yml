@@ -56,6 +56,7 @@ jobs:
           - elixir/plug
           - elixir/plug-ecto
           - elixir/plug-oban
+          - elixir/phoenix-ash
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -218,10 +219,12 @@ jobs:
       matrix:
         app:
           - nodejs/express-apollo
+          - nodejs/express-elasticsearch
           - nodejs/express-bullmq
           - nodejs/express-mongoose
           - nodejs/express-postgres
           - nodejs/express-postgres-opentelemetry
+          - nodejs/express-rabbitmq
           - nodejs/express-redis
           - nodejs/express-redis-alpine
           - nodejs/express-yoga
@@ -287,6 +290,8 @@ jobs:
           - ruby/rails7-delayed-job
           - ruby/rails7-sequel
           - ruby/rails7-sidekiq
+          - ruby/rails7-solid-cache
+          - ruby/rails7-solid-queue
           - ruby/rails8-delayed-job
           - ruby/rails8-que
           - ruby/rails8-resque
@@ -295,6 +300,7 @@ jobs:
           - ruby/sinatra-redis
           - ruby/sinatra-alpine
           - ruby/sinatra-puma
+          - ruby/sinatra-gvltools
           - ruby/webmachine1
           - ruby/webmachine2
     steps:
@@ -342,8 +348,13 @@ jobs:
           - python/django5-celery
           - python/django5-celery-opentelemetry
           - python/django4-celery
+          - python/django4-asgi
+          - python/django4-wsgi
           - python/flask
+          - python/flask-pika
+          - python/flask-sqlalchemy
           - python/fastapi
+          - python/fastapi-databases
           - python/starlette
     steps:
       - name: Checkout
@@ -382,12 +393,30 @@ jobs:
           - php/symfony-opentelemetry
           - php/laravel-opentelemetry
           - php/vanilla-opentelemetry
+          - php/laravel
+          - php/symfony
+          - php/vanilla
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Cache processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Update Docker Compose
+        run: |
+          mkdir -p ~/.docker/cli-plugins
+          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
+
       - name: Setup environment
-        run: echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+        run: |
+          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+          rake integrations:clone
 
       - name: Run tests
         run: rake app=${{ matrix.app }} app:test
