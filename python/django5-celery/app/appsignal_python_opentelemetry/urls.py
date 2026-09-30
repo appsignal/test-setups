@@ -34,5 +34,7 @@ urlpatterns = [
     path('custom_instrumentation/', views.custom_instrumentation, name='custom_instrumentation'),
     path('metrics/', views.metrics, name='metrics'),
     path('logs/', views.logs, name='logs'),
+    path('logs_reconfigure/', views.logs_reconfigure, name='logs_reconfigure'),
+    path('logs_duplicate_handler/', views.logs_duplicate_handler, name='logs_duplicate_handler'),
     path('blog/', include("blog.urls"))
 ]

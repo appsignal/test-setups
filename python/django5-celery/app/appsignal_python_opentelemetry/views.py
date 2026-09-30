@@ -216,7 +216,56 @@ def logs(request):
     except Exception as e:
         logger.exception("An exception occurred: %s", e)
 
+    # A log message that is not a string. The collector reads it as a
+    # structured log line, taking the message out of it and keeping the rest
+    # as attributes.
+    logger.warning({"message": "This is a structured log", "order_id": 1234})
+
+    # The same data through `extra`, which is the idiomatic way to attach
+    # attributes to a log line.
+    logger.warning("This is a log with extra", extra={"order_id": 5678})
+
     return HttpResponse("I emitted some logs to AppSignal!")
+
+
+def logs_duplicate_handler(request):
+    """Configure logging the way our documentation used to tell Django users
+    to, with an OpenTelemetry log handler of their own, and log afterwards."""
+    import logging
+    import logging.config
+    from opentelemetry.sdk._logs import LoggingHandler
+
+    logging.config.dictConfig({
+        "version": 1,
+        "disable_existing_loggers": False,
+        "handlers": {"appsignal": {"()": LoggingHandler, "level": logging.NOTSET}},
+        "loggers": {"my app": {"handlers": ["appsignal"], "level": "INFO"}},
+    })
+
+    logger = logging.getLogger("my app")
+    logger.warning("This is a log with a handler of the app's own")
+
+    return HttpResponse("I emitted a log with my own handler attached!")
+
+
+def logs_reconfigure(request):
+    """Reconfigure the logging module the way a Django application does, with
+    a LOGGING setting that puts its own handlers on the root logger, and log
+    again afterwards."""
+    import logging
+    import logging.config
+
+    logging.config.dictConfig({
+        "version": 1,
+        "disable_existing_loggers": False,
+        "handlers": {"console": {"class": "logging.StreamHandler"}},
+        "root": {"handlers": ["console"], "level": "INFO"},
+    })
+
+    logger = logging.getLogger("my app")
+    logger.warning("This is a log after reconfiguring logging")
+
+    return HttpResponse("I reconfigured logging and emitted a log!")
 
 
 class MyException(Exception):
