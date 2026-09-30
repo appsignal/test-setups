@@ -16,6 +16,7 @@ app.get("/", (_req: any, res: any) => {
     <p>Try these routes:</p>
     <ul>
       <li><a href="/route-param/1">Route param</a></li>
+      <li><a href="/slow">Slow</a></li>
       <li><a href="/error">Error</a></li>
       <li><a href="/rabbitmq">RabbitMQ</a></li><p>Server reset required after clicking this link</p>
       <li><a href="/custom">Custom</a></li>
@@ -25,6 +26,12 @@ app.get("/", (_req: any, res: any) => {
 
 app.get("/route-param/:id", (_req: any, res: any) => {
   res.send("200 OK")
+})
+
+app.get("/slow", async (_req: any, res: any) => {
+  await new Promise((resolve) => setTimeout(resolve, 3000))
+
+  res.send("Well, that took forever!")
 })
 
 app.get("/error", (_req: any, _res: any) => {
