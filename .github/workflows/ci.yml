@@ -1,6 +1,8 @@
+# DO NOT EDIT
+# Generated from support/ci/workflow.yml by `rake ci:generate`.
+---
 name: Appsignal test setups tests
-
-on:
+'on':
   push:
     branches:
     - main
@@ -11,412 +13,487 @@ on:
     - synchronize
   schedule:
   - cron: 0 0 * * 1-5
-
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: "${{ !contains(github.ref, 'main')}}"
-
 env:
   CACHE_VERSION: v1
   RUNNING_IN_CI: true
-  JOB_TIMEOUT_MINUTES: &timeout 10
-
 jobs:
+  validate-ci:
+    name: Validate the generated CI workflow
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Install Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.4'
+    - name: Validate CI workflow
+      run: rake ci:validate
   build-processmon:
     name: Build processmon
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache processmon
-        id: cache-processmon
-        uses: actions/cache@v4
-        with:
-          path: support/processmon/processmon
-          key: ${{ env.CACHE_VERSION }}-processmon
-
-      - name: Build processmon
-        if: steps.cache-processmon.outputs.cache-hit != 'true'
-        run: rake global:install_processmon
-
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache processmon
+      id: cache-processmon
+      uses: actions/cache@v4
+      with:
+        path: support/processmon/processmon
+        key: "${{ env.CACHE_VERSION }}-processmon"
+    - name: Build processmon
+      if: steps.cache-processmon.outputs.cache-hit != 'true'
+      run: rake global:install_processmon
   test-elixir:
     name: Run tests for Elixir test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
-    timeout-minutes: *timeout
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        app:
-          - elixir/alpine-release
-          - elixir/phoenix
-          - elixir/phoenix-opentelemetry
-          - elixir/phoenix-oban
-          - elixir/plug
-          - elixir/plug-ecto
-          - elixir/plug-oban
-          - elixir/phoenix-ash
+        include:
+        - app: elixir/alpine-release
+          mode: default
+        - app: elixir/phoenix
+          mode: default
+        - app: elixir/phoenix-ash
+          mode: default
+        - app: elixir/phoenix-oban
+          mode: default
+        - app: elixir/phoenix-opentelemetry
+          mode: default
+        - app: elixir/plug
+          mode: default
+        - app: elixir/plug-ecto
+          mode: default
+        - app: elixir/plug-oban
+          mode: default
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache processmon
-        uses: actions/cache@v4
-        with:
-          path: support/processmon/processmon
-          key: ${{ env.CACHE_VERSION }}-processmon
-
-      - name: Update Docker Compose
-        run: |
-          mkdir -p ~/.docker/cli-plugins
-          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-          chmod +x ~/.docker/cli-plugins/docker-compose
-          docker compose version
-
-      - name: Setup environment
-        run: |
-          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
-          rake integrations:clone
-
-      - name: Run tests
-        run: rake app=${{ matrix.app }} app:test
-
-  test-java:
-    name: Run tests for Java test setups
-    runs-on: ubuntu-22.04
-    needs: build-processmon
-    timeout-minutes: *timeout
-    strategy:
-      fail-fast: false
-      matrix:
-        app:
-          - java/spring-native-opentelemetry
-          - java/spring-agent-opentelemetry
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache processmon
-        uses: actions/cache@v4
-        with:
-          path: support/processmon/processmon
-          key: ${{ env.CACHE_VERSION }}-processmon
-
-      - name: Update Docker Compose
-        run: |
-          mkdir -p ~/.docker/cli-plugins
-          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-          chmod +x ~/.docker/cli-plugins/docker-compose
-          docker compose version
-
-      - name: Setup environment
-        run: |
-          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
-          rake integrations:clone
-
-      - name: Run tests
-        run: rake app=${{ matrix.app }} app:test
-
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache processmon
+      uses: actions/cache@v4
+      with:
+        path: support/processmon/processmon
+        key: "${{ env.CACHE_VERSION }}-processmon"
+    - name: Update Docker Compose
+      run: |
+        mkdir -p ~/.docker/cli-plugins
+        curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+        chmod +x ~/.docker/cli-plugins/docker-compose
+        docker compose version
+    - name: Setup environment
+      run: |
+        echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+        rake integrations:clone
+    - name: Setup front-end key config
+      run: |
+        if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+          cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+        fi
+    - name: Run tests
+      run: rake app=${{ matrix.app }} mode=${{ matrix.mode }} app:test
   test-go:
     name: Run tests for Go test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
-    timeout-minutes: *timeout
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        app:
-          - go/beego
-          - go/beego-mod-otel
-          - go/go-gin-mysql
-          - go/go-gin-mysql-opentelemetry
-          - go/gorilla-mux-mysql-redis-mongo
-          - go/gorilla-mux-mysql-redis-mongo-opentelemetry
+        include:
+        - app: go/beego
+          mode: default
+        - app: go/beego-mod-otel
+          mode: default
+        - app: go/go-gin-mysql
+          mode: default
+        - app: go/go-gin-mysql-opentelemetry
+          mode: default
+        - app: go/gorilla-mux-mysql-redis-mongo
+          mode: default
+        - app: go/gorilla-mux-mysql-redis-mongo-opentelemetry
+          mode: default
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache processmon
-        uses: actions/cache@v4
-        with:
-          path: support/processmon/processmon
-          key: ${{ env.CACHE_VERSION }}-processmon
-
-      - name: Update Docker Compose
-        run: |
-          mkdir -p ~/.docker/cli-plugins
-          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-          chmod +x ~/.docker/cli-plugins/docker-compose
-          docker compose version
-
-      - name: Setup environment
-        run: |
-          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
-          rake integrations:clone
-
-      - name: Run tests
-        run: rake app=${{ matrix.app }} app:test
-
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache processmon
+      uses: actions/cache@v4
+      with:
+        path: support/processmon/processmon
+        key: "${{ env.CACHE_VERSION }}-processmon"
+    - name: Update Docker Compose
+      run: |
+        mkdir -p ~/.docker/cli-plugins
+        curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+        chmod +x ~/.docker/cli-plugins/docker-compose
+        docker compose version
+    - name: Setup environment
+      run: |
+        echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+        rake integrations:clone
+    - name: Setup front-end key config
+      run: |
+        if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+          cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+        fi
+    - name: Run tests
+      run: rake app=${{ matrix.app }} mode=${{ matrix.mode }} app:test
+  test-java:
+    name: Run tests for Java test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - app: java/spring-agent-opentelemetry
+          mode: default
+        - app: java/spring-native-opentelemetry
+          mode: default
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache processmon
+      uses: actions/cache@v4
+      with:
+        path: support/processmon/processmon
+        key: "${{ env.CACHE_VERSION }}-processmon"
+    - name: Update Docker Compose
+      run: |
+        mkdir -p ~/.docker/cli-plugins
+        curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+        chmod +x ~/.docker/cli-plugins/docker-compose
+        docker compose version
+    - name: Setup environment
+      run: |
+        echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+        rake integrations:clone
+    - name: Setup front-end key config
+      run: |
+        if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+          cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+        fi
+    - name: Run tests
+      run: rake app=${{ matrix.app }} mode=${{ matrix.mode }} app:test
   test-javascript:
     name: Run tests for JavaScript test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
-    timeout-minutes: *timeout
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        app:
-          - javascript/react
-          - javascript/react-vite-opentelemetry
-          - javascript/ember
-          - javascript/vanilla
-          - javascript/vue-3
+        include:
+        - app: javascript/ember
+          mode: default
+        - app: javascript/react
+          mode: default
+        - app: javascript/react-vite-opentelemetry
+          mode: default
+        - app: javascript/vanilla
+          mode: default
+        - app: javascript/vue-3
+          mode: default
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache processmon
-        uses: actions/cache@v4
-        with:
-          path: support/processmon/processmon
-          key: ${{ env.CACHE_VERSION }}-processmon
-
-      - name: Update Docker Compose
-        run: |
-          mkdir -p ~/.docker/cli-plugins
-          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-          chmod +x ~/.docker/cli-plugins/docker-compose
-          docker compose version
-
-      - name: Setup environment
-        run: |
-          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
-          rake integrations:clone
-
-      - name: Setup front-end key config
-        run: |
-          # Front-end setups ship an app-local appsignal_key.env.example; copy it
-          # to the appsignal_key.env the setup reads (via docker-compose env_file).
-          if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
-            cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
-          fi
-          # Legacy: setups that still template an app-dir .env directly.
-          if [ -f "${{ matrix.app }}/app/.example.env" ]; then
-            cp "${{ matrix.app }}/app/.example.env" "${{ matrix.app }}/app/.env"
-          fi
-
-      - name: Run tests
-        run: rake app=${{ matrix.app }} app:test
-
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache processmon
+      uses: actions/cache@v4
+      with:
+        path: support/processmon/processmon
+        key: "${{ env.CACHE_VERSION }}-processmon"
+    - name: Update Docker Compose
+      run: |
+        mkdir -p ~/.docker/cli-plugins
+        curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+        chmod +x ~/.docker/cli-plugins/docker-compose
+        docker compose version
+    - name: Setup environment
+      run: |
+        echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+        rake integrations:clone
+    - name: Setup front-end key config
+      run: |
+        if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+          cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+        fi
+    - name: Run tests
+      run: rake app=${{ matrix.app }} mode=${{ matrix.mode }} app:test
   test-nodejs:
     name: Run tests for Node.js test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
-    timeout-minutes: *timeout
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        app:
-          - nodejs/express-apollo
-          - nodejs/express-elasticsearch
-          - nodejs/express-bullmq
-          - nodejs/express-mongoose
-          - nodejs/express-postgres
-          - nodejs/express-postgres-opentelemetry
-          - nodejs/express-rabbitmq
-          - nodejs/express-redis
-          - nodejs/express-redis-alpine
-          - nodejs/express-yoga
-          - nodejs/fastify
-          - nodejs/koa-2-microservices
-          - nodejs/koa-2-mongo
-          - nodejs/koa-2-mysql
-          - nodejs/koa-3-mysql
-          - nodejs/nestjs
-          - nodejs/nestjs-10
-          - nodejs/nestjs-prisma
-          - nodejs/nextjs-13-app
-          - nodejs/nextjs-14-app
-          - nodejs/nextjs-14-pages
-          - nodejs/nextjs-15-app-opentelemetry
-          - nodejs/remix
-          - nodejs/restify
+        include:
+        - app: nodejs/express-apollo
+          mode: default
+        - app: nodejs/express-bullmq
+          mode: default
+        - app: nodejs/express-elasticsearch
+          mode: default
+        - app: nodejs/express-mongoose
+          mode: default
+        - app: nodejs/express-postgres
+          mode: default
+        - app: nodejs/express-postgres-opentelemetry
+          mode: default
+        - app: nodejs/express-rabbitmq
+          mode: default
+        - app: nodejs/express-redis
+          mode: default
+        - app: nodejs/express-redis-alpine
+          mode: default
+        - app: nodejs/express-yoga
+          mode: default
+        - app: nodejs/fastify
+          mode: default
+        - app: nodejs/koa-2-microservices
+          mode: default
+        - app: nodejs/koa-2-mongo
+          mode: default
+        - app: nodejs/koa-2-mysql
+          mode: default
+        - app: nodejs/koa-3-mysql
+          mode: default
+        - app: nodejs/nestjs
+          mode: default
+        - app: nodejs/nestjs-10
+          mode: default
+        - app: nodejs/nestjs-prisma
+          mode: default
+        - app: nodejs/nextjs-13-app
+          mode: default
+        - app: nodejs/nextjs-14-app
+          mode: default
+        - app: nodejs/nextjs-14-pages
+          mode: default
+        - app: nodejs/nextjs-15-app-opentelemetry
+          mode: default
+        - app: nodejs/remix
+          mode: default
+        - app: nodejs/restify
+          mode: default
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache processmon
-        uses: actions/cache@v4
-        with:
-          path: support/processmon/processmon
-          key: ${{ env.CACHE_VERSION }}-processmon
-
-      - name: Update Docker Compose
-        run: |
-          mkdir -p ~/.docker/cli-plugins
-          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-          chmod +x ~/.docker/cli-plugins/docker-compose
-          docker compose version
-
-      - name: Setup environment
-        run: |
-          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
-          rake integrations:clone
-
-      - name: Run tests
-        run: rake app=${{ matrix.app }} app:test
-
-  test-ruby:
-    name: Run tests for Ruby test setups
-    runs-on: ubuntu-22.04
-    needs: build-processmon
-    timeout-minutes: *timeout
-    strategy:
-      fail-fast: false
-      matrix:
-        app:
-          - ruby/jruby-rails6
-          - ruby/grape
-          - ruby/hanami2-postgres
-          - ruby/rack
-          - ruby/padrino
-          - ruby/rails7-goodjob
-          - ruby/rails7-postgres
-          - ruby/rails6-mysql
-          - ruby/rails6-mongo
-          - ruby/rails6-shakapacker
-          - ruby/rails6-shoryuken
-          - ruby/rails7-delayed-job
-          - ruby/rails7-sequel
-          - ruby/rails7-sidekiq
-          - ruby/rails7-solid-cache
-          - ruby/rails7-solid-queue
-          - ruby/rails8-delayed-job
-          - ruby/rails8-que
-          - ruby/rails8-resque
-          - ruby/rails8-sidekiq
-          - ruby/rails8-sidekiq-opentelemetry
-          - ruby/sinatra-redis
-          - ruby/sinatra-alpine
-          - ruby/sinatra-puma
-          - ruby/sinatra-gvltools
-          - ruby/webmachine1
-          - ruby/webmachine2
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache processmon
-        uses: actions/cache@v4
-        with:
-          path: support/processmon/processmon
-          key: ${{ env.CACHE_VERSION }}-processmon
-
-      - name: Update Docker Compose
-        run: |
-          mkdir -p ~/.docker/cli-plugins
-          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-          chmod +x ~/.docker/cli-plugins/docker-compose
-          docker compose version
-
-      - name: Setup environment
-        run: |
-          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
-          rake integrations:clone
-
-      - name: Setup rails7-postgres config
-        if: matrix.app == 'ruby/rails7-postgres'
-        run: echo "APPSIGNAL_PUSH_API_KEY_FOR_APP=00000000-0000-0000-0000-000000000000" > ruby/rails7-postgres/appsignal_key.env
-
-      - name: Setup rails6-shakapacker config
-        if: matrix.app == 'ruby/rails6-shakapacker'
-        run: echo "APPSIGNAL_FRONTEND_API_KEY=00000000-0000-0000-0000-000000000000" > ruby/rails6-shakapacker/appsignal_key.env
-
-      - name: Run tests
-        run: rake app=${{ matrix.app }} app:test
-
-  test-python:
-    name: Run tests for Python test setups
-    runs-on: ubuntu-22.04
-    needs: build-processmon
-    timeout-minutes: *timeout
-    strategy:
-      fail-fast: false
-      matrix:
-        app:
-          - python/django5-celery
-          - python/django5-celery-opentelemetry
-          - python/django4-celery
-          - python/django4-asgi
-          - python/django4-wsgi
-          - python/flask
-          - python/flask-pika
-          - python/flask-sqlalchemy
-          - python/fastapi
-          - python/fastapi-databases
-          - python/starlette
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache processmon
-        uses: actions/cache@v4
-        with:
-          path: support/processmon/processmon
-          key: ${{ env.CACHE_VERSION }}-processmon
-
-      - name: Update Docker Compose
-        run: |
-          mkdir -p ~/.docker/cli-plugins
-          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-          chmod +x ~/.docker/cli-plugins/docker-compose
-          docker compose version
-
-      - name: Setup environment
-        run: |
-          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
-          rake integrations:clone
-
-      - name: Run tests
-        run: rake app=${{ matrix.app }} app:test
-
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache processmon
+      uses: actions/cache@v4
+      with:
+        path: support/processmon/processmon
+        key: "${{ env.CACHE_VERSION }}-processmon"
+    - name: Update Docker Compose
+      run: |
+        mkdir -p ~/.docker/cli-plugins
+        curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+        chmod +x ~/.docker/cli-plugins/docker-compose
+        docker compose version
+    - name: Setup environment
+      run: |
+        echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+        rake integrations:clone
+    - name: Setup front-end key config
+      run: |
+        if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+          cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+        fi
+    - name: Run tests
+      run: rake app=${{ matrix.app }} mode=${{ matrix.mode }} app:test
   test-php:
     name: Run tests for PHP test setups
     runs-on: ubuntu-22.04
     needs: build-processmon
-    timeout-minutes: *timeout
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        app:
-          - php/symfony-opentelemetry
-          - php/laravel-opentelemetry
-          - php/vanilla-opentelemetry
-          - php/laravel
-          - php/symfony
-          - php/vanilla
+        include:
+        - app: php/laravel
+          mode: default
+        - app: php/laravel-opentelemetry
+          mode: default
+        - app: php/symfony
+          mode: default
+        - app: php/symfony-opentelemetry
+          mode: default
+        - app: php/vanilla
+          mode: default
+        - app: php/vanilla-opentelemetry
+          mode: default
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache processmon
-        uses: actions/cache@v4
-        with:
-          path: support/processmon/processmon
-          key: ${{ env.CACHE_VERSION }}-processmon
-
-      - name: Update Docker Compose
-        run: |
-          mkdir -p ~/.docker/cli-plugins
-          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-          chmod +x ~/.docker/cli-plugins/docker-compose
-          docker compose version
-
-      - name: Setup environment
-        run: |
-          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
-          rake integrations:clone
-
-      - name: Run tests
-        run: rake app=${{ matrix.app }} app:test
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache processmon
+      uses: actions/cache@v4
+      with:
+        path: support/processmon/processmon
+        key: "${{ env.CACHE_VERSION }}-processmon"
+    - name: Update Docker Compose
+      run: |
+        mkdir -p ~/.docker/cli-plugins
+        curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+        chmod +x ~/.docker/cli-plugins/docker-compose
+        docker compose version
+    - name: Setup environment
+      run: |
+        echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+        rake integrations:clone
+    - name: Setup front-end key config
+      run: |
+        if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+          cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+        fi
+    - name: Run tests
+      run: rake app=${{ matrix.app }} mode=${{ matrix.mode }} app:test
+  test-python:
+    name: Run tests for Python test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - app: python/django4-asgi
+          mode: agent
+        - app: python/django4-celery
+          mode: agent
+        - app: python/django4-wsgi
+          mode: agent
+        - app: python/django5-celery
+          mode: agent
+        - app: python/django5-celery-opentelemetry
+          mode: default
+        - app: python/fastapi
+          mode: agent
+        - app: python/fastapi-databases
+          mode: agent
+        - app: python/flask
+          mode: agent
+        - app: python/flask-pika
+          mode: agent
+        - app: python/flask-sqlalchemy
+          mode: agent
+        - app: python/starlette
+          mode: agent
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache processmon
+      uses: actions/cache@v4
+      with:
+        path: support/processmon/processmon
+        key: "${{ env.CACHE_VERSION }}-processmon"
+    - name: Update Docker Compose
+      run: |
+        mkdir -p ~/.docker/cli-plugins
+        curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+        chmod +x ~/.docker/cli-plugins/docker-compose
+        docker compose version
+    - name: Setup environment
+      run: |
+        echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+        rake integrations:clone
+    - name: Setup front-end key config
+      run: |
+        if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+          cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+        fi
+    - name: Run tests
+      run: rake app=${{ matrix.app }} mode=${{ matrix.mode }} app:test
+  test-ruby:
+    name: Run tests for Ruby test setups
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - app: ruby/grape
+          mode: agent
+        - app: ruby/hanami2-postgres
+          mode: agent
+        - app: ruby/jruby-rails6
+          mode: default
+        - app: ruby/padrino
+          mode: default
+        - app: ruby/rack
+          mode: agent
+        - app: ruby/rails6-mongo
+          mode: default
+        - app: ruby/rails6-mysql
+          mode: agent
+        - app: ruby/rails6-shakapacker
+          mode: agent
+        - app: ruby/rails6-shoryuken
+          mode: agent
+        - app: ruby/rails7-delayed-job
+          mode: agent
+        - app: ruby/rails7-goodjob
+          mode: agent
+        - app: ruby/rails7-postgres
+          mode: agent
+        - app: ruby/rails7-sequel
+          mode: agent
+        - app: ruby/rails7-sidekiq
+          mode: agent
+        - app: ruby/rails7-solid-cache
+          mode: agent
+        - app: ruby/rails7-solid-queue
+          mode: agent
+        - app: ruby/rails8-delayed-job
+          mode: agent
+        - app: ruby/rails8-que
+          mode: agent
+        - app: ruby/rails8-resque
+          mode: agent
+        - app: ruby/rails8-sidekiq
+          mode: agent
+        - app: ruby/rails8-sidekiq-opentelemetry
+          mode: default
+        - app: ruby/sinatra-alpine
+          mode: agent
+        - app: ruby/sinatra-gvltools
+          mode: agent
+        - app: ruby/sinatra-puma
+          mode: default
+        - app: ruby/sinatra-redis
+          mode: default
+        - app: ruby/webmachine1
+          mode: agent
+        - app: ruby/webmachine2
+          mode: agent
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Cache processmon
+      uses: actions/cache@v4
+      with:
+        path: support/processmon/processmon
+        key: "${{ env.CACHE_VERSION }}-processmon"
+    - name: Update Docker Compose
+      run: |
+        mkdir -p ~/.docker/cli-plugins
+        curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+        chmod +x ~/.docker/cli-plugins/docker-compose
+        docker compose version
+    - name: Setup environment
+      run: |
+        echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+        rake integrations:clone
+    - name: Setup front-end key config
+      run: |
+        if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+          cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+        fi
+    - name: Run tests
+      run: rake app=${{ matrix.app }} mode=${{ matrix.mode }} app:test
