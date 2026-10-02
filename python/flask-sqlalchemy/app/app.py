@@ -28,7 +28,7 @@ def home():
 @app.route("/slow")
 def slow():
     import time
-    time.sleep(2)
+    time.sleep(3)
     return "<p>Wow, that took forever</p>"
 
 @app.route("/error")

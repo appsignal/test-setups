@@ -9,7 +9,7 @@ services:
     hostname: elastic1
     image: elasticsearch:9.1.4
     expose:
-      - 9200:9200
+      - 9200
     mem_limit: 1g
     env_file:
       - elastic.env

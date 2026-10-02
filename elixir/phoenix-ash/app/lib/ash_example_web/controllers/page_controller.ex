@@ -6,4 +6,13 @@ defmodule AshExampleWeb.PageController do
     # so skip the default app layout.
     render(conn, :home, layout: false)
   end
+
+  def slow(conn, _params) do
+    :timer.sleep(3000)
+    text(conn, "That took forever!")
+  end
+
+  def error(_conn, _params) do
+    raise "Oops!"
+  end
 end

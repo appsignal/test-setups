@@ -179,6 +179,16 @@ app.delete("/products/:product_id", (req: Request, res: Response) => {
 		.catch((err) => res.status(500).send(err))
 })
 
+app.get("/slow", async (_req: Request, res: Response) => {
+	await new Promise((resolve) => setTimeout(resolve, 3000))
+
+	res.send("Well, that took forever!")
+})
+
+app.get("/error", (_req: Request, _res: Response) => {
+	throw new Error("Expected test error!")
+})
+
 app.use(expressErrorHandler())
 
 app.listen(port, () => {
@@ -243,6 +253,8 @@ function getHtmlLinks(docs: Array<SearchHit<Product>>): string {
 		<p>Try these routes:</p>
 		<ul>
 			<li><a href="/cluster-info">Cluster info</a></span>
+			<li><a href="/slow">Slow</a></li>
+			<li><a href="/error">Error</a></li>
 			<li><h2>Indices</h2>
 				<ul>
 					<li><form method="POST" action="/index"><button>Create "${PRODUCT_INDEX}" index</button></form></li>

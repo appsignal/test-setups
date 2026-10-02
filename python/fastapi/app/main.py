@@ -22,7 +22,7 @@ async def root():
 @app.get("/slow")
 async def slow():
     import time
-    time.sleep(2)
+    time.sleep(3)
     return {"wow_that_took": "forever"}
 
 @app.get("/error")

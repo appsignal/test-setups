@@ -14,6 +14,8 @@ def home():
         <h1>Python Flask + Pika OpenTelemetry app</h1>
         <ul>
         <li><a href="/publish_rabbit">Publish a message to RabbitMQ</a></li>
+        <li><a href="/slow">Trigger a slow request</a></li>
+        <li><a href="/error">Trigger an error</a></li>
         </ul>
     """
 
@@ -25,3 +27,13 @@ def publish_rabbit():
     pika_connection.close()
 
     return "<p>Published a message to RabbitMQ!</p>"
+
+@app.route("/slow")
+def slow():
+    import time
+    time.sleep(3)
+    return "<p>Wow, that took forever</p>"
+
+@app.route("/error")
+def error():
+    raise Exception("I am an error!")
