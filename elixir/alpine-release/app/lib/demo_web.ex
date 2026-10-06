@@ -35,7 +35,7 @@ defmodule DemoWeb do
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
-        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
+        only: [view_module: 1, view_template: 1]
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
@@ -45,7 +45,7 @@ defmodule DemoWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {DemoWeb.LayoutView, "live.html"}
+        layout: {DemoWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end
@@ -81,8 +81,8 @@ defmodule DemoWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      # Import LiveView helpers (live_render, live_component, live_patch, etc)
-      import Phoenix.LiveView.Helpers
+      # Import LiveView and .heex helpers (live_render, <.live_title>, etc)
+      import Phoenix.Component
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
