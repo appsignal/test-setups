@@ -1,5 +1,6 @@
 require 'erb'
 require 'fileutils'
+require 'yaml'
 
 LANGUAGES = %w(elixir go java javascript nodejs php python ruby standalone vector)
 PROCESSMON_PATH = "support/processmon/processmon"
@@ -117,12 +118,10 @@ end
 # - mode given but not available for the app: error, listing what is available.
 # - the `default` mode is ambiguous when both `docker-compose.yml` and
 #   `docker-compose.default.yml` exist: error.
-# The chosen mode is printed so it's clear at the start of the output.
-def get_mode(app)
+def resolve_mode(app, requested)
   files = mode_files(app)
   available = available_modes(app)
   default_conflict = has_plain_default?(app) && files.key?("default")
-  requested = ENV["mode"]
   requested = nil if requested && requested.strip.empty?
 
   mode =
@@ -146,8 +145,74 @@ def get_mode(app)
     raise "App #{app} has both docker-compose.yml and docker-compose.default.yml, which both define the 'default' mode. Remove one."
   end
 
+  mode
+end
+
+# The mode from the `mode=` parameter, printed so it's clear at the start of
+# the output.
+def get_mode(app)
+  mode = resolve_mode(app, ENV["mode"])
   puts "==> Mode: #{mode}"
   mode
+end
+
+CI_WORKFLOW_FILE = ".github/workflows/ci.yml"
+
+def load_compose_services(path)
+  config = YAML.safe_load(File.read(path), :aliases => true) || {}
+  services = {}
+  Array(config["include"]).each do |entry|
+    Array(entry.is_a?(Hash) ? entry["path"] : entry).each do |included|
+      services.merge!(load_compose_services(File.join(File.dirname(path), included)))
+    end
+  end
+  services.merge(config["services"] || {})
+end
+
+# `app:test` starts the `tests` service through the `tests` profile, so a mode
+# is testable when its compose file defines that service under that profile.
+def testable_mode?(app, mode)
+  tests = load_compose_services("#{app}/#{compose_file_for(app, mode)}")["tests"]
+  tests.is_a?(Hash) && Array(tests["profiles"]).include?("tests")
+end
+
+# Every testable `[app, mode]` pair, grouped by language.
+def ci_jobs
+  LANGUAGES.each_with_object({}) do |language, jobs|
+    entries = Dir["#{language}/*/"].map { |dir| dir.delete_suffix("/") }.sort
+      .reject { |app| app.end_with?("/integration") }
+      .flat_map { |app| available_modes(app).sort.map { |mode| [app, resolve_mode(app, mode)] } }
+      .select { |app, mode| testable_mode?(app, mode) }
+    jobs[language] = entries unless entries.empty?
+  end
+end
+
+def language_display_name(language)
+  {
+    "javascript" => "JavaScript",
+    "nodejs" => "Node.js",
+    "php" => "PHP"
+  }.fetch(language) { language.capitalize }
+end
+
+CI_WORKFLOW_BASE_FILE = "support/ci/workflow.yml"
+
+def ci_workflow
+  workflow = YAML.safe_load(File.read(CI_WORKFLOW_BASE_FILE))
+  template = workflow["jobs"].delete("test-job")
+  ci_jobs.each do |language, entries|
+    job = Marshal.load(Marshal.dump(template))
+    job["strategy"]["matrix"] = {
+      "include" => entries.map { |app, mode| { "app" => app, "mode" => mode } }
+    }
+    workflow["jobs"]["test-#{language}"] = {
+      "name" => "Run tests for #{language_display_name(language)} test setups"
+    }.merge(job)
+  end
+
+  "# DO NOT EDIT\n" \
+    "# Generated from #{CI_WORKFLOW_BASE_FILE} by `rake ci:generate`.\n" +
+    YAML.dump(workflow)
 end
 
 def clone_from_git(path, repo, branch: nil)
@@ -502,6 +567,22 @@ namespace :integrations do
     run_command("rm -rf javascript/integration")
     run_command("rm -rf python/integration")
     run_command("rm -rf php/integration")
+  end
+end
+
+namespace :ci do
+  desc "Generate the CI workflow from the test setups that have a tests profile"
+  task :generate do
+    File.write CI_WORKFLOW_FILE, ci_workflow
+    puts "Generated #{CI_WORKFLOW_FILE}"
+  end
+
+  desc "Fail if the committed CI workflow differs from a freshly generated one"
+  task :validate => :generate do
+    unless system("git", "diff", "--exit-code", "--", CI_WORKFLOW_FILE)
+      puts "#{CI_WORKFLOW_FILE} is out of date. Run `rake ci:generate` and commit the result."
+      exit 1
+    end
   end
 end
 

@@ -1,0 +1,98 @@
+# The static part of `.github/workflows/ci.yml`. `rake ci:generate` copies the
+# `test-job` template once per language, fills in its name and matrix, and
+# writes the result.
+
+name: Appsignal test setups tests
+
+"on":
+  push:
+    branches:
+    - main
+  pull_request:
+    types:
+    - opened
+    - reopened
+    - synchronize
+  schedule:
+  - cron: 0 0 * * 1-5
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: "${{ !contains(github.ref, 'main')}}"
+
+env:
+  CACHE_VERSION: v1
+  RUNNING_IN_CI: true
+
+jobs:
+  validate-ci:
+    name: Validate the generated CI workflow
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # The generated file is compared byte for byte, and the YAML library's
+      # output formatting varies between Ruby versions.
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+
+      - name: Validate CI workflow
+        run: rake ci:validate
+
+  build-processmon:
+    name: Build processmon
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        id: cache-processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Build processmon
+        if: steps.cache-processmon.outputs.cache-hit != 'true'
+        run: rake global:install_processmon
+
+  test-job:
+    runs-on: ubuntu-22.04
+    needs: build-processmon
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache processmon
+        uses: actions/cache@v4
+        with:
+          path: support/processmon/processmon
+          key: ${{ env.CACHE_VERSION }}-processmon
+
+      - name: Update Docker Compose
+        run: |
+          mkdir -p ~/.docker/cli-plugins
+          curl -fsSL https://github.com/docker/compose/releases/download/v5.1.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
+
+      - name: Setup environment
+        run: |
+          echo APPSIGNAL_PUSH_API_KEY=not-a-real-api-key > appsignal_key.env
+          rake integrations:clone
+
+      - name: Setup front-end key config
+        run: |
+          if [ -f "${{ matrix.app }}/appsignal_key.env.example" ]; then
+            cp "${{ matrix.app }}/appsignal_key.env.example" "${{ matrix.app }}/appsignal_key.env"
+          fi
+
+      - name: Run tests
+        run: rake app=${{ matrix.app }} mode=${{ matrix.mode }} app:test
