@@ -479,11 +479,9 @@ namespace :integrations do
   task :clone do
     # Clone Ruby
     clone_from_git("ruby/integration", "appsignal-ruby")
-    # Clone Elixir, it currently consists of multiple repos
+    # Clone Elixir
     FileUtils.mkdir_p("elixir/integration")
-    clone_from_git("elixir/integration/appsignal-elixir", "appsignal-elixir")
-    clone_from_git("elixir/integration/appsignal-elixir-phoenix", "appsignal-elixir-phoenix")
-    clone_from_git("elixir/integration/appsignal-elixir-plug", "appsignal-elixir-plug")
+    clone_from_git("elixir/integration/appsignal-elixir", "appsignal-elixir", branch: "merge-plug-and-phoenix")
     # Clone Node.js
     clone_from_git("nodejs/integration", "appsignal-nodejs")
     # Clone JavaScript

@@ -29,8 +29,7 @@ defmodule PlugExample.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:ecto_sql, "~> 3.2"},
       {:postgrex, "~> 0.15"},
-      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
-      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug"}
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir"}
     ]
   end
 end

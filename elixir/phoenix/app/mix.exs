@@ -62,10 +62,7 @@ defmodule Example.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
-      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
-      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true},
-      {:appsignal_phoenix,
-       path: "#{integration_path()}/appsignal-elixir-phoenix", override: true},
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir"},
       {:absinthe_plug, "~> 1.5"},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
       {:httpoison, "~> 3.0"}

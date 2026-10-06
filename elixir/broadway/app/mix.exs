@@ -29,8 +29,7 @@ defmodule BroadwayExample.MixProject do
       {:broadway, "~> 1.3.0"},
       {:plug_cowboy, "~> 2.7"},
       {:jason, "~> 1.4"},
-      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
-      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug"}
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir"}
     ]
   end
 end

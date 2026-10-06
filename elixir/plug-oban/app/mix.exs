@@ -30,8 +30,7 @@ defmodule PlugOban.MixProject do
       {:plug_cowboy, "~> 2.6.0"},
       {:oban, "~> 2.13"},
       {:jason, "~> 1.1"},
-      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
-      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true}
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir"}
     ]
   end
 end
