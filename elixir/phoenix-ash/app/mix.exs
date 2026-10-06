@@ -60,10 +60,7 @@ defmodule AshExample.MixProject do
       {:ash, "~> 3.0"},
       {:ash_phoenix, "~> 2.0"},
       {:ash_appsignal, "~> 0.1.2"},
-      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true},
-      {:appsignal_plug, path: "#{integration_path()}/appsignal-elixir-plug", override: true},
-      {:appsignal_phoenix,
-       path: "#{integration_path()}/appsignal-elixir-phoenix", override: true}
+      {:appsignal, path: "#{integration_path()}/appsignal-elixir", override: true}
     ]
   end
 
