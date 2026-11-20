@@ -65,6 +65,40 @@ function getRouteForWordpressRequest(): string
     return '/' . $requestPath;
 }
 
+// REST route patterns like `/v2/posts/(?P<id>[\d]+)`.
+// Replaces named groups with `{name}`.
+function getRouteForRestPattern(string $pattern): string
+{
+    $namedGroups = preg_replace('#\(\?P<(\w+)>((?:[^()]|\((?2)\))*)\)#', '{$1}', $pattern);
+
+    return '/' . rest_get_url_prefix() . $namedGroups;
+}
+
+// Matches the request to a route pattern.
+// WordPress only passes the matched pattern to filters that are skipped when
+// the permission check fails.
+function getRouteForRestRequest(WP_REST_Server $server, WP_REST_Request $request): string
+{
+    foreach (array_keys($server->get_routes()) as $pattern) {
+        if (preg_match('@^' . $pattern . '$@i', $request->get_route())) {
+            return getRouteForRestPattern($pattern);
+        }
+    }
+
+    return '/' . rest_get_url_prefix() . '/{not-found}';
+}
+
+// The normalized REST route request.
+function getServedRestRoute(): ?string
+{
+    $route = $GLOBALS['wp']->query_vars['rest_route'] ?? null;
+    if (!is_string($route)) {
+        return null;
+    }
+
+    return untrailingslashit($route) ?: '/';
+}
+
 $requestSpan = null;
 
 // WordPress is not loaded yet at this point, so `add_action()` doesn't exist,
@@ -90,6 +124,18 @@ $GLOBALS['wp_filter']['template_redirect'][1][] = [
     'accepted_args' => 0,
     'function' => function () use (&$requestSpan) {
         $requestSpan?->setAttribute('http.route', getRouteForWordpressRequest());
+    },
+];
+// REST API requests are served before `template_redirect` runs. This filter
+// also runs for REST requests WordPress makes internally, like the preloads on
+// editor pages, so only the served request may set the route.
+$GLOBALS['wp_filter']['rest_post_dispatch'][1][] = [
+    'accepted_args' => 3,
+    'function' => function ($response, $server, $request) use (&$requestSpan) {
+        if ($request->get_route() === getServedRestRoute()) {
+            $requestSpan?->setAttribute('http.route', getRouteForRestRequest($server, $request));
+        }
+        return $response;
     },
 ];
 
