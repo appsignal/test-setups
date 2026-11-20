@@ -74,3 +74,21 @@ $GLOBALS['wp_filter']['template_redirect'][1][] = [
         Appsignal::setNamespace('web');
     },
 ];
+
+// The WordPress instrumentation ends the request span before the `shutdown`
+// action runs, so the WP-Cron check queries there would each become their
+// own trace. Group them in one trace, apart from the requests.
+$shutdownSpan = null;
+$GLOBALS['wp_filter']['shutdown'][PHP_INT_MIN][] = [
+    'accepted_args' => 0,
+    'function' => function () use (&$shutdownSpan) {
+        $shutdownSpan = Appsignal::instrument(current_action());
+        Appsignal::setNamespace('background');
+    },
+];
+$GLOBALS['wp_filter']['shutdown'][PHP_INT_MAX][] = [
+    'accepted_args' => 0,
+    'function' => function () use (&$shutdownSpan) {
+        $shutdownSpan?->end();
+    },
+];
