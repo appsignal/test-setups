@@ -71,5 +71,6 @@ $GLOBALS['wp_filter']['template_redirect'][1][] = [
     'function' => function () {
         $requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         Appsignal::setAction($requestMethod . ' ' . getActionPathForWordpressRequest());
+        Appsignal::setNamespace('web');
     },
 ];
