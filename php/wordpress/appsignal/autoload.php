@@ -69,15 +69,24 @@ $requestSpan = null;
 
 // WordPress is not loaded yet at this point, so `add_action()` doesn't exist,
 // but it will pick up hooks that are in this global when it starts.
-$GLOBALS['wp_filter']['template_redirect'][1][] = [
+// `wp_loaded` runs for every request, including scripts like
+// `wp-comments-post.php` and `wp-admin/admin-ajax.php`, which never render a
+// template, so their route is the script path.
+$GLOBALS['wp_filter']['wp_loaded'][1][] = [
     'accepted_args' => 0,
     'function' => function () use (&$requestSpan) {
         $requestSpan = Span::getCurrent();
-        $requestSpan->setAttribute('http.route', getRouteForWordpressRequest());
+        $requestSpan->setAttribute('http.route', $_SERVER['SCRIPT_NAME'] ?? '/');
         $requestSpan->setAttribute('server.address', $_SERVER['SERVER_NAME'] ?? null);
         Appsignal::setNamespace('web');
         Appsignal::addTags(['custom' => 'tag']);
         Appsignal::addHeaders(getallheaders());
+    },
+];
+$GLOBALS['wp_filter']['template_redirect'][1][] = [
+    'accepted_args' => 0,
+    'function' => function () use (&$requestSpan) {
+        $requestSpan?->setAttribute('http.route', getRouteForWordpressRequest());
     },
 ];
 
