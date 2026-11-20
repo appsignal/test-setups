@@ -27,6 +27,7 @@ services:
             APPSIGNAL_APP_ENV: development
             APPSIGNAL_COLLECTOR_ENDPOINT: 'http://appsignal-collector:8099'
             APPSIGNAL_REVISION: ${APPSIGNAL_REVISION:-unknown}
+            APPSIGNAL_REQUEST_HEADERS: accept,accept-charset,accept-encoding,accept-language,cache-control,connection,content-length,range
             APPSIGNAL_SERVICE_NAME: WordPress Demo
         env_file:
             - ../../appsignal.env

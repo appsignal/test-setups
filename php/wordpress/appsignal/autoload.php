@@ -77,6 +77,7 @@ $GLOBALS['wp_filter']['template_redirect'][1][] = [
         $requestSpan->setAttribute('server.address', $_SERVER['SERVER_NAME'] ?? null);
         Appsignal::setNamespace('web');
         Appsignal::addTags(['custom' => 'tag']);
+        Appsignal::addHeaders(getallheaders());
     },
 ];
 
