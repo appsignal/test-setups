@@ -81,6 +81,9 @@ $GLOBALS['wp_filter']['wp_loaded'][1][] = [
         Appsignal::setNamespace('web');
         Appsignal::addTags(['custom' => 'tag']);
         Appsignal::addHeaders(getallheaders());
+        if ($_POST) {
+            Appsignal::setPayload($_POST);
+        }
     },
 ];
 $GLOBALS['wp_filter']['template_redirect'][1][] = [
