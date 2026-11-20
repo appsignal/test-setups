@@ -1,0 +1,31 @@
+{
+    "name": "appsignal/wordpress-appsignal",
+    "type": "project",
+    "description": "Loads AppSignal into the WordPress test app",
+    "require": {
+        "php": "^8.4",
+        "appsignal/appsignal-php": "*@dev",
+        "guzzlehttp/guzzle": "^7.9",
+        "open-telemetry/opentelemetry-auto-wordpress": "0.2.0"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../integration",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "tbachert/spi": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

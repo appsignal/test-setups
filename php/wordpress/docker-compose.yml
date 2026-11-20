@@ -1,0 +1,40 @@
+services:
+    appsignal-collector:
+        image: appsignal/collector:latest
+        environment:
+            - APPSIGNAL_LOG_LEVEL=trace
+        env_file:
+            - ../../appsignal.env
+            - ../../appsignal_key.env
+    app:
+        build:
+            context: "."
+            dockerfile: Dockerfile
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        ports:
+            - "4001:80"
+        environment:
+            WORDPRESS_ADMIN_USER: admin
+            WORDPRESS_ADMIN_PASSWORD: password
+            WORDPRESS_ADMIN_EMAIL: admin@example.com
+            # Follow the host of the request without redirects
+            WORDPRESS_CONFIG_EXTRA: |
+                define('WP_HOME', 'http://' . ($$_SERVER['HTTP_HOST'] ?? 'localhost:4001'));
+                define('WP_SITEURL', WP_HOME);
+            APPSIGNAL_APP_NAME: php/wordpress
+            APPSIGNAL_ACTIVE: true
+            APPSIGNAL_APP_ENV: development
+            APPSIGNAL_COLLECTOR_ENDPOINT: 'http://appsignal-collector:8099'
+            APPSIGNAL_FILTER_REQUEST_PAYLOAD: pwd,pass1,pass2,post_password,_wpnonce,_wp_unfiltered_html_comment
+            APPSIGNAL_REVISION: ${APPSIGNAL_REVISION:-unknown}
+            APPSIGNAL_REQUEST_HEADERS: accept,accept-charset,accept-encoding,accept-language,cache-control,connection,content-length,range
+            APPSIGNAL_SERVICE_NAME: WordPress Demo
+        env_file:
+            - ../../appsignal.env
+            - ../../appsignal_key.env
+        volumes:
+            - "./app/mu-plugins:/var/www/html/wp-content/mu-plugins"
+            - "./appsignal:/var/www/appsignal"
+            - ../integration:/var/www/integration
+            - "./commands:/commands"
