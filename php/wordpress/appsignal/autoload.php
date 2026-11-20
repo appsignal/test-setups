@@ -1,6 +1,7 @@
 <?php
 
 use Appsignal\Appsignal;
+use OpenTelemetry\API\Trace\Span;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -17,7 +18,7 @@ $previousExceptionHandler = set_exception_handler(
     }
 );
 
-function getActionPathForWordpressRequest(): string
+function getRouteForWordpressRequest(): string
 {
     global $wp;
 
@@ -64,16 +65,25 @@ function getActionPathForWordpressRequest(): string
     return '/' . $requestPath;
 }
 
+$requestSpan = null;
+
 // WordPress is not loaded yet at this point, so `add_action()` doesn't exist,
 // but it will pick up hooks that are in this global when it starts.
 $GLOBALS['wp_filter']['template_redirect'][1][] = [
     'accepted_args' => 0,
-    'function' => function () {
-        $requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        Appsignal::setAction($requestMethod . ' ' . getActionPathForWordpressRequest());
+    'function' => function () use (&$requestSpan) {
+        $requestSpan = Span::getCurrent();
+        $requestSpan->setAttribute('http.route', getRouteForWordpressRequest());
+        $requestSpan->setAttribute('server.address', $_SERVER['SERVER_NAME'] ?? null);
         Appsignal::setNamespace('web');
+        Appsignal::addTags(['custom' => 'tag']);
     },
 ];
+
+// this runs while the request span is still open.
+register_shutdown_function(function () use (&$requestSpan) {
+    $requestSpan?->setAttribute('http.response.status_code', http_response_code());
+});
 
 // The WordPress instrumentation ends the request span before the `shutdown`
 // action runs, so the WP-Cron check queries there would each become their
