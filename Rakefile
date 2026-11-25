@@ -364,6 +364,8 @@ namespace :app do
     @app = get_app
     @mode = get_mode(@app)
 
+    ENV["APPSIGNAL_REVISION"] ||= `git rev-parse HEAD`.strip
+
     # Front-end (browser) setups need a separate front-end API key. When the
     # setup ships an `appsignal_key.env.example` but its `appsignal_key.env` has
     # not been created, fail early with a clear message instead of letting docker

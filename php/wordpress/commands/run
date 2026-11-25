@@ -1,0 +1,80 @@
+#!/bin/bash
+
+set -eu
+
+# Install AppSignal, which is loaded before every PHP script.
+# Composer is a PHP script too, so skip that autoload file for this one call:
+# it fails while the dependencies it loads are not installed yet.
+echo "Installing dependencies..."
+php -d auto_prepend_file= /usr/local/bin/composer install --working-dir=/var/www/appsignal
+
+cd /var/www/html
+
+# The official image only copies WordPress into place and writes
+# wp-config.php when it is asked to start Apache.
+echo "Setting up WordPress files..."
+docker-entrypoint.sh apache2 -v
+
+if ! wp core is-installed --allow-root; then
+  echo "Installing WordPress..."
+  wp core install \
+    --allow-root \
+    --url="http://localhost:4001" \
+    --title="AppSignal WordPress test app" \
+    --admin_user="${WORDPRESS_ADMIN_USER}" \
+    --admin_password="${WORDPRESS_ADMIN_PASSWORD}" \
+    --admin_email="${WORDPRESS_ADMIN_EMAIL}" \
+    --skip-email
+  wp rewrite structure "/%postname%/" --allow-root
+
+  # The test pages plugin throws an error when this post is viewed
+  wp post create \
+    --allow-root \
+    --post_title="Error post" \
+    --post_name="error-post" \
+    --post_content="Viewing this post raises an error." \
+    --post_status=publish
+fi
+
+wp plugin activate mailchimp-for-wp --allow-root
+
+if [ -z "${MAILCHIMP_API_KEY:-}" ]; then
+  echo "Skipping Mailchimp setup: MAILCHIMP_API_KEY is not set"
+else
+  echo "Setting up Mailchimp..."
+  wp option update mc4wp "{\"api_key\": \"${MAILCHIMP_API_KEY}\"}" --format=json --allow-root
+
+  # A bad key or an unreachable Mailchimp only skips the form, so the other
+  # test pages still work.
+  if [ -n "$(wp post list --post_type=mc4wp-form --format=ids --allow-root)" ]; then
+    :
+  elif ! audience_id=$(wp eval 'echo mc4wp_get_api_v3()->get_lists(["count" => 1])[0]->id ?? "";' --allow-root) \
+    || [ -z "$audience_id" ]; then
+    echo "Skipping Mailchimp form: could not fetch an audience with MAILCHIMP_API_KEY"
+  else
+    # Double opt-in is off so test signups don't send confirmation emails
+    wp post create \
+      --allow-root \
+      --post_type=mc4wp-form \
+      --post_title="Newsletter" \
+      --post_status=publish \
+      --post_content='<p><label>Email address: <input type="email" name="EMAIL" required></label></p><p><input type="submit" value="Sign up"></p>' \
+      --meta_input="{\"_mc4wp_settings\": {\"lists\": [\"${audience_id}\"], \"double_optin\": 0}}"
+    wp post create \
+      --allow-root \
+      --post_type=page \
+      --post_title="Newsletter" \
+      --post_name="newsletter" \
+      --post_content="[mc4wp_form]" \
+      --post_status=publish
+  fi
+fi
+
+# WordPress caches its URL rules, refresh them so the test pages are known
+wp rewrite flush --allow-root
+
+# WP-CLI runs as root, but Apache needs to write to the SQLite database
+chown -R www-data:www-data wp-content/database
+
+echo "Starting the application..."
+exec apache2-foreground
