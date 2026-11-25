@@ -5,6 +5,8 @@ use Appsignal\Integrations\Monolog\Handler as AppsignalLogHandler;
 use Monolog\ErrorHandler;
 use Monolog\Logger;
 use OpenTelemetry\API\Trace\Span;
+use OpenTelemetry\API\Trace\SpanKind;
+use OpenTelemetry\API\Trace\StatusCode;
 
 use function OpenTelemetry\Instrumentation\hook;
 
@@ -53,6 +55,45 @@ hook(
         } finally {
             $logging = false;
         }
+    },
+);
+
+// Traces every `wp_remote_*()` call. The URL path and query are left out:
+// Mailchimp's paths hold a hash of the subscriber's email. A stack, because a
+// filter inside one request can make another.
+$httpSpans = [];
+hook(
+    WP_Http::class,
+    'request',
+    pre: static function ($http, array $params) use (&$httpSpans): void {
+        $method = strtoupper($params[1]['method'] ?? 'GET');
+        $url = parse_url((string) $params[0]);
+        $httpSpans[] = Appsignal::instrument($method, [
+            'http.request.method' => $method,
+            'server.address' => $url['host'] ?? null,
+            'server.port' => $url['port'] ?? (($url['scheme'] ?? '') === 'https' ? 443 : 80),
+            'url.scheme' => $url['scheme'] ?? null,
+        ], SpanKind::KIND_CLIENT);
+    },
+    post: static function ($http, array $params, $response, ?Throwable $exception) use (&$httpSpans): void {
+        $httpSpan = array_pop($httpSpans);
+        if (!$httpSpan) {
+            return;
+        }
+
+        $span = $httpSpan->getSpan();
+        if (is_array($response)) {
+            $span->setAttribute('http.response.status_code', $response['response']['code'] ?? null);
+        }
+        // HTTP error statuses are left to the caller: a 404 can be expected.
+        if ($response instanceof WP_Error) {
+            $span->setAttribute('error.type', $response->get_error_code());
+            $span->setStatus(StatusCode::STATUS_ERROR, $response->get_error_message());
+        }
+        if ($exception) {
+            $span->recordException($exception);
+        }
+        $httpSpan->end();
     },
 );
 
