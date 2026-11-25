@@ -1,7 +1,12 @@
 <?php
 
 use Appsignal\Appsignal;
+use Appsignal\Integrations\Monolog\Handler as AppsignalLogHandler;
+use Monolog\ErrorHandler;
+use Monolog\Logger;
 use OpenTelemetry\API\Trace\Span;
+
+use function OpenTelemetry\Instrumentation\hook;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -16,6 +21,39 @@ $previousExceptionHandler = set_exception_handler(
 
         throw $error;
     }
+);
+
+// WordPress has no logger of its own. Core and plugins log through PHP errors
+// and `error_log()`, the same lines `WP_DEBUG_LOG` writes to `debug.log`.
+$wordpressLogger = new Logger('wordpress', [AppsignalLogHandler::withLevel('debug')]);
+
+// Only logs the error types `error_reporting()` allows, which WordPress sets
+// from `WP_DEBUG`. PHP's own error handling still runs after it.
+new ErrorHandler($wordpressLogger)
+    ->registerErrorHandler()
+    ->registerFatalHandler();
+
+// `error_log()` is a native function, so no error handler sees its calls.
+// The OpenTelemetry SDK reports its own export failures with `error_log()`,
+// so the guard stops a failing export from logging itself in a loop.
+hook(
+    null,
+    'error_log',
+    pre: static function ($object, array $params) use ($wordpressLogger): void {
+        static $logging = false;
+        $message = $params[0] ?? null;
+        if ($logging || !(is_scalar($message) || $message instanceof Stringable)) {
+            return;
+        }
+
+        $logging = true;
+        try {
+            // Core only calls `error_log()` outside debug mode to report failures.
+            $wordpressLogger->error((string) $message);
+        } finally {
+            $logging = false;
+        }
+    },
 );
 
 function getRouteForWordpressRequest(): string
@@ -108,7 +146,12 @@ $requestSpan = null;
 // template, so their route is the script path.
 $GLOBALS['wp_filter']['wp_loaded'][1][] = [
     'accepted_args' => 0,
-    'function' => function () use (&$requestSpan) {
+    'function' => function () use (&$requestSpan, $wordpressLogger) {
+        $wordpressLogger->info(sprintf(
+            'Started %s "%s"',
+            $_SERVER['REQUEST_METHOD'] ?? 'GET',
+            $_SERVER['REQUEST_URI'] ?? '/',
+        ));
         $requestSpan = Span::getCurrent();
         $requestSpan->setAttribute('http.route', $_SERVER['SCRIPT_NAME'] ?? '/');
         $requestSpan->setAttribute('server.address', $_SERVER['SERVER_NAME'] ?? null);

@@ -1,7 +1,5 @@
 <?php
 
-use Appsignal\Appsignal;
-
 /**
  * Plugin Name: Test pages
  * Description: Adds the /slow and /error pages used to test AppSignal.
@@ -10,8 +8,14 @@ use Appsignal\Appsignal;
 const TEST_PAGES = [
     'slow' => 'Slow request',
     'error' => 'Error request',
-    'logs' => 'Logs request',
 ];
+
+// Logs the ways WordPress core and plugins do
+function writeWordPressLogs(): void
+{
+    error_log('Logging from WordPress with error_log()');
+    trigger_error('Warning from WordPress', E_USER_WARNING);
+}
 
 add_action('init', function () {
     $pageNames = implode('|', array_keys(TEST_PAGES));
@@ -21,14 +25,6 @@ add_action('init', function () {
 add_filter('query_vars', function ($queryVars) {
     $queryVars[] = 'test_page';
     return $queryVars;
-});
-
-add_filter('template_include', function ($template) {
-    if (get_query_var('test_page') === 'logs') {
-        Appsignal::log("Logging from WordPress!");
-        return __DIR__ . '/views/logs.php';
-    }
-    return $template;
 });
 
 add_filter('template_include', function ($template) {
@@ -44,6 +40,7 @@ add_filter('template_include', function ($template) {
 // doesn't track it, so this only gets reported by a global error handler.
 add_filter('template_include', function ($template) {
     if (get_query_var('test_page') === 'error') {
+        writeWordPressLogs();
         throw new Exception('Expected test error');
     }
 
@@ -70,6 +67,7 @@ add_action('wp_body_open', function () {
 // `is_single()` keeps the homepage working, where the post is only listed.
 add_filter('the_content', function ($content) {
     if (is_single('error-post')) {
+        writeWordPressLogs();
         throw new Exception('Expected test error in a post');
     }
 

@@ -9,11 +9,12 @@ WordPress is installed automatically on boot. Log in on
 <http://localhost:4001/wp-admin> with user `admin` and password `password`.
 
 The `app/mu-plugins` directory is loaded by WordPress as "must-use" plugins.
-It adds three test pages, linked from the top of the homepage:
+It adds two test pages, linked from the top of the homepage:
 
 - `/slow` - a request that takes three seconds
-- `/error` - a request that raises an error
-- `/logs` - a request that writes a log line
+- `/error` - a request that writes log lines with `error_log()` and
+  `trigger_error()`, then raises an error
 
-It also raises an error when the "Error post" post is viewed on `/error-post`.
+It also writes the same log lines and raises an error when the "Error post"
+post is viewed on `/error-post`.
 That post is created on boot.
