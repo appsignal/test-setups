@@ -44,8 +44,14 @@ else
   echo "Setting up Mailchimp..."
   wp option update mc4wp "{\"api_key\": \"${MAILCHIMP_API_KEY}\"}" --format=json --allow-root
 
-  if [ -z "$(wp post list --post_type=mc4wp-form --format=ids --allow-root)" ]; then
-    audience_id=$(wp eval 'echo mc4wp_get_api_v3()->get_lists(["count" => 1])[0]->id;' --allow-root)
+  # A bad key or an unreachable Mailchimp only skips the form, so the other
+  # test pages still work.
+  if [ -n "$(wp post list --post_type=mc4wp-form --format=ids --allow-root)" ]; then
+    :
+  elif ! audience_id=$(wp eval 'echo mc4wp_get_api_v3()->get_lists(["count" => 1])[0]->id ?? "";' --allow-root) \
+    || [ -z "$audience_id" ]; then
+    echo "Skipping Mailchimp form: could not fetch an audience with MAILCHIMP_API_KEY"
+  else
     # Double opt-in is off so test signups don't send confirmation emails
     wp post create \
       --allow-root \
