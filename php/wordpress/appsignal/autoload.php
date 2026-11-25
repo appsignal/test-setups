@@ -277,6 +277,15 @@ $GLOBALS['wp_filter']['template_redirect'][1][] = [
         $requestSpan?->setAttribute('http.route', getRouteForWordpressRequest());
     },
 ];
+// Counts views of single posts, not pages or archives.
+$GLOBALS['wp_filter']['template_redirect'][10][] = [
+    'accepted_args' => 0,
+    'function' => function () {
+        if (is_singular('post')) {
+            Appsignal::incrementCounter('post_read', 1);
+        }
+    },
+];
 // REST API requests are served before `template_redirect` runs. This filter
 // also runs for REST requests WordPress makes internally, like the preloads on
 // editor pages, so only the served request may set the route.
