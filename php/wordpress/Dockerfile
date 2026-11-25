@@ -30,6 +30,13 @@ RUN curl -sSL https://downloads.wordpress.org/plugin/sqlite-database-integration
         "$SQLITE_PLUGIN_PATH/db.copy" > /usr/src/wordpress/wp-content/db.php \
     && chown -R www-data:www-data /usr/src/wordpress/wp-content
 
+# Newsletter signup forms for Mailchimp. Pinned, because the AppSignal
+# instrumentation hooks one of its private methods.
+RUN curl -sSL https://downloads.wordpress.org/plugin/mailchimp-for-wp.4.15.0.zip -o /tmp/mc4wp.zip \
+    && unzip -q /tmp/mc4wp.zip -d /usr/src/wordpress/wp-content/plugins \
+    && rm /tmp/mc4wp.zip \
+    && chown -R www-data:www-data /usr/src/wordpress/wp-content/plugins/mailchimp-for-wp
+
 # Copy startup script
 COPY commands/run /commands/run
 RUN chmod +x /commands/run

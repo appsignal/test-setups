@@ -3,4 +3,5 @@
     <?php foreach (TEST_PAGES as $pageName => $linkLabel) : ?>
         <a href="<?php echo esc_url(home_url("/$pageName")); ?>" style="margin-left: 1rem;"><?php echo esc_html($linkLabel); ?></a>
     <?php endforeach; ?>
+    <a href="<?php echo esc_url(home_url('/newsletter')); ?>" style="margin-left: 1rem;">Newsletter</a>
 </nav>

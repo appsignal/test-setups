@@ -33,6 +33,9 @@ services:
         env_file:
             - ../../appsignal.env
             - ../../appsignal_key.env
+            # Sets MAILCHIMP_API_KEY. Without it, the newsletter form isn't set up.
+            - path: ../../mailchimp.env
+              required: false
         volumes:
             - "./app/mu-plugins:/var/www/html/wp-content/mu-plugins"
             - "./appsignal:/var/www/appsignal"

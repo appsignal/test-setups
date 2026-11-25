@@ -18,3 +18,14 @@ It adds two test pages, linked from the top of the homepage:
 It also writes the same log lines and raises an error when the "Error post"
 post is viewed on `/error-post`.
 That post is created on boot.
+
+The MC4WP ("Mailchimp for WordPress") plugin adds a newsletter signup form on
+`/newsletter`, linked from the homepage. It needs a Mailchimp API key in a
+`mailchimp.env` file in the root of this repository:
+
+```
+MAILCHIMP_API_KEY=<key>
+```
+
+The form subscribes to the first audience of that Mailchimp account. Without
+the key, the app still starts, but the form isn't set up.

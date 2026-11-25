@@ -36,6 +36,34 @@ if ! wp core is-installed --allow-root; then
     --post_status=publish
 fi
 
+wp plugin activate mailchimp-for-wp --allow-root
+
+if [ -z "${MAILCHIMP_API_KEY:-}" ]; then
+  echo "Skipping Mailchimp setup: MAILCHIMP_API_KEY is not set"
+else
+  echo "Setting up Mailchimp..."
+  wp option update mc4wp "{\"api_key\": \"${MAILCHIMP_API_KEY}\"}" --format=json --allow-root
+
+  if [ -z "$(wp post list --post_type=mc4wp-form --format=ids --allow-root)" ]; then
+    audience_id=$(wp eval 'echo mc4wp_get_api_v3()->get_lists(["count" => 1])[0]->id;' --allow-root)
+    # Double opt-in is off so test signups don't send confirmation emails
+    wp post create \
+      --allow-root \
+      --post_type=mc4wp-form \
+      --post_title="Newsletter" \
+      --post_status=publish \
+      --post_content='<p><label>Email address: <input type="email" name="EMAIL" required></label></p><p><input type="submit" value="Sign up"></p>' \
+      --meta_input="{\"_mc4wp_settings\": {\"lists\": [\"${audience_id}\"], \"double_optin\": 0}}"
+    wp post create \
+      --allow-root \
+      --post_type=page \
+      --post_title="Newsletter" \
+      --post_name="newsletter" \
+      --post_content="[mc4wp_form]" \
+      --post_status=publish
+  fi
+fi
+
 # WordPress caches its URL rules, refresh them so the test pages are known
 wp rewrite flush --allow-root
 
