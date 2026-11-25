@@ -97,6 +97,73 @@ hook(
     },
 );
 
+// Mailchimp resources alternate between collection names and IDs, like
+// `/lists/abc123/members/9e10...`. IDs become placeholders, so endpoints group.
+function getMailchimpEndpoint(string $method, string $resource): string
+{
+    $placeholders = ['lists' => '{list_id}', 'members' => '{subscriber_hash}'];
+    $segments = explode('/', trim($resource, '/'));
+    foreach ($segments as $index => $segment) {
+        if ($index % 2 === 1) {
+            $segments[$index] = $placeholders[$segments[$index - 1]] ?? '{id}';
+        }
+    }
+
+    return $method . ' /' . implode('/', $segments);
+}
+
+// MC4WP sends every Mailchimp API call through this private method. Its span
+// wraps the HTTP span of the call. Exceptions aren't recorded: MC4WP looks up
+// a member before subscribing, and a new subscriber is an expected 404.
+$mailchimpCalls = [];
+hook(
+    'MC4WP_API_V3_Client',
+    'request',
+    pre: static function ($client, array $params) use (&$mailchimpCalls): void {
+        $endpoint = getMailchimpEndpoint($params[0], $params[1]);
+        $mailchimpCalls[] = [
+            'endpoint' => $endpoint,
+            'span' => Appsignal::instrument("Mailchimp $endpoint"),
+            'start' => hrtime(true),
+        ];
+    },
+    post: static function ($client, array $params) use (&$mailchimpCalls): void {
+        $call = array_pop($mailchimpCalls);
+        if (!$call) {
+            return;
+        }
+
+        $status = wp_remote_retrieve_response_code($client->get_last_response());
+        $call['span']->getSpan()->setAttribute('http.response.status_code', $status ?: null);
+        $call['span']->end();
+        Appsignal::addDistributionValue(
+            'mailchimp_api_duration',
+            (hrtime(true) - $call['start']) / 1e6,
+            ['endpoint' => $call['endpoint'], 'status' => (string) $status],
+        );
+    },
+);
+
+class MailchimpApiError extends RuntimeException {}
+
+// Maps a submitted MC4WP form to one outcome, for the submissions counter.
+// MC4WP passes Mailchimp's own error codes through, so unknown codes are API
+// errors.
+function getMailchimpFormResult(MC4WP_Form $form): string
+{
+    if (!$form->errors) {
+        return $form->last_event === 'updated_subscriber' ? 'updated' : 'subscribed';
+    }
+
+    $error = (string) $form->errors[0];
+    if (str_starts_with($error, 'spam.')) {
+        return 'spam';
+    }
+    $knownErrors = ['invalid_email', 'required_field_missing', 'no_lists_selected', 'already_subscribed', 'unauthorized'];
+
+    return in_array($error, $knownErrors, true) ? $error : 'api_error';
+}
+
 function getRouteForWordpressRequest(): string
 {
     global $wp;
@@ -220,6 +287,25 @@ $GLOBALS['wp_filter']['rest_post_dispatch'][1][] = [
             $requestSpan?->setAttribute('http.route', getRouteForRestRequest($server, $request));
         }
         return $response;
+    },
+];
+
+// Fires once per MC4WP form submission, whatever the outcome.
+$GLOBALS['wp_filter']['mc4wp_form_respond'][10][] = [
+    'accepted_args' => 1,
+    'function' => function (MC4WP_Form $form) {
+        Appsignal::incrementCounter('mailchimp_form_submissions', 1, [
+            'form' => $form->name,
+            'result' => getMailchimpFormResult($form),
+        ]);
+    },
+];
+// Only Mailchimp failures, like a revoked API key. Visitor mistakes, like an
+// invalid email, are only counted.
+$GLOBALS['wp_filter']['mc4wp_form_api_error'][10][] = [
+    'accepted_args' => 2,
+    'function' => function (MC4WP_Form $form, string $message) {
+        Appsignal::setError(new MailchimpApiError($message));
     },
 ];
 
